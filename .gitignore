@@ -1,0 +1,5 @@
+# ignore editor backup files
+*~
+
+# ignore pycache directories
+__pycache__/
