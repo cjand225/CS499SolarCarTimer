@@ -44,10 +44,20 @@ class Table(QWidget):
         self.tableWidget = QTableWidget()                    # Create Table
         self.tableWidget.setRowCount(self.rows)
         self.tableWidget.setColumnCount(self.cols)
-
         self.tableWidget.move(0, 0)                          #default cell pointer
 
-        self.tableWidget.doubleClicked.connect(self.on_click) #setting action response
+        # setting action responses
+        self.tableWidget.doubleClicked.connect(self.on_click)
+
+    #sets cell with given string data
+    def setCell(self, row, col, data):
+        self.tableWidget.setItem(row, col, QTableWidgetItem(data))
+
+
+    #nulls out select cell
+    def clearCell(self, row, col):
+        self.tableWidget.setItem(row, col, QTableWidgetItem(None))
+
 
     # auto resizes Table rows based on verticle scroll bar
     def RowResize(self, val):

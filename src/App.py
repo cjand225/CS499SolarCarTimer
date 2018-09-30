@@ -34,6 +34,7 @@ class AppWindow(QMainWindow):
 
     def initMainMenu(self):
         mBar = self.menuBar()
+
         self.fileMenu = mBar.addMenu("File")  # Menu
         self.fileMenu.addAction("New")  # Item of Submenu File
         self.fileMenu.addAction("Open")  # Item of Submenu File
@@ -52,9 +53,13 @@ class AppWindow(QMainWindow):
         self.helpMenu = mBar.addMenu("Help")  # Menu
         self.helpMenu.addAction("About")  # Item of Submenu Help
 
-        # set Bindings from QActions to relevant functions
-        self.viewMenu.triggered[QAction].connect(self.toggleButtonWidget)
 
+        # set Bindings from QActions to relevant functions
+        self.viewMenu.triggered[QAction].connect(self.toggleButtonWidget) #debug toggle for Buttonwidget
+        self.fileMenu.triggered[QAction].connect(self.quit) #any button in file menu quits
+
+    def quit(self):
+        exit(0)
 
     # debug function for bindings
     def fileTrigger(self, q):
