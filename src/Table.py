@@ -4,13 +4,13 @@ from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSlot
 
 
-class table(QWidget):
+class Table(QWidget):
 
     def __init__(self):
         super().__init__()
         self.title = 'Time Table'                           #default name
 
-        self.left = 0                                       #default size for table
+        self.left = 0                                       #default size for Table
         self.top = 0
         self.width = 1080
         self.height = 720
@@ -18,7 +18,7 @@ class table(QWidget):
         self.rows = 50                                      #default values for rows/cols
         self.cols = 20
 
-        self.createTable()                                  # creates and initializes actual table
+        self.createTable()                                  # creates and initializes actual Table
 
         self.hBar = self.tableWidget.horizontalScrollBar()  #links resize col function with horizontal scroll bar
         self.hBarLastVal = self.hBar.value()
@@ -34,25 +34,23 @@ class table(QWidget):
         self.setWindowTitle(self.title)
         self.setGeometry(self.left, self.top, self.width, self.height)
 
-        self.layout = QVBoxLayout()                          # Add box layout, add table to box layout
+        self.layout = QVBoxLayout()                          # Add box layout, add Table to box layout
         self.layout.addWidget(self.tableWidget)              # and add box layout to widget
         self.setLayout(self.layout)
 
         self.show()                                          # Show widget
 
     def createTable(self):
-        self.tableWidget = QTableWidget()                    # Create table
+        self.tableWidget = QTableWidget()                    # Create Table
         self.tableWidget.setRowCount(self.rows)
         self.tableWidget.setColumnCount(self.cols)
 
-        #requires Qstringlist for setting labels
-        #self.tableWidget.setHorizontalHeaderLabels("hi")
         self.tableWidget.move(0, 0)                          #default cell pointer
 
         self.tableWidget.doubleClicked.connect(self.on_click) #setting action response
 
-
-    def RowResize(self, val):                                 #auto resizes table rows based on verticle scroll bar
+    # auto resizes Table rows based on verticle scroll bar
+    def RowResize(self, val):
         bar = self.vBar
         minVal, maxVal = bar.minimum(), bar.maximum()
         avg = (minVal + maxVal) / 2
@@ -74,7 +72,8 @@ class table(QWidget):
 
         self.vBarLastVal = val
 
-    def ColRefactor(self, val):                                 #auto resizes table columns based on hori scroll bar
+    # auto resizes Table columns based on hori scroll bar
+    def ColRefactor(self, val):
         bar = self.hBar
         minVal, maxVal = bar.minimum(), bar.maximum()
         avg = (minVal + maxVal) / 2
@@ -96,9 +95,9 @@ class table(QWidget):
                     self.tableWidget.removeColumn(lastCol)
         self.hBarLastVal = val
 
-
+    # mostly defined for testing
     @pyqtSlot()
-    def on_click(self):                                         #mostly defined for testing
+    def on_click(self):
         print("\n")
         for currentQTableWidgetItem in self.tableWidget.selectedItems():
             print(currentQTableWidgetItem.row(), currentQTableWidgetItem.column(), currentQTableWidgetItem.text())
