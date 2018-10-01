@@ -8,7 +8,7 @@ class Table(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.title = 'Time Table'                           #default name
+        self.title = "Time Table"                           #default name
 
         self.width = 1080
         self.height = 700

@@ -8,6 +8,7 @@ from PyQt5 import uic
 from Table import *
 from SAButtonWidget import *
 from VisionWidget import *
+from LogWidget import *
 
 
 class AppWindow(QMainWindow):
@@ -25,6 +26,7 @@ class AppWindow(QMainWindow):
         self.initTableWidget()
         self.initButtonWidget()
         self.initVisionWidget()
+        self.initLogWidget()
 
         # initialize gui
         self.initUi()
@@ -70,7 +72,7 @@ class AppWindow(QMainWindow):
         mList = [None] * 4
 
         self.menuList = ["File", "Edit", "View", "Help"]
-        self.mActions = [["New", "Open", "Export", "Quit"], ["Cut", "Copy", "Paste"], ["Table", "Semi-Auto", "Auto"], ["About"]]
+        self.mActions = [["New", "Open", "Export", "Quit"], ["Cut", "Copy", "Paste"], ["Table", "Log", "Semi-Auto", "Auto"], ["About"]]
 
         for i in range(4):
             mList[i] = mBar.addMenu(self.menuList[i])
@@ -98,6 +100,9 @@ class AppWindow(QMainWindow):
 
     def initVisionWidget(self):
         self.mVision = VisionWidget()
+
+    def initLogWidget(self):
+        self.mLog = LogWidget()
 
     #placeholder function
     def handleFileMenu(self, action):
@@ -138,4 +143,9 @@ class AppWindow(QMainWindow):
         else:
             self.mVision.show()
 
+    def toggleLogWidget(self):
+        if self.mLog.isVisible():
+            self.mLog.show()
+        else:
+            self.mLog.show()
 

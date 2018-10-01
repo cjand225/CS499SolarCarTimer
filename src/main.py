@@ -1,4 +1,5 @@
-from Table import *
+import sys
+from PyQt5.Qt import QApplication
 from App import AppWindow
 
 if __name__ == '__main__':
