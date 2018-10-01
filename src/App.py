@@ -6,7 +6,7 @@ from PyQt5 import uic
 
 
 from Table import *
-from SAButtonWidget import *
+from ButtonWidget import *
 from VisionWidget import *
 from LogWidget import *
 
@@ -96,7 +96,7 @@ class AppWindow(QMainWindow):
         self.mTable = Table()
 
     def initButtonWidget(self):
-        self.mButton = SAButtonWidget()
+        self.mButton = ButtonWidget()
 
     def initVisionWidget(self):
         self.mVision = VisionWidget()

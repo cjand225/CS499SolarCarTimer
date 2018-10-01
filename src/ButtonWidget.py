@@ -4,7 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 #Semi-Auto Button Widget
-class SAButtonWidget(QWidget):
+class ButtonWidget(QWidget):
 
     def __init__(self):
         super().__init__()
