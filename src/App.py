@@ -7,6 +7,7 @@ from PyQt5 import uic
 
 from Table import *
 from SAButtonWidget import *
+from VisionWidget import *
 
 
 class AppWindow(QMainWindow):
@@ -15,12 +16,15 @@ class AppWindow(QMainWindow):
         super(AppWindow, self).__init__()
         # initialize Window
         self.initMainWindow()
-        self.createPopupMenu()
+        # self.createPopupMenu()
+
+        # setup Menu Bar
         self.initMainMenu()
 
         # setup widgets
         self.initTableWidget()
         self.initButtonWidget()
+        self.initVisionWidget()
 
         # initialize gui
         self.initUi()
@@ -28,29 +32,26 @@ class AppWindow(QMainWindow):
     def initMainWindow(self):
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowTitle("Main Window")
-        #self.resize(1200, 800)  #if table is central widget
-        self.resize(800,0)  #keeps only toolbar for main App
+        # keeps only toolbar for main App
+        self.resize(800,0)
         #centers window
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignTop,
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
 
-    # defines what happens when main window X is clicked
+    # Overloads closeEvent function to define what happens when main window X is clicked
     def closeEvent(self, a0: QCloseEvent):
-        self.checkClose()
-
-
-    def checkClose(self):
         self.initCloseDialog()
-        retval = self.msg.exec_()
-        print("value of pressed message box button:", retval)
-
-        if retval == QMessageBox.Ok:
+        retval = self.msg.exec_()   #grabs event code from Message box execution
+        if retval == QMessageBox.Ok:    #if OK clicked - Close
+            a0.accept()
+            self.mTable.close()
+            self.mButton.close()
+            self.mVision.close()
             self.close()
-        if retval == QMessageBox.Cancel:
-            pass
-            #ignore siginals to close widgets
-
+        #if Cancel or MessageBox is closed - Ignore the signal
+        if retval == QMessageBox.Cancel or retval == QMessageBox.Abort:
+            a0.ignore()
 
     def close(self):
         exit(0)
@@ -66,33 +67,23 @@ class AppWindow(QMainWindow):
 
     def initMainMenu(self):
         mBar = self.menuBar()
+        mList = [None] * 4
 
-        self.fileMenu = mBar.addMenu("File")  # Menu
-        self.fileMenu.addAction("New")  # Item of Submenu File
-        self.fileMenu.addAction("Open")  # Item of Submenu File
-        self.fileMenu.addAction("Export")  # Item of Submenu File
-        self.fileMenu.addAction("Quit")  # Item of Submenu File
+        self.menuList = ["File", "Edit", "View", "Help"]
+        self.mActions = [["New", "Open", "Export", "Quit"], ["Cut", "Copy", "Paste"], ["Table", "Semi-Auto", "Auto"], ["About"]]
 
-        self.editMenu = mBar.addMenu("Edit")  # Menu
-        self.editMenu.addAction("Cut")  # Item of Submenu Edit
-        self.editMenu.addAction("Copy")  # Item of Submenu Edit
-        self.editMenu.addAction("Paste")  # Item of Submenu Edit
+        for i in range(4):
+            mList[i] = mBar.addMenu(self.menuList[i])
+            for action in self.mActions[i]:
+                mList[i].addAction(action)
+            # set Bindings for handler functions for menus
+            if i == 0:
+                mList[i].triggered[QAction].connect(self.handleFileMenu)
+            if i == 1:
+                mList[i].triggered[QAction].connect(self.handleEditMenu)
+            if i == 2:
+                mList[i].triggered[QAction].connect(self.handleViewMenu)
 
-        self.viewMenu = mBar.addMenu("View")  # Menu
-        self.viewMenu.addAction("Semi-Auto")  # Item of Submenu View
-        self.viewMenu.addAction("Auto")  # Item of Submenu View
-
-        self.helpMenu = mBar.addMenu("Help")  # Menu
-        self.helpMenu.addAction("About")  # Item of Submenu Help
-
-
-        # set Bindings from QActions to relevant functions
-        self.viewMenu.triggered[QAction].connect(self.toggleButtonWidget) #debug toggle for Buttonwidget
-
-
-    # debug function for bindings
-    def fileTrigger(self, q):
-        print(" is triggered")
 
     # Initalize/show ui components here
     def initUi(self):
@@ -101,16 +92,50 @@ class AppWindow(QMainWindow):
     # handles TableWidget stuff
     def initTableWidget(self):
         self.mTable = Table()
-        #self.setCentralWidget(self.mTable) #can add table to main window
 
-    # debug for widget toggle
+    def initButtonWidget(self):
+        self.mButton = SAButtonWidget()
+
+    def initVisionWidget(self):
+        self.mVision = VisionWidget()
+
+    #placeholder function
+    def handleFileMenu(self, action):
+        print("hi")
+
+    # placeholder function
+    def handleEditMenu(self, action):
+        print("hi")
+
+    def handleViewMenu(self, action):
+        if action.text() == "Semi-Auto":
+            self.toggleButtonWidget()
+        if action.text() == "Table":
+            self.toggleTableWidget()
+        if action.text() == "Auto":
+            self.toggleVisionWidget()
+
+    # placeholder function
+    def handleHelpMenu(self, action):
+        print("hi")
+
+    #---------Widget Toggle Effects------------
+    def toggleTableWidget(self):
+        if self.mTable.isVisible():
+            self.mTable.hide()
+        else:
+            self.mTable.show()
+
     def toggleButtonWidget(self):
         if self.mButton.isVisible():
             self.mButton.hide()
         else:
             self.mButton.show()
 
-    def initButtonWidget(self):
-        self.mButton = SAButtonWidget()
+    def toggleVisionWidget(self):
+        if self.mVision.isVisible():
+            self.mVision.hide()
+        else:
+            self.mVision.show()
 
-    # def handleVisionWidget(self):
+

@@ -26,7 +26,7 @@ class SAButtonWidget(QWidget):
     def initUI(self):
         self.setWindowTitle(self.title)
         self.resize(self.width,self.height)
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignTop,
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
         self.setLayout(self.layout) # applies layout to widget

@@ -10,17 +10,15 @@ class Table(QWidget):
         super().__init__()
         self.title = 'Time Table'                           #default name
 
-        self.left = 0                                       #default size for Table
-        self.top = 0
         self.width = 1080
         self.height = 700
 
-        self.setRows(30)
-        self.setColumns(30)
+        self.setRows(30)                                    #Set default amount of Rows
+        self.setColumns(30)                                 #Set default amount of Columns
 
         self.createTable()                                  # creates and initializes actual Table
-        self.initVerticalScroll()
-        self.initHorizontalScroll()
+        self.initVerticalScroll()                           # intializes infitinite vert scrolling
+        self.initHorizontalScroll()                         # initializes infinite horiz scrolling
 
         self.initUI()                                       #create UI
 
@@ -42,7 +40,6 @@ class Table(QWidget):
         self.tableWidget.move(0, 0)                          #default cell pointer
 
         self.initCells()
-        self.clearCell(1,1)
 
         # setting action responses
         self.tableWidget.doubleClicked.connect(self.on_click)
