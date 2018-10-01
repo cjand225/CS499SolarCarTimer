@@ -113,10 +113,12 @@ class AppWindow(QMainWindow):
         print("hi")
 
     def handleViewMenu(self, action):
-        if action.text() == "Semi-Auto":
-            self.toggleButtonWidget()
         if action.text() == "Table":
             self.toggleTableWidget()
+        if action.text() == "Log":
+            self.toggleLogWidget()
+        if action.text() == "Semi-Auto":
+            self.toggleButtonWidget()
         if action.text() == "Auto":
             self.toggleVisionWidget()
 
@@ -145,7 +147,7 @@ class AppWindow(QMainWindow):
 
     def toggleLogWidget(self):
         if self.mLog.isVisible():
-            self.mLog.show()
+            self.mLog.hide()
         else:
             self.mLog.show()
 
