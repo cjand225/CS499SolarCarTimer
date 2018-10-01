@@ -4,6 +4,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
+
 from Table import *
 from SAButtonWidget import *
 
@@ -27,10 +28,41 @@ class AppWindow(QMainWindow):
     def initMainWindow(self):
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowTitle("Main Window")
-        self.resize(1200, 800)
+        #self.resize(1200, 800)  #if table is central widget
+        self.resize(800,0)  #keeps only toolbar for main App
         #centers window
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignTop,
                                             self.size(), QApplication.desktop().availableGeometry()))
+
+
+    # defines what happens when main window X is clicked
+    def closeEvent(self, a0: QCloseEvent):
+        self.checkClose()
+
+
+    def checkClose(self):
+        self.initCloseDialog()
+        retval = self.msg.exec_()
+        print("value of pressed message box button:", retval)
+
+        if retval == QMessageBox.Ok:
+            self.close()
+        if retval == QMessageBox.Cancel:
+            pass
+            #ignore siginals to close widgets
+
+
+    def close(self):
+        exit(0)
+
+    def initCloseDialog(self):
+        self.msg = QMessageBox()
+        self.msg.setIcon(QMessageBox.Warning)
+        self.msg.setText("Are you sure you want to Quit?")
+        self.msg.setInformativeText("You could lose unsaved work.")
+        self.msg.setWindowTitle("Are you Sure?")
+        self.msg.setDetailedText("The details are as follows:")
+        self.msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
 
     def initMainMenu(self):
         mBar = self.menuBar()
@@ -56,10 +88,7 @@ class AppWindow(QMainWindow):
 
         # set Bindings from QActions to relevant functions
         self.viewMenu.triggered[QAction].connect(self.toggleButtonWidget) #debug toggle for Buttonwidget
-        self.fileMenu.triggered[QAction].connect(self.quit) #any button in file menu quits
 
-    def quit(self):
-        exit(0)
 
     # debug function for bindings
     def fileTrigger(self, q):
@@ -72,7 +101,7 @@ class AppWindow(QMainWindow):
     # handles TableWidget stuff
     def initTableWidget(self):
         self.mTable = Table()
-        self.setCentralWidget(self.mTable)
+        #self.setCentralWidget(self.mTable) #can add table to main window
 
     # debug for widget toggle
     def toggleButtonWidget(self):

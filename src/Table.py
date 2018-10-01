@@ -1,7 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QMainWindow, QApplication, QWidget, QAction, QTableWidget, QTableWidgetItem, QVBoxLayout
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSlot
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
 
 
 class Table(QWidget):
@@ -13,27 +13,22 @@ class Table(QWidget):
         self.left = 0                                       #default size for Table
         self.top = 0
         self.width = 1080
-        self.height = 720
+        self.height = 700
 
-        self.rows = 50                                      #default values for rows/cols
-        self.cols = 20
+        self.setRows(30)
+        self.setColumns(30)
 
         self.createTable()                                  # creates and initializes actual Table
-
-        self.hBar = self.tableWidget.horizontalScrollBar()  #links resize col function with horizontal scroll bar
-        self.hBarLastVal = self.hBar.value()
-        self.hBar.valueChanged.connect(self.ColRefactor)
-
-        self.vBar = self.tableWidget.verticalScrollBar()    #links resize row function with vertical scroll bar
-        self.vBarLastVal = self.vBar.value()
-        self.vBar.valueChanged.connect(self.RowResize)
+        self.initVerticalScroll()
+        self.initHorizontalScroll()
 
         self.initUI()                                       #create UI
 
     def initUI(self):
         self.setWindowTitle(self.title)
-        self.setGeometry(self.left, self.top, self.width, self.height)
-
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
+                                            self.size(), QApplication.desktop().availableGeometry()))
+        self.resize(self.width, self.height)
         self.layout = QVBoxLayout()                          # Add box layout, add Table to box layout
         self.layout.addWidget(self.tableWidget)              # and add box layout to widget
         self.setLayout(self.layout)
@@ -43,8 +38,11 @@ class Table(QWidget):
     def createTable(self):
         self.tableWidget = QTableWidget()                    # Create Table
         self.tableWidget.setRowCount(self.rows)
-        self.tableWidget.setColumnCount(self.cols)
+        self.tableWidget.setColumnCount(self.columns)
         self.tableWidget.move(0, 0)                          #default cell pointer
+
+        self.initCells()
+        self.clearCell(1,1)
 
         # setting action responses
         self.tableWidget.doubleClicked.connect(self.on_click)
@@ -53,10 +51,39 @@ class Table(QWidget):
     def setCell(self, row, col, data):
         self.tableWidget.setItem(row, col, QTableWidgetItem(data))
 
+    #returns contents of cell at specified location
+    def getCell(self, row, col):
+        return self.tableWidget.item(row, col).text()
 
     #nulls out select cell
     def clearCell(self, row, col):
-        self.tableWidget.setItem(row, col, QTableWidgetItem(None))
+        self.tableWidget.setItem(row, col, None)
+
+    #intializes cells for usage
+    def initCells(self):
+        for col in range(self.columns):
+            for row in range(self.rows):
+                self.setCell(row, col, "")
+
+    #sets amount of rows
+    def setRows(self, rowNum):
+        self.rows = rowNum
+
+    #sets amount of collumns
+    def setColumns(self, colNum):
+        self.columns = colNum
+
+    # defines and binds vertical scroll bar to RowResize
+    def initVerticalScroll(self):
+        self.vBar = self.tableWidget.verticalScrollBar()    #links resize row function with vertical scroll bar
+        self.vBarLastVal = self.vBar.value()
+        self.vBar.valueChanged.connect(self.RowResize)
+
+    #defines and binds horizontal scroll bar to ColumnResize
+    def initHorizontalScroll(self):
+        self.hBar = self.tableWidget.horizontalScrollBar()  #links resize col function with horizontal scroll bar
+        self.hBarLastVal = self.hBar.value()
+        self.hBar.valueChanged.connect(self.ColRefactor)
 
 
     # auto resizes Table rows based on verticle scroll bar
@@ -79,7 +106,6 @@ class Table(QWidget):
                     break
                 if empty:
                     self.tableWidget.removeRow(lastRow)
-
         self.vBarLastVal = val
 
     # auto resizes Table columns based on hori scroll bar
