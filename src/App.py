@@ -5,10 +5,10 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic
 
 
-from Table import *
-from ButtonWidget import *
-from VisionWidget import *
-from LogWidget import *
+from Table import Table
+from ButtonWidget import ButtonWidget
+from VisionWidget import VisionWidget
+from LogWidget import LogWidget
 
 
 class AppWindow(QMainWindow):
