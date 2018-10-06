@@ -45,6 +45,6 @@ class ImageThread(threading.Thread):
             if self.imageQ.qsize() < 10:
                 self.imageQ.put(frame)
             else:
-                print(self.imageQ.qsize())
+                print(self.imageQ.qsize()) #frame stack full and/or no camera
 
 

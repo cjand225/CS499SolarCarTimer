@@ -17,7 +17,6 @@ class AppWindow(QMainWindow):
         super(AppWindow, self).__init__()
         # initialize Window
         self.initMainWindow()
-        # self.createPopupMenu()
 
         # setup Menu Bar
         self.initMainMenu()
