@@ -98,9 +98,3 @@ class VisionWidget(QWidget):
         self.timer.start(1)
 
 
-    # Layout of UI
-    #   QWidget -   Main Widget - VisionWidget
-    #       QGroupBox -  Group area - on widget
-    #           QWidget - Canvas - on GroupBox
-
-

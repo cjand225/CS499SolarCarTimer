@@ -24,6 +24,9 @@ class ImageThread(threading.Thread):
     def isRunning(self):
         return self.running
 
+    #def resume(self):
+
+    #def pause(self):
 
     #gets frame data continously until thread stops
     def grab(self):
