@@ -24,7 +24,9 @@ class ImageThread(threading.Thread):
     def isRunning(self):
         return self.running
 
-    #def resume(self):
+    def stop(self):
+        self.stopThread = True
+
 
     #def pause(self):
 

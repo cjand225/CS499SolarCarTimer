@@ -1,48 +1,43 @@
 import sys
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QWidget, QTableWidget, QTableWidgetItem, QApplication, QStyle
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.uic import loadUi
 
 
 class Table(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.title = "Time Table"                           #default name
+        self.rows = None
+        self.columns = None
 
-        self.width = 1080
-        self.height = 700
-
-        self.setRows(30)                                    #Set default amount of Rows
-        self.setColumns(30)                                 #Set default amount of Columns
-
-        self.createTable()                                  # creates and initializes actual Table
-        self.initVerticalScroll()                           # intializes infitinite vert scrolling
-        self.initHorizontalScroll()                         # initializes infinite horiz scrolling
-
-        self.initUI()                                       #create UI
+        self.initUI()                   #create UI
+        self.createTable()              # creates and initializes actual Table
+        self.initVerticalScroll()       # intializes infitinite vert scrolling
+        self.initHorizontalScroll()     # initializes infinite horiz scrolling
 
     def initUI(self):
-        self.setWindowTitle(self.title)
+        self.ui = loadUi('./../resources/Table.ui', self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        self.resize(self.width, self.height)
-        self.layout = QVBoxLayout()                          # Add box layout, add Table to box layout
-        self.layout.addWidget(self.tableWidget)              # and add box layout to widget
-        self.setLayout(self.layout)
-
-        self.show()                                          # Show widget
+        self.show()
 
     def createTable(self):
-        self.tableWidget = QTableWidget()                    # Create Table
-        self.tableWidget.setRowCount(self.rows)
-        self.tableWidget.setColumnCount(self.columns)
-        self.tableWidget.move(0, 0)                          #default cell pointer
-
         self.initCells()
+        self.tableWidget.move(0, 0)                         #default cell pointer
+        self.setActions(self.on_click)                      #set function binds
 
-        # setting action responses
-        self.tableWidget.doubleClicked.connect(self.on_click)
+    def setActions(self, function):
+        self.tableWidget.doubleClicked.connect(function)
+
+    # takes a list of strings & interates over the list size to determine what columns are set.
+    def setColumnNames(self, list):
+        self.tableWidget.setVerticalHeaderLabels(list)
+
+    #takes a list of strings & interates over the list size to determine what rows are set.
+    def setRowNames(self, list):
+        self.tableWidget.setVerticalHeaderLabels(list)
 
     #sets cell with given string data
     def setCell(self, row, col, data):
@@ -58,8 +53,8 @@ class Table(QWidget):
 
     #intializes cells for usage
     def initCells(self):
-        for col in range(self.columns):
-            for row in range(self.rows):
+        for col in range(self.tableWidget.columnCount()):
+            for row in range(self.tableWidget.rowCount()):
                 self.setCell(row, col, "")
 
     #sets amount of rows

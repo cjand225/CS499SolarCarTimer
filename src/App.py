@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from PyQt5 import uic
+from PyQt5.uic import loadUi
 
 
 from Table import Table
@@ -22,15 +22,17 @@ class AppWindow(QMainWindow):
         self.initMainMenu()
 
         # setup widgets
-        self.initTableWidget()
+
         self.initButtonWidget()
         self.initVisionWidget()
         self.initLogWidget()
+        self.initTableWidget()
 
         # initialize gui
         self.initUi()
 
     def initMainWindow(self):
+        self.mainWindow = loadUi('./../resources/Buttons.ui')
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setWindowTitle("Main Window")
         # keeps only toolbar for main App
@@ -42,29 +44,27 @@ class AppWindow(QMainWindow):
 
     # Overloads closeEvent function to define what happens when main window X is clicked
     def closeEvent(self, a0: QCloseEvent):
-        self.initCloseDialog()
-        retval = self.msg.exec_()   #grabs event code from Message box execution
-        if retval == QMessageBox.Ok:    #if OK clicked - Close
-            a0.accept()
-            self.mTable.close()
-            self.mButton.close()
-            self.mVision.close()
-            self.close()
-        #if Cancel or MessageBox is closed - Ignore the signal
-        if retval == QMessageBox.Cancel or retval == QMessageBox.Abort:
-            a0.ignore()
+         self.initCloseDialog()
+         retval = self.msg.exec()  #grabs event code from Message box execution
+         print(retval)
+         if retval == 1:    #if OK clicked - Close
+             a0.accept()
+             self.mTable.close()
+             self.mButton.close()
+             self.mVision.close()
+             self.close()
+         #if Cancel or MessageBox is closed - Ignore the signal
+         if retval == 0:
+             a0.ignore()
 
     def close(self):
         exit(0)
 
     def initCloseDialog(self):
-        self.msg = QMessageBox()
-        self.msg.setIcon(QMessageBox.Warning)
-        self.msg.setText("Are you sure you want to Quit?")
-        self.msg.setInformativeText("You could lose unsaved work.")
-        self.msg.setWindowTitle("Are you Sure?")
-        self.msg.setDetailedText("The details are as follows:")
-        self.msg.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        self.msg = QDialog()
+        self.msg.ui = loadUi('./../resources/QuitDialog.ui', self.msg)
+        self.msg.show()
+
 
     def initMainMenu(self):
         mBar = self.menuBar()

@@ -1,4 +1,5 @@
-from PyQt5.QtWidgets import QWidget, QPushButton
+from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QApplication
+from PyQt5.Qt import Qt
 from PyQt5.uic import loadUi
 
 
@@ -7,13 +8,13 @@ class ButtonWidget(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.title = 'Button Widget'
         self.initUI()
         #self.createSAWidget()
 
     def initUI(self):
         self.ui = loadUi('./../resources/Buttons.ui', self)
-        self.setWindowTitle(self.title)
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
+                                            self.size(), QApplication.desktop().availableGeometry()))
         self.show() # displays widget
 
     def createSAWidget(self):

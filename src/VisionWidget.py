@@ -3,6 +3,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import queue
 import cv2
+import threading
 
 from ImageCanvas import ImageCanvas
 from ImageThread import ImageThread
@@ -22,10 +23,21 @@ class VisionWidget(QWidget):
         self.height = self.frameSize().height()
         self.layout = QGridLayout()  # Defines Layout - grid
 
-        #thread related
+
+
+        #thread related - default
+        self.resolution = [None] * 2
+        self.fps = None;
+        self.deviceCam = None;
+
         self.checkRunning = False
         self.captureThread = None
         self.imageQueue = queue.Queue()
+
+        self.setDevice(0)
+        self.setResolution(1920,1080)
+        self.setFps(60)
+
 
         #initalizers
         self.initUI()
@@ -60,12 +72,24 @@ class VisionWidget(QWidget):
 
     #initalizes thread for grabbing data from capture cam
     def initCaptureThread(self):
-        self.captureThread = ImageThread(self.imageQueue, 0, 1920, 1080, 60)
+        self.captureThread = ImageThread(self.imageQueue, self.deviceCam, self.resolution[0], self.resolution[1], self.fps)
+
+    def setResolution(self, height, width):
+        self.resolution[0] = height
+        self.resolution[1] = width
+
+    def setFps(self, frames):
+        self.fps = frames
+
+    def setDevice(self, deviceNum):
+        self.deviceCam = deviceNum
 
     #used for binding thread to a button
     def toggleThread(self):
-        self.captureThread.start()
-
+        if(not self.captureThread.isRunning()):
+            self.captureThread.start()
+        else:
+            self.captureThread.stop()
 
     #grabs frames from queue that is managed by ImageThread Class
     def updateFrame(self):
