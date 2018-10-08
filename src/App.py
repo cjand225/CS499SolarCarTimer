@@ -19,7 +19,7 @@ class AppWindow(QMainWindow):
         self.initMainWindow()
 
         # setup Menu Bar
-        self.initMainMenu()
+        #self.initMainMenu()
 
         # setup widgets
 
@@ -32,11 +32,8 @@ class AppWindow(QMainWindow):
         self.initUi()
 
     def initMainWindow(self):
-        self.mainWindow = loadUi('./../resources/Buttons.ui')
+        self.mainWindowUI = loadUi('./../resources/App.ui', self)
         self.setAttribute(Qt.WA_DeleteOnClose)
-        self.setWindowTitle("Main Window")
-        # keeps only toolbar for main App
-        self.resize(800,0)
         #centers window
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
@@ -46,12 +43,12 @@ class AppWindow(QMainWindow):
     def closeEvent(self, a0: QCloseEvent):
          self.initCloseDialog()
          retval = self.msg.exec()  #grabs event code from Message box execution
-         print(retval)
          if retval == 1:    #if OK clicked - Close
              a0.accept()
              self.mTable.close()
              self.mButton.close()
              self.mVision.close()
+             self.mLog.close()
              self.close()
          #if Cancel or MessageBox is closed - Ignore the signal
          if retval == 0:
@@ -66,24 +63,7 @@ class AppWindow(QMainWindow):
         self.msg.show()
 
 
-    def initMainMenu(self):
-        mBar = self.menuBar()
-        mList = [None] * 4
-
-        self.menuList = ["File", "Edit", "View", "Help"]
-        self.mActions = [["New", "Open", "Export", "Quit"], ["Cut", "Copy", "Paste"], ["Table", "Log", "Semi-Auto", "Auto"], ["About"]]
-
-        for i in range(4):
-            mList[i] = mBar.addMenu(self.menuList[i])
-            for action in self.mActions[i]:
-                mList[i].addAction(action)
-            # set Bindings for handler functions for menus
-            if i == 0:
-                mList[i].triggered[QAction].connect(self.handleFileMenu)
-            if i == 1:
-                mList[i].triggered[QAction].connect(self.handleEditMenu)
-            if i == 2:
-                mList[i].triggered[QAction].connect(self.handleViewMenu)
+    #def initMainMenu(self):
 
 
     # Initalize/show ui components here

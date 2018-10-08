@@ -6,7 +6,7 @@ import cv2
 import threading
 
 from ImageCanvas import ImageCanvas
-from ImageThread import ImageThread
+from CaptureThread import CaptureThread
 
 frameQueue = queue.Queue()
 
@@ -72,7 +72,7 @@ class VisionWidget(QWidget):
 
     #initalizes thread for grabbing data from capture cam
     def initCaptureThread(self):
-        self.captureThread = ImageThread(self.imageQueue, self.deviceCam, self.resolution[0], self.resolution[1], self.fps)
+        self.captureThread = CaptureThread(self.imageQueue, self.deviceCam, self.resolution[0], self.resolution[1], self.fps)
 
     def setResolution(self, height, width):
         self.resolution[0] = height
@@ -91,7 +91,7 @@ class VisionWidget(QWidget):
         else:
             self.captureThread.stop()
 
-    #grabs frames from queue that is managed by ImageThread Class
+    #grabs frames from queue that is managed by CaptureThread Class
     def updateFrame(self):
         if not self.imageQueue.empty():
             frame = self.imageQueue.get()

@@ -1,7 +1,7 @@
 import threading
 import cv2
 
-class ImageThread(threading.Thread):
+class CaptureThread(threading.Thread):
 
     def __init__(self, queue, imageCam, width, height, fps):
         threading.Thread.__init__(self)
@@ -37,6 +37,7 @@ class ImageThread(threading.Thread):
         capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.imageWidth)
         capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.imageHeight)
         capture.set(cv2.CAP_PROP_FPS, self.frames)
+
 
         while (self.running):
             frame = {}
