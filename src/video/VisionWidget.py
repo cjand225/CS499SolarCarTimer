@@ -3,10 +3,9 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 import queue
 import cv2
-import threading
 
-from ImageCanvas import ImageCanvas
-from CaptureThread import CaptureThread
+from video.ImageCanvas import ImageCanvas
+from video.CaptureThread import CaptureThread
 
 frameQueue = queue.Queue()
 
@@ -15,7 +14,7 @@ class VisionWidget(QWidget):
     def __init__(self):
         super().__init__()
         self.title = 'Vision Widget'
-        #vision part
+        #video part
         self.image = None
 
         # default sizing for Widget

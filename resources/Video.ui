@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>458</width>
-    <height>390</height>
+    <width>629</width>
+    <height>559</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -20,16 +20,16 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="startButton">
+     <property name="text">
+      <string>Stop Feed</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <layout class="QGridLayout" name="videoWidgetLayout">
      <item row="0" column="0">
-      <widget class="QPushButton" name="startVideo">
-       <property name="text">
-        <string>Start Feed</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
       <widget class="QGroupBox" name="videoBox">
        <property name="title">
         <string>Video Frame</string>
@@ -46,6 +46,13 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="stopButton">
+     <property name="text">
+      <string>Start Feed</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>

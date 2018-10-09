@@ -4,7 +4,7 @@ from PyQt5.uic import loadUi
 
 
 #Semi-Auto Button Widget
-class ButtonWidget(QWidget):
+class SemiAutoWidget(QWidget):
 
     def __init__(self):
         super().__init__()

@@ -1,15 +1,14 @@
-import sys
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 
 
-from Table import Table
-from ButtonWidget import ButtonWidget
-from VisionWidget import VisionWidget
-from LogWidget import LogWidget
-
+from table.Table import Table
+from table.SemiAutoWidget import SemiAutoWidget
+from video.VisionWidget import VisionWidget
+from table.LogWidget import LogWidget
+from graph.GraphOptions import GraphOptions
 
 class AppWindow(QMainWindow):
 
@@ -27,6 +26,7 @@ class AppWindow(QMainWindow):
         self.initVisionWidget()
         self.initLogWidget()
         self.initTableWidget()
+        self.initGraphWidget()
 
         # initialize gui
         self.initUi()
@@ -75,13 +75,16 @@ class AppWindow(QMainWindow):
         self.mTable = Table()
 
     def initButtonWidget(self):
-        self.mButton = ButtonWidget()
+        self.mButton = SemiAutoWidget()
 
     def initVisionWidget(self):
         self.mVision = VisionWidget()
 
     def initLogWidget(self):
         self.mLog = LogWidget()
+
+    def initGraphWidget(self):
+        self.mGraphOptions = GraphOptions()
 
     #placeholder function
     def handleFileMenu(self, action):
