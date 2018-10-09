@@ -9,6 +9,7 @@ from table.SemiAutoWidget import SemiAutoWidget
 from video.VisionWidget import VisionWidget
 from table.LogWidget import LogWidget
 from graph.GraphOptions import GraphOptions
+from graph.Graph import Graph
 
 class AppWindow(QMainWindow):
 
@@ -26,7 +27,7 @@ class AppWindow(QMainWindow):
         self.initVisionWidget()
         self.initLogWidget()
         self.initTableWidget()
-        self.initGraphWidget()
+        #self.initGraphWidget()
 
         # initialize gui
         self.initUi()
@@ -85,6 +86,7 @@ class AppWindow(QMainWindow):
 
     def initGraphWidget(self):
         self.mGraphOptions = GraphOptions()
+        self.mGraph = Graph()
 
     #placeholder function
     def handleFileMenu(self, action):

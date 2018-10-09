@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import QWidget, QGridLayout, QStyle, QApplication, QPushButton
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
+from PyQt5.uic import loadUi
 import queue
 import cv2
 
@@ -42,17 +43,14 @@ class VisionWidget(QWidget):
         self.initUI()
         self.initButton()
         self.initVisionWidget()
-        self.initCaptureThread()
-        self.initTimer()
+
+
 
     #initalizes Vision Widget Qwidget
     def initUI(self):
-        self.setWindowTitle(self.title)
-        self.resize(self.width, self.height)
+        self.ui = loadUi('./../resources/Video.ui', self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignVCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
-
-        self.setLayout(self.layout)  # applies layout to widget
         self.show()  # displays widget
 
     #initializes Canvas for Qimage to be put onto
@@ -60,14 +58,12 @@ class VisionWidget(QWidget):
         self.imageWidget = ImageCanvas()
         self.windowWidth = self.imageWidget.frameSize().width()
         self.windowHeight = self.imageWidget.frameSize().height()
-        self.layout.addWidget(self.imageWidget)
+        self.imageLayout.addWidget(self.imageWidget)
 
     #initalizes button that toggles thread
     def initButton(self):
-        self.startButton = QPushButton()
-        self.startButton.setText("start")
-        self.startButton.clicked.connect(self.toggleThread)
-        self.layout.addWidget(self.startButton)
+        self.startButton.clicked.connect(self.startThread)
+        self.stopButton.clicked.connect(self.stopThread)
 
     #initalizes thread for grabbing data from capture cam
     def initCaptureThread(self):
@@ -84,11 +80,23 @@ class VisionWidget(QWidget):
         self.deviceCam = deviceNum
 
     #used for binding thread to a button
-    def toggleThread(self):
-        if(not self.captureThread.isRunning()):
-            self.captureThread.start()
-        else:
+    def startThread(self):
+        self.initCaptureThread()
+        self.initTimer()
+        self.captureThread.start()
+
+    def stopThread(self):
+        if(self.captureThread.isRunning()):
             self.captureThread.stop()
+            self.captureThread.join()
+
+    #makes sure thread stops before widget/program is closed
+    def closeEvent(self, a0: QCloseEvent):
+        if(self.captureThread != None and self.captureThread.isRunning()):
+            self.stopThread()
+        else:
+            a0.accept()
+
 
     #grabs frames from queue that is managed by CaptureThread Class
     def updateFrame(self):

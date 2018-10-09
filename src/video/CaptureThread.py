@@ -20,13 +20,16 @@ class CaptureThread(threading.Thread):
     def run(self):
         self.grab()
 
+
     #used to check if thread is running
     def isRunning(self):
         return self.running
 
     def stop(self):
-        self.stopThread = True
+        self.running = False
 
+    def resume(self):
+        self.running = True
 
     #def pause(self):
 

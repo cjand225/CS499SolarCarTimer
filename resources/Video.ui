@@ -21,7 +21,7 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="2" column="0">
-    <widget class="QPushButton" name="startButton">
+    <widget class="QPushButton" name="stopButton">
      <property name="text">
       <string>Stop Feed</string>
      </property>
@@ -38,7 +38,13 @@
         <item row="0" column="0">
          <layout class="QGridLayout" name="videoLayout">
           <item row="0" column="0">
-           <widget class="QWidget" name="imageFrame" native="true"/>
+           <widget class="QWidget" name="imageFrame" native="true">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="imageLayout"/>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </item>
@@ -48,7 +54,7 @@
     </layout>
    </item>
    <item row="1" column="0">
-    <widget class="QPushButton" name="stopButton">
+    <widget class="QPushButton" name="startButton">
      <property name="text">
       <string>Start Feed</string>
      </property>
