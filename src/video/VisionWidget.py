@@ -14,7 +14,6 @@ class VisionWidget(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.title = 'Vision Widget'
         #video part
         self.image = None
 
@@ -23,17 +22,22 @@ class VisionWidget(QWidget):
         self.height = self.frameSize().height()
         self.layout = QGridLayout()  # Defines Layout - grid
 
-
-
         #thread related - default
         self.resolution = [None] * 2
-        self.fps = None;
-        self.deviceCam = None;
-
-        self.checkRunning = False
+        self.fps = None
+        self.deviceCam = None
         self.captureThread = None
+
+        #adding list of threads before they are instanced
+        self.threadList = [None] * 4
+
+        #Image queue for capture thread
         self.imageQueue = queue.Queue()
 
+        #images from capture thread, aviable for processing
+        self.processQueue = queue.Queue()
+
+        #gives context to capture thread
         self.setDevice(0)
         self.setResolution(1920,1080)
         self.setFps(60)
@@ -89,6 +93,10 @@ class VisionWidget(QWidget):
         if(self.captureThread.isRunning()):
             self.captureThread.stop()
             self.captureThread.join()
+            if(self.captureThread.isAlive()):
+                print("Thread is still Alive.")
+            else:
+                print("Thread has Quit.")
 
     #makes sure thread stops before widget/program is closed
     def closeEvent(self, a0: QCloseEvent):

@@ -61,7 +61,6 @@ class AppWindow(QMainWindow):
     def initCloseDialog(self):
         self.msg = QDialog()
         self.msg.ui = loadUi('./../resources/QuitDialog.ui', self.msg)
-        self.msg.show()
 
 
     #def initMainMenu(self):
