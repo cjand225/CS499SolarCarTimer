@@ -20,13 +20,5 @@ class SemiAutoWidget(QWidget):
     def createSAWidget(self):
         self.initButtons()
 
-    #initalizes Buttons for each respective car & adds them to the layout
-    def initButtons(self):
-        self.buttonArray = [None] * (self.rows * self.cols)
-
-        for i in range(self.buttonTotal):
-            self.buttonArray[i] = QPushButton("Button " + str(i))
-            self.buttonArray[i].setGeometry(10 * i, 10 * i, 100, 100)
-            self.buttonArray[i].setCheckable(True)
-            self.buttonArray[i].toggle()
-            self.layout.addWidget(self.buttonArray[i])  # can take additional parameters to specify what part of grid
+    def initButtons(self, totalButtons):
+        print("hi")

@@ -19,7 +19,7 @@ class AppWindow(QMainWindow):
         self.initMainWindow()
 
         # setup Menu Bar
-        #self.initMainMenu()
+        self.initMainMenu()
 
         # setup widgets
 
@@ -38,6 +38,8 @@ class AppWindow(QMainWindow):
         #centers window
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
+
+
 
 
     # Overloads closeEvent function to define what happens when main window X is clicked
@@ -62,8 +64,12 @@ class AppWindow(QMainWindow):
         self.msg = QDialog()
         self.msg.ui = loadUi('./../resources/QuitDialog.ui', self.msg)
 
-
-    #def initMainMenu(self):
+    #connects menubar submenus with menu handler functions
+    def initMainMenu(self):
+        self.menuFile.triggered[QAction].connect(self.handleFileMenu)
+        self.menuEdit.triggered[QAction].connect(self.handleEditMenu)
+        self.menuView.triggered[QAction].connect(self.handleViewMenu)
+        self.menuHelp.triggered[QAction].connect(self.handleHelpMenu)
 
 
     # Initalize/show ui components here
@@ -89,25 +95,53 @@ class AppWindow(QMainWindow):
 
     #placeholder function
     def handleFileMenu(self, action):
-        print("hi")
+        if action == self.actionNew:
+            print("hi")
+        if action == self.actionOpen:
+            print("hi")
+        if action == self.actionRecent:
+            print("hi")
+        if action == self.actionSave:
+            print("hi")
+        if action == self.actionSaveAs:
+            print("hi")
+        if action == self.actionClose:
+            print("hi")
+        if action == self.actionQuit:
+            print("hi")
 
     # placeholder function
     def handleEditMenu(self, action):
-        print("hi")
+        if action == self.actionUndo:
+            print("hi")
+        if action == self.actionRedo:
+            print("hi")
+        if action == self.actionCopy:
+            print("hi")
+        if action == self.actionCut:
+            print("hi")
+        if action == self.actionPaste:
+            print("hi")
+        if action == self.actionSelectRow:
+            print("hi")
+        if action == self.actionSelectColumn:
+            print("hi")
+
 
     def handleViewMenu(self, action):
-        if action.text() == "Table":
+        if action == self.actionTable:
             self.toggleTableWidget()
-        if action.text() == "Log":
+        if action == self.actionLog:
             self.toggleLogWidget()
-        if action.text() == "Semi-Auto":
+        if action == self.actionSemiAuto:
             self.toggleButtonWidget()
-        if action.text() == "Auto":
+        if action == self.actionAuto:
             self.toggleVisionWidget()
 
     # placeholder function
     def handleHelpMenu(self, action):
-        print("hi")
+        if action == self.actionAbout:
+            print("hi")
 
     #---------Widget Toggle Effects------------
     def toggleTableWidget(self):

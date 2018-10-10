@@ -102,8 +102,8 @@ class VisionWidget(QWidget):
     def closeEvent(self, a0: QCloseEvent):
         if(self.captureThread != None and self.captureThread.isRunning()):
             self.stopThread()
-        else:
-            a0.accept()
+        a0.ignore()
+        self.hide()
 
 
     #grabs frames from queue that is managed by CaptureThread Class
