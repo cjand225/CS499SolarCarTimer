@@ -29,7 +29,7 @@ class VisionWidget(QWidget):
         self.captureThread = None
 
         #adding list of threads before they are instanced
-        self.threadList = [None] * 4
+        #self.threadList = [None] * 4
 
         #Image queue for capture thread
         self.imageQueue = queue.Queue()

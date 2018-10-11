@@ -27,7 +27,7 @@ class AppWindow(QMainWindow):
         self.initVisionWidget()
         self.initLogWidget()
         self.initTableWidget()
-        #self.initGraphWidget()
+        self.initGraphWidget()
 
         # initialize gui
         self.initUi()
@@ -91,7 +91,7 @@ class AppWindow(QMainWindow):
 
     def initGraphWidget(self):
         self.mGraphOptions = GraphOptions()
-        self.mGraph = Graph()
+        #self.mGraph = Graph()
 
     #placeholder function
     def handleFileMenu(self, action):
@@ -137,6 +137,8 @@ class AppWindow(QMainWindow):
             self.toggleButtonWidget()
         if action == self.actionAuto:
             self.toggleVisionWidget()
+        if action == self.actionGraphing:
+            self.toggleGraphingWidget()
 
     # placeholder function
     def handleHelpMenu(self, action):
@@ -167,4 +169,10 @@ class AppWindow(QMainWindow):
             self.mLog.hide()
         else:
             self.mLog.show()
+
+    def toggleGraphingWidget(self):
+        if self.mGraphOptions.isVisible():
+            self.mGraphOptions.hide()
+        else:
+            self.mGraphOptions.show()
 

@@ -72,6 +72,7 @@
     <addaction name="actionTable"/>
     <addaction name="actionSemiAuto"/>
     <addaction name="actionAuto"/>
+    <addaction name="actionGraphing"/>
     <addaction name="actionLog"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -232,6 +233,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+A</string>
+   </property>
+  </action>
+  <action name="actionGraphing">
+   <property name="text">
+    <string>Graphing</string>
    </property>
   </action>
  </widget>
