@@ -12,7 +12,6 @@ class LogWidget(QWidget):
         self.ui = loadUi('./../resources/Log.ui', self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignBottom,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        self.show()
 
     def appendLog(self, text):
         self.logText.append(text)

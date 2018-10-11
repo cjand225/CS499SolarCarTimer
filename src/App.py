@@ -8,8 +8,8 @@ from table.Table import Table
 from table.SemiAutoWidget import SemiAutoWidget
 from video.VisionWidget import VisionWidget
 from table.LogWidget import LogWidget
-from graph.GraphOptions import GraphOptions
-from graph.Graph import Graph
+from graph.GraphOptionsWidget import GraphOptions
+from graph.GraphWidget import Graph
 
 class AppWindow(QMainWindow):
 

@@ -15,7 +15,6 @@ class SemiAutoWidget(QWidget):
         self.ui = loadUi('./../resources/Buttons.ui', self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        self.show() # displays widget
 
     def createSAWidget(self):
         self.initButtons()

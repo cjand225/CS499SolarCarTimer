@@ -13,4 +13,3 @@ class Graph(QWidget):
         self.ui = loadUi('./../resources/GraphCanvas.ui', self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        self.show()

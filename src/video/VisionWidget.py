@@ -55,7 +55,6 @@ class VisionWidget(QWidget):
         self.ui = loadUi('./../resources/Video.ui', self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignVCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        self.show()  # displays widget
 
     #initializes Canvas for Qimage to be put onto
     def initVisionWidget(self):
