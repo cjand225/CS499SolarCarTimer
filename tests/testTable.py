@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow
 
 
 
-class TestStringMethods(unittest.TestCase):
+class TestTableMethods(unittest.TestCase):
 
     def setUp(self):
         self.app = QApplication(sys.argv)
@@ -14,14 +14,26 @@ class TestStringMethods(unittest.TestCase):
 
     #def tearDown(self):
 
+    #checks format of Headers and if they're set
+    #specfically if they are numbers
     def test_headerH(self):
-        list = ["hi", "blah"]
+        list = ["hi", "blah", "132"]
         self.window.table.setColumnNames(list)
-        for x in range(1, len(list)):
+        for x in range(0, len(list)):
             self.assertEqual(self.window.table.getTableWidget().horizontalHeaderItem(x).text(), list[x])
 
-    #tests for vertical headers to see if correct
-    #def text_verticalH(self):
+    #checks format of Headers and if they're set
+    #specifically if they are alphanumeric and if they're names
+    def test_verticalH(self):
+        list = ["hi", "blah", "1"]
+        self.window.table.setColumnNames(list)
+        for x in range(1, len(list)):
+            self.assertTrue(self.window.table.getTableWidget().horizontalHeaderItem(x).text())
+
+    def test_cell_text_format(self):
+        self.window.table.setCell(0,0, "hi")
+        self.assertNotEqual(self.window.table.getCell(0,0), "hi")
+
 
 
 

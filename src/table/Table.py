@@ -33,7 +33,7 @@ class Table(QWidget):
 
     # takes a list of strings & interates over the list size to determine what columns are set.
     def setColumnNames(self, list):
-        self.tableWidget.setVerticalHeaderLabels(list)
+        self.tableWidget.setHorizontalHeaderLabels(list)
 
     #takes a list of strings & interates over the list size to determine what rows are set.
     def setRowNames(self, list):
@@ -47,15 +47,29 @@ class Table(QWidget):
     def getCell(self, row, col):
         return self.tableWidget.item(row, col).text()
 
+
+    def getCellCount(self):
+        if (self.tableWidget.columnCount() == None or self.tableWidget.rowCount() == None):
+            return 0
+        else:
+            return self.tableWidget.columnCount() * self.tableWidget.rowCount()
+
+    def getHorizontalHeaderItem(self, index):
+        return self.tableWidget.horizontalHeaderItem(index).text()
+
+    def getVerticalHeaderItem(self, index):
+        return self.tableWidget.horizontalHeaderItem(index).text()
+
     #nulls out select cell
     def clearCell(self, row, col):
         self.tableWidget.setItem(row, col, None)
 
     #intializes cells for usage
     def initCells(self):
+        blank = ""
         for col in range(self.tableWidget.columnCount()):
             for row in range(self.tableWidget.rowCount()):
-                self.setCell(row, col, "")
+                self.setCell(row, col, blank)
 
     #sets amount of rows
     def setRows(self, rowNum):
@@ -75,7 +89,7 @@ class Table(QWidget):
     def initHorizontalScroll(self):
         self.hBar = self.tableWidget.horizontalScrollBar()  #links resize col function with horizontal scroll bar
         self.hBarLastVal = self.hBar.value()
-        self.hBar.valueChanged.connect(self.ColRefactor)
+        self.hBar.valueChanged.connect(self.ColumnResize)
 
 
     # auto resizes Table rows based on verticle scroll bar
@@ -101,7 +115,7 @@ class Table(QWidget):
         self.vBarLastVal = val
 
     # auto resizes Table columns based on hori scroll bar
-    def ColRefactor(self, val):
+    def ColumnResize(self, val):
         bar = self.hBar
         minVal, maxVal = bar.minimum(), bar.maximum()
         avg = (minVal + maxVal) / 2
@@ -122,6 +136,9 @@ class Table(QWidget):
                 if empty:
                     self.tableWidget.removeColumn(lastCol)
         self.hBarLastVal = val
+
+    def getTableWidget(self):
+        return self.tableWidget
 
     # mostly defined for testing
     @pyqtSlot()
