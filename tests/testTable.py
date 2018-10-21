@@ -1,23 +1,34 @@
 import unittest
+import sys
 from src.table.Table import Table
-from test import support
+from PyQt5.QtWidgets import QApplication, QMainWindow
 
-class unitTestTable(unittest.Testcase):
 
-    #def setUp(self):
-        #setup variables needed to run test
+
+class TestStringMethods(unittest.TestCase):
+
+    def setUp(self):
+        self.app = QApplication(sys.argv)
+        self.window = QMainWindow()
+        self.window.table = Table()
 
     #def tearDown(self):
-        #code that needs cleaning up goes here
 
-    def testOne(self):
-        print("hi")
+    def test_headerH(self):
+        list = ["hi", "blah"]
+        self.window.table.setColumnNames(list)
+        for x in range(1, len(list)):
+            self.assertEqual(self.window.table.getTableWidget().horizontalHeaderItem(x).text(), list[x])
 
+    #tests for vertical headers to see if correct
+    #def text_verticalH(self):
 
-
-def test_main():
-    support.run_unittest(unitTestTable)
 
 
 if __name__ == '__main__':
-    test_main()
+    unittest.main()
+
+
+
+
+
