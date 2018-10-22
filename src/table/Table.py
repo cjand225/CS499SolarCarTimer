@@ -71,6 +71,7 @@ class Table(QWidget):
             for row in range(self.tableWidget.rowCount()):
                 self.setCell(row, col, blank)
 
+
     #sets amount of rows
     def setRows(self, rowNum):
         self.rows = rowNum

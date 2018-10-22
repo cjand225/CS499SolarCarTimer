@@ -12,10 +12,9 @@ class TestTableMethods(unittest.TestCase):
         self.window = QMainWindow()
         self.window.table = Table()
 
-    #def tearDown(self):
-
-    #checks format of Headers and if they're set
-    #specfically if they are numbers
+    '''
+     tests for proper horizontal headers
+    '''
     def test_headerH(self):
         list = ["hi", "blah", "132"]
         self.window.table.setColumnNames(list)

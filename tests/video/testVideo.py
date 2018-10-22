@@ -5,10 +5,11 @@ from src.video.VisionWidget import *
 
 class testVideo(unittest.TestCase):
 
-    def changeCamera(self):
+    def setUp(self):
         print("hi")
 
-
+    def changeCamera(self):
+        print("hi")
 
 
 
