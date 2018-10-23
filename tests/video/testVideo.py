@@ -1,5 +1,5 @@
 import unittest
-from src.video.VisionWidget import *
+from src.video.Video import Video
 
 
 

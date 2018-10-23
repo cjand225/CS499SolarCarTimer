@@ -1,9 +1,9 @@
 import unittest
-from src.table.SemiAutoWidget import SemiAutoWidget
+from src.video.ImageCanvas import *
 
 
 
-class testSemiAuto(unittest.TestCase):
+class testImageCanvas(unittest.TestCase):
 
     def setUp(self):
         print("hi")

@@ -1,9 +1,9 @@
 import unittest
-from src.table.SemiAutoWidget import SemiAutoWidget
+from src.video.ImageProcessThread import ImageProcessThread
 
 
 
-class testSemiAuto(unittest.TestCase):
+class testImageProcessThread(unittest.TestCase):
 
     def setUp(self):
         print("hi")
