@@ -1,3 +1,11 @@
+'''
+Module: AppWindow.py
+Purpose: Top level view object that handles most view information and talks with the controller to
+         recieve data from modal
+
+Depends On: PyQt5, Table.py, SemiAutoWidget.py,
+'''
+
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
