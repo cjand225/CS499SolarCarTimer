@@ -1,0 +1,10 @@
+#Make sure conda-forge is the top channel
+conda config --add-channels conda-forge
+
+#To Create an Env for sharing
+conda list --explicit > envBuild.txt
+
+#To Install Existing env from file
+conda create -n <env-name> --file envBuild.txt
+conda activate <env-name>
+pip install opencv-contrib-python
