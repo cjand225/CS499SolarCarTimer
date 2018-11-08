@@ -26,15 +26,12 @@ class AppWindow(QMainWindow):
         # initialize Window
         self.initMainWindow()
 
-        # initialize gui
-        self.initUi()
-
     def initMainWindow(self):
         self.mainWindowUI = loadUi('./../resources/App.ui', self)
         self.setAttribute(Qt.WA_DeleteOnClose)
-        #centers window
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        self.show()
 
 
 
