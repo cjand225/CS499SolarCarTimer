@@ -19,18 +19,21 @@ class App():
         self.mainWindow = None
         self.running = False
 
+        #put ui PathFiles Right here
+        self.MainUIPath = './../../resources/App.ui'
+
         self.videoMod = None
         self.tableMod = None
 
         self.initApplication()
         self.initMainWindow()
 
-    def initMainWindow(self):
-        self.mainWindow = AppWindow()
-
 
     def initApplication(self):
         self.Application = QApplication(sys.argv)
+
+    def initMainWindow(self):
+        self.mainWindow = AppWindow(self.MainUIPath)
 
     def run(self):
         self.running = True

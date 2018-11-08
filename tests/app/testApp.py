@@ -2,8 +2,6 @@ import unittest
 import sys
 from src.app.App import App
 from src.app.AppWindow import AppWindow
-
-
 from PyQt5.QtWidgets import QApplication, QMainWindow
 
 class TestAppMethods(unittest.TestCase):

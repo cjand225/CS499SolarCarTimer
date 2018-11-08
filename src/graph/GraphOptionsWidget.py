@@ -5,11 +5,12 @@ from PyQt5.uic import loadUi
 
 class GraphOptions(QWidget):
 
-    def __init__(self):
+    def __init__(self, uipath):
         super().__init__()
+        self.UIPath = uipath
         self.initUI()
 
     def initUI(self):
-        self.ui = loadUi('./../resources/GraphOptions.ui', self)
+        self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
