@@ -19,8 +19,9 @@ class SemiAutoWidget(QWidget):
     boxColumn = 2
     predictColor = Qt.green
 
-    def __init__(self):
+    def __init__(self, uipath):
         super().__init__()
+        self.UIPath = uipath
         self.initUI()
         self.buttonsLayout.setAlignment(Qt.AlignTop)
         self._cars = []
@@ -30,7 +31,6 @@ class SemiAutoWidget(QWidget):
         self.buttonsLayout.setColumnStretch(type(self).labelColumn,1)
         self.buttonsLayout.setColumnStretch(type(self).buttonColumn,1)
         self.buttonsLayout.setColumnStretch(type(self).boxColumn,0)
-
 
     @property
     def cars(self):
