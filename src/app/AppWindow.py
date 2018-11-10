@@ -21,6 +21,9 @@ from graph.GraphOptionsWidget import GraphOptions
 
 class AppWindow(QMainWindow):
 
+    def openSemiAuto(self,e):
+        self.semiAuto.show()
+
     def __init__(self):
         super(AppWindow, self).__init__()
         # initialize Window
@@ -28,6 +31,11 @@ class AppWindow(QMainWindow):
 
         # initialize gui
         self.initUi()
+        self.semiAuto = SemiAutoWidget()
+        self.actionSemiAuto.triggered.connect(self.openSemiAuto)
+
+    def initUi(self):
+        self.show()
 
     def initMainWindow(self):
         self.mainWindowUI = loadUi('./../resources/App.ui', self)
@@ -36,8 +44,5 @@ class AppWindow(QMainWindow):
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
-
-
-
-
-
+    def closeEvent(self, a0: QCloseEvent):
+        self.semiAuto.close()
