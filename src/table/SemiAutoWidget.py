@@ -8,8 +8,8 @@ from PyQt5.uic import loadUi
 import sched, time
 
 #Semi-Auto Button Widget
-from table.Car import car
-from table.ElidedLabel import ElidedLabel
+from src.table.Car import car
+from src.table.ElidedLabel import ElidedLabel
 
 class SemiAutoWidget(QWidget):
     carRecord = pyqtSignal(object,int)
@@ -71,7 +71,7 @@ class SemiAutoWidget(QWidget):
         predictWidget.animateClick()
 
     def initUI(self):
-        self.ui = loadUi(os.path.abspath(os.path.join(__file__,'../../..//resources/Buttons.ui')), self)
+        self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
 

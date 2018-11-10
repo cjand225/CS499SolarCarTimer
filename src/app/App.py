@@ -5,7 +5,7 @@ Purpose: Controller for entire application, used to periodically update project 
 
 '''
 
-import sys
+import os, sys
 from PyQt5.QtCore import *
 from PyQt5.Qt import *
 from src.app.AppWindow import AppWindow
@@ -21,12 +21,13 @@ class App():
         self.running = False
 
         #put ui PathFiles Right here
-        self.MainUIPath = './../resources/App.ui'
-        self.TableUIPath = './../resources/Table.ui'
-        self.VisionUIPath = './../resources/Video.ui'
-        self.LogUIPath = './../resource/Log.ui'
-        self.SemiAutoUIPath = './../resources/Buttons.ui'
-        self.QuitDialogPath = './../resources/QuitDialog.ui'
+        resourcesDir = os.path.abspath(os.path.join(__file__,"./../../../resources"))
+        self.MainUIPath = os.path.join(resourcesDir,'App.ui')
+        self.TableUIPath = os.path.join(resourcesDir,'Table.ui')
+        self.VisionUIPath = os.path.join(resourcesDir,'Video.ui')
+        self.LogUIPath = os.path.join(resourcesDir,'Log.ui')
+        self.SemiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
+        self.QuitDialogPath = os.path.join(resourcesDir,'QuitDialog.ui')
 
         #read/write paths
         self.LogPath = '../../logs/'
@@ -136,7 +137,8 @@ class App():
 
     '''
     def addComponents(self):
-        self.mainWindow.addTable(self.tableView.getTableWidget())
+        pass
+        #self.mainWindow.addTable(self.tableView.getTableWidget())
         #self.mainWindow.addVision()
         #self.mainWindow.addLog()
         #self.mainWindow.addGraph(graphOptions, GraphWidget)
