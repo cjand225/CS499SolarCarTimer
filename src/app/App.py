@@ -49,25 +49,92 @@ class App():
         self.addComponents()
         self.connectActionsMainWindow()
 
+
+    ''' 
+
+        Function: initApplication(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes the QApplication, required for running and maintaing program.
+
+    '''
+
     def initApplication(self):
         self.Application = QApplication(sys.argv)
+
+    ''' 
+
+        Function: initMainWindow(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes AppWindow in the mainWindow Variable attatched to App Class as well as
+                 Initalizing any functions related to the AppWindow Class
+
+    '''
 
     def initMainWindow(self):
         self.mainWindow = AppWindow(self.MainUIPath)
         self.mainWindow.initCloseDialog(self.QuitDialogPath)
 
+    ''' 
+
+        Function: initTableview(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes the Table Class (w/ a path to the view's UI), that is its own controller for handling 
+                 both its internal model and View class (however view class is passed to AppWindow to handle afterwards)
+
+    '''
     def initTableView(self):
         self.tableView = Table(self.TableUIPath)
 
+    ''' 
+
+        Function: initVision(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initalizes the Vision Class (w/ a path to the View's UI), that handled camera interfacing, image
+                 processing, and OCR related tasks, which then can interface with the Table Class in order to update
+                 Various Cars with Laptime Information
+
+    '''
     def initVision(self):
         self.vision = None
 
+
+    ''' 
+
+        Function: initLog(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes the Log Class (w/ a path to the View's UI and Writing directory), that handles
+                 file writes to a specified file when the Log Class is invoked.
+
+    '''
     def initLog(self):
         self.log = None
 
+    ''' 
+
+        Function: initGraph(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: initializes the Graphing Module (w/ a path to the View's UI), which then when given information
+                 in the form of lists and user specified information, can create Graphs via its own VieW
+
+    '''
     def initGraph(self):
         self.graph = None
 
+    ''' 
+
+        Function: addComponents(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Adds widgets from each module to mainWindow(AppWindow) to be handled as a sub component
+                 of the overall View of the program.
+
+    '''
     def addComponents(self):
         self.mainWindow.addTable(self.tableView.getTableWidget())
         #self.mainWindow.addVision()
@@ -75,6 +142,15 @@ class App():
         #self.mainWindow.addGraph(graphOptions, GraphWidget)
         #self.mainWindow.addSemiAuto()
 
+    ''' 
+
+        Function: connectActionsMainWindow(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: connects Actions relating to the QMainWindow(AppWindow) that require a higher level scope
+                 than what is normally allowed to AppWindow such as newfile, openfile, savefile, saveAs.
+
+    '''
     def connectActionsMainWindow(self):
         #FileMenu
         self.mainWindow.actionNew.triggered.connect(self.newFile)
@@ -86,30 +162,75 @@ class App():
 
         #Help Menu
 
+    ''' 
+
+        Function: run(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Runs entire Program until Application returns from executing, which then closes with a 
+                 proper exit code.
+
+    '''
     def run(self):
         self.running = True
         sys.exit(self.Application.exec_())
 
-    def isRunning(self):
-        return self.running
 
-    def getMainWindow(self):
-        return self.mainWindow
+    ''' 
 
+        Function: saveFile(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Saves the current session of data from Table Model to the currently chosen writeFile,
+                 if the file happens to not exist, the writeFile file will then ask the user to name such
+                 a file to be created.
+
+    '''
     def saveFile(self):
         if(self.writeFile == None):
             self.writeFile = self.mainWindow.saveAsFileDialog()
 
+        #else use writeFile
+
         #continue to dump save file
 
+
+    ''' 
+
+        Function: SaveAsFile(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Saves the current session of data from TableModel to the writeFile chosen by the user,
+                 if the user doesn't choosen a filename, it'll asssume a default file name to save as under
+                 the current working directory.
+
+    '''
     def saveAsFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
         #write file to location
 
+    ''' 
+
+        Function: openFile(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: opens a file chosen by the user via FileDialog that is then opened and read/parsed
+                 into the Table Model
+
+    '''
     def openFile(self):
         if(self.readFile == None):
             self.readFile = self.mainWindow.openFileDialog()
 
+    ''' 
+
+        Function: newFile(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Clears any currently existing tableModel, prompts user to set a filename via FileDialog,
+                 then saves that as the current writeFile to be used for anything further.
+
+    '''
     def newFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
 
