@@ -5,6 +5,7 @@ from PyQt5.Qt import QApplication, Qt
 from PyQt5.QtTest import QSignalSpy
 from PyQt5.QtGui import QBrush, QPalette
 from src.table.SemiAutoWidget import SemiAutoWidget
+from src.app.App import App
 from src.table.Car import car
 
 class TestSemiAutoWidget(unittest.TestCase):
@@ -13,7 +14,7 @@ class TestSemiAutoWidget(unittest.TestCase):
 
     @staticmethod
     def createWidget():
-        semiAutoWidget = SemiAutoWidget()
+        semiAutoWidget = SemiAutoWidget(App.semiAutoUIPath)
         semiAutoWidget.show()
         return semiAutoWidget
 

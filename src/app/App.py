@@ -14,20 +14,21 @@ from src.table.Table import Table
 
 
 class App():
-
+    resourcesDir = os.path.abspath(os.path.join(__file__,"./../../../resources"))
+    mainUIPath = os.path.join(resourcesDir,'App.ui')
+    tableUIPath = os.path.join(resourcesDir,'Table.ui')
+    visionUIPath = os.path.join(resourcesDir,'Video.ui')
+    logUIPath = os.path.join(resourcesDir,'Log.ui')
+    semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
+    quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
+    
     def __init__(self):
         self.Application = None
         self.mainWindow = None
         self.running = False
 
         #put ui PathFiles Right here
-        resourcesDir = os.path.abspath(os.path.join(__file__,"./../../../resources"))
-        self.MainUIPath = os.path.join(resourcesDir,'App.ui')
-        self.TableUIPath = os.path.join(resourcesDir,'Table.ui')
-        self.VisionUIPath = os.path.join(resourcesDir,'Video.ui')
-        self.LogUIPath = os.path.join(resourcesDir,'Log.ui')
-        self.SemiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
-        self.QuitDialogPath = os.path.join(resourcesDir,'QuitDialog.ui')
+
 
         #read/write paths
         self.LogPath = '../../logs/'
@@ -74,8 +75,8 @@ class App():
     '''
 
     def initMainWindow(self):
-        self.mainWindow = AppWindow(self.MainUIPath)
-        self.mainWindow.initCloseDialog(self.QuitDialogPath)
+        self.mainWindow = AppWindow(type(self).mainUIPath)
+        self.mainWindow.initCloseDialog(type(self).quitDialogUIPath)
 
     ''' 
 
@@ -87,7 +88,7 @@ class App():
 
     '''
     def initTableView(self):
-        self.tableView = Table(self.TableUIPath)
+        self.tableView = Table(type(self).tableUIPath)
 
     ''' 
 
