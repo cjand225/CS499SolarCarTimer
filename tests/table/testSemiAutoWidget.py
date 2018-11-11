@@ -98,4 +98,6 @@ class TestSemiAutoWidget(unittest.TestCase):
         self.assertEqual(carButton.palette().color(carButton.backgroundRole()),SemiAutoWidget.predictColor)
         semiAutoWidget.clearPredict(testCar)
         self.assertEqual(carButton.palette().color(carButton.backgroundRole()),palette.color(carButton.backgroundRole()))
-    
+
+    def tearDown(self):
+        self.app.quit()

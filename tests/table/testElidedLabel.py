@@ -1,4 +1,5 @@
 import sys, os, unittest, time
+sys.path.insert(0, os.path.abspath("src"))
 from PyQt5.Qt import QApplication
 from PyQt5.QtTest import QSignalSpy
 from tests.table.ElidedLabelTestWidget import ElidedLabelTestWidget
@@ -6,7 +7,6 @@ from tests.table.ElidedLabelTestWidget import ElidedLabelTestWidget
 class TestElidedLabel(unittest.TestCase):
     def setUp(self):
         self.app = QApplication(sys.argv)
-        sys.path.insert(0, os.path.abspath("src"))
         self.labelWidget = ElidedLabelTestWidget()
         self.labelWidget.show()
     
@@ -25,3 +25,6 @@ class TestElidedLabel(unittest.TestCase):
         self.labelWidget.label.setText(shortString)
         self.labelWidget.label.paintEvent(None)
         self.assertFalse(self.labelWidget.label.elided)
+
+    def tearDown(self):
+        self.app.quit()
