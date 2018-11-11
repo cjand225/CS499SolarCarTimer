@@ -24,6 +24,7 @@ class App():
     semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
     quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
     addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
+    GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
 
     def __init__(self):
         self.Application = None
@@ -141,7 +142,7 @@ class App():
 
     '''
     def addComponents(self):
-        self.mainWindow.addTable(self.tableView.getTableWidget())
+        #self.mainWindow.addTable(self.tableView.getTableWidget())
         #self.mainWindow.addVision()
         #self.mainWindow.addLog()
         #self.mainWindow.addGraph(graphOptions, GraphWidget)

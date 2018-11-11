@@ -8,7 +8,7 @@ from PyQt5.uic import loadUi
 import sched, time
 
 #Semi-Auto Button Widget
-from src.table.Car import car
+#from src.table.Car import Car
 from src.table.ElidedLabel import ElidedLabel
 
 class SemiAutoWidget(QWidget):

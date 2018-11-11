@@ -6,53 +6,58 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>979</width>
-    <height>394</height>
+    <width>1027</width>
+    <height>466</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Graph Analysis</string>
+   <string>Dialog</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QGroupBox" name="groupBox">
+  <layout class="QGridLayout" name="gridLayout_3">
+   <item row="0" column="1">
+    <layout class="QGridLayout" name="gridLayout_2">
+     <item row="0" column="1">
+      <widget class="QGroupBox" name="groupBox_1">
        <property name="title">
-        <string>Graphs</string>
+        <string>Add Teams</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="0" alignment="Qt::AlignHCenter">
-           <widget class="QPushButton" name="pushButton_3">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QFormLayout" name="formLayout_2">
+          <property name="leftMargin">
+           <number>1</number>
+          </property>
+          <property name="topMargin">
+           <number>1</number>
+          </property>
+          <property name="rightMargin">
+           <number>1</number>
+          </property>
+          <property name="bottomMargin">
+           <number>1</number>
+          </property>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_2">
             <property name="text">
-             <string>Graph Type 1 img</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
+             <string>Displayed Teams</string>
             </property>
            </widget>
           </item>
-          <item row="0" column="2" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>Graph Type 3 img</string>
+          <item row="2" column="0">
+           <widget class="QListWidget" name="ChosenTeamList">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
             </property>
-            <property name="checkable">
-             <bool>true</bool>
+            <property name="autoFillBackground">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
-          <item row="0" column="1" alignment="Qt::AlignHCenter|Qt::AlignVCenter">
-           <widget class="QPushButton" name="pushButton_2">
-            <property name="text">
-             <string>Graph Type 2 Img</string>
-            </property>
-            <property name="checkable">
-             <bool>true</bool>
-            </property>
-           </widget>
+          <item row="0" column="0" colspan="2">
+           <widget class="QComboBox" name="TeamChoiceBox"/>
           </item>
          </layout>
         </item>
@@ -61,102 +66,33 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item row="0" column="0" rowspan="2">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="0" column="0">
+      <widget class="QGraphicsView" name="GraphWindow"/>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="1">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
-      <string>Graph Options</string>
+      <string>Graph Type</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout_7">
-      <item row="0" column="0">
-       <layout class="QGridLayout" name="gridLayout_6">
-        <item row="1" column="0">
-         <widget class="QGroupBox" name="groupBox_3">
-          <property name="title">
-           <string>Cars (Max 7)</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_9">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout_8">
-             <item row="0" column="1">
-              <widget class="QCheckBox" name="checkBox_3">
-               <property name="text">
-                <string>Car 2</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="2">
-              <widget class="QCheckBox" name="checkBox_2">
-               <property name="text">
-                <string>Car 3</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="2">
-              <widget class="QCheckBox" name="checkBox">
-               <property name="text">
-                <string>Car 6</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_4">
-               <property name="text">
-                <string>Car 1</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="0">
-              <widget class="QCheckBox" name="checkBox_5">
-               <property name="text">
-                <string>Car 4</string>
-               </property>
-              </widget>
-             </item>
-             <item row="1" column="1">
-              <widget class="QCheckBox" name="checkBox_6">
-               <property name="text">
-                <string>Car 5</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QGroupBox" name="groupBox_4">
-          <property name="title">
-           <string>Data to Display</string>
-          </property>
-          <layout class="QGridLayout" name="gridLayout_11">
-           <item row="0" column="0">
-            <layout class="QGridLayout" name="gridLayout_10">
-             <item row="0" column="1">
-              <widget class="QCheckBox" name="checkBox_7">
-               <property name="text">
-                <string>Time vs Velocity</string>
-               </property>
-              </widget>
-             </item>
-             <item row="0" column="0">
-              <widget class="QCheckBox" name="checkBox_8">
-               <property name="text">
-                <string>Avg Lap Time</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
-           </item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0" colspan="2">
+       <widget class="QComboBox" name="GraphTypes">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+       </widget>
       </item>
       <item row="1" column="0">
        <widget class="QDialogButtonBox" name="buttonBox">
         <property name="standardButtons">
-         <set>QDialogButtonBox::Apply|QDialogButtonBox::Cancel</set>
+         <set>QDialogButtonBox::Apply</set>
         </property>
        </widget>
       </item>
