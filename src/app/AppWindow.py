@@ -11,6 +11,7 @@ Depends On:
             Files: Table.py, SemiAutoWidget.py, VisionWidget.py, LogWidget.py, GraphWidget.py
                    GraphOptions.py,
 '''
+import src.app.App
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -19,6 +20,8 @@ from PyQt5.uic import loadUi
 
 from src.table.Table import Table
 from src.table.SemiAutoWidget import SemiAutoWidget
+from src.table.AddCarDialog import AddCarDialog
+from src.table.Car import car
 from src.video.VisionWidget import VisionWidget
 from src.log.LogWidget import LogWidget
 from src.graph.GraphOptionsWidget import GraphOptions
@@ -76,7 +79,7 @@ class AppWindow(QMainWindow):
     '''
 
 
-    #def connectComponents(self):
+    # def connectComponents(self):
         #view
         #self.actionTable.triggered.connect()
         #self.actionSemiAuto.triggered.connect()
@@ -86,6 +89,7 @@ class AppWindow(QMainWindow):
         #help
         #self.actionAbout.triggered.connect()
         #self.actionHelp.triggered.connect()
+
 
     ''' 
 
@@ -301,5 +305,19 @@ class AppWindow(QMainWindow):
         if(self.GraphWidget != None):
             self.GraphWidget.close()
         self.close()
+
+    def addCarDialog(self):
+        carDialog = AddCarDialog(src.app.App.App.addCarDialogUIPath)
+        retVal = carDialog.exec()
+        if retVal == QDialog.Accepted:
+            # Returns a car for now.
+            # This should be changed to do whatever needs to be done with the table,
+            # semiAutoWidget, etc.
+            carNumber = int(carDialog.carNumber)
+            return car(0,carDialog.teamName)
+        else:
+            return None
+        
+    
 
 

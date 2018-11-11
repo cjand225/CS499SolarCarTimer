@@ -5,7 +5,7 @@ Purpose: Controller for entire application, used to periodically update project 
 
 '''
 
-import sys
+import os, sys
 from PyQt5.QtCore import *
 from PyQt5.Qt import *
 from src.app.AppWindow import AppWindow
@@ -14,19 +14,22 @@ from src.table.Table import Table
 
 
 class App():
-
+    resourcesDir = os.path.abspath(os.path.join(__file__,"./../../../resources"))
+    mainUIPath = os.path.join(resourcesDir,'App.ui')
+    tableUIPath = os.path.join(resourcesDir,'Table.ui')
+    visionUIPath = os.path.join(resourcesDir,'Video.ui')
+    logUIPath = os.path.join(resourcesDir,'Log.ui')
+    semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
+    quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
+    addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
+    
     def __init__(self):
         self.Application = None
         self.mainWindow = None
         self.running = False
 
         #put ui PathFiles Right here
-        self.MainUIPath = './../resources/App.ui'
-        self.TableUIPath = './../resources/Table.ui'
-        self.VisionUIPath = './../resources/Video.ui'
-        self.LogUIPath = './../resource/Log.ui'
-        self.SemiAutoUIPath = './../resources/Buttons.ui'
-        self.QuitDialogPath = './../resources/QuitDialog.ui'
+
 
         #read/write paths
         self.LogPath = '../../logs/'
@@ -73,8 +76,8 @@ class App():
     '''
 
     def initMainWindow(self):
-        self.mainWindow = AppWindow(self.MainUIPath)
-        self.mainWindow.initCloseDialog(self.QuitDialogPath)
+        self.mainWindow = AppWindow(type(self).mainUIPath)
+        self.mainWindow.initCloseDialog(type(self).quitDialogUIPath)
 
     ''' 
 
@@ -86,7 +89,7 @@ class App():
 
     '''
     def initTableView(self):
-        self.tableView = Table(self.TableUIPath)
+        self.tableView = Table(type(self).tableUIPath)
 
     ''' 
 
@@ -136,7 +139,8 @@ class App():
 
     '''
     def addComponents(self):
-        self.mainWindow.addTable(self.tableView.getTableWidget())
+        pass
+        #self.mainWindow.addTable(self.tableView.getTableWidget())
         #self.mainWindow.addVision()
         #self.mainWindow.addLog()
         #self.mainWindow.addGraph(graphOptions, GraphWidget)
@@ -159,6 +163,7 @@ class App():
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
 
         #Edit Menu
+        self.mainWindow.actionAddCar.triggered.connect(self.addCar)
 
         #Help Menu
 
@@ -235,6 +240,8 @@ class App():
         self.writeFile = self.mainWindow.saveAsFileDialog()
 
 
+    def addCar(self):
+        self.mainWindow.addCarDialog()
 
 
 
