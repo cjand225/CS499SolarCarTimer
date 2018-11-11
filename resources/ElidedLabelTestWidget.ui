@@ -33,7 +33,7 @@
   <customwidget>
    <class>ElidedLabel</class>
    <extends>QLabel</extends>
-   <header>table.ElidedLabel</header>
+   <header>src.table.ElidedLabel</header>
   </customwidget>
  </customwidgets>
  <resources/>
