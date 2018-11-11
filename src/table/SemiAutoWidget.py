@@ -8,7 +8,7 @@ from PyQt5.uic import loadUi
 import sched, time
 
 #Semi-Auto Button Widget
-from src.table.Car import car
+from src.table.Car import Car
 from src.table.ElidedLabel import ElidedLabel
 
 class SemiAutoWidget(QWidget):
@@ -38,7 +38,7 @@ class SemiAutoWidget(QWidget):
 
     def setCar(self,index,car):
         self._cars[index] = car
-        self.buttonsLayout.itemAtPosition(index,type(self).labelColumn).widget().setText(car.carOrg)
+        self.buttonsLayout.itemAtPosition(index,type(self).labelColumn).widget().setText(car.OrgName)
         recordWidget = self.buttonsLayout.itemAtPosition(index,type(self).buttonColumn).widget()
         recordWidget.clicked.disconnect()
         recordWidget.clicked.connect(lambda b: self.carRecord.emit(car,index))
@@ -77,7 +77,7 @@ class SemiAutoWidget(QWidget):
 
     def addCar(self,car):
         carIndex = len(self._cars)
-        carLabel = ElidedLabel(car.carOrg)
+        carLabel = ElidedLabel(car.OrgName)
         carLabel.setMaximumWidth(225)
         self.buttonsLayout.addWidget(carLabel,carIndex,type(self).labelColumn)
         recordButton = QPushButton("Record time")
