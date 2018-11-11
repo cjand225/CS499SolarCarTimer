@@ -33,7 +33,7 @@
      <x>0</x>
      <y>0</y>
      <width>875</width>
-     <height>23</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -47,6 +47,7 @@
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
+    <addaction name="actionClose"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -63,6 +64,8 @@
     <addaction name="separator"/>
     <addaction name="actionSelectRow"/>
     <addaction name="actionSelectColumn"/>
+    <addaction name="separator"/>
+    <addaction name="actionAddCar"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -99,6 +102,14 @@
    </property>
    <property name="shortcut">
     <string>Shift+O</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+W</string>
    </property>
   </action>
   <action name="actionTable">
@@ -231,24 +242,12 @@
     <string>Graphing</string>
    </property>
   </action>
+  <action name="actionAddCar">
+   <property name="text">
+    <string>Add Car</string>
+   </property>
+  </action>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>actionQuit</sender>
-   <signal>triggered()</signal>
-   <receiver>MainWindow</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>437</x>
-     <y>19</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>437</x>
-     <y>19</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

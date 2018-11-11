@@ -21,6 +21,7 @@ class App():
     logUIPath = os.path.join(resourcesDir,'Log.ui')
     semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
     quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
+    addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
     
     def __init__(self):
         self.Application = None
@@ -162,6 +163,7 @@ class App():
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
 
         #Edit Menu
+        self.mainWindow.actionAddCar.triggered.connect(self.addCar)
 
         #Help Menu
 
@@ -238,6 +240,8 @@ class App():
         self.writeFile = self.mainWindow.saveAsFileDialog()
 
 
+    def addCar(self):
+        self.mainWindow.addCarDialog()
 
 
 
