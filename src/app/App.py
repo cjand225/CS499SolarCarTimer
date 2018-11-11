@@ -22,6 +22,7 @@ class App():
     semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
     quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
     addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
+    googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
     
     def __init__(self):
         self.Application = None
@@ -161,6 +162,7 @@ class App():
         self.mainWindow.actionOpen.triggered.connect(self.openFile)
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
+        self.mainWindow.actionUpload.triggered.connect(self.upload)
 
         #Edit Menu
         self.mainWindow.actionAddCar.triggered.connect(self.addCar)
@@ -242,6 +244,9 @@ class App():
 
     def addCar(self):
         self.mainWindow.addCarDialog()
+
+    def upload(self):
+        self.mainWindow.googleDriveDialog()
 
 
 

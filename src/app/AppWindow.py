@@ -21,10 +21,11 @@ from PyQt5.uic import loadUi
 from src.table.Table import Table
 from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.AddCarDialog import AddCarDialog
-from src.table.Car import car
+from src.table.Car import Car
 from src.video.VisionWidget import VisionWidget
 from src.log.LogWidget import LogWidget
 from src.graph.GraphOptionsWidget import GraphOptions
+from src.cloud.GoogleDriveBrowser import GoogleDriveBrowser
 
 
 class AppWindow(QMainWindow):
@@ -317,6 +318,10 @@ class AppWindow(QMainWindow):
             return car(0,carDialog.teamName)
         else:
             return None
+
+    def googleDriveDialog(self):
+        driveDialog = GoogleDriveBrowser(src.app.App.App.googleDriveUIPath)
+        retVal = driveDialog.exec()
         
     
 
