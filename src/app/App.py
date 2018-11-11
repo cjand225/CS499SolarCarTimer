@@ -8,6 +8,8 @@ Purpose: Controller for entire application, used to periodically update project 
 import sys
 from PyQt5.QtCore import *
 from PyQt5.Qt import *
+
+from src.graph.GraphWidget import Graph
 from src.app.AppWindow import AppWindow
 from src.table.Table import Table
 
@@ -27,6 +29,8 @@ class App():
         self.LogUIPath = './../resource/Log.ui'
         self.SemiAutoUIPath = './../resources/Buttons.ui'
         self.QuitDialogPath = './../resources/QuitDialog.ui'
+        self.GraphUIPath = './../resources/GraphTest.ui'
+        #self.GraphUIPath = './../../resources/GraphOptions.ui'
 
         #read/write paths
         self.LogPath = '../../logs/'
@@ -44,7 +48,7 @@ class App():
         self.initTableView()
         #self.initVision()
         #self.initLog()
-        #self.initGraph()
+        self.initGraph()
 
         self.addComponents()
         self.connectActionsMainWindow()
@@ -124,7 +128,7 @@ class App():
 
     '''
     def initGraph(self):
-        self.graph = None
+        self.graph = Graph(self.GraphUIPath)
 
     ''' 
 
@@ -136,10 +140,12 @@ class App():
 
     '''
     def addComponents(self):
-        self.mainWindow.addTable(self.tableView.getTableWidget())
+        print("Nothing to see here")
+        #self.mainWindow.addTable(self.tableView.getTableWidget())
         #self.mainWindow.addVision()
         #self.mainWindow.addLog()
         #self.mainWindow.addGraph(graphOptions, GraphWidget)
+        self.mainWindow.addGraph(Graph)
         #self.mainWindow.addSemiAuto()
 
     ''' 
