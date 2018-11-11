@@ -7,16 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>516</width>
-    <height>293</height>
+    <height>102</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout"/>
-   </item>
    <item row="1" column="0">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
@@ -26,6 +23,30 @@
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
+   </item>
+   <item row="0" column="0">
+    <layout class="QFormLayout" name="formLayout">
+     <item row="0" column="0">
+      <widget class="QLabel" name="teamNameLabel">
+       <property name="text">
+        <string>Team name</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLineEdit" name="teamNameEdit"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="carNumberLabel">
+       <property name="text">
+        <string>Car number</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="carNumberEdit"/>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
