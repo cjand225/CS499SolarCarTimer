@@ -88,6 +88,11 @@ class testCar(unittest.TestCase):
         myCar.editID(0)
         self.assertEqual(myCar.getCarID(), 0)
 
+    def testLapCount(self):
+        myCar = Car(1, "University of Kentucky", 23)
+        myCar.addLapTime(2, 3, 4, 5)
+        myCar.addLapTime(6, 7, 8, 9)
+        self.assertEqual(myCar.getLapCount(), 2)
 
 
 

@@ -36,6 +36,7 @@ class Car():
         newLap = (self.getLatestLapID(), hours, minutes, seconds, milliseconds)
         self.LapList.append(newLap)
         self.LatestLapID += 1
+        self.LapCount = len(self.LapList)
 
     """
          Function: removeLapTime
@@ -126,7 +127,23 @@ class Car():
     def editID(self, ID):
         self.ID = ID
 
+    """
+    
+        Function: getLapCount
+        Parameters: self
+        Return Value: self.LapCount
+        Purpose: Returns the total laps that have been added to the car class.
+    
+    """
+    def getLapCount(self):
+        return self.LapCount
 
+
+    """
+    
+    """
+    def getLap(self, lapID):
+        return self.LapList[lapID]
 
 
 

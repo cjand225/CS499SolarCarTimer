@@ -28,7 +28,6 @@ class testCarStorage(unittest.TestCase):
         self.assertNotEqual(myStore.storageList[0], testCar)
         self.assertEqual(myStore.storageList[0], reIndexedCar)
 
-
     def testgetCarByCarNum(self):
         myStore = CarStorage()
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
@@ -79,7 +78,6 @@ class testCarStorage(unittest.TestCase):
         self.assertEqual(CarLap[3], 3)
         self.assertEqual(CarLap[4], 2)
 
-
     def testeditLaptime(self):
         myStore = CarStorage()
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
@@ -112,13 +110,25 @@ class testCarStorage(unittest.TestCase):
         self.assertEqual(LapOne[3], 0)
         self.assertEqual(LapOne[4], 0)
 
+    def testGetOrgNames(self):
+        myStore = CarStorage()
+        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
+        myStore.addCar(myStore.getLatestCarID(), 'University of y', 42)
+        newlist = []
+        newlist.append(myStore.getCarByID(0).getOrg())
+        newlist.append(myStore.getCarByID(1).getOrg())
+        self.assertEqual(newlist, myStore.getCarNamesList())
 
+    def testgetCarAmount(self):
+        myStore = CarStorage()
+        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
+        myStore.addCar(myStore.getLatestCarID(), 'University of y', 42)
+        self.assertEqual(myStore.getCarAmount(), 2)
 
-
-
-
-
-
-
-
-
+    def testgetHighestLapCount(self):
+        myStore = CarStorage()
+        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
+        myStore.addCar(myStore.getLatestCarID(), 'University of y', 42)
+        myStore.appendLapTime(0, 1, 1, 1, 1)
+        myStore.appendLapTime(0, 2, 3, 4, 5)
+        myStore.appendLapTime(1, 3, 4, 6, 7)
