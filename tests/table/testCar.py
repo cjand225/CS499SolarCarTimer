@@ -81,8 +81,12 @@ class testCar(unittest.TestCase):
     def testGetCarNum(self):
         myCar = Car(1, "University of Kentucky", 23)
         myCarNum = myCar.getCarNum()
-
         self.assertEqual(myCarNum, 23)
+
+    def testIDChanged(self):
+        myCar = Car(1, "University of Kentucky", 23)
+        myCar.editID(0)
+        self.assertEqual(myCar.getCarID(), 0)
 
 
 
