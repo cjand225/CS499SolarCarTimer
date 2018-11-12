@@ -50,6 +50,25 @@ class App():
 
         self.addComponents()
         self.connectActionsMainWindow()
+        self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
+        self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
+
+    def semiAutoStart(self,car,semiAutoIndex,startTime):
+        self.tableView.CarStoreList.storageList[car.ID].initialTime = startTime
+
+    def semiAutoRecord(self,car,semiAutoIndex,recordedTime):
+        if self.tableView.CarStoreList.storageList[car.ID].LapList:
+            elapsedTime = recordedTime - self.tableView.CarStoreList.storageList[car.ID].LapList[-1].recordedTime
+        else:
+            elapsedTime = recordedTime - car.initialTime
+        self.tableView.CarStoreList.appendLapTime(car.ID,elapsedTime)
+
+    @staticmethod
+    def toggleWidget(widget,e):
+        if widget.isVisible():
+            widget.hide()
+        else:
+            widget.show()
 
 
     ''' 
@@ -165,6 +184,9 @@ class App():
         #Edit Menu
         self.mainWindow.actionAddCar.triggered.connect(self.addCar)
 
+        #View Menu
+        self.mainWindow.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.mainWindow.SemiAutoWidget,e))
+
         #Help Menu
 
     ''' 
@@ -245,6 +267,7 @@ class App():
         if newCar:
             newCar.ID = len(self.tableView.CarStoreList.storageList)
             self.tableView.CarStoreList.addExistingCar(newCar)
+            self.mainWindow.SemiAutoWidget.addCar(newCar)
 
     # def upload(self):
     #     self.mainWindow.googleDriveDialog()

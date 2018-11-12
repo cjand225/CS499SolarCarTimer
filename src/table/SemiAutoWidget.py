@@ -12,7 +12,8 @@ from src.table.Car import Car
 from src.table.ElidedLabel import ElidedLabel
 
 class SemiAutoWidget(QWidget):
-    carRecord = pyqtSignal(object,int)
+    carRecord = pyqtSignal(object,int,float)
+    startClicked = pyqtSignal(object,int,float)
     predictClicked = pyqtSignal(object,bool,int)
     labelColumn = 0
     buttonColumn = 1
@@ -36,12 +37,19 @@ class SemiAutoWidget(QWidget):
     def cars(self):
         return self._cars
 
+    def recordCar(self,car,carIndex):
+        self.carRecord.emit(car,carIndex,time.time())
+
     def setCar(self,index,car):
         self._cars[index] = car
         self.buttonsLayout.itemAtPosition(index,type(self).labelColumn).widget().setText(car.OrgName)
         recordWidget = self.buttonsLayout.itemAtPosition(index,type(self).buttonColumn).widget()
         recordWidget.clicked.disconnect()
-        recordWidget.clicked.connect(lambda b: self.carRecord.emit(car,index))
+        if car.initialTime:
+            recordWidget.clicked.connect(lambda b: self.recordCar(car,index))
+            recordWidget.setText("Record time")
+        else:
+            recordWidget.clicked.connect(lambda b: self.startCar(car,carIndex))
         predictWidget = self.buttonsLayout.itemAtPosition(index,type(self).boxColumn).widget()
         predictWidget.clicked.disconnect()
         predictWidget.clicked.connect(lambda b: self.predictClicked.emit(car,b,carIndex))
@@ -74,18 +82,25 @@ class SemiAutoWidget(QWidget):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        
+    def startCar(self,car,carIndex):
+        self.startClicked.emit(car,carIndex,time.time())
+        recordButton = self.buttonsLayout.itemAtPosition(carIndex,type(self).buttonColumn).widget()
+        recordButton.setText("Record time")
+        recordButton.clicked.disconnect()
+        recordButton.clicked.connect(lambda b: self.recordCar(car,carIndex))
 
     def addCar(self,car):
         carIndex = len(self._cars)
         carLabel = ElidedLabel(car.OrgName)
         carLabel.setMaximumWidth(225)
         self.buttonsLayout.addWidget(carLabel,carIndex,type(self).labelColumn)
-        recordButton = QPushButton("Record time")
+        recordButton = QPushButton("Start")
         self.buttonsLayout.addWidget(recordButton,carIndex,type(self).buttonColumn)
         checkBox = QCheckBox("Predict laps")
         self.buttonsLayout.addWidget(checkBox,carIndex,type(self).boxColumn,Qt.AlignCenter)
         self._cars.append(car)
-        recordButton.clicked.connect(lambda b: self.carRecord.emit(car,carIndex))
+        recordButton.clicked.connect(lambda b: self.startCar(car,carIndex))
         checkBox.clicked.connect(lambda b: self.predictClicked.emit(car,b,carIndex))
 
     def showPredict(self,car):
