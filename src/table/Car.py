@@ -66,11 +66,15 @@ class Car():
                   to delete a lap and then re-enter other data.
 
      """
-    def editLapTime(self, ID, hours, minutes, seconds, milliseconds=None):
-        if(milliseconds):
+    def editLapTime(self, ID, hours, minutes=0, seconds=0, milliseconds=0):
+        if milliseconds:
             self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
-        else:
-            self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
+        elif milliseconds and seconds:
+            self.LapList[ID] = (ID, hours, minutes, 0, 0)
+        elif milliseconds and seconds and minutes:
+            self.LapList[ID] = (ID, hours, 0, 0, 0)
+        elif hours:
+            self.LapList[ID] = (ID, hours, minutes, seconds, 0)
 
 
 
