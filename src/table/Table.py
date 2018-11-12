@@ -5,6 +5,7 @@ from PyQt5.QtCore import *
 from PyQt5.uic import loadUi
 
 from src.table.CarStorage import CarStorage
+from src.table.ATMTest import ATMTest
 
 
 class Table():
@@ -17,14 +18,34 @@ class Table():
         self.TableMod = None
         self.Table = None
         self.CarStoreList = None
-        self.TableView = None
+        # self.TableView = None
 
         # Model > UI > UIModel
-        self.initCarStorage()
+        # self.initCarStorage()
         self.initUI()
         self.initTableModel()
 
-        self.TableView.setModel(self.TableMod)
+        self.tableView.setModel(self.TableMod)
+
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        minSize = 0
+        for headerIndex in range(len(self.tableView.horizontalHeader())):
+            minSize = min(minSize,self.tableView.horizontalHeader().sectionSize(headerIndex))
+        self.tableView.horizontalHeader().setMinimumSectionSize(minSize)
+        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        minSize = 0
+        for headerIndex in range(len(self.tableView.verticalHeader())):
+            minSize = min(minSize,self.tableView.verticalHeader().sectionSize(headerIndex))
+        self.tableView.verticalHeader().setMinimumSectionSize(minSize)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        for i in range(8,20):
+            self.tableView.model().cs.addCar(i,"foo{0}".format(i),20)
+            #self.tableView.model().cs.appendLapTime(i,91,0,0,0)
+        # print(self.tableView.model().columnCount(None))
+        # self.tableView.repaint()
+        for i in range(1,20):
+            self.tableView.model().cs.appendLapTime(5,i,0,0,0)
 
     def initUI(self):
         self.Table = QWidget()
@@ -32,33 +53,33 @@ class Table():
         self.ui = loadUi(self.tableUIPath, self.Table)
         self.Table.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
                                                   self.Table.size(), QApplication.desktop().availableGeometry()))
-        self.TableView = self.Table.tableView
+        self.tableView = self.Table.tableView
         self.Table.show()
 
     def getTableWidget(self):
         return self.Table
 
     def initTableModel(self):
-        self.TableMod = TableModel(self.CarStoreList)
+        self.TableMod = ATMTest(self.Table)
 
-    def initCarStorage(self):
-        self.CarStoreList = CarStorage()
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.addCar(0, "WEE", 43)
-        self.CarStoreList.appendLapTime(0, 1, 1, 1, 1)
-        self.CarStoreList.appendLapTime(1, 2, 2, 2, 2)
+    # def initCarStorage(self):
+    #     self.CarStoreList = CarStorage()
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.addCar(0, "WEE", 43)
+    #     self.CarStoreList.appendLapTime(0, 1, 1, 1, 1)
+    #     self.CarStoreList.appendLapTime(1, 2, 2, 2, 2)
 
-    def getCarStorage(self):
-        return self.CarStoreList.getCarListCopy()
+    # def getCarStorage(self):
+    #    return self.CarStoreList.getCarListCopy()
 
 
 class TableModel(QAbstractTableModel):

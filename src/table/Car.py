@@ -9,20 +9,21 @@
 
 """
 
+from PyQt5.QtCore import pyqtSignal, QObject
 
 
-
-
-class Car():
+class Car(QObject):
+    lapChanged = pyqtSignal(int)
 
     def __init__(self, ID, Org, CarNum):
+        super().__init__()
         self.ID = ID
         self.OrgName = Org
         self.CarNum = CarNum
 
         self.LatestLapID = 0
-        self.LapCount = 50
-        self.LapList = [[0] * 5] * 50
+        self.LapCount = 0
+        self.LapList = []
 
     """
         Function: addLapTime
@@ -33,16 +34,11 @@ class Car():
     
     """
     def addLapTime(self, hours, minutes, seconds, milliseconds):
-        if(self.LatestLapID > 50):
-            newLap = (self.getLatestLapID(), hours, minutes, seconds, milliseconds)
-            self.LapList.append(newLap)
-            self.LatestLapID += 1
-            self.LapCount = len(self.LapList)
-        else:
-            newLap = (self.getLatestLapID(), hours, minutes, seconds, milliseconds)
-            self.LapList.insert(self.LatestLapID, newLap)
-            self.LatestLapID += 1
-            self.LapCount = len(self.LapList)
+        newLap = [self.getLatestLapID(), hours, minutes, seconds, milliseconds]
+        self.LapList.insert(self.LatestLapID, newLap)
+        self.LatestLapID += 1
+        self.LapCount = len(self.LapList)
+        self.lapChanged.emit(len(self.LapList))
 
     """
          Function: removeLapTime
@@ -55,7 +51,7 @@ class Car():
 
      """
     def removeLapTime(self, lapID):
-        self.LapList[lapID] = (lapID, 0, 0, 0, 0)
+        self.LapList[lapID] = [lapID, 0, 0, 0, 0]
 
     """
          Function: editLapTime
@@ -68,9 +64,10 @@ class Car():
      """
     def editLapTime(self, ID, hours, minutes, seconds, milliseconds=None):
         if(milliseconds):
-            self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
+            self.LapList[ID] = [ID, hours, minutes, seconds, milliseconds]
         else:
-            self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
+            self.LapList[ID] = [ID, hours, minutes, seconds, 0]
+        self.lapChanged.emit(ID)
 
 
 

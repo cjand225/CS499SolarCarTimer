@@ -8,18 +8,23 @@
 
 """
 
-
+from PyQt5.QtCore import QObject, pyqtSignal
 from src.table.Car import Car
 import re
 
-class CarStorage():
+class CarStorage(QObject):
+    dataModified = pyqtSignal(int,int)
+    
     def __init__(self):
-        self.storageList = [] * 50
+        super().__init__()
+        self.storageList = []
         self.LatestCarID = 0
 
         self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
         self.RegExpOrg = "/^[a-z ,.'-]+$/i"
         self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
+
+        
 
     """
          Function: addCar
@@ -34,6 +39,8 @@ class CarStorage():
         newCar = Car(ID, carOrg, carNum)
         self.storageList.append(newCar)
         self.LatestCarID += 1
+        self.dataModified.emit(ID,0)
+        newCar.lapChanged.connect(lambda l: self.dataModified.emit(ID,l))
         #check ID
         #IDCheck = self.checkNumRange(ID)
         #check car Org
@@ -129,6 +136,7 @@ class CarStorage():
      """
     def appendLapTime(self, carID, hours, minutes, seconds, milliseconds):
         self.storageList[carID].addLapTime(hours, minutes, seconds, milliseconds)
+        # self.dataChanged.emit(carId,len
 
     """
          Function: editLapTime
