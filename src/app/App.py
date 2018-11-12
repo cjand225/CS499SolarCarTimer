@@ -242,8 +242,9 @@ class App():
 
     def addCar(self):
         newCar = self.mainWindow.addCarDialog()
-        newCar.ID = len(self.tableView.CarStoreList.storageList)
-        self.tableView.CarStoreList.addExistingCar(newCar)
+        if newCar:
+            newCar.ID = len(self.tableView.CarStoreList.storageList)
+            self.tableView.CarStoreList.addExistingCar(newCar)
 
     # def upload(self):
     #     self.mainWindow.googleDriveDialog()
