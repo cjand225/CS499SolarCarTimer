@@ -9,7 +9,9 @@
 
 """
 
+from time import time
 from PyQt5.QtCore import pyqtSignal, QObject
+from src.system.Time import Lap_Time
 
 
 class Car(QObject):
@@ -24,6 +26,7 @@ class Car(QObject):
         self.LatestLapID = 0
         self.LapCount = 0
         self.LapList = []
+        self.initialTime = None
 
     """
         Function: addLapTime
@@ -33,11 +36,20 @@ class Car(QObject):
                  next ID to be used for the next Lap that will be.
     
     """
-    def addLapTime(self, hours, minutes, seconds, milliseconds):
-        newLap = [self.getLatestLapID(), hours, minutes, seconds, milliseconds]
-        self.LapList.insert(self.LatestLapID, newLap)
-        self.LatestLapID += 1
-        self.LapCount = len(self.LapList)
+    # def addLapTime(self, hours, minutes, seconds, milliseconds):
+    #     newLap = [self.getLatestLapID(), hours, minutes, seconds, milliseconds]
+    #     self.LapList.insert(self.LatestLapID, newLap)
+    #     self.LatestLapID += 1
+    #     self.LapCount = len(self.LapList)
+    #     self.lapChanged.emit(len(self.LapList))
+
+    def addLapTime(self, time):
+        recordedTime = None
+        if self.LapList:
+            recordedTime = self.LapList[-1].recordedTime + time
+        else:
+            recordedTime = self.initialTime
+        self.LapList.append(Lap_Time(recordedTime,time))
         self.lapChanged.emit(len(self.LapList))
 
     """
@@ -62,12 +74,21 @@ class Car(QObject):
                   to delete a lap and then re-enter other data.
 
      """
-    def editLapTime(self, ID, hours, minutes, seconds, milliseconds=None):
-        if(milliseconds):
-            self.LapList[ID] = [ID, hours, minutes, seconds, milliseconds]
-        else:
-            self.LapList[ID] = [ID, hours, minutes, seconds, 0]
-        self.lapChanged.emit(ID)
+    # def editLapTime(self, ID, hours, minutes, seconds, milliseconds=None):
+    #     if(milliseconds):
+    #         self.LapList[ID] = [ID, hours, minutes, seconds, milliseconds]
+    #     else:
+    #         self.LapList[ID] = [ID, hours, minutes, seconds, 0]
+    #     self.lapChanged.emit(ID)
+
+    def editLapTime(self, ID, time):
+        self.LapList[ID].elapsedTime = time
+        if ID == 0:
+            self.LapList[ID].recordedTime = self.initialTime + time
+        else:                
+            self.LapList[ID].recordedTime = self.LapList[ID-1].recordedTime + time
+        for lapIndex in range(ID+1,len(self.LapList)):
+            self.LapList[lapIndex].recordedTime = self.LapList[lapIndex-1].recordedTime + self.LapList[lapIndex].elapsedTime
 
 
 
@@ -80,7 +101,8 @@ class Car(QObject):
 
      """
     def getLatestLapID(self):
-        return self.LatestLapID
+        return len(self.LapList)
+        #return self.LatestLapID
 
     """
          Function: getLapByID

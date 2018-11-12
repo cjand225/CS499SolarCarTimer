@@ -134,8 +134,8 @@ class CarStorage(QObject):
                   from the parameters.
 
      """
-    def appendLapTime(self, carID, hours, minutes, seconds, milliseconds):
-        self.storageList[carID].addLapTime(hours, minutes, seconds, milliseconds)
+    def appendLapTime(self, carID, time):
+        self.storageList[carID].addLapTime(time)
         # self.dataChanged.emit(carId,len
 
     """
