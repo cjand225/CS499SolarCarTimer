@@ -21,8 +21,8 @@ class Car():
         self.CarNum = CarNum
 
         self.LatestLapID = 0
-        self.LapCount = 0
-        self.LapList = []
+        self.LapCount = 50
+        self.LapList = [[0] * 5] * 50
 
     """
         Function: addLapTime
@@ -33,10 +33,16 @@ class Car():
     
     """
     def addLapTime(self, hours, minutes, seconds, milliseconds):
-        newLap = (self.getLatestLapID(), hours, minutes, seconds, milliseconds)
-        self.LapList.append(newLap)
-        self.LatestLapID += 1
-        self.LapCount = len(self.LapList)
+        if(self.LatestLapID > 50):
+            newLap = (self.getLatestLapID(), hours, minutes, seconds, milliseconds)
+            self.LapList.append(newLap)
+            self.LatestLapID += 1
+            self.LapCount = len(self.LapList)
+        else:
+            newLap = (self.getLatestLapID(), hours, minutes, seconds, milliseconds)
+            self.LapList.insert(self.LatestLapID, newLap)
+            self.LatestLapID += 1
+            self.LapCount = len(self.LapList)
 
     """
          Function: removeLapTime
@@ -60,8 +66,13 @@ class Car():
                   to delete a lap and then re-enter other data.
 
      """
-    def editLapTime(self, ID, hours, minutes, seconds, milliseconds):
-        self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
+    def editLapTime(self, ID, hours, minutes, seconds, milliseconds=None):
+        if(milliseconds):
+            self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
+        else:
+            self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
+
+
 
     """
          Function: getLatestLapID
@@ -84,7 +95,10 @@ class Car():
      """
     def getLapByID(self, ID):
         newlist = self.LapList.copy()
-        return newlist[ID]
+        if(ID >= self.LapCount):
+            return None
+        else:
+            return newlist[ID]
 
     """
          Function: getCarID
@@ -145,6 +159,9 @@ class Car():
     def getLap(self, lapID):
         return self.LapList[lapID]
 
+    def getLapStringByID(self, lapID):
+        tempLap = self.getLapByID(lapID)
+        return str(tempLap[1]) + ":" + str(tempLap[2]) + ":" + str(tempLap[3])
 
 
 

@@ -14,7 +14,7 @@ import re
 
 class CarStorage():
     def __init__(self):
-        self.storageList = []
+        self.storageList = [] * 50
         self.LatestCarID = 0
 
         self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
@@ -214,15 +214,14 @@ class CarStorage():
 
     """
 
-    #def getHighestLapCount(self):
-    #    return len(self.storageList)
-
-
-    #def getValue(self, i, j):
-    #    return self.storageList[i].getLap(j)
-
-
-
+    def getHighestLapCount(self):
+        newList = self.storageList.copy()
+        highest = 0
+        names = []
+        for x in range(0, len(newList)):
+            if(newList[x].getLapCount() > highest):
+                highest = newList[x].getLapCount()
+        return highest
 
 
     """

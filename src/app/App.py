@@ -23,17 +23,14 @@ class App():
     quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
     addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
     googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
+    LogPath = os.path.abspath(os.path.join(__file__, '../../logs/'))
     
     def __init__(self):
         self.Application = None
         self.mainWindow = None
         self.running = False
 
-        #put ui PathFiles Right here
-
-
         #read/write paths
-        self.LogPath = '../../logs/'
         self.defaultSavePath = ''
 
         self.vision = None
@@ -140,8 +137,8 @@ class App():
 
     '''
     def addComponents(self):
-        pass
-        #self.mainWindow.addTable(self.tableView.getTableWidget())
+        #pass
+        self.mainWindow.addTable(self.tableView.getTableWidget())
         #self.mainWindow.addVision()
         #self.mainWindow.addLog()
         #self.mainWindow.addGraph(graphOptions, GraphWidget)
