@@ -22,7 +22,7 @@ class App():
     semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
     quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
     addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
-    googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
+    # googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
     LogPath = os.path.abspath(os.path.join(__file__, '../../logs/'))
     
     def __init__(self):
@@ -242,8 +242,8 @@ class App():
     def addCar(self):
         self.mainWindow.addCarDialog()
 
-    def upload(self):
-        self.mainWindow.googleDriveDialog()
+    # def upload(self):
+    #     self.mainWindow.googleDriveDialog()
 
 
 
