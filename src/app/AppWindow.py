@@ -49,6 +49,7 @@ class AppWindow(QMainWindow):
         self.initFileDialog()
         #self.addSemiAuto(SemiAutoWidget(src.app.App.SemiAuto))
         #self.connectComponents()
+        self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"),self)
 
     ''' 
 
@@ -208,10 +209,9 @@ class AppWindow(QMainWindow):
     def openFileDialog(self):
         fileName = self.fileDialog.getOpenFileName()
         if fileName:
-            self.FileOpen = fileName
+            return fileName[0]
         else:
-            self.FileOpen = None
-        return fileName
+            return None
 
     ''' 
         Function: saveAsFileDialog(self)
@@ -226,10 +226,10 @@ class AppWindow(QMainWindow):
     def saveAsFileDialog(self):
         fileName = self.fileDialog.getSaveFileName(self)
         if fileName:
-            self.FileSave = fileName
+            return fileName[0]
         else:
-            self.FileSave = None
-        return fileName
+            return None
+        # return fileName[0]
 
 
     ''' 

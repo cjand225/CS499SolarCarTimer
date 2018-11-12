@@ -9,9 +9,10 @@ import os, sys
 from PyQt5.QtCore import *
 from PyQt5.Qt import *
 from src.app.AppWindow import AppWindow
+from src.system.IO import loadCSV, saveCSV
 from src.table.Table import Table
 from src.table.SemiAutoWidget import SemiAutoWidget
-
+from src.table.CarStorage import CarStorage
 
 
 class App():
@@ -52,6 +53,8 @@ class App():
         self.connectActionsMainWindow()
         self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
         self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
+        self.mainWindow.saveShortcut.activated.connect(self.saveFile)
+        self.tableView.saveShortcut.activated.connect(self.saveFile)
 
     def semiAutoStart(self,car,semiAutoIndex,startTime):
         self.tableView.CarStoreList.storageList[car.ID].initialTime = startTime
@@ -97,6 +100,10 @@ class App():
         self.mainWindow = AppWindow(type(self).mainUIPath)
         self.mainWindow.initCloseDialog(type(self).quitDialogUIPath)
 
+    def tableClickEvent(self,i):
+        if i.column() == len(self.tableView.CarStoreList.storageList):
+            self.addCar()
+
     ''' 
 
         Function: initTableview(self)
@@ -108,6 +115,7 @@ class App():
     '''
     def initTableView(self):
         self.tableView = Table(type(self).tableUIPath)
+        self.tableView.tableView.doubleClicked.connect(self.tableClickEvent)
 
     ''' 
 
@@ -214,8 +222,10 @@ class App():
 
     '''
     def saveFile(self):
-        if(self.writeFile == None):
+        if not self.writeFile:
             self.writeFile = self.mainWindow.saveAsFileDialog()
+        if self.writeFile:
+            saveCSV(self.tableView.CarStoreList,self.writeFile)
 
         #else use writeFile
 
@@ -235,6 +245,7 @@ class App():
     def saveAsFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
         #write file to location
+        self.saveFile()
 
     ''' 
 
@@ -246,8 +257,17 @@ class App():
 
     '''
     def openFile(self):
-        if(self.readFile == None):
-            self.readFile = self.mainWindow.openFileDialog()
+        #if(self.readFile == None):
+        readFile = self.mainWindow.openFileDialog()
+        if readFile:
+            self.writeFile = readFile
+            cars = loadCSV(readFile)
+            self.mainWindow.SemiAutoWidget.deleteAllCars()
+            self.tableView.CarStoreList = CarStorage()
+            self.tableView.initTableModel()
+            self.tableView.tableView.setModel(self.tableView.TableMod)
+            for car in cars:
+                self.addCar(car)
 
     ''' 
 
@@ -262,12 +282,14 @@ class App():
         self.writeFile = self.mainWindow.saveAsFileDialog()
 
 
-    def addCar(self):
-        newCar = self.mainWindow.addCarDialog()
-        if newCar:
+    def addCar(self,newCar=None):
+        if not newCar:
+            newCar = self.mainWindow.addCarDialog()
             newCar.ID = len(self.tableView.CarStoreList.storageList)
+        if newCar:
             self.tableView.CarStoreList.addExistingCar(newCar)
             self.mainWindow.SemiAutoWidget.addCar(newCar)
+            
 
     # def upload(self):
     #     self.mainWindow.googleDriveDialog()

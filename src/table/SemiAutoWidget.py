@@ -37,6 +37,15 @@ class SemiAutoWidget(QWidget):
     def cars(self):
         return self._cars
 
+    def deleteAllCars(self):
+        self._cars = []
+        for i in reversed(range(self.buttonsLayout.count())):
+            widget = self.buttonsLayout.itemAt(i).widget()
+            self.buttonsLayout.removeWidget(widget)
+            widget.setParent(None)
+        # for index in reversed(range(len(self._cars))):
+        #     self.deleteCarAtIndex(index)
+
     def recordCar(self,car,carIndex):
         self.carRecord.emit(car,carIndex,time.time())
 
@@ -95,12 +104,17 @@ class SemiAutoWidget(QWidget):
         carLabel = ElidedLabel(car.OrgName)
         carLabel.setMaximumWidth(225)
         self.buttonsLayout.addWidget(carLabel,carIndex,type(self).labelColumn)
-        recordButton = QPushButton("Start")
+        recordButton = QPushButton()
         self.buttonsLayout.addWidget(recordButton,carIndex,type(self).buttonColumn)
         checkBox = QCheckBox("Predict laps")
         self.buttonsLayout.addWidget(checkBox,carIndex,type(self).boxColumn,Qt.AlignCenter)
         self._cars.append(car)
-        recordButton.clicked.connect(lambda b: self.startCar(car,carIndex))
+        if car.initialTime:
+            recordButton.clicked.connect(lambda b: self.recordCar(car,carIndex))
+            recordButton.setText("Record time")
+        else:
+            recordButton.clicked.connect(lambda b: self.startCar(car,carIndex))
+            recordButton.setText("Start")
         checkBox.clicked.connect(lambda b: self.predictClicked.emit(car,b,carIndex))
 
     def showPredict(self,car):
