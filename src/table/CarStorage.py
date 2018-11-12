@@ -41,12 +41,19 @@ class CarStorage(QObject):
         self.LatestCarID += 1
         self.dataModified.emit(ID,0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(ID,l))
+        return newCar
         #check ID
         #IDCheck = self.checkNumRange(ID)
         #check car Org
         #OrgCheck = self.checkString(carOrg)
         #Check CarNum
         #CarNumCheck = self.checkNumRange(carNum)
+
+    def addExistingCar(self, car):
+        self.storageList.append(car)
+        self.LatestCarID += 1
+        self.dataModified.emit(car.ID,0)
+        car.lapChanged.connect(lambda l: self.dataModified.emit(car.ID,l))
 
     """
          Function: removeCar

@@ -10,6 +10,7 @@ from PyQt5.QtCore import *
 from PyQt5.Qt import *
 from src.app.AppWindow import AppWindow
 from src.table.Table import Table
+from src.table.SemiAutoWidget import SemiAutoWidget
 
 
 
@@ -142,7 +143,7 @@ class App():
         #self.mainWindow.addVision()
         #self.mainWindow.addLog()
         #self.mainWindow.addGraph(graphOptions, GraphWidget)
-        #self.mainWindow.addSemiAuto()
+        self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
 
     ''' 
 
@@ -240,7 +241,9 @@ class App():
 
 
     def addCar(self):
-        self.mainWindow.addCarDialog()
+        newCar = self.mainWindow.addCarDialog()
+        newCar.ID = len(self.tableView.CarStoreList.storageList)
+        self.tableView.CarStoreList.addExistingCar(newCar)
 
     # def upload(self):
     #     self.mainWindow.googleDriveDialog()

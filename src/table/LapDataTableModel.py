@@ -14,7 +14,7 @@ class LapDataTableModel(QAbstractTableModel):
         if not cs:
             cs = CarStorage()
         self.cs = cs
-        # self.cs.dataModified.connect(self.storageModifiedEvent)
+        self.cs.dataModified.connect(self.storageModifiedEvent)
         # for i, s in enumerate(ascii_lowercase[:8]):
         #     self.cs.addCar(i,s,randint(0,100))
         #     self.cs.storageList[i].initialTime = time.time()

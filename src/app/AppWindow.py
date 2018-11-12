@@ -47,6 +47,7 @@ class AppWindow(QMainWindow):
         #declare initalizers here
         self.initMainWindow()
         self.initFileDialog()
+        #self.addSemiAuto(SemiAutoWidget(src.app.App.SemiAuto))
         #self.connectComponents()
 
     ''' 
@@ -79,17 +80,24 @@ class AppWindow(QMainWindow):
 
     '''
 
+    # @staticmethod
+    # def toggleWidget(widget,e):
+    #     if widget.isVisible():
+    #         wdiget.hide()
+    #     else:
+    #         widget.show()
+
 
     # def connectComponents(self):
-        #view
-        #self.actionTable.triggered.connect()
-        #self.actionSemiAuto.triggered.connect()
-        #self.actionAuto.triggered.connect()
-        #self.actionLog.triggered.connect()
-        #self.actionGraphing.triggered.connect()
-        #help
-        #self.actionAbout.triggered.connect()
-        #self.actionHelp.triggered.connect()
+    #     # view
+    #     self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.Table,e))
+    #     self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.SemiAuto,e))
+    #     # self.actionAuto.triggered.connect()
+    #     # self.actionLog.triggered.connect()
+    #     # self.actionGraphing.triggered.connect()
+    #     # help
+    #     # self.actionAbout.triggered.connect()
+        # self.actionHelp.triggered.connect()
 
 
     ''' 
@@ -302,11 +310,8 @@ class AppWindow(QMainWindow):
         carDialog = AddCarDialog(src.app.App.App.addCarDialogUIPath)
         retVal = carDialog.exec()
         if retVal == QDialog.Accepted:
-            # Returns a car for now.
-            # This should be changed to do whatever needs to be done with the table,
-            # semiAutoWidget, etc.
             carNumber = int(carDialog.carNumber)
-            return car(0,carDialog.teamName)
+            return Car(0,carDialog.teamName,carNumber)
         else:
             return None
 

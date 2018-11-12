@@ -26,6 +26,7 @@ class Table():
         self.initTableModel()
 
         self.tableView.setModel(self.TableMod)
+        #self.TableMod.headerDataChanged.connect(lambda a,b: print("got"))
 
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
