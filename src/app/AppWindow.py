@@ -196,8 +196,6 @@ class AppWindow(QMainWindow):
                  otherwise it'll return the name of the file prepended with its directory.
 
     '''
-
-
     def openFileDialog(self):
         fileName = self.fileDialog.getOpenFileName()
         if fileName:
@@ -206,11 +204,7 @@ class AppWindow(QMainWindow):
             self.FileOpen = None
         return fileName
 
-
-
-
     ''' 
-
         Function: saveAsFileDialog(self)
         Parameters: self
         Return Value: FileName(String) or None
@@ -218,7 +212,6 @@ class AppWindow(QMainWindow):
                  their current session to. If Nothing is pressed on return, it'll return None,
                  otherwise it'll return the name and place of where they would like to save their
                  file.
-
     '''
     # TODO: set parameters for width/heigh/file formats - also add Save As part as well
     def saveAsFileDialog(self):
@@ -247,8 +240,6 @@ class AppWindow(QMainWindow):
     def newFileDialog(self):
         fileName = self.fileDialog.getSaveFileName(self)
         return fileName
-
-
 
 
     ''' 
