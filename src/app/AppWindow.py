@@ -25,7 +25,7 @@ from src.table.Car import Car
 from src.video.VisionWidget import VisionWidget
 from src.log.LogWidget import LogWidget
 from src.graph.GraphOptionsWidget import GraphOptions
-from src.cloud.GoogleDriveBrowser import GoogleDriveBrowser
+# from src.cloud.GoogleDriveBrowser import GoogleDriveBrowser
 
 
 class AppWindow(QMainWindow):
@@ -310,9 +310,9 @@ class AppWindow(QMainWindow):
         else:
             return None
 
-    def googleDriveDialog(self):
-        driveDialog = GoogleDriveBrowser(src.app.App.App.googleDriveUIPath)
-        retVal = driveDialog.exec()
+    # def googleDriveDialog(self):
+    #     driveDialog = GoogleDriveBrowser(src.app.App.App.googleDriveUIPath)
+    #     retVal = driveDialog.exec()
         
     
 
