@@ -159,7 +159,7 @@ class App():
         self.mainWindow.actionOpen.triggered.connect(self.openFile)
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
-        self.mainWindow.actionUpload.triggered.connect(self.upload)
+        # self.mainWindow.actionUpload.triggered.connect(self.upload)
 
         #Edit Menu
         self.mainWindow.actionAddCar.triggered.connect(self.addCar)
