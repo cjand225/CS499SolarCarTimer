@@ -14,7 +14,7 @@ import re
 
 class CarStorage():
     def __init__(self):
-        self.storageList = [] * 50
+        self.storageList = [Car(0,'',0)] * 50
         self.LatestCarID = 0
 
         self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
@@ -31,9 +31,15 @@ class CarStorage():
 
      """
     def addCar(self, ID, carOrg, carNum):
-        newCar = Car(ID, carOrg, carNum)
-        self.storageList.append(newCar)
-        self.LatestCarID += 1
+        if(ID > len(self.storageList)):
+            newCar = Car(self.LatestCarID, carOrg, carNum)
+            self.storageList.append(newCar)
+            self.LatestCarID += 1
+        else:
+            newCar = Car(self.LatestCarID, carOrg, carNum)
+            self.storageList.insert(self.LatestCarID, newCar)
+            self.LatestCarID += 1
+
         #check ID
         #IDCheck = self.checkNumRange(ID)
         #check car Org
@@ -52,8 +58,11 @@ class CarStorage():
 
      """
     def removeCar(self, ID):
-        self.storageList.remove(self.getCarByID(ID))
-        self.reindexStorage(ID)
+        if(ID < 0 or ID > len(self.storageList)):
+            return
+        else:
+            self.storageList.remove(self.getCarByID(ID))
+            self.reindexStorage(ID)
 
     """
          Function: reindexStorage
@@ -127,7 +136,7 @@ class CarStorage():
                   from the parameters.
 
      """
-    def appendLapTime(self, carID, hours, minutes, seconds, milliseconds):
+    def appendLapTime(self, carID, hours=0, minutes=0, seconds=0, milliseconds=0):
         self.storageList[carID].addLapTime(hours, minutes, seconds, milliseconds)
 
     """

@@ -15,7 +15,7 @@
 
 class Car():
 
-    def __init__(self, ID, Org, CarNum):
+    def __init__(self, ID=-1, Org='', CarNum=-1):
         self.ID = ID
         self.OrgName = Org
         self.CarNum = CarNum
@@ -32,8 +32,8 @@ class Car():
                  next ID to be used for the next Lap that will be.
     
     """
-    def addLapTime(self, hours, minutes, seconds, milliseconds):
-        if(self.LatestLapID > 50):
+    def addLapTime(self, hours=0, minutes=0, seconds=0, milliseconds=0):
+        if self.LatestLapID > 50:
             newLap = (self.getLatestLapID(), hours, minutes, seconds, milliseconds)
             self.LapList.append(newLap)
             self.LatestLapID += 1
@@ -66,7 +66,7 @@ class Car():
                   to delete a lap and then re-enter other data.
 
      """
-    def editLapTime(self, ID, hours, minutes=0, seconds=0, milliseconds=0):
+    def editLapTime(self, ID, hours=0, minutes=0, seconds=0, milliseconds=0):
         if milliseconds:
             self.LapList[ID] = (ID, hours, minutes, seconds, milliseconds)
         elif milliseconds and seconds:
