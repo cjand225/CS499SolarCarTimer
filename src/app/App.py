@@ -285,7 +285,8 @@ class App():
     def addCar(self,newCar=None):
         if not newCar:
             newCar = self.mainWindow.addCarDialog()
-            newCar.ID = len(self.tableView.CarStoreList.storageList)
+            if newCar:
+                newCar.ID = len(self.tableView.CarStoreList.storageList)
         if newCar:
             self.tableView.CarStoreList.addExistingCar(newCar)
             self.mainWindow.SemiAutoWidget.addCar(newCar)
