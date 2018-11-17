@@ -1,49 +1,39 @@
-'''
-from PyQt5.QtWidgets import QWidget, QPushButton, QStyle, QApplication
-from PyQt5.Qt import Qt
-from PyQt5.uic import loadUi
-
-
-class Graph(QWidget):
-
-    def __init__(self, uipath):
-        super().__init__()
-        self.UIPath = uipath
-        self.initUI()
-
-    def initUI(self):
-        self.ui = loadUi(self.UIPath, self)
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
-                                            self.size(), QApplication.desktop().availableGeometry()))
-        self.show()
-'''
-
-import sys
-from tkinter import Image
-
-from PyQt5 import QtCore, QtGui, QtWidgets
+import matplotlib
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
-    QPushButton, QStyle
-from PyQt5.QtGui import QIcon
+    QPushButton, QStyle, QFileDialog
 from PyQt5.uic import loadUi
-from matplotlib import figure
-
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
 from src.table.Car import Car
-
 import random
+
+GRAPH_LAPVSTIME = "Lap vs Time"
+GRAPH_MINTIME = "Minimum Time"
+GRAPH_MAXTIME = "Maximum Time"
+GRAPH_AVGVSTIME = "Average Lap vs Time"
+
+graphTypes = [
+    GRAPH_LAPVSTIME,
+    GRAPH_AVGVSTIME,
+    GRAPH_MINTIME,
+    GRAPH_MAXTIME
+]
 
 
 class Graph(QWidget):
+    maxGraphNumber = 3
 
     def __init__(self, uipath):
         super().__init__()
         self.UIPath = uipath
         self.graphedTeamList = []
-        self.teamList = [Car(0, "Cool", 54), Car(1, "UK", 10)]
+        self.currentGraphType = graphTypes[0]
+
+        self.fileDialog = QFileDialog()
+
+        self.teamList = self.dumbData() #TODO CHANGE TO REAL DATA
+
         self.initUI()
 
     def initUI(self):
@@ -51,61 +41,90 @@ class Graph(QWidget):
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
-        self.buttonBox.clicked.connect(self.printTest) #TODO REMOVE
+        self.ApplyGraphBtn.clicked.connect(self.drawGraph)
 
+        self.SaveGraphBtn.clicked.connect(self.saveGraph)
 
-        #TODO get real car list
-        cars = [Car(0, "Cool", 54), Car(1, "UK", 10)]
         # ADD TEAMS TO CHOICES COMBO BOX
-        for car in cars:
-            self.TeamChoiceBox.addItem(car.getOrg())
-        #add action listener to team choice
-        self.TeamChoiceBox.activated[str].connect(self.teamChosen)
+        index = 0
+        for car in self.teamList:
+            self.TeamChoiceBox.addItem(car.getOrg(), index)
+            index += 1
+        # add action listener to team choice
+        self.TeamChoiceBox.activated.connect(self.teamChosen)
 
-        #add graph types
-        self.GraphTypes.addItem("Lap vs. Time")
+        # add graph types
+        for graphType in graphTypes:
+            self.GraphTypes.addItem(graphType)
+        # action listener for graph type
+        self.GraphTypes.activated[str].connect(self.typeChosen)
 
-        #add team list listener
-        self.ChosenTeamList.itemClicked.connect(self.chosenTeamClick)
+        # add team list listener
+        self.ChosenTeamList.itemDoubleClicked.connect(self.chosenTeamClick)
 
-        #start the plot canvas
-        self.plot = PlotCanvas(self.GraphWindow, width=5, height=4)
-
-
-
-
-
+        # start the plot canvas
+        self.pcanvas = PlotCanvas(self.GraphWindow, width=5, height=4)
 
         self.show()
 
-    def printTest(self):
-        print("TEST")
+    def drawGraph(self):
+        self.pcanvas.plot(self.graphedTeamList) #TODO Change
 
-    def teamChosen(self, text):
-        print("Team chosen:", text)
-        self.plot.winTitle(text)
-        self.addTeamToList(text)
+    def saveGraph(self):
+        fileName = self.fileDialog.getSaveFileName(self)
+        print(fileName)
+        if fileName:
+            self.pcanvas.saveGraph(fileName[0])
 
-    def addTeamToList(self, team):
-        if len(self.graphedTeamList) > 1:
-            return
+    def teamChosen(self, index):
+        self.addTeamToGraphList(self.TeamChoiceBox.itemData(index))
 
-        if team not in self.graphedTeamList:
-            self.ChosenTeamList.addItem(team)
-            self.graphedTeamList.append(team)
+    def addTeamToGraphList(self, index):
+        # check for space in list
+        if len(self.graphedTeamList) >= self.maxGraphNumber:
+            return False
+
+        # if not in list add it
+        if self.teamList[index] not in self.graphedTeamList:
+            self.ChosenTeamList.addItem(self.teamList[index].getOrg())
+            self.graphedTeamList.append(self.teamList[index])
+            return True
+        return False
+
+    def removeTeamFromGraphList(self, teamName):
+        for i in range(len(self.graphedTeamList)):
+            team = self.graphedTeamList[i]
+            if team.getOrg() == teamName:
+                self.graphedTeamList.pop(i)
+                return True
+        return False
 
     def chosenTeamClick(self):
-        print(self.ChosenTeamList.currentRow)
+        teamName = self.ChosenTeamList.currentItem().text()
+        self.removeTeamFromGraphList(teamName)
+        self.ChosenTeamList.takeItem(self.ChosenTeamList.currentRow())
 
+    def typeChosen(self, text):
+        if text in graphTypes:
+            self.currentGraphType = text
 
+    def dumbData(self):
+        carList = [Car(0, "Cool", 54),
+                   Car(1, "UK", 10),
+                   Car(2, "NC", 45),
+                   Car(3, "TEST", 2)
+                   ]
 
+        for car in carList:
+            car.LapList = [random.randint(10, 12) for i in range(20)]
+
+        return carList
 
 
 class PlotCanvas(FigureCanvas):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
         fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
 
         FigureCanvas.__init__(self, fig)
         self.setParent(parent)
@@ -113,80 +132,32 @@ class PlotCanvas(FigureCanvas):
         FigureCanvas.setSizePolicy(self,
                                    QSizePolicy.Expanding,
                                    QSizePolicy.Expanding)
-        data = [random.random() for i in range(25)]
         FigureCanvas.updateGeometry(self)
-        self.plot(data)
 
-    def plot(self, data):
-        #data = [random.random() for i in range(25)]
-        self.ax = self.figure.add_subplot(111)
-        self.ax.plot(data, 'r-')
-        self.ax.set_title('Lap vs. Time')
+    def plot(self, teams):
+        ax = self.figure.add_subplot(111)
+        ax.lines = []
+        legendText = []
+
+        # set x-axis to be whole numbers
+        for axis in [ax.xaxis, ax.yaxis]:
+            axis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
+
+        ax.set_title('Lap vs. Time')
+
+        # add team to legend and plot their data
+        for team in teams:
+            legendText.append(team.getOrg())
+            ax.plot(team.LapList)
+
+        # place legend at upper left corner of graph
+        ax.legend(legendText, loc='upper left')
+
         self.draw()
 
     def winTitle(self, text):
-        self.ax .set_title(text)
+        self.ax.set_title(text)
         self.draw()
 
-'''
-
-class App(QMainWindow):
-
-    def __init__(self):
-        super().__init__()
-        #self.left = 10
-        #self.top = 10
-        #self.title = 'PyQt5 matplotlib example - pythonspot.com'
-        #self.width = 640
-        #self.height = 400
-        self.initUI()
-
-    def initUI(self):
-        self.ui = loadUi('./../../resources/GraphOptions.ui', self)
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
-                                            self.size(), QApplication.desktop().availableGeometry()))
-
-        self.pushButton_3.clicked.connect(self.hello)
-        #m = PlotCanvas(self, width=5, height=4)
-        #m.move(10, 10)
-
-        #button = QPushButton('PyQt5 button', self)
-        #button.setToolTip('This s an example button')
-        #button.move(500, 0)
-        #button.resize(140, 100)
-
-        self.show()
-
-    def hello(self):
-        print("HELLO")
-
-
-class PlotCanvas(FigureCanvas):
-
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-
-        FigureCanvas.__init__(self, fig)
-        self.setParent(parent)
-
-        FigureCanvas.setSizePolicy(self,
-                                   QSizePolicy.Expanding,
-                                   QSizePolicy.Expanding)
-        FigureCanvas.updateGeometry(self)
-        self.plot()
-
-    def plot(self):
-        data = [random.random() for i in range(25)]
-        ax = self.figure.add_subplot(111)
-        ax.plot(data, 'r-')
-        ax.set_title('PyQt Matplotlib Example')
-        self.draw()
-
-
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    ex = App()
-    sys.exit(app.exec_())
-
-'''
+    def saveGraph(self, filePath):
+        self.figure.savefig(filePath, bbox_inches='tight')

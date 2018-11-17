@@ -90,9 +90,16 @@
        </widget>
       </item>
       <item row="1" column="0">
-       <widget class="QDialogButtonBox" name="buttonBox">
+       <widget class="QDialogButtonBox" name="ApplyGraphBtn">
         <property name="standardButtons">
          <set>QDialogButtonBox::Apply</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QDialogButtonBox" name="SaveGraphBtn">
+        <property name="standardButtons">
+         <set>QDialogButtonBox::Save</set>
         </property>
        </widget>
       </item>
