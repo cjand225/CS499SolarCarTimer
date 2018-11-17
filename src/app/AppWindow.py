@@ -25,6 +25,7 @@ from src.table.Car import Car
 from src.video.VisionWidget import VisionWidget
 from src.log.LogWidget import LogWidget
 from src.graph.GraphOptionsWidget import GraphOptions
+# from src.cloud.GoogleDriveBrowser import GoogleDriveBrowser
 
 
 class AppWindow(QMainWindow):
@@ -46,6 +47,7 @@ class AppWindow(QMainWindow):
         #declare initalizers here
         self.initMainWindow()
         self.initFileDialog()
+        #self.addSemiAuto(SemiAutoWidget(src.app.App.SemiAuto))
         #self.connectComponents()
 
     ''' 
@@ -78,17 +80,24 @@ class AppWindow(QMainWindow):
 
     '''
 
+    # @staticmethod
+    # def toggleWidget(widget,e):
+    #     if widget.isVisible():
+    #         wdiget.hide()
+    #     else:
+    #         widget.show()
+
 
     # def connectComponents(self):
-        #view
-        #self.actionTable.triggered.connect()
-        #self.actionSemiAuto.triggered.connect()
-        #self.actionAuto.triggered.connect()
-        #self.actionLog.triggered.connect()
-        #self.actionGraphing.triggered.connect()
-        #help
-        #self.actionAbout.triggered.connect()
-        #self.actionHelp.triggered.connect()
+    #     # view
+    #     self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.Table,e))
+    #     self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.SemiAuto,e))
+    #     # self.actionAuto.triggered.connect()
+    #     # self.actionLog.triggered.connect()
+    #     # self.actionGraphing.triggered.connect()
+    #     # help
+    #     # self.actionAbout.triggered.connect()
+        # self.actionHelp.triggered.connect()
 
 
     ''' 
@@ -196,8 +205,6 @@ class AppWindow(QMainWindow):
                  otherwise it'll return the name of the file prepended with its directory.
 
     '''
-
-
     def openFileDialog(self):
         fileName = self.fileDialog.getOpenFileName()
         if fileName:
@@ -206,11 +213,7 @@ class AppWindow(QMainWindow):
             self.FileOpen = None
         return fileName
 
-
-
-
     ''' 
-
         Function: saveAsFileDialog(self)
         Parameters: self
         Return Value: FileName(String) or None
@@ -218,7 +221,6 @@ class AppWindow(QMainWindow):
                  their current session to. If Nothing is pressed on return, it'll return None,
                  otherwise it'll return the name and place of where they would like to save their
                  file.
-
     '''
     # TODO: set parameters for width/heigh/file formats - also add Save As part as well
     def saveAsFileDialog(self):
@@ -247,8 +249,6 @@ class AppWindow(QMainWindow):
     def newFileDialog(self):
         fileName = self.fileDialog.getSaveFileName(self)
         return fileName
-
-
 
 
     ''' 
@@ -310,13 +310,14 @@ class AppWindow(QMainWindow):
         carDialog = AddCarDialog(src.app.App.App.addCarDialogUIPath)
         retVal = carDialog.exec()
         if retVal == QDialog.Accepted:
-            # Returns a car for now.
-            # This should be changed to do whatever needs to be done with the table,
-            # semiAutoWidget, etc.
             carNumber = int(carDialog.carNumber)
-            return car(0,carDialog.teamName)
+            return Car(0,carDialog.teamName,carNumber)
         else:
             return None
+
+    # def googleDriveDialog(self):
+    #     driveDialog = GoogleDriveBrowser(src.app.App.App.googleDriveUIPath)
+    #     retVal = driveDialog.exec()
         
     
 

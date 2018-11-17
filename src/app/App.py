@@ -12,6 +12,7 @@ from PyQt5.Qt import *
 from src.graph.GraphWidget import Graph
 from src.app.AppWindow import AppWindow
 from src.table.Table import Table
+from src.table.SemiAutoWidget import SemiAutoWidget
 
 
 
@@ -24,6 +25,9 @@ class App():
     semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
     quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
     addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
+    # googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
+    LogPath = os.path.abspath(os.path.join(__file__, '../../logs/'))
+
     GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
 
     def __init__(self):
@@ -31,11 +35,7 @@ class App():
         self.mainWindow = None
         self.running = False
 
-        #put ui PathFiles Right here
-
-
         #read/write paths
-        self.LogPath = '../../logs/'
         self.defaultSavePath = ''
 
         self.vision = None
@@ -54,6 +54,25 @@ class App():
 
         self.addComponents()
         self.connectActionsMainWindow()
+        self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
+        self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
+
+    def semiAutoStart(self,car,semiAutoIndex,startTime):
+        self.tableView.CarStoreList.storageList[car.ID].initialTime = startTime
+
+    def semiAutoRecord(self,car,semiAutoIndex,recordedTime):
+        if self.tableView.CarStoreList.storageList[car.ID].LapList:
+            elapsedTime = recordedTime - self.tableView.CarStoreList.storageList[car.ID].LapList[-1].recordedTime
+        else:
+            elapsedTime = recordedTime - car.initialTime
+        self.tableView.CarStoreList.appendLapTime(car.ID,elapsedTime)
+
+    @staticmethod
+    def toggleWidget(widget,e):
+        if widget.isVisible():
+            widget.hide()
+        else:
+            widget.show()
 
 
     ''' 
@@ -142,10 +161,12 @@ class App():
 
     '''
     def addComponents(self):
-        #self.mainWindow.addTable(self.tableView.getTableWidget())
+        #pass
+        self.mainWindow.addTable(self.tableView.getTableWidget())
         #self.mainWindow.addVision()
         #self.mainWindow.addLog()
         #self.mainWindow.addGraph(graphOptions, GraphWidget)
+        self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
         self.mainWindow.addGraph(Graph)
         #self.mainWindow.addSemiAuto()
 
@@ -164,9 +185,13 @@ class App():
         self.mainWindow.actionOpen.triggered.connect(self.openFile)
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
+        # self.mainWindow.actionUpload.triggered.connect(self.upload)
 
         #Edit Menu
         self.mainWindow.actionAddCar.triggered.connect(self.addCar)
+
+        #View Menu
+        self.mainWindow.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.mainWindow.SemiAutoWidget,e))
 
         #Help Menu
 
@@ -244,7 +269,14 @@ class App():
 
 
     def addCar(self):
-        self.mainWindow.addCarDialog()
+        newCar = self.mainWindow.addCarDialog()
+        if newCar:
+            newCar.ID = len(self.tableView.CarStoreList.storageList)
+            self.tableView.CarStoreList.addExistingCar(newCar)
+            self.mainWindow.SemiAutoWidget.addCar(newCar)
+
+    # def upload(self):
+    #     self.mainWindow.googleDriveDialog()
 
 
 

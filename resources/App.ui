@@ -47,6 +47,8 @@
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
+    <addaction name="actionUpload"/>
+    <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
@@ -245,6 +247,11 @@
   <action name="actionAddCar">
    <property name="text">
     <string>Add Car</string>
+   </property>
+  </action>
+  <action name="actionUpload">
+   <property name="text">
+    <string>Upload</string>
    </property>
   </action>
  </widget>

@@ -1,10 +1,21 @@
+import datetime
 from time import time
+
+def strptimeMultiple(text,formats):
+    for f in formats:
+        try:
+            return datetime.datetime.strptime(text,f)
+        except ValueError:
+            pass
+    raise ValueError()
 
 class Lap_Time():
     def __init__(self, recordedTime, elapsedTime = None):
         self.recordedTime = recordedTime
         self.elapsedTime = elapsedTime
 
+    def __str__(self):
+        return str(datetime.timedelta(seconds=self.elapsedTime))
 
     @classmethod
     def fromCurrentTime(cls, previousTime = None):

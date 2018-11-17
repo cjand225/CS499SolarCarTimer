@@ -8,18 +8,23 @@
 
 """
 
-
+from PyQt5.QtCore import QObject, pyqtSignal
 from src.table.Car import Car
 import re
 
-class CarStorage():
+class CarStorage(QObject):
+    dataModified = pyqtSignal(int,int)
+    
     def __init__(self):
+        super().__init__()
         self.storageList = []
         self.LatestCarID = 0
 
         self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
         self.RegExpOrg = "/^[a-z ,.'-]+$/i"
         self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
+
+        
 
     """
          Function: addCar
@@ -34,12 +39,21 @@ class CarStorage():
         newCar = Car(ID, carOrg, carNum)
         self.storageList.append(newCar)
         self.LatestCarID += 1
+        self.dataModified.emit(ID,0)
+        newCar.lapChanged.connect(lambda l: self.dataModified.emit(ID,l))
+        return newCar
         #check ID
         #IDCheck = self.checkNumRange(ID)
         #check car Org
         #OrgCheck = self.checkString(carOrg)
         #Check CarNum
         #CarNumCheck = self.checkNumRange(carNum)
+
+    def addExistingCar(self, car):
+        self.storageList.append(car)
+        self.LatestCarID += 1
+        self.dataModified.emit(car.ID,0)
+        car.lapChanged.connect(lambda l: self.dataModified.emit(car.ID,l))
 
     """
          Function: removeCar
@@ -127,8 +141,9 @@ class CarStorage():
                   from the parameters.
 
      """
-    def appendLapTime(self, carID, hours, minutes, seconds, milliseconds):
-        self.storageList[carID].addLapTime(hours, minutes, seconds, milliseconds)
+    def appendLapTime(self, carID, time):
+        self.storageList[carID].addLapTime(time)
+        # self.dataChanged.emit(carId,len
 
     """
          Function: editLapTime
@@ -166,6 +181,22 @@ class CarStorage():
     def getCarListCopy(self):
         return self.storageList.copy()
 
+
+    """
+         Function: getCarNamesList
+         Parameters: self
+         Return Value: list of Org names of all cars
+         Purpose: used as a convient method for accesing all the car Orgs Names
+
+     """
+    def getCarNamesList(self):
+        newList = self.storageList.copy()
+        names = []
+        for x in range(0, len(newList)):
+            names.append(newList[x].getOrg())
+        return names
+
+
     """
          Function: getLatestCarID
          Parameters: self
@@ -175,6 +206,38 @@ class CarStorage():
      """
     def getLatestCarID(self):
         return self.LatestCarID
+
+
+
+    """
+        
+        Function: getCarAmount
+        Parameters: self
+        Return Value: N/A
+        Purpose: Used to find how many cars are stored within CarStorage
+    
+    """
+    def getCarAmount(self):
+        return len(self.storageList)
+
+    """
+
+        Function: getHighestLapCount
+        Parameters: self
+        Return Value: N/A
+        Purpose: Used to find the highest amount of laps stored within all the cars in carStorage
+
+    """
+
+    def getHighestLapCount(self):
+        newList = self.storageList.copy()
+        highest = 0
+        names = []
+        for x in range(0, len(newList)):
+            if(newList[x].getLapCount() > highest):
+                highest = newList[x].getLapCount()
+        return highest
+
 
     """
          Function: checkNumRange
