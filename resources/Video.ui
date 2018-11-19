@@ -41,7 +41,15 @@
            <widget class="QWidget" name="imageFrame" native="true">
             <layout class="QGridLayout" name="gridLayout_3">
              <item row="0" column="0">
-              <layout class="QGridLayout" name="imageLayout"/>
+              <layout class="QGridLayout" name="imageLayout">
+               <item row="0" column="0">
+                <widget class="QLabel" name="imgCanvas">
+                 <property name="text">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </item>
             </layout>
            </widget>
