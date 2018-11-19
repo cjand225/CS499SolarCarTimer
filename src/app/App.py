@@ -40,6 +40,8 @@ class App():
 
         self.Vision = None
         self.tableView = None
+        self.graph = None
+        self.log = None
 
         # read/write files
         self.writeFile = None
@@ -211,10 +213,6 @@ class App():
 
         # Edit Menu
         self.mainWindow.actionAddCar.triggered.connect(self.addCar)
-
-        # View Menu
-        self.mainWindow.actionSemiAuto.triggered.connect(
-            lambda e: type(self).toggleWidget(self.mainWindow.SemiAutoWidget, e))
 
         # Help Menu
 
