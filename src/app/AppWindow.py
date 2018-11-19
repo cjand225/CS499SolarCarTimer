@@ -63,13 +63,14 @@ class AppWindow(QMainWindow):
                                             self.size(), QApplication.desktop().availableGeometry()))
         self.show()
 
+
     ''' 
 
-        Function: connectComponents()
-        Parameters: self (QMainWindow)
+        Function: toggleWidget
+        Parameters: widget, e
         Return Value: N/A
-        Purpose: Binds certain menu Actions to certain functions which involve toggling of particular
-                children widgets. I.E. connect actionTable (View Menu Action) to tableWidget.toggle()
+        Purpose: static method that involves toggling any of the widgets bound to the main app window, allowing
+                 reduction of repitious code for different widgets
 
     '''
 
@@ -80,6 +81,16 @@ class AppWindow(QMainWindow):
         else:
             widget.show()
 
+
+    ''' 
+
+        Function: connectComponents()
+        Parameters: self (QMainWindow)
+        Return Value: N/A
+        Purpose: Binds certain menu Actions to certain functions which involve toggling of particular
+                children widgets. I.E. connect actionTable (View Menu Action) to tableWidget.toggle()
+
+    '''
     def connectComponents(self):
         # view
         self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
@@ -89,9 +100,17 @@ class AppWindow(QMainWindow):
         #self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.GraphWidget), e)
         #self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
 
+        #Center Widget
+        self.pushTable.clicked.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
+        self.pushSemiAuto.clicked.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
+        self.pushVideo.clicked.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
+        self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
+        self.pushGraph.clicked.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
+        self.pushLogs.clicked.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
+
         # help
-        #self.actionAbout.triggered.connect()
-        #self.actionHelp.triggered.connect()
+        self.actionAbout.triggered.connect(self.handleAboutDialog)
+        self.actionHelp.triggered.connect(self.handleHelpDialog)
 
     ''' 
     
@@ -283,7 +302,6 @@ class AppWindow(QMainWindow):
                  before calling the AppWindow close event.
     
     '''
-
     def handleWidgetClosing(self):
         if (self.TableWidget != None):
             self.TableWidget.close()
@@ -298,6 +316,77 @@ class AppWindow(QMainWindow):
         if(self.SemiAutoWidget != None):
             self.SemiAutoWidget.close()
         self.close()
+
+
+    '''
+
+        Function: initHelpDialog
+        Parameters: uiPath, filePath
+        Return Value: N/A
+        Purpose: Instances a QDialog given a filepath in UIpath parameter and a file containing data to display
+                 given by filePath, loads file into a text stream that then is set as html for the textbrowser
+                 built into the Dialog's ui file. If no file path is given, it'll just return none
+
+
+    '''
+    def initHelpDialog(self, uiPath, filePath=None):
+        self.HelpDialog = QDialog()
+        self.HelpDialog.ui = loadUi(uiPath, self.HelpDialog)
+        if(filePath != None):
+            file = QFile(filePath)
+            file.open(QFile.ReadOnly | QFile.Text)
+            stream = QTextStream(file)
+            self.HelpDialog.ui.textBrowser.setHtml(stream.readAll())
+
+    '''
+
+        Function: initAboutDialog
+        Parameters: uiPath, filePath
+        Return Value: N/A
+        Purpose: Instances a QDialog given a filepath in UIpath parameter and a file containing data to display
+                 given by filePath, loads file into a text stream that then is set as html for the textbrowser
+                 built into the Dialog's ui file. If no file path is given, it'll just return none 
+
+    '''
+    def initAboutDialog(self, uiPath, filePath=None):
+        self.AboutDialog = QDialog()
+        self.AboutDialog.ui = loadUi(uiPath, self.AboutDialog)
+        if filePath != None:
+            file = QFile(filePath)
+            file.open(QFile.ReadOnly | QFile.Text)
+            stream = QTextStream(file)
+            self.AboutDialog.ui.textBrowser.setHtml(stream.readAll())
+
+    '''
+
+        Function: handleAboutDialog
+        Parameters: self
+        Return Value: N/A
+        Purpose: Binds the buttonbox to the close event allowing the ok/close buttons to close the dialog
+                 and then executes the dialog to display out to the user.
+
+
+    '''
+    def handleAboutDialog(self):
+        self.AboutDialog.ui.buttonBox.clicked.connect(self.AboutDialog.close)
+        self.AboutDialog.exec()
+
+
+
+    '''
+        
+        Function: handleHelpDialog
+        Parameters: self
+        Return Value: N/A
+        Purpose: Binds the buttonbox to the close event allowing the ok/close buttons to close the dialog
+                 and then executes the dialog to display out to the user.
+    
+    
+    '''
+    def handleHelpDialog(self):
+        self.HelpDialog.ui.buttonBox.clicked.connect(self.HelpDialog.close)
+        self.HelpDialog.exec()
+
 
 
 

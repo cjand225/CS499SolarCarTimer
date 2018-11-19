@@ -20,15 +20,23 @@ from src.video.Video import Video
 
 class App():
     resourcesDir = os.path.abspath(os.path.join(__file__, "./../../../resources"))
-    mainUIPath = os.path.join(resourcesDir, 'App.ui')
-    tableUIPath = os.path.join(resourcesDir, 'Table.ui')
+    manualDir = os.path.abspath(os.path.join(__file__, "./../../../manuals"))
+
+    mainUIPath = os.path.join(resourcesDir, 'AppWindow.ui')
+    tableUIPath = os.path.join(resourcesDir, 'TableView.ui')
     visionUIPath = os.path.join(resourcesDir, 'Video.ui')
     logUIPath = os.path.join(resourcesDir, 'Log.ui')
-    semiAutoUIPath = os.path.join(resourcesDir, 'Buttons.ui')
+    semiAutoUIPath = os.path.join(resourcesDir, 'SemiAuto.ui')
     quitDialogUIPath = os.path.join(resourcesDir, 'QuitDialog.ui')
     addCarDialogUIPath = os.path.join(resourcesDir, 'addCarDialog.ui')
     # googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
     LogPath = os.path.abspath(os.path.join(__file__, '../../logs/'))
+    helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
+    aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
+
+    userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
+    aboutPath = os.path.join(manualDir, 'about.html')
+
 
     def __init__(self):
         self.Application = None
@@ -38,15 +46,18 @@ class App():
         # read/write paths
         self.defaultSavePath = ''
 
-        self.Vision = None
+        #Foward Module Declaration
         self.tableView = None
+        self.Vision = None
         self.graph = None
         self.log = None
+        self.leaderBoard = None
 
         # read/write files
         self.writeFile = None
         self.readFile = None
 
+        #Initalizing everything
         self.initApplication()
         self.initMainWindow()
         self.initTableView()
@@ -55,6 +66,7 @@ class App():
         self.initGraph()
         self.initLeaderBoard()
 
+        #adding and connecting essential components to user interface
         self.addComponents()
         self.connectActionsMainWindow()
 
@@ -99,6 +111,8 @@ class App():
     def initMainWindow(self):
         self.mainWindow = AppWindow(type(self).mainUIPath)
         self.mainWindow.initCloseDialog(type(self).quitDialogUIPath)
+        self.mainWindow.initHelpDialog(type(self).helpDialogUIPath, type(self).userManPath)
+        self.mainWindow.initAboutDialog(type(self).aboutDialogUIPath, type(self).aboutPath)
 
     ''' 
 
