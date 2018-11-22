@@ -21,6 +21,8 @@ class ImageProcessThread(threading.Thread):
         self.ProcessQ = procQ
         self.DetectQ = detectQ
         self.running = True
+        self.VidPath = './output.png'
+
 
     def run(self):
         self.processFrames()
@@ -35,16 +37,22 @@ class ImageProcessThread(threading.Thread):
         self.running = True
 
     def processFrames(self):
+
+
         while self.running:
             if not self.ProcessQ.empty():
+                frame = {}
+
                 nextImage = self.ProcessQ.get()
+                #currentImage is considered pure frame data from capture cam
                 currentImage = self.applyEdgeFilter(nextImage)
-                self.DetectQ.put(currentImage)
+                frame["img"] = currentImage
+
+                cv2.imwrite(self.VidPath, currentImage)
+                self.DetectQ.put(frame)
             else:
                 time.sleep(1)
 
-        #after loop stops, close thread completely
-        self.join()
 
 
     def applyEdgeFilter(self, imgData):

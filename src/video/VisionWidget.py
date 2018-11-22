@@ -46,4 +46,3 @@ class VisionWidget(QWidget):
 
     def getStopButton(self):
         return self.stopButton
-

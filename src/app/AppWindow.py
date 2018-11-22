@@ -390,6 +390,9 @@ class AppWindow(QMainWindow):
 
 
 
+
+
+
     def addCarDialog(self):
         carDialog = AddCarDialog(src.app.App.App.addCarDialogUIPath)
         retVal = carDialog.exec()

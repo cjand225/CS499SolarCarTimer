@@ -4,6 +4,7 @@ Purpose: a thread classs intended for retrieving frame data constantly from a vi
          and adding that frame data to a queue that is then passed to UpdateThread and ImageProcessThread.
 Depends On: threading, cv2(OpenCV)
 
+TODO: pass two seperate queues, one for updateThread, one for ImageProcessThread
 
 '''
 
@@ -30,6 +31,7 @@ class CaptureThread(threading.Thread):
         threading.Thread.__init__(self)
 
         self.canvas = canvas
+
         # variables needed for capturing frame data
         self.captureCam = imageCam  # Specific I/O Device
         self.imageWidth = width  # Resolution Width
@@ -37,10 +39,13 @@ class CaptureThread(threading.Thread):
         self.frames = fps  # Frames per Second
         self.CapQ = queueOne  # queue for adding multiple frame
         self.UpQ = queueTwo
+
+        self.loop_delta = 1 / self.frames
+
         self.running = False
         self.Edge = True
         self.Normal = False
-
+        self.enableFPS = False
 
     # executes what the thread is meant for
     def run(self):
@@ -78,26 +83,41 @@ class CaptureThread(threading.Thread):
         capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.imageHeight)
         capture.set(cv2.CAP_PROP_FPS, self.frames)
 
+        #set inital target/current times
+        currentTime = targetTime = time.time()
         while (self.running):
+
+            #calculate difference in time and get the current time
+            previousTime = currentTime
+            currentTime = time.time()
+            time_delta = currentTime - previousTime
+
+            if(self.enableFPS):
+                self.showFPS(time_delta)
+
             frame = {}
             capture.grab()
             retval, img = capture.retrieve(0)
             frame["img"] = img
 
-            #corverts frame to normal image or edge detection image based on boolean setting and returns it
+            # corverts frame to normal image or edge detection image based on boolean setting and returns it
             currentImage, self.newImg = self.ApplyFilter(img)
 
             # if canvas is actually set, update it
             if self.canvas:
                 self.canvas.setPixmap(QPixmap.fromImage(self.newImg))
-
             self.CapQ.put(img)
 
-        self.join()
+            #keep adding the difference in time needed and calculate sleep based on that
+            targetTime =+ self.loop_delta
+            sleepAmount = targetTime - time.time()
 
+            if sleepAmount > 0:
+                time.sleep(sleepAmount)
 
+        capture.release()
 
-    #function works by setting either self.Edge to True or self.Normal to True in the initalizer of the this class
+    # function works by setting either self.Edge to True or self.Normal to True in the initalizer of the
     def ApplyFilter(self, imgData):
         if self.Edge == True:
             edges = self.applyEdgeFilter(imgData)
@@ -109,8 +129,6 @@ class CaptureThread(threading.Thread):
             Norm = cv2.cvtColor(imgData, cv2.COLOR_BGR2RGB)
             return Norm, QImage(Norm, Norm.shape[1], Norm.shape[0], Norm.strides[0], QImage.Format_RGB888)
 
-
-
     def applyEdgeFilter(self, imgData):
         sigma = 0.2
         v = np.median(imgData)
@@ -120,3 +138,6 @@ class CaptureThread(threading.Thread):
         upper = int(min(255, (1.0 + sigma) * v))
         edges = cv2.Canny(hsv, lower, upper)
         return edges
+
+    def showFPS(self, time_delta):
+        print('FPS: %d' % (1 / time_delta))

@@ -24,7 +24,7 @@ class Video():
         self.VisWidget = None
 
         # device requirements
-        self.FramesPerSecond = 60
+        self.FramesPerSecond = 120
         self.VidWidth = 1920
         self.VidHeight = 1080
         self.DeviceNum = 0
@@ -42,6 +42,7 @@ class Video():
 
         self.initUI()
         self.initBinds()
+
 
 
     def initUI(self):
@@ -92,8 +93,12 @@ class Video():
 
 
     def stopVideo(self):
-        self.CapThread.stop()
-        self.UpThread.stop()
+        if(self.CapThread.isRunning() and self.ProcThread.isRunning()):
+            self.CapThread.stop()
+            self.ProcThread.stop()
+            self.CapThread.join()
+            self.ProcThread.join()
+
 
     #def cleanUp(self):
 
