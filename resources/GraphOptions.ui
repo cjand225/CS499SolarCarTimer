@@ -7,11 +7,11 @@
     <x>0</x>
     <y>0</y>
     <width>321</width>
-    <height>420</height>
+    <height>440</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Graphing Options</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
@@ -51,6 +51,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="toolTip">
+             <string extracomment="Double click to remove team."/>
+            </property>
             <property name="autoFillBackground">
              <bool>false</bool>
             </property>
@@ -66,7 +69,7 @@
      </item>
     </layout>
    </item>
-   <item row="1" column="0">
+   <item row="2" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Graph Type</string>
@@ -91,6 +94,27 @@
       </item>
      </layout>
     </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QRadioButton" name="SecondButton">
+       <property name="text">
+        <string>Seconds</string>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QRadioButton" name="MinuteButton">
+       <property name="text">
+        <string>Minutes</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>

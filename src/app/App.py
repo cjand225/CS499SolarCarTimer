@@ -35,9 +35,10 @@ class App():
     LogPath = os.path.abspath(os.path.join(__file__, '../../logs/'))
     helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
     aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
+    GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
     userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
     aboutPath = os.path.join(manualDir, 'about.html')
-    GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
+
 
     def __init__(self):
         self.Application = None
@@ -200,7 +201,7 @@ class App():
         self.mainWindow.addTable(self.tableView.getTableWidget())
         self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
         self.mainWindow.addVision(self.Vision.getWidget())
-        # self.mainWindow.addGraph(graphOptions, GraphWidget)
+        self.mainWindow.addGraph(self.graph)
         #self.mainWindow.addLeaderBoard(self.LeaderBoard.getWidget())
 
     ''' 
@@ -325,6 +326,7 @@ class App():
         if newCar:
             self.tableView.CarStoreList.addExistingCar(newCar)
             self.mainWindow.SemiAutoWidget.addCar(newCar)
+            self.graph.addCar(newCar)
 
     # def upload(self):
     #     self.mainWindow.googleDriveDialog()

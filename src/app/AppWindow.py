@@ -37,7 +37,6 @@ class AppWindow(QMainWindow):
         self.TableWidget = None
         self.SemiAutoWidget = None
         self.GraphWidget = None
-        self.GraphOptionsWidget = None
         self.LogWidget = None
         self.LeaderBoardWidget = None
 

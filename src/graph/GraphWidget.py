@@ -5,9 +5,6 @@ from PyQt5.uic import loadUi
 import matplotlib.pyplot as plt
 import numpy as np
 
-from src.table.Car import Car
-import random
-
 GRAPH_LAPVSTIME = "Lap vs Time"
 GRAPH_MINTIME = "Minimum Time"
 GRAPH_MAXTIME = "Maximum Time"
@@ -30,8 +27,9 @@ class Graph(QWidget):
         self.graphedTeamList = []
         self.currentGraphType = graphTypes[0]
         self.currGraphNum = 1
+        self.inMinutes = False
 
-        self.teamList = self.dumbData() #TODO CHANGE TO REAL DATA
+        self.teamList = []
 
         self.initUI()
 
@@ -59,7 +57,25 @@ class Graph(QWidget):
         # add team list listener
         self.ChosenTeamList.itemDoubleClicked.connect(self.chosenTeamClick)
 
-        self.show()
+        self.MinuteButton.toggled.connect(self.timeToggle)
+
+    def timeToggle(self):
+        self.inMinutes = self.MinuteButton.isChecked()
+
+    def updateTeamList(self, newTeamList):
+        self.graphedTeamList = []
+        self.currGraphNum = 1
+        self.teamList = newTeamList
+
+        index = 0
+        for car in self.teamList:
+            self.TeamChoiceBox.addItem(car.getOrg(), index)
+            index += 1
+
+    def addCar(self, car):
+        teamListLength = len(self.teamList)
+        self.teamList.append(car)
+        self.TeamChoiceBox.addItem(car.getOrg(), teamListLength)
 
     def drawGraph(self):
         if self.currentGraphType == GRAPH_LAPVSTIME:
@@ -107,6 +123,17 @@ class Graph(QWidget):
         if text in graphTypes:
             self.currentGraphType = text
 
+    def getElapsed(self, lapList):
+        elapsed = []
+        if self.inMinutes:
+            for lap in lapList:
+                elapsed.append(lap.elapsedTime/60)
+        else:
+            for lap in lapList:
+                elapsed.append(lap.elapsedTime)
+
+        return elapsed
+
     def lapVsTimeGraph(self):
         # increments the figure number to guarantee new window
         plt.figure(self.currGraphNum)
@@ -116,12 +143,15 @@ class Graph(QWidget):
 
         # plot data
         for team in self.graphedTeamList:
-            plt.plot(graphRange, team.LapList, label=team.getOrg())
+            plt.plot(graphRange, self.getElapsed(team.LapList), label=team.getOrg())
 
         # set labels
         plt.title('Lap vs Time')
         plt.xlabel('Lap')
-        plt.ylabel('Time')
+        if self.inMinutes:
+            plt.ylabel('Time (minutes)')
+        else:
+            plt.ylabel('Time (seconds)')
 
         plt.xticks(np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0))
         plt.legend()
@@ -140,20 +170,25 @@ class Graph(QWidget):
         # plot team lap averages
         for team in self.graphedTeamList:
             lapAverages = []
-            totalTime = 0
             lapList = team.LapList
 
             # for every lap for current team calculate the average time
-            for i in range(len(team.LapList)):
-                totalTime += lapList[i]
-                lapAverages.append(totalTime / (i + 1))
+            if self.inMinutes:
+                for i in range(len(team.LapList)):
+                    lapAverages.append(lapList[i].recordedTime / ((i + 1) * 60))
+            else:
+                for i in range(len(team.LapList)):
+                    lapAverages.append(lapList[i].recordedTime / (i + 1))
 
             plt.plot(graphRange, lapAverages, label=team.getOrg())
 
         # set labels
         plt.title('Lap vs Average Time')
         plt.xlabel('Lap')
-        plt.ylabel('Average Time')
+        if self.inMinutes:
+            plt.ylabel('Average Time (minutes)')
+        else:
+            plt.ylabel('Average Time (seconds)')
 
         plt.xticks(np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0))
         plt.legend()
@@ -168,11 +203,14 @@ class Graph(QWidget):
 
         # calculate minimum times for teams
         for team in self.graphedTeamList:
-            data.append(min(team.LapList))
+            data.append(min(self.getElapsed(team.LapList)))
             labels.append(team.getOrg())
 
         # send data to bar graph
-        self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Times')
+        if self.inMinutes:
+            self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Time (minutes)')
+        else:
+            self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Time (seconds)')
 
     def maxTimeGraph(self):
         labels = []
@@ -180,11 +218,14 @@ class Graph(QWidget):
 
         # calculate maximum times for teams
         for team in self.graphedTeamList:
-            data.append(max(team.LapList))
+            data.append(max(self.getElapsed(team.LapList)))
             labels.append(team.getOrg())
 
         # send data to bar graph
-        self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Times')
+        if self.inMinutes:
+            self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Time (minutes)')
+        else:
+            self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Time (seconds)')
 
     def barGraph(self, data, labels, title, x_axis, y_axis):
         # increments the figure number to guarantee new window
@@ -216,17 +257,5 @@ class Graph(QWidget):
         plt.tight_layout()
         plt.show()
 
-    def dumbData(self):
-        # generates fake car data
-        carList = [Car(0, "Cool", 54),
-                   Car(1, "UK", 10),
-                   Car(2, "NC", 45),
-                   Car(3, "TEST", 2)
-                   ]
-
-        for car in carList:
-            car.LapList = [random.randint(10, 30) for i in range(10)]
-
-        return carList
 
 
