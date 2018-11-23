@@ -10,7 +10,7 @@ Depends On: threading, cv2(OpenCV)
 import threading
 import cv2
 import time
-from src.system.graphics import applyBlurFilter, applyEdgeFilter, ApplyFilter, filterType
+from src.system.Graphics import applyBlurFilter, applyEdgeFilter, ApplyFilter, filterType
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -39,8 +39,7 @@ class CaptureThread(threading.Thread):
         self.imageHeight = height  # Resolution Height
         self.frames = fps  # Frames per Second
         self.CapQ = queueOne  # queue for adding multiple frame
-        self.loop_delta = 1 / self.frames
-
+        self.loopDeltaTime = 1 / self.frames
 
     # executes what the thread is meant for
     def run(self):
@@ -73,11 +72,11 @@ class CaptureThread(threading.Thread):
     # gets frame data continously until thread stops
     def grab(self):
         self.running = True
+
         capture = cv2.VideoCapture(self.captureCam)
         capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.imageWidth)
         capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.imageHeight)
         capture.set(cv2.CAP_PROP_FPS, self.frames)
-
 
         # set inital target/current times
         currentTime = targetTime = time.time()
@@ -86,26 +85,20 @@ class CaptureThread(threading.Thread):
             # calculate difference in time and get the current time
             previousTime = currentTime
             currentTime = time.time()
-            time_delta = currentTime - previousTime
+            deltaTime = currentTime - previousTime
 
-            if (self.enableFPS):
-                self.showFPS(time_delta)
-
-            frame = {}
             capture.grab()
             retval, img = capture.retrieve(0)
-            frame["img"] = img
+            self.showFPS(deltaTime)
 
-            # corverts frame to normal image or edge detection image based on Enum
-            currentImage, newImg = ApplyFilter(img, filterType.EDGE)
+            retImg, guiImage = ApplyFilter(img, filterType.NORMAL)
 
-            # if canvas is actually set, update it
             if self.canvas:
-                self.canvas.setPixmap(QPixmap.fromImage(newImg))
+                self.canvas.setPixmap(QPixmap.fromImage(guiImage))
             self.CapQ.put(img)
 
             # keep adding the difference in time needed and calculate sleep based on that
-            targetTime = + self.loop_delta
+            targetTime =+ self.loopDeltaTime
             sleepAmount = targetTime - time.time()
 
             if sleepAmount > 0:
@@ -113,5 +106,6 @@ class CaptureThread(threading.Thread):
 
         capture.release()
 
-    def showFPS(self, time_delta):
-        print('FPS: %d' % (1 / time_delta))
+    def showFPS(self, timeDiff):
+        print('FPS: %d' % (1 / timeDiff))
+        return

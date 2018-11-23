@@ -13,6 +13,7 @@ from PyQt5.QtCore import *
 from src.video.VisionWidget import VisionWidget
 from src.video.CaptureThread import CaptureThread
 from src.video.ImageProcessThread import ImageProcessThread
+from src.video.DetectionThread import DetectThread
 
 
 class Video():
@@ -22,7 +23,7 @@ class Video():
         self.VisWidget = None
 
         # device requirements
-        self.FramesPerSecond = 120
+        self.FramesPerSecond = 60
         self.VidWidth = 1920
         self.VidHeight = 1080
         self.DeviceNum = 0
@@ -32,11 +33,12 @@ class Video():
 
         self.CapThread = None
         self.ProcThread = None
-        self.UpThread = None
         self.DetectThread = None
-        self.CaptureQ = None
-        self.ProcessQ = None
-        self.UpdateQ = None
+
+
+        self.CapturedQ = None
+        self.ProcessedQ = None
+
 
         self.initUI()
         self.initBinds()
@@ -47,9 +49,8 @@ class Video():
         self.ImgCanvasHeight = self.VisWidget.getHeight()
 
     def initQueues(self):
-        self.CaptureQ = queue.Queue()
-        self.UpdateQ = queue.Queue()
-        self.ProcessQ = queue.Queue()
+        self.CapturedQ = queue.Queue()
+        self.ProcessedQ = queue.Queue()
 
     def initThreads(self):
         self.initCapThread()
@@ -57,14 +58,14 @@ class Video():
         self.initDetectThread()
 
     def initCapThread(self):
-        self.CapThread = CaptureThread(self.CaptureQ, self.DeviceNum,
+        self.CapThread = CaptureThread(self.CapturedQ, self.DeviceNum,
                                        self.VidWidth, self.VidHeight, self.FramesPerSecond, self.VisWidget.imgCanvas)
 
     def initProcThread(self):
-        self.ProcThread = ImageProcessThread(self.CaptureQ, self.ProcessQ)
+        self.ProcThread = ImageProcessThread(self.CapturedQ, self.ProcessedQ, self.FramesPerSecond, self.VisWidget.imgCanvas)
 
     def initDetectThread(self):
-        self.DetectThread = None
+        self.DetectThread = DetectThread(self.ProcessedQ)
 
     def bindStart(self):
         self.VisWidget.getStartButton().clicked.connect(self.startVideo)
@@ -82,14 +83,24 @@ class Video():
     def startVideo(self):
         self.initQueues()
         self.initThreads()
-        self.CapThread.start()
-        self.ProcThread.start()
+        self.startThreads()
 
     def stopVideo(self):
-        if (self.CapThread.isRunning() and self.ProcThread.isRunning()):
-            self.CapThread.stop()
-            self.ProcThread.stop()
-            self.CapThread.join()
-            self.ProcThread.join()
+        self.cleanUp()
 
-    # def cleanUp(self):
+    def cleanUp(self):
+        if self.CapThread.isRunning():
+            self.CapThread.stop()
+            self.CapThread.join()
+        if self.ProcThread.isRunning():
+            self.ProcThread.stop()
+            self.ProcThread.join()
+        if self.DetectThread.isRunning():
+            self.DetectThread.stop()
+            self.DetectThread.join()
+
+
+    def startThreads(self):
+        self.CapThread.start()
+        self.ProcThread.start()
+        #self.DetectThread.start()
