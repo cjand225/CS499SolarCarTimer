@@ -10,6 +10,8 @@ import cv2
 import numpy as np
 import time
 
+from src.system.graphics import ApplyFilter, applyEdgeFilter, applyBlurFilter, filterType
+
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
@@ -37,15 +39,13 @@ class ImageProcessThread(threading.Thread):
         self.running = True
 
     def processFrames(self):
-
-
         while self.running:
-            if not self.ProcessQ.empty():
+            if self.ProcessQ.qsize() > 3:
                 frame = {}
 
                 nextImage = self.ProcessQ.get()
                 #currentImage is considered pure frame data from capture cam
-                currentImage = self.applyEdgeFilter(nextImage)
+                currentImage = applyEdgeFilter(nextImage)
                 frame["img"] = currentImage
 
                 cv2.imwrite(self.VidPath, currentImage)
@@ -54,14 +54,3 @@ class ImageProcessThread(threading.Thread):
                 time.sleep(1)
 
 
-
-    def applyEdgeFilter(self, imgData):
-        sigma = 0.2
-        v = np.median(imgData)
-        bilateralImage = cv2.bilateralFilter(imgData, 3, 225, 225)
-
-        hsv = cv2.cvtColor(bilateralImage, cv2.COLOR_BGR2GRAY)
-        lower = int(max(0, (1.0 - sigma) * v))
-        upper = int(min(255, (1.0 + sigma) * v))
-        edges = cv2.Canny(hsv, lower, upper)
-        return edges

@@ -1,17 +1,16 @@
 '''
 Module: CaptureThread.py
-Purpose: a thread classs intended for retrieving frame data constantly from a video device(webcam),
-         and adding that frame data to a queue that is then passed to UpdateThread and ImageProcessThread.
+Purpose: a thread class intended for retrieving frame data constantly from a video device(webcam),
+         and adding that frame data to a queue that is then passed to ImageProcessThread.
 Depends On: threading, cv2(OpenCV)
 
-TODO: pass two seperate queues, one for updateThread, one for ImageProcessThread
 
 '''
 
 import threading
 import cv2
 import time
-import numpy as np
+from src.system.graphics import applyBlurFilter, applyEdgeFilter, ApplyFilter, filterType
 
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -27,10 +26,12 @@ class CaptureThread(threading.Thread):
 
     '''
 
-    def __init__(self, queueOne, queueTwo, imageCam, width, height, fps, canvas=None, ):
+    def __init__(self, queueOne, imageCam, width, height, fps, canvas=None, ):
         threading.Thread.__init__(self)
 
         self.canvas = canvas
+        self.running = False
+        self.enableFPS = False
 
         # variables needed for capturing frame data
         self.captureCam = imageCam  # Specific I/O Device
@@ -38,14 +39,8 @@ class CaptureThread(threading.Thread):
         self.imageHeight = height  # Resolution Height
         self.frames = fps  # Frames per Second
         self.CapQ = queueOne  # queue for adding multiple frame
-        self.UpQ = queueTwo
-
         self.loop_delta = 1 / self.frames
 
-        self.running = False
-        self.Edge = True
-        self.Normal = False
-        self.enableFPS = False
 
     # executes what the thread is meant for
     def run(self):
@@ -83,16 +78,17 @@ class CaptureThread(threading.Thread):
         capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.imageHeight)
         capture.set(cv2.CAP_PROP_FPS, self.frames)
 
-        #set inital target/current times
+
+        # set inital target/current times
         currentTime = targetTime = time.time()
         while (self.running):
 
-            #calculate difference in time and get the current time
+            # calculate difference in time and get the current time
             previousTime = currentTime
             currentTime = time.time()
             time_delta = currentTime - previousTime
 
-            if(self.enableFPS):
+            if (self.enableFPS):
                 self.showFPS(time_delta)
 
             frame = {}
@@ -100,44 +96,22 @@ class CaptureThread(threading.Thread):
             retval, img = capture.retrieve(0)
             frame["img"] = img
 
-            # corverts frame to normal image or edge detection image based on boolean setting and returns it
-            currentImage, self.newImg = self.ApplyFilter(img)
+            # corverts frame to normal image or edge detection image based on Enum
+            currentImage, newImg = ApplyFilter(img, filterType.EDGE)
 
             # if canvas is actually set, update it
             if self.canvas:
-                self.canvas.setPixmap(QPixmap.fromImage(self.newImg))
+                self.canvas.setPixmap(QPixmap.fromImage(newImg))
             self.CapQ.put(img)
 
-            #keep adding the difference in time needed and calculate sleep based on that
-            targetTime =+ self.loop_delta
+            # keep adding the difference in time needed and calculate sleep based on that
+            targetTime = + self.loop_delta
             sleepAmount = targetTime - time.time()
 
             if sleepAmount > 0:
                 time.sleep(sleepAmount)
 
         capture.release()
-
-    # function works by setting either self.Edge to True or self.Normal to True in the initalizer of the
-    def ApplyFilter(self, imgData):
-        if self.Edge == True:
-            edges = self.applyEdgeFilter(imgData)
-            return edges, QImage(edges, edges.shape[1], edges.shape[0], edges.strides[0], QImage.Format_Grayscale8)
-        elif self.Normal == True:
-            Norm = cv2.cvtColor(imgData, cv2.COLOR_BGR2RGB)
-            return Norm, QImage(Norm, Norm.shape[1], Norm.shape[0], Norm.strides[0], QImage.Format_RGB888)
-        else:
-            Norm = cv2.cvtColor(imgData, cv2.COLOR_BGR2RGB)
-            return Norm, QImage(Norm, Norm.shape[1], Norm.shape[0], Norm.strides[0], QImage.Format_RGB888)
-
-    def applyEdgeFilter(self, imgData):
-        sigma = 0.2
-        v = np.median(imgData)
-        bilateralImage = cv2.bilateralFilter(imgData, 3, 225, 225)
-        hsv = cv2.cvtColor(bilateralImage, cv2.COLOR_BGR2GRAY)
-        lower = int(max(0, (1.0 - sigma) * v))
-        upper = int(min(255, (1.0 + sigma) * v))
-        edges = cv2.Canny(hsv, lower, upper)
-        return edges
 
     def showFPS(self, time_delta):
         print('FPS: %d' % (1 / time_delta))

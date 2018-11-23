@@ -15,8 +15,6 @@ from src.video.CaptureThread import CaptureThread
 from src.video.ImageProcessThread import ImageProcessThread
 
 
-
-
 class Video():
 
     def __init__(self, uipath):
@@ -43,8 +41,6 @@ class Video():
         self.initUI()
         self.initBinds()
 
-
-
     def initUI(self):
         self.VisWidget = VisionWidget(self.UIpath)
         self.ImgCanvasWidth = self.VisWidget.getWidth()
@@ -55,14 +51,13 @@ class Video():
         self.UpdateQ = queue.Queue()
         self.ProcessQ = queue.Queue()
 
-
     def initThreads(self):
         self.initCapThread()
         self.initProcThread()
         self.initDetectThread()
 
     def initCapThread(self):
-        self.CapThread = CaptureThread(self.CaptureQ, self.UpdateQ, self.DeviceNum,
+        self.CapThread = CaptureThread(self.CaptureQ, self.DeviceNum,
                                        self.VidWidth, self.VidHeight, self.FramesPerSecond, self.VisWidget.imgCanvas)
 
     def initProcThread(self):
@@ -84,21 +79,17 @@ class Video():
     def getWidget(self):
         return self.VisWidget
 
-
     def startVideo(self):
         self.initQueues()
         self.initThreads()
         self.CapThread.start()
         self.ProcThread.start()
 
-
     def stopVideo(self):
-        if(self.CapThread.isRunning() and self.ProcThread.isRunning()):
+        if (self.CapThread.isRunning() and self.ProcThread.isRunning()):
             self.CapThread.stop()
             self.ProcThread.stop()
             self.CapThread.join()
             self.ProcThread.join()
 
-
-    #def cleanUp(self):
-
+    # def cleanUp(self):

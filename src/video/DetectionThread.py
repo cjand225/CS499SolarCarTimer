@@ -29,10 +29,8 @@ class DetectThread(threading.Thread):
 
     def detectFrame(self):
         while self.running:
-            if not self.DetectQueue.empty():
+            if self.DetectQueue.qsize() > 3:
                 print('Hi')
             else:
                 time.sleep(1)
 
-
-        self.join()
