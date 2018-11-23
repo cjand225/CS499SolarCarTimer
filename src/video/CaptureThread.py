@@ -89,7 +89,7 @@ class CaptureThread(threading.Thread):
 
             capture.grab()
             retval, img = capture.retrieve(0)
-            self.showFPS(deltaTime)
+            #self.showFPS(deltaTime)
 
             retImg, guiImage = ApplyFilter(img, filterType.NORMAL)
 
