@@ -1,10 +1,10 @@
-import matplotlib
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QMainWindow, QMenu, QVBoxLayout, QSizePolicy, QMessageBox, QWidget, \
-    QPushButton, QStyle, QFileDialog
+from PyQt5.QtWidgets import QApplication, QWidget, QStyle
 from PyQt5.uic import loadUi
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 from src.table.Car import Car
 import random
 
@@ -22,15 +22,14 @@ graphTypes = [
 
 
 class Graph(QWidget):
-    maxGraphNumber = 3
+    maxGraphNumber = 100
 
     def __init__(self, uipath):
         super().__init__()
         self.UIPath = uipath
         self.graphedTeamList = []
         self.currentGraphType = graphTypes[0]
-
-        self.fileDialog = QFileDialog()
+        self.currGraphNum = 1
 
         self.teamList = self.dumbData() #TODO CHANGE TO REAL DATA
 
@@ -43,9 +42,7 @@ class Graph(QWidget):
 
         self.ApplyGraphBtn.clicked.connect(self.drawGraph)
 
-        self.SaveGraphBtn.clicked.connect(self.saveGraph)
-
-        # ADD TEAMS TO CHOICES COMBO BOX
+        # add teams to the choice box
         index = 0
         for car in self.teamList:
             self.TeamChoiceBox.addItem(car.getOrg(), index)
@@ -62,19 +59,17 @@ class Graph(QWidget):
         # add team list listener
         self.ChosenTeamList.itemDoubleClicked.connect(self.chosenTeamClick)
 
-        # start the plot canvas
-        self.pcanvas = PlotCanvas(self.GraphWindow, width=5, height=4)
-
         self.show()
 
     def drawGraph(self):
-        self.pcanvas.plot(self.graphedTeamList) #TODO Change
-
-    def saveGraph(self):
-        fileName = self.fileDialog.getSaveFileName(self)
-        print(fileName)
-        if fileName:
-            self.pcanvas.saveGraph(fileName[0])
+        if self.currentGraphType == GRAPH_LAPVSTIME:
+            self.lapVsTimeGraph()
+        elif self.currentGraphType == GRAPH_AVGVSTIME:
+            self.avgLapVsTimeGraph()
+        elif self.currentGraphType == GRAPH_MINTIME:
+            self.minTimeGraph()
+        elif self.currentGraphType == GRAPH_MAXTIME:
+            self.maxTimeGraph()
 
     def teamChosen(self, index):
         self.addTeamToGraphList(self.TeamChoiceBox.itemData(index))
@@ -92,6 +87,7 @@ class Graph(QWidget):
         return False
 
     def removeTeamFromGraphList(self, teamName):
+        # search graph list and remove found element
         for i in range(len(self.graphedTeamList)):
             team = self.graphedTeamList[i]
             if team.getOrg() == teamName:
@@ -100,15 +96,128 @@ class Graph(QWidget):
         return False
 
     def chosenTeamClick(self):
+        # if the team is double clicked then remove it
         teamName = self.ChosenTeamList.currentItem().text()
         self.removeTeamFromGraphList(teamName)
+        # remove the team from the list
         self.ChosenTeamList.takeItem(self.ChosenTeamList.currentRow())
 
     def typeChosen(self, text):
+        # checks that type is valid (in types list)
         if text in graphTypes:
             self.currentGraphType = text
 
+    def lapVsTimeGraph(self):
+        # increments the figure number to guarantee new window
+        plt.figure(self.currGraphNum)
+        self.currGraphNum += 1
+
+        graphRange = np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0)
+
+        # plot data
+        for team in self.graphedTeamList:
+            plt.plot(graphRange, team.LapList, label=team.getOrg())
+
+        # set labels
+        plt.title('Lap vs Time')
+        plt.xlabel('Lap')
+        plt.ylabel('Time')
+
+        plt.xticks(np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0))
+        plt.legend()
+
+        plt.tight_layout()
+        plt.grid(True)
+        plt.show()
+
+    def avgLapVsTimeGraph(self):
+        # increments the figure number to guarantee new window
+        plt.figure(self.currGraphNum)
+        self.currGraphNum += 1
+
+        graphRange = np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0)
+
+        # plot team lap averages
+        for team in self.graphedTeamList:
+            lapAverages = []
+            totalTime = 0
+            lapList = team.LapList
+
+            # for every lap for current team calculate the average time
+            for i in range(len(team.LapList)):
+                totalTime += lapList[i]
+                lapAverages.append(totalTime / (i + 1))
+
+            plt.plot(graphRange, lapAverages, label=team.getOrg())
+
+        # set labels
+        plt.title('Lap vs Average Time')
+        plt.xlabel('Lap')
+        plt.ylabel('Average Time')
+
+        plt.xticks(np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0))
+        plt.legend()
+
+        plt.tight_layout()
+        plt.grid(True)
+        plt.show()
+
+    def minTimeGraph(self):
+        labels = []
+        data = []
+
+        # calculate minimum times for teams
+        for team in self.graphedTeamList:
+            data.append(min(team.LapList))
+            labels.append(team.getOrg())
+
+        # send data to bar graph
+        self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Times')
+
+    def maxTimeGraph(self):
+        labels = []
+        data = []
+
+        # calculate maximum times for teams
+        for team in self.graphedTeamList:
+            data.append(max(team.LapList))
+            labels.append(team.getOrg())
+
+        # send data to bar graph
+        self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Times')
+
+    def barGraph(self, data, labels, title, x_axis, y_axis):
+        # increments the figure number to guarantee new window
+        plt.figure(self.currGraphNum)
+        self.currGraphNum += 1
+
+        # graph settings
+        # range is 1 because only 1 set of bars
+        index = np.arange(1)
+        bar_width = .5
+        opacity = .8
+
+        # add team to legend and plot their data
+        for i in range(len(data)):
+            plt.bar(index + bar_width * i, data[i],
+                    width=bar_width,
+                    label=labels[i],
+                    alpha=opacity)
+
+        # set labels
+        plt.title(title)
+        plt.xlabel(x_axis)
+        plt.ylabel(y_axis)
+        # remove x ticks
+        plt.xticks(index, ' ')
+        # add legend
+        plt.legend()
+
+        plt.tight_layout()
+        plt.show()
+
     def dumbData(self):
+        # generates fake car data
         carList = [Car(0, "Cool", 54),
                    Car(1, "UK", 10),
                    Car(2, "NC", 45),
@@ -116,48 +225,8 @@ class Graph(QWidget):
                    ]
 
         for car in carList:
-            car.LapList = [random.randint(10, 12) for i in range(20)]
+            car.LapList = [random.randint(10, 30) for i in range(10)]
 
         return carList
 
 
-class PlotCanvas(FigureCanvas):
-
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-
-        FigureCanvas.__init__(self, fig)
-        self.setParent(parent)
-
-        FigureCanvas.setSizePolicy(self,
-                                   QSizePolicy.Expanding,
-                                   QSizePolicy.Expanding)
-        FigureCanvas.updateGeometry(self)
-
-    def plot(self, teams):
-        ax = self.figure.add_subplot(111)
-        ax.lines = []
-        legendText = []
-
-        # set x-axis to be whole numbers
-        for axis in [ax.xaxis, ax.yaxis]:
-            axis.set_major_locator(matplotlib.ticker.MaxNLocator(integer=True))
-
-        ax.set_title('Lap vs. Time')
-
-        # add team to legend and plot their data
-        for team in teams:
-            legendText.append(team.getOrg())
-            ax.plot(team.LapList)
-
-        # place legend at upper left corner of graph
-        ax.legend(legendText, loc='upper left')
-
-        self.draw()
-
-    def winTitle(self, text):
-        self.ax.set_title(text)
-        self.draw()
-
-    def saveGraph(self, filePath):
-        self.figure.savefig(filePath, bbox_inches='tight')

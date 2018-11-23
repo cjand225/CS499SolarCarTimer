@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1027</width>
-    <height>466</height>
+    <width>321</width>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
-   <item row="0" column="1">
+   <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="1">
       <widget class="QGroupBox" name="groupBox_1">
@@ -66,14 +66,7 @@
      </item>
     </layout>
    </item>
-   <item row="0" column="0" rowspan="2">
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0">
-      <widget class="QGraphicsView" name="GraphWindow"/>
-     </item>
-    </layout>
-   </item>
-   <item row="1" column="1">
+   <item row="1" column="0">
     <widget class="QGroupBox" name="groupBox_2">
      <property name="title">
       <string>Graph Type</string>
@@ -93,13 +86,6 @@
        <widget class="QDialogButtonBox" name="ApplyGraphBtn">
         <property name="standardButtons">
          <set>QDialogButtonBox::Apply</set>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QDialogButtonBox" name="SaveGraphBtn">
-        <property name="standardButtons">
-         <set>QDialogButtonBox::Save</set>
         </property>
        </widget>
       </item>
