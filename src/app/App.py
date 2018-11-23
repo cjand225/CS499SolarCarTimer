@@ -5,29 +5,38 @@ Purpose: Controller for entire application, used to periodically update project 
 
 '''
 
-import os, sys
-from PyQt5.QtCore import *
+import os
+import sys
+
 from PyQt5.Qt import *
+
 
 from src.graph.GraphWidget import Graph
 from src.app.AppWindow import AppWindow
-from src.table.Table import Table
+from src.system.IO import loadCSV, saveCSV
+from src.table.CarStorage import CarStorage
 from src.table.SemiAutoWidget import SemiAutoWidget
-
+from src.table.Table import Table
+from src.video.Video import Video
 
 
 class App():
-    resourcesDir = os.path.abspath(os.path.join(__file__,"./../../../resources"))
-    mainUIPath = os.path.join(resourcesDir,'App.ui')
-    tableUIPath = os.path.join(resourcesDir,'Table.ui')
-    visionUIPath = os.path.join(resourcesDir,'Video.ui')
-    logUIPath = os.path.join(resourcesDir,'Log.ui')
-    semiAutoUIPath = os.path.join(resourcesDir,'Buttons.ui')
-    quitDialogUIPath = os.path.join(resourcesDir,'QuitDialog.ui')
-    addCarDialogUIPath = os.path.join(resourcesDir,'addCarDialog.ui')
+    resourcesDir = os.path.abspath(os.path.join(__file__, "./../../../resources"))
+    manualDir = os.path.abspath(os.path.join(__file__, "./../../../manuals"))
+
+    mainUIPath = os.path.join(resourcesDir, 'AppWindow.ui')
+    tableUIPath = os.path.join(resourcesDir, 'TableView.ui')
+    visionUIPath = os.path.join(resourcesDir, 'Video.ui')
+    logUIPath = os.path.join(resourcesDir, 'Log.ui')
+    semiAutoUIPath = os.path.join(resourcesDir, 'SemiAuto.ui')
+    quitDialogUIPath = os.path.join(resourcesDir, 'QuitDialog.ui')
+    addCarDialogUIPath = os.path.join(resourcesDir, 'addCarDialog.ui')
     # googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
     LogPath = os.path.abspath(os.path.join(__file__, '../../logs/'))
-
+    helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
+    aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
+    userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
+    aboutPath = os.path.join(manualDir, 'about.html')
     GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
 
     def __init__(self):
@@ -35,45 +44,48 @@ class App():
         self.mainWindow = None
         self.running = False
 
-        #read/write paths
+        # read/write paths
         self.defaultSavePath = ''
 
-        self.vision = None
+        #Foward Module Declaration
         self.tableView = None
+        self.Vision = None
+        self.graph = None
+        self.log = None
+        self.leaderBoard = None
 
-        #read/write files
+        # read/write files
         self.writeFile = None
         self.readFile = None
 
+        #Initalizing everything
         self.initApplication()
         self.initMainWindow()
         self.initTableView()
-        #self.initVision()
-        #self.initLog()
+        self.initVision()
+        self.initLog()
         self.initGraph()
+        self.initLeaderBoard()
 
+        #adding and connecting essential components to user interface
         self.addComponents()
         self.connectActionsMainWindow()
-        self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
-        self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
 
-    def semiAutoStart(self,car,semiAutoIndex,startTime):
+
+
+    def semiAutoStart(self, car, semiAutoIndex, startTime):
         self.tableView.CarStoreList.storageList[car.ID].initialTime = startTime
 
-    def semiAutoRecord(self,car,semiAutoIndex,recordedTime):
+    def semiAutoRecord(self, car, semiAutoIndex, recordedTime):
         if self.tableView.CarStoreList.storageList[car.ID].LapList:
             elapsedTime = recordedTime - self.tableView.CarStoreList.storageList[car.ID].LapList[-1].recordedTime
         else:
             elapsedTime = recordedTime - car.initialTime
-        self.tableView.CarStoreList.appendLapTime(car.ID,elapsedTime)
+        self.tableView.CarStoreList.appendLapTime(car.ID, elapsedTime)
 
-    @staticmethod
-    def toggleWidget(widget,e):
-        if widget.isVisible():
-            widget.hide()
-        else:
-            widget.show()
-
+    def tableClickEvent(self, i):
+        if i.column() == len(self.tableView.CarStoreList.storageList):
+            self.addCar()
 
     ''' 
 
@@ -100,6 +112,8 @@ class App():
     def initMainWindow(self):
         self.mainWindow = AppWindow(type(self).mainUIPath)
         self.mainWindow.initCloseDialog(type(self).quitDialogUIPath)
+        self.mainWindow.initHelpDialog(type(self).helpDialogUIPath, type(self).userManPath)
+        self.mainWindow.initAboutDialog(type(self).aboutDialogUIPath, type(self).aboutPath)
 
     ''' 
 
@@ -110,8 +124,10 @@ class App():
                  both its internal model and View class (however view class is passed to AppWindow to handle afterwards)
 
     '''
+
     def initTableView(self):
         self.tableView = Table(type(self).tableUIPath)
+        self.tableView.tableView.doubleClicked.connect(self.tableClickEvent)
 
     ''' 
 
@@ -123,9 +139,9 @@ class App():
                  Various Cars with Laptime Information
 
     '''
-    def initVision(self):
-        self.vision = None
 
+    def initVision(self):
+        self.Vision = Video(self.visionUIPath)
 
     ''' 
 
@@ -136,6 +152,7 @@ class App():
                  file writes to a specified file when the Log Class is invoked.
 
     '''
+
     def initLog(self):
         self.log = None
 
@@ -148,8 +165,23 @@ class App():
                  in the form of lists and user specified information, can create Graphs via its own VieW
 
     '''
+
     def initGraph(self):
         self.graph = Graph(self.GraphUIPath)
+
+
+    ''' 
+
+        Function: initLeaderBoard(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: initializes the LeaderBoard Module (w/ a path to the View's UI), which then when given information
+                 in the form of lists of information based on racing data can create a visual list from its view for user.
+
+    '''
+
+    def initLeaderBoard(self):
+        self.leaderBoard = None
 
     ''' 
 
@@ -160,15 +192,16 @@ class App():
                  of the overall View of the program.
 
     '''
+
+
+
     def addComponents(self):
-        #pass
+        #self.mainWindow.addLog(self.Log.getWidget())
         self.mainWindow.addTable(self.tableView.getTableWidget())
-        #self.mainWindow.addVision()
-        #self.mainWindow.addLog()
-        #self.mainWindow.addGraph(graphOptions, GraphWidget)
         self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
-        self.mainWindow.addGraph(Graph)
-        #self.mainWindow.addSemiAuto()
+        self.mainWindow.addVision(self.Vision.getWidget())
+        # self.mainWindow.addGraph(graphOptions, GraphWidget)
+        #self.mainWindow.addLeaderBoard(self.LeaderBoard.getWidget())
 
     ''' 
 
@@ -179,24 +212,27 @@ class App():
                  than what is normally allowed to AppWindow such as newfile, openfile, savefile, saveAs.
 
     '''
+
     def connectActionsMainWindow(self):
-        #FileMenu
+        # FileMenu
         self.mainWindow.actionNew.triggered.connect(self.newFile)
         self.mainWindow.actionOpen.triggered.connect(self.openFile)
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         # self.mainWindow.actionUpload.triggered.connect(self.upload)
 
-        #Edit Menu
+        # self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
+        # self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
+        # self.mainWindow.saveShortcut.activated.connect(self.saveFile)
+        # self.tableView.saveShortcut.activated.connect(self.saveFile)
+
+        # Edit Menu
         self.mainWindow.actionAddCar.triggered.connect(self.addCar)
 
-        #View Menu
-        self.mainWindow.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.mainWindow.SemiAutoWidget,e))
-
-        #Help Menu
+        # Help Menu
 
     ''' 
-
+    
         Function: run(self)
         Parameters: self
         Return Value: N/A
@@ -204,10 +240,10 @@ class App():
                  proper exit code.
 
     '''
+
     def run(self):
         self.running = True
         sys.exit(self.Application.exec_())
-
 
     ''' 
 
@@ -219,14 +255,16 @@ class App():
                  a file to be created.
 
     '''
+
     def saveFile(self):
-        if(self.writeFile == None):
+        if not self.writeFile:
             self.writeFile = self.mainWindow.saveAsFileDialog()
+        if self.writeFile:
+            saveCSV(self.tableView.CarStoreList, self.writeFile)
 
-        #else use writeFile
+        # else use writeFile
 
-        #continue to dump save file
-
+        # continue to dump save file
 
     ''' 
 
@@ -238,9 +276,11 @@ class App():
                  the current working directory.
 
     '''
+
     def saveAsFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
-        #write file to location
+        # write file to location
+        self.saveFile()
 
     ''' 
 
@@ -251,9 +291,18 @@ class App():
                  into the Table Model
 
     '''
+
     def openFile(self):
-        if(self.readFile == None):
-            self.readFile = self.mainWindow.openFileDialog()
+        readFile = self.mainWindow.openFileDialog()
+        if readFile:
+            self.writeFile = readFile
+            cars = loadCSV(readFile)
+            self.mainWindow.SemiAutoWidget.deleteAllCars()
+            self.tableView.CarStoreList = CarStorage()
+            self.tableView.initTableModel()
+            self.tableView.tableView.setModel(self.tableView.TableMod)
+            for car in cars:
+                self.addCar(car)
 
     ''' 
 
@@ -264,20 +313,18 @@ class App():
                  then saves that as the current writeFile to be used for anything further.
 
     '''
+
     def newFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
 
-
-    def addCar(self):
-        newCar = self.mainWindow.addCarDialog()
+    def addCar(self, newCar=None):
+        if not newCar:
+            newCar = self.mainWindow.addCarDialog()
+            if newCar:
+                newCar.ID = len(self.tableView.CarStoreList.storageList)
         if newCar:
-            newCar.ID = len(self.tableView.CarStoreList.storageList)
             self.tableView.CarStoreList.addExistingCar(newCar)
             self.mainWindow.SemiAutoWidget.addCar(newCar)
 
     # def upload(self):
     #     self.mainWindow.googleDriveDialog()
-
-
-
-
