@@ -66,9 +66,9 @@ class App():
         #Initalizing everything
         self.initApplication()
         self.initMainWindow()
+        self.initLog()
         self.initTableView()
         self.initVision()
-        self.initLog()
         self.initGraph()
         self.initLeaderBoard()
 
@@ -163,6 +163,7 @@ class App():
     def initLog(self):
         self.log = LogWidget(self.logUIPath)
 
+
     ''' 
 
         Function: initGraph(self)
@@ -203,7 +204,7 @@ class App():
 
 
     def addComponents(self):
-        self.mainWindow.addLog(self.logWidget)
+        self.mainWindow.addLog(self.log)
         self.mainWindow.addTable(self.tableView.getTableWidget())
         self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
         self.mainWindow.addVision(self.Vision.getWidget())

@@ -100,7 +100,7 @@ class AppWindow(QMainWindow):
         self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
         self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
         self.actionAuto.triggered.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
-        #self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
+        self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
         #self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.GraphWidget), e)
         #self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
 
