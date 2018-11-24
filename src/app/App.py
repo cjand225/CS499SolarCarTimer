@@ -18,6 +18,9 @@ from src.table.CarStorage import CarStorage
 from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.Table import Table
 from src.video.Video import Video
+from src.log.LogWidget import LogWidget
+
+from src.log.Log import getLogger
 
 
 class App():
@@ -32,7 +35,6 @@ class App():
     quitDialogUIPath = os.path.join(resourcesDir, 'QuitDialog.ui')
     addCarDialogUIPath = os.path.join(resourcesDir, 'addCarDialog.ui')
     # googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
-    LogPath = os.path.abspath(os.path.join(__file__, '../../logs/'))
     helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
     aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
     GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
@@ -44,6 +46,7 @@ class App():
         self.Application = None
         self.mainWindow = None
         self.running = False
+        self.log = getLogger()
 
         # read/write paths
         self.defaultSavePath = ''
@@ -52,8 +55,9 @@ class App():
         self.tableView = None
         self.Vision = None
         self.graph = None
-        self.log = None
+        self.logWidget = None
         self.leaderBoard = None
+
 
         # read/write files
         self.writeFile = None
@@ -98,7 +102,9 @@ class App():
     '''
 
     def initApplication(self):
+        self.log.debug('creating app')
         self.Application = QApplication(sys.argv)
+        self.log.debug('app created')
 
     ''' 
 
@@ -155,7 +161,7 @@ class App():
     '''
 
     def initLog(self):
-        self.log = None
+        self.log = LogWidget(self.logUIPath)
 
     ''' 
 
@@ -197,7 +203,7 @@ class App():
 
 
     def addComponents(self):
-        #self.mainWindow.addLog(self.Log.getWidget())
+        self.mainWindow.addLog(self.logWidget)
         self.mainWindow.addTable(self.tableView.getTableWidget())
         self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
         self.mainWindow.addVision(self.Vision.getWidget())

@@ -22,6 +22,9 @@ from src.table.Car import Car
 from src.video.Video import Video
 
 
+from src.log.Log import getLogger
+
+
 # from src.cloud.GoogleDriveBrowser import GoogleDriveBrowser
 
 
@@ -39,6 +42,7 @@ class AppWindow(QMainWindow):
         self.GraphWidget = None
         self.LogWidget = None
         self.LeaderBoardWidget = None
+        self.Log = getLogger()
 
         # declare initalizers here
         self.initMainWindow()
@@ -58,8 +62,9 @@ class AppWindow(QMainWindow):
     def initMainWindow(self):
         self.mainWindowUI = loadUi(self.UIPath, self)
         self.setAttribute(Qt.WA_DeleteOnClose)
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
-                                            self.size(), QApplication.desktop().availableGeometry()))
+        #self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
+        #                                    self.size(), QApplication.desktop().availableGeometry()))
+        self.setGeometry(QRect((QApplication.desktop().availableGeometry().width() - self.width()) / 2, self.height()/2, self.width(), self.height()))
         self.show()
 
 
