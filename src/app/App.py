@@ -10,7 +10,6 @@ import sys
 
 from PyQt5.Qt import *
 
-
 from src.graph.GraphWidget import Graph
 from src.app.AppWindow import AppWindow
 from src.system.IO import loadCSV, saveCSV
@@ -20,7 +19,7 @@ from src.table.Table import Table
 from src.video.Video import Video
 from src.log.LogWidget import LogWidget
 
-from src.log.Log import getLogger
+from src.log.Log import getLogger, createLogger
 
 
 class App():
@@ -41,17 +40,19 @@ class App():
     userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
     aboutPath = os.path.join(manualDir, 'about.html')
 
-
     def __init__(self):
         self.Application = None
         self.mainWindow = None
         self.running = False
-        self.log = getLogger()
+                
+        #creating Logger
+        createLogger()
 
         # read/write paths
         self.defaultSavePath = ''
 
-        #Foward Module Declaration
+        # Forward Module Declaration
+        self.log = getLogger()
         self.tableView = None
         self.Vision = None
         self.graph = None
@@ -63,7 +64,7 @@ class App():
         self.writeFile = None
         self.readFile = None
 
-        #Initalizing everything
+        # Initializing everything
         self.initApplication()
         self.initMainWindow()
         self.initLog()
@@ -72,7 +73,7 @@ class App():
         self.initGraph()
         self.initLeaderBoard()
 
-        #adding and connecting essential components to user interface
+        # adding and connecting essential components to user interface
         self.addComponents()
         self.connectActionsMainWindow()
 
@@ -102,9 +103,7 @@ class App():
     '''
 
     def initApplication(self):
-        self.log.debug('creating app')
         self.Application = QApplication(sys.argv)
-        self.log.debug('app created')
 
     ''' 
 
@@ -141,7 +140,7 @@ class App():
         Function: initVision(self)
         Parameters: self
         Return Value: N/A
-        Purpose: Initalizes the Vision Class (w/ a path to the View's UI), that handled camera interfacing, image
+        Purpose: Initializes the Vision Class (w/ a path to the View's UI), that handled camera interfacing, image
                  processing, and OCR related tasks, which then can interface with the Table Class in order to update
                  Various Cars with Laptime Information
 
@@ -161,8 +160,7 @@ class App():
     '''
 
     def initLog(self):
-        self.log = LogWidget(self.logUIPath)
-
+        self.logWidget = LogWidget(self.logUIPath)
 
     ''' 
 
@@ -176,7 +174,6 @@ class App():
 
     def initGraph(self):
         self.graph = Graph(self.GraphUIPath)
-
 
     ''' 
 
@@ -201,15 +198,13 @@ class App():
 
     '''
 
-
-
     def addComponents(self):
-        self.mainWindow.addLog(self.log)
+        self.mainWindow.addLog(self.logWidget)
         self.mainWindow.addTable(self.tableView.getTableWidget())
         self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
         self.mainWindow.addVision(self.Vision.getWidget())
         self.mainWindow.addGraph(self.graph)
-        #self.mainWindow.addLeaderBoard(self.LeaderBoard.getWidget())
+        # self.mainWindow.addLeaderBoard(self.LeaderBoard.getWidget())
 
     ''' 
 
@@ -280,7 +275,7 @@ class App():
         Parameters: self
         Return Value: N/A
         Purpose: Saves the current session of data from TableModel to the writeFile chosen by the user,
-                 if the user doesn't choosen a filename, it'll asssume a default file name to save as under
+                 if the user doesn't choose a filename, it'll assume a default file name to save as under
                  the current working directory.
 
     '''
