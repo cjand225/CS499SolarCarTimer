@@ -11,8 +11,6 @@ from PyQt5.uic import loadUi
 from PyQt5.QtCore import *
 
 
-
-
 class VisionWidget(QWidget):
 
     def __init__(self, uipath):
@@ -30,7 +28,6 @@ class VisionWidget(QWidget):
                                             self.size(), QApplication.desktop().availableGeometry()))
         self.ImgCanvasWidth = self.imgCanvas.frameSize().width()
         self.ImgCanvasHeight = self.imgCanvas.frameSize().height()
-
 
     def getHeight(self):
         return self.ImgCanvasHeight

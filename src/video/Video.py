@@ -35,10 +35,8 @@ class Video():
         self.ProcThread = None
         self.DetectThread = None
 
-
         self.CapturedQ = None
         self.ProcessedQ = None
-
 
         self.initUI()
         self.initBinds()
@@ -62,7 +60,8 @@ class Video():
                                        self.VidWidth, self.VidHeight, self.FramesPerSecond, self.VisWidget.imgCanvas)
 
     def initProcThread(self):
-        self.ProcThread = ImageProcessThread(self.CapturedQ, self.ProcessedQ, self.FramesPerSecond, self.VisWidget.imgCanvas)
+        self.ProcThread = ImageProcessThread(self.CapturedQ, self.ProcessedQ, self.FramesPerSecond,
+                                             self.VisWidget.imgCanvas)
 
     def initDetectThread(self):
         self.DetectThread = DetectThread(self.ProcessedQ)
@@ -99,8 +98,7 @@ class Video():
             self.DetectThread.stop()
             self.DetectThread.join()
 
-
     def startThreads(self):
         self.CapThread.start()
         self.ProcThread.start()
-        #self.DetectThread.start()
+        # self.DetectThread.start()

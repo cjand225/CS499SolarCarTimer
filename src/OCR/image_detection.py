@@ -7,23 +7,24 @@ import time
 import numpy as np
 from imutils.object_detection import non_max_suppression
 
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: python3 image_detection.py [image path]")
         return
 
-    pathname = os.path.dirname(sys.argv[0])     # get pathname of file
-    filename = sys.argv[1]                      # image to open
+    pathname = os.path.dirname(sys.argv[0])  # get pathname of file
+    filename = sys.argv[1]  # image to open
 
     image = cv2.imread(filename)
     image_original = image.copy()
-    h, w = image.shape[:2]      # image dimensions
+    h, w = image.shape[:2]  # image dimensions
 
-    (newW, newH) = (640, 640)   # resize the image, needs to be multiples of 32
+    (newW, newH) = (640, 640)  # resize the image, needs to be multiples of 32
     rW = w / float(newW)
     rH = h / float(newH)
     image = cv2.resize(image, (newW, newH))
-    (h, w) = image.shape[:2]    # get the new height and width
+    (h, w) = image.shape[:2]  # get the new height and width
 
     # layers that will be used
     # the first provides probabilities and the second provides box coordinates
@@ -44,7 +45,7 @@ def main():
     rects = []
     confidences = []
 
-    minimumConfidence = 0.5     # minimum confidence level needed to accept a detection
+    minimumConfidence = 0.5  # minimum confidence level needed to accept a detection
 
     for i in range(0, numRows):
         # extract scores and geometry data
@@ -82,7 +83,7 @@ def main():
             confidences.append(scoresData[j])
 
     # get rid of overlapping bounding boxes
-    boxes = non_max_suppression(np.array(rects), probs = confidences)
+    boxes = non_max_suppression(np.array(rects), probs=confidences)
 
     # loop over each box
     for (startX, startY, endX, endY) in boxes:
@@ -110,7 +111,6 @@ def main():
     # show image with bounding boxes drawn
     cv2.imshow("Text Detection", image_original)
     cv2.waitKey(0)
-
 
     cv2.destroyAllWindows()
 

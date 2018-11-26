@@ -89,7 +89,7 @@ class CaptureThread(threading.Thread):
 
             capture.grab()
             retval, img = capture.retrieve(0)
-            #self.showFPS(deltaTime)
+            # self.showFPS(deltaTime)
 
             retImg, guiImage = ApplyFilter(img, filterType.EDGE)
 
@@ -98,7 +98,7 @@ class CaptureThread(threading.Thread):
             self.CapQ.put(img)
 
             # keep adding the difference in time needed and calculate sleep based on that
-            targetTime =+ self.loopDeltaTime
+            targetTime = + self.loopDeltaTime
             sleepAmount = targetTime - time.time()
 
             if sleepAmount > 0:

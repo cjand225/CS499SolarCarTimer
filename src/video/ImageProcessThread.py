@@ -41,14 +41,14 @@ class ImageProcessThread(threading.Thread):
         self.running = True
 
     def processFrames(self):
-        #self.running = True
+        # self.running = True
         self.running = False
 
         # create the kernal and background subtractor
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         fgbg = cv2.createBackgroundSubtractorMOG2()
 
-        #initalize fps lock based on time
+        # initalize fps lock based on time
         currentTime = targetTime = time.time()
         while self.running:
 
@@ -57,7 +57,7 @@ class ImageProcessThread(threading.Thread):
             currentTime = time.time()
             deltaTime = currentTime - previousTime
 
-            #make sure to run at 3 frames behind capture Thread
+            # make sure to run at 3 frames behind capture Thread
             if self.ProcessQ.qsize() > 3:
                 nextImage = self.ProcessQ.get()
                 currentImage, guiImage = ApplyFilter(nextImage, filterType.EDGE)

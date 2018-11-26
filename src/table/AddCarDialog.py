@@ -3,8 +3,9 @@ from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator
 from PyQt5.uic import loadUi
 
+
 class AddCarDialog(QDialog):
-    def __init__(self,uipath):
+    def __init__(self, uipath):
         super().__init__()
         self.UIPath = uipath
         self.initUI()
@@ -12,12 +13,12 @@ class AddCarDialog(QDialog):
         intValidator = QIntValidator(self)
         self.carNumberEdit.setValidator(intValidator)
         self.validationError = QErrorMessage(self)
-        #self.buttonBox.accepted.connect(self.validateData)
-        #self.buttonBox.rejected.connect(self.reject)
+        # self.buttonBox.accepted.connect(self.validateData)
+        # self.buttonBox.rejected.connect(self.reject)
 
     @property
     def carNumber(self):
-        try:            
+        try:
             return int(self.carNumberEdit.text())
         except ValueError:
             return None
@@ -25,9 +26,8 @@ class AddCarDialog(QDialog):
     @property
     def teamName(self):
         return self.teamNameEdit.text()
-    
 
-    def done(self,r):
+    def done(self, r):
         if r == QDialog.Accepted:
             if self.carNumberEdit.text():
                 if self.teamNameEdit.text():
@@ -38,7 +38,6 @@ class AddCarDialog(QDialog):
                 self.validationError.showMessage("Please enter a value for {0}.".format(self.carNumberLabel.text()))
         else:
             super().done(r)
-            
 
     def initUI(self):
         self.ui = loadUi(self.UIPath, self)
@@ -52,6 +51,3 @@ class AddCarDialog(QDialog):
     #     except ValueError:
     #         error = QErrorMessage(self)
     #         error.showMessage("Invalid car number {0}!".format(self.carNumberEdit.text()))
-        
-        
-        

@@ -90,8 +90,9 @@ class AppWindow(QMainWindow):
                 children widgets. I.E. connect actionTable (View Menu Action) to tableWidget.toggle()
 
     '''
+
     def connectComponents(self):
-        #File
+        # File
         self.actionQuit.triggered.connect(self.handleWidgetClosing)
 
         # view
@@ -401,9 +402,6 @@ class AppWindow(QMainWindow):
     def handleHelpDialog(self):
         self.HelpDialog.ui.buttonBox.clicked.connect(self.HelpDialog.close)
         self.HelpDialog.exec()
-
-
-
 
     def addCarDialog(self):
         carDialog = AddCarDialog(src.app.App.App.addCarDialogUIPath)

@@ -36,6 +36,7 @@ class Car(QObject):
                  next ID to be used for the next Lap that will be.
     
     """
+
     # def addLapTime(self, hours, minutes, seconds, milliseconds):
     #     newLap = [self.getLatestLapID(), hours, minutes, seconds, milliseconds]
     #     self.LapList.insert(self.LatestLapID, newLap)
@@ -49,7 +50,7 @@ class Car(QObject):
             recordedTime = self.LapList[-1].recordedTime + time
         else:
             recordedTime = self.initialTime
-        self.LapList.append(Lap_Time(recordedTime,time))
+        self.LapList.append(Lap_Time(recordedTime, time))
         self.lapChanged.emit(len(self.LapList))
 
     """
@@ -62,6 +63,7 @@ class Car(QObject):
                   a specified lap in order to put in more accurate data later.
 
      """
+
     def removeLapTime(self, lapID):
         self.LapList[lapID] = [lapID, 0, 0, 0, 0]
 
@@ -74,6 +76,7 @@ class Car(QObject):
                   to delete a lap and then re-enter other data.
 
      """
+
     # def editLapTime(self, ID, hours, minutes, seconds, milliseconds=None):
     #     if(milliseconds):
     #         self.LapList[ID] = [ID, hours, minutes, seconds, milliseconds]
@@ -85,12 +88,11 @@ class Car(QObject):
         self.LapList[ID].elapsedTime = time
         if ID == 0:
             self.LapList[ID].recordedTime = self.initialTime + time
-        else:                
-            self.LapList[ID].recordedTime = self.LapList[ID-1].recordedTime + time
-        for lapIndex in range(ID+1,len(self.LapList)):
-            self.LapList[lapIndex].recordedTime = self.LapList[lapIndex-1].recordedTime + self.LapList[lapIndex].elapsedTime
-
-
+        else:
+            self.LapList[ID].recordedTime = self.LapList[ID - 1].recordedTime + time
+        for lapIndex in range(ID + 1, len(self.LapList)):
+            self.LapList[lapIndex].recordedTime = self.LapList[lapIndex - 1].recordedTime + self.LapList[
+                lapIndex].elapsedTime
 
     """
          Function: getLatestLapID
@@ -100,9 +102,10 @@ class Car(QObject):
                   when adding Laps to the LapList.
 
      """
+
     def getLatestLapID(self):
         return len(self.LapList)
-        #return self.LatestLapID
+        # return self.LatestLapID
 
     """
          Function: getLapByID
@@ -112,9 +115,10 @@ class Car(QObject):
                   access to a lap without worry of modifying its' contents.
 
      """
+
     def getLapByID(self, ID):
         newlist = self.LapList.copy()
-        if(ID >= self.LapCount):
+        if (ID >= self.LapCount):
             return None
         else:
             return newlist[ID]
@@ -126,6 +130,7 @@ class Car(QObject):
          Purpose: returns the currently set carID, primarily used with indexing lists
 
      """
+
     def getCarID(self):
         return self.ID
 
@@ -136,6 +141,7 @@ class Car(QObject):
          Purpose: Returns the currently set OrgName, used as part of a search and ease of access
 
      """
+
     def getOrg(self):
         return self.OrgName
 
@@ -146,6 +152,7 @@ class Car(QObject):
          Purpose: Returns the currently set CarNum, used as part of a search function and ease of access.
 
      """
+
     def getCarNum(self):
         return self.CarNum
 
@@ -157,6 +164,7 @@ class Car(QObject):
                   CarStorage class.
 
      """
+
     def editID(self, ID):
         self.ID = ID
 
@@ -168,20 +176,17 @@ class Car(QObject):
         Purpose: Returns the total laps that have been added to the car class.
     
     """
+
     def getLapCount(self):
         return self.LapCount
-
 
     """
     
     """
+
     def getLap(self, lapID):
         return self.LapList[lapID]
 
     def getLapStringByID(self, lapID):
         tempLap = self.getLapByID(lapID)
         return str(tempLap[1]) + ":" + str(tempLap[2]) + ":" + str(tempLap[3])
-
-
-
-

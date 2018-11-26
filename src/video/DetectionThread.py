@@ -37,10 +37,9 @@ class DetectThread(threading.Thread):
 
         while self.running:
 
-            #make sure thread runs 3 frames behind image process thread
+            # make sure thread runs 3 frames behind image process thread
             if self.DetectQueue.qsize() > 3:
                 next = self.DetectQueue.get()
-
 
                 # if self.DetectQ.qsize() > 3:
                 #     if self.canvas:
@@ -53,6 +52,3 @@ class DetectThread(threading.Thread):
 
                 #        #cv2.imwrite(self.VidPath, fg)
                 #        self.canvas.setPixmap(QPixmap.fromImage(fg))
-
-
-

@@ -12,9 +12,10 @@ from PyQt5.QtCore import QObject, pyqtSignal
 from src.table.Car import Car
 import re
 
+
 class CarStorage(QObject):
-    dataModified = pyqtSignal(int,int)
-    
+    dataModified = pyqtSignal(int, int)
+
     def __init__(self):
         super().__init__()
         self.storageList = []
@@ -23,8 +24,6 @@ class CarStorage(QObject):
         self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
         self.RegExpOrg = "/^[a-z ,.'-]+$/i"
         self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
-
-        
 
     """
          Function: addCar
@@ -35,25 +34,26 @@ class CarStorage(QObject):
                  each car within the list with its current position within the list.
 
      """
+
     def addCar(self, ID, carOrg, carNum):
         newCar = Car(ID, carOrg, carNum)
         self.storageList.append(newCar)
         self.LatestCarID += 1
-        self.dataModified.emit(ID,0)
-        newCar.lapChanged.connect(lambda l: self.dataModified.emit(ID,l))
+        self.dataModified.emit(ID, 0)
+        newCar.lapChanged.connect(lambda l: self.dataModified.emit(ID, l))
         return newCar
-        #check ID
-        #IDCheck = self.checkNumRange(ID)
-        #check car Org
-        #OrgCheck = self.checkString(carOrg)
-        #Check CarNum
-        #CarNumCheck = self.checkNumRange(carNum)
+        # check ID
+        # IDCheck = self.checkNumRange(ID)
+        # check car Org
+        # OrgCheck = self.checkString(carOrg)
+        # Check CarNum
+        # CarNumCheck = self.checkNumRange(carNum)
 
     def addExistingCar(self, car):
         self.storageList.append(car)
         self.LatestCarID += 1
-        self.dataModified.emit(car.ID,0)
-        car.lapChanged.connect(lambda l: self.dataModified.emit(car.ID,l))
+        self.dataModified.emit(car.ID, 0)
+        car.lapChanged.connect(lambda l: self.dataModified.emit(car.ID, l))
 
     """
          Function: removeCar
@@ -65,6 +65,7 @@ class CarStorage(QObject):
                   end of the list, to allow for proper ID management.
 
      """
+
     def removeCar(self, ID):
         self.storageList.remove(self.getCarByID(ID))
         self.reindexStorage(ID)
@@ -78,9 +79,10 @@ class CarStorage(QObject):
                   bounds errors with the StorageList.
 
      """
+
     def reindexStorage(self, ID):
         for x in range(ID, len(self.storageList) - 1):
-            self.storageList[x].editID( x - 1)
+            self.storageList[x].editID(x - 1)
         self.LatestCarID -= 1
 
     """
@@ -93,10 +95,11 @@ class CarStorage(QObject):
                   Number is Known.
 
      """
+
     def getCarByID(self, ID):
         newList = self.storageList.copy()
-        if(ID > len(newList)):
-           return -1
+        if (ID > len(newList)):
+            return -1
         else:
             return newList[ID]
 
@@ -110,6 +113,7 @@ class CarStorage(QObject):
                   is Known.
 
      """
+
     def getCarByNum(self, CarNum):
         newList = self.storageList.copy()
         itemList = [item for item in newList if item.getCarNum() == CarNum]
@@ -126,6 +130,7 @@ class CarStorage(QObject):
                   is Known.
 
      """
+
     def getCarByOrg(self, OrgString):
         newList = self.storageList.copy()
         itemList = [item for item in newList if item.getOrg() == OrgString]
@@ -141,6 +146,7 @@ class CarStorage(QObject):
                   from the parameters.
 
      """
+
     def appendLapTime(self, carID, time):
         self.storageList[carID].addLapTime(time)
         # self.dataChanged.emit(carId,len
@@ -154,9 +160,9 @@ class CarStorage(QObject):
                   from the parameters.
 
      """
+
     def editLapTime(self, carID, LapID, hours, minutes, seconds, milliseconds):
         self.storageList[carID].editLapTime(LapID, hours, minutes, seconds, milliseconds)
-
 
     """
          Function: removeLapTime
@@ -167,6 +173,7 @@ class CarStorage(QObject):
                   from the parameters.
 
      """
+
     def removeLapTime(self, carID, LapID):
         self.getCarByID(carID).removeLapTime(LapID)
 
@@ -178,9 +185,9 @@ class CarStorage(QObject):
                   such as view comonents like graphing/TableView/etc.
 
      """
+
     def getCarListCopy(self):
         return self.storageList.copy()
-
 
     """
          Function: getCarNamesList
@@ -189,13 +196,13 @@ class CarStorage(QObject):
          Purpose: used as a convient method for accesing all the car Orgs Names
 
      """
+
     def getCarNamesList(self):
         newList = self.storageList.copy()
         names = []
         for x in range(0, len(newList)):
             names.append(newList[x].getOrg())
         return names
-
 
     """
          Function: getLatestCarID
@@ -204,10 +211,9 @@ class CarStorage(QObject):
          Purpose: Used for finding what the next ID to be used for the carStorage list should be.
 
      """
+
     def getLatestCarID(self):
         return self.LatestCarID
-
-
 
     """
         
@@ -217,6 +223,7 @@ class CarStorage(QObject):
         Purpose: Used to find how many cars are stored within CarStorage
     
     """
+
     def getCarAmount(self):
         return len(self.storageList)
 
@@ -234,10 +241,9 @@ class CarStorage(QObject):
         highest = 0
         names = []
         for x in range(0, len(newList)):
-            if(newList[x].getLapCount() > highest):
+            if (newList[x].getLapCount() > highest):
                 highest = newList[x].getLapCount()
         return highest
-
 
     """
          Function: checkNumRange
@@ -248,10 +254,11 @@ class CarStorage(QObject):
                  a -1, meaning failure, or if it does, the actual number of the parameter, meaning a success
 
      """
+
     def checkNumRange(self, carNum):
-        if(type(carNum) is int):
-            if(carNum > 0):
-                if(re.findall(self.RegExpCarNum, str(carNum)) or re.findall(self.RegExpID, str(carNum))):
+        if (type(carNum) is int):
+            if (carNum > 0):
+                if (re.findall(self.RegExpCarNum, str(carNum)) or re.findall(self.RegExpID, str(carNum))):
                     return carNum
                 else:
                     return -1
@@ -259,7 +266,6 @@ class CarStorage(QObject):
                 return -1
         else:
             return -1
-
 
     """
          Function: checkString
@@ -270,9 +276,10 @@ class CarStorage(QObject):
                   match and it returns the original parameter given.
 
      """
+
     def checkString(self, orgName):
-        if(type(orgName) is str):
-            if(re.findall(self.RegExpOrg, orgName)):
+        if (type(orgName) is str):
+            if (re.findall(self.RegExpOrg, orgName)):
                 return orgName
             else:
                 return orgName

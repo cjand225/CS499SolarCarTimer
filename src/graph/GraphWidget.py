@@ -127,7 +127,7 @@ class Graph(QWidget):
         elapsed = []
         if self.inMinutes:
             for lap in lapList:
-                elapsed.append(lap.elapsedTime/60)
+                elapsed.append(lap.elapsedTime / 60)
         else:
             for lap in lapList:
                 elapsed.append(lap.elapsedTime)
@@ -256,6 +256,3 @@ class Graph(QWidget):
 
         plt.tight_layout()
         plt.show()
-
-
-

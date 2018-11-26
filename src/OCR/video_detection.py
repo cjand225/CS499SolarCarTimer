@@ -7,11 +7,12 @@ import time
 from imutils.object_detection import non_max_suppression
 from imutils.video import VideoStream, FPS
 
+
 def decode_predictions(scores, geometry):
     (numRows, numCols) = scores.shape[2:4]
     rects = []
     confidences = []
-    minimumConfidence = 0.5 # minimum confidence needed to accept a text detection
+    minimumConfidence = 0.5  # minimum confidence needed to accept a text detection
 
     for i in range(0, numRows):
         # get scores and geometry data for each prediction
@@ -23,7 +24,7 @@ def decode_predictions(scores, geometry):
         anglesData = geometry[0, 4, i]
 
         for j in range(0, numCols):
-            if scoresData[j] < minimumConfidence:   # ignore detections with scores below the minimum confidence
+            if scoresData[j] < minimumConfidence:  # ignore detections with scores below the minimum confidence
                 continue
 
             # offsets since the feature maps are 4x smaller than the input
@@ -48,11 +49,11 @@ def decode_predictions(scores, geometry):
             confidences.append(scoresData[j])
     return (rects, confidences)
 
-def main():
 
+def main():
     # initialize frame dimensions, resized frame dimensions, and the ratio between them
     (W, H) = (None, None)
-    (newW, newH) = (320, 320)   # needs to be multiples of 32
+    (newW, newH) = (320, 320)  # needs to be multiples of 32
     (rW, rH) = (None, None)
 
     # layer names that will be used, one for output probabilities and the other for box coordinates
@@ -71,7 +72,7 @@ def main():
 
     # video processing loop
     while True:
-        frame = vs.read()   # get a frame
+        frame = vs.read()  # get a frame
 
         if frame is None:
             break
@@ -88,7 +89,7 @@ def main():
         frame = cv2.resize(frame, (newW, newH))
 
         # create a blob and use it for text detection
-        blob = cv2.dnn.blobFromImage(frame, 1.0, (newW, newH),(123.68, 116.78, 103.94), swapRB=True, crop=False)
+        blob = cv2.dnn.blobFromImage(frame, 1.0, (newW, newH), (123.68, 116.78, 103.94), swapRB=True, crop=False)
         net.setInput(blob)
         (scores, geometry) = net.forward(layerNames)
 
@@ -139,5 +140,6 @@ def main():
     # stop the webcam and destroy all windows
     vs.stop()
     cv2.destroyAllWindows()
+
 
 main()

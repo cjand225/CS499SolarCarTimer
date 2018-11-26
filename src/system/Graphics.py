@@ -8,7 +8,6 @@ import numpy as np
 from enum import Enum
 from PyQt5.QtGui import QImage
 
-
 """
     Function: filterType (Class)
     Parameters: N/A
@@ -18,6 +17,7 @@ from PyQt5.QtGui import QImage
              used in capture thread for debugging gui related functions when updating gui from cam capture
     
 """
+
 
 class filterType(Enum):
     NORMAL = 0
@@ -34,6 +34,8 @@ class filterType(Enum):
             data to be used however the invoker sees fit. 
 
 """
+
+
 def applyEdgeFilter(imgData):
     v = np.median(imgData)
     sigma = 0.33
@@ -56,6 +58,8 @@ def applyEdgeFilter(imgData):
              225
 
 """
+
+
 def applyBlurFilter(imgData):
     blurImg = cv2.bilateralFilter(imgData, 3, 225, 225)
     blur = cv2.cvtColor(blurImg, cv2.COLOR_BGR2RGB)
@@ -70,6 +74,8 @@ def applyBlurFilter(imgData):
              returns a modified imgData as well as a QImage mainly used for updating vision widget.
 
 """
+
+
 def ApplyFilter(imgData, filter):
     if filter == filterType.EDGE:
         edges = applyEdgeFilter(imgData)
@@ -80,5 +86,3 @@ def ApplyFilter(imgData, filter):
     elif filter == filterType.NORMAL:
         Norm = cv2.cvtColor(imgData, cv2.COLOR_BGR2RGB)
         return Norm, QImage(Norm, Norm.shape[1], Norm.shape[0], Norm.strides[0], QImage.Format_RGB888)
-
-

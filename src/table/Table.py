@@ -26,24 +26,24 @@ class Table():
         self.initTableModel()
 
         self.tableView.setModel(self.TableMod)
-        #self.TableMod.headerDataChanged.connect(lambda a,b: print("got"))
+        # self.TableMod.headerDataChanged.connect(lambda a,b: print("got"))
 
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         minSize = 0
         for headerIndex in range(len(self.tableView.horizontalHeader())):
-            minSize = min(minSize,self.tableView.horizontalHeader().sectionSize(headerIndex))
+            minSize = min(minSize, self.tableView.horizontalHeader().sectionSize(headerIndex))
         self.tableView.horizontalHeader().setMinimumSectionSize(minSize)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
         minSize = 0
         for headerIndex in range(len(self.tableView.verticalHeader())):
-            minSize = min(minSize,self.tableView.verticalHeader().sectionSize(headerIndex))
+            minSize = min(minSize, self.tableView.verticalHeader().sectionSize(headerIndex))
         self.tableView.verticalHeader().setMinimumSectionSize(minSize)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
-        self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"),self.Table)
+        self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"), self.Table)
         # for i in range(8,20):
         #     self.tableView.model().cs.addCar(i,"foo{0}".format(i),20)
-            #self.tableView.model().cs.appendLapTime(i,91,0,0,0)
+        # self.tableView.model().cs.appendLapTime(i,91,0,0,0)
         # print(self.tableView.model().columnCount(None))
         # self.tableView.repaint()
         # for i in range(1,20):
@@ -62,7 +62,7 @@ class Table():
         return self.Table
 
     def initTableModel(self):
-        self.TableMod = LapDataTableModel(self.Table,self.CarStoreList)
+        self.TableMod = LapDataTableModel(self.Table, self.CarStoreList)
 
     def initCarStorage(self):
         self.CarStoreList = CarStorage()
@@ -82,7 +82,6 @@ class Table():
 
     # def getCarStorage(self):
     #    return self.CarStoreList.getCarListCopy()
-
 
 # class TableModel(QAbstractTableModel):
 
