@@ -342,7 +342,7 @@ class App():
 
     def openFile(self):
         readFile = self.mainWindow.openFileDialog()
-        if readFile:
+        if readFile is not None and readFile != '':
             self.writeFile = readFile
             cars = loadCSV(readFile)
             self.mainWindow.SemiAutoWidget.deleteAllCars()

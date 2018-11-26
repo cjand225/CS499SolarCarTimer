@@ -32,16 +32,16 @@ class AppWindow(QMainWindow):
     def __init__(self, uipath):
         super(AppWindow, self).__init__()
         # initialize Window
-        self.UIPath = uipath
+        self.uiPath = uipath
 
         # Widgets controlled by top view AppWindow
-        self.VisionWidget = None
-        self.TableWidget = None
-        self.SemiAutoWidget = None
-        self.GraphWidget = None
-        self.LogWidget = None
-        self.LeaderBoardWidget = None
-        self.Log = getLogger()
+        self.visionWidget = None
+        self.tableWidget = None
+        self.semiAutoWidget = None
+        self.graphWidget = None
+        self.logWidget = None
+        self.leaderBoardWidget = None
+        self.log = getLogger()
 
         # declare initializers here
         self.initMainWindow()
@@ -58,7 +58,7 @@ class AppWindow(QMainWindow):
     '''
 
     def initMainWindow(self):
-        self.mainWindowUI = loadUi(self.UIPath, self)
+        self.mainWindowUI = loadUi(self.uiPath, self)
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
@@ -91,30 +91,33 @@ class AppWindow(QMainWindow):
 
     '''
     def connectComponents(self):
+        #File
+        self.actionQuit.triggered.connect(self.handleWidgetClosing)
+
         # view
-        if self.TableWidget is not None:
-            self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
-            self.pushTable.clicked.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
+        if self.tableWidget is not None:
+            self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.tableWidget, e))
+            self.pushTable.clicked.connect(lambda e: type(self).toggleWidget(self.tableWidget, e))
 
-        if self.SemiAutoWidget is not None:
-            self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
-            self.pushSemiAuto.clicked.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
+        if self.semiAutoWidget is not None:
+            self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.semiAutoWidget, e))
+            self.pushSemiAuto.clicked.connect(lambda e: type(self).toggleWidget(self.semiAutoWidget, e))
 
-        if self.VisionWidget is not None:
-            self.actionAuto.triggered.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
-            self.pushVideo.clicked.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
+        if self.visionWidget is not None:
+            self.actionAuto.triggered.connect(lambda e: type(self).toggleWidget(self.visionWidget, e))
+            self.pushVideo.clicked.connect(lambda e: type(self).toggleWidget(self.visionWidget, e))
 
-        if self.LogWidget is not None:
-            self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
-            self.pushLogs.clicked.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
+        if self.logWidget is not None:
+            self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.logWidget, e))
+            self.pushLogs.clicked.connect(lambda e: type(self).toggleWidget(self.logWidget, e))
 
-        if self.GraphWidget is not None:
-            self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
-            self.pushGraph.clicked.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
+        if self.graphWidget is not None:
+            self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.graphWidget, e))
+            self.pushGraph.clicked.connect(lambda e: type(self).toggleWidget(self.graphWidget, e))
 
-        if self.LeaderBoardWidget is not None:
-            self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
-            self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
+        if self.leaderBoardWidget is not None:
+            self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
+            self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
 
         # help
         self.actionAbout.triggered.connect(self.handleAboutDialog)
@@ -131,7 +134,7 @@ class AppWindow(QMainWindow):
     '''
 
     def addVision(self, vision):
-        self.VisionWidget = vision
+        self.visionWidget = vision
 
     ''' 
     
@@ -144,7 +147,7 @@ class AppWindow(QMainWindow):
     '''
 
     def addTable(self, table):
-        self.TableWidget = table
+        self.tableWidget = table
 
     ''' 
     
@@ -158,7 +161,7 @@ class AppWindow(QMainWindow):
     '''
 
     def addSemiAuto(self, semiAuto):
-        self.SemiAutoWidget = semiAuto
+        self.semiAutoWidget = semiAuto
 
     ''' 
     
@@ -171,7 +174,7 @@ class AppWindow(QMainWindow):
     '''
 
     def addGraph(self, graph):
-        self.GraphWidget = graph
+        self.graphWidget = graph
 
     ''' 
 
@@ -184,7 +187,7 @@ class AppWindow(QMainWindow):
     '''
 
     def addLeaderBoard(self, leaderboard):
-        self.LeaderBoardWidget = leaderboard
+        self.leaderBoardWidget = leaderboard
 
     ''' 
     
@@ -196,8 +199,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def addLog(self, logwid):
-        self.LogWidget = logwid
+    def addLog(self, pLogWidget):
+        self.logWidget = pLogWidget
 
     ''' 
     
@@ -225,7 +228,7 @@ class AppWindow(QMainWindow):
     '''
 
     def openFileDialog(self):
-        fileName = self.fileDialog.getOpenFileName()
+        fileName = self.fileDialog.getOpenFileName(self, 'Open File')
         if fileName:
             return fileName[0]
         else:
@@ -243,7 +246,7 @@ class AppWindow(QMainWindow):
 
     # TODO: set parameters for width/heigh/file formats - also add Save As part as well
     def saveAsFileDialog(self):
-        fileName = self.fileDialog.getSaveFileName(self)
+        fileName = self.fileDialog.getSaveFileName(self, 'Save File')
         if fileName != '':
             return fileName[0]
         else:
@@ -263,8 +266,11 @@ class AppWindow(QMainWindow):
 
     # TODO: set parameters for width/heigh/file formats
     def newFileDialog(self):
-        fileName = self.fileDialog.getSaveFileName(self)
-        return fileName
+        fileName = self.fileDialog.getSaveFileName(self, 'New File')
+        if fileName != '':
+            return fileName[0]
+        else:
+            return None
 
     ''' 
     
@@ -311,18 +317,18 @@ class AppWindow(QMainWindow):
     '''
 
     def handleWidgetClosing(self):
-        if self.TableWidget is not None:
-            self.TableWidget.close()
-        if self.VisionWidget is not None:
-            self.VisionWidget.close()
-        if self.LogWidget is not None:
-            self.LogWidget.close()
-        if self.GraphWidget is not None:
-            self.GraphWidget.close()
-        if self.LeaderBoardWidget is not None:
-            self.LeaderBoardWidget.close()
-        if self.SemiAutoWidget is not None:
-            self.SemiAutoWidget.close()
+        if self.tableWidget is not None:
+            self.tableWidget.close()
+        if self.visionWidget is not None:
+            self.visionWidget.close()
+        if self.logWidget is not None:
+            self.logWidget.close()
+        if self.graphWidget is not None:
+            self.graphWidget.close()
+        if self.leaderBoardWidget is not None:
+            self.leaderBoardWidget.close()
+        if self.semiAutoWidget is not None:
+            self.semiAutoWidget.close()
         self.close()
 
     '''

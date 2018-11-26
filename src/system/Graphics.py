@@ -9,7 +9,6 @@ from enum import Enum
 from PyQt5.QtGui import QImage
 
 
-
 """
     Function: filterType (Class)
     Parameters: N/A
@@ -37,16 +36,13 @@ class filterType(Enum):
 """
 def applyEdgeFilter(imgData):
     v = np.median(imgData)
-    #v = np.mean(imgData)
     sigma = 0.33
     lower = int(max(0, (1.0 - sigma) * v))
     upper = int(min(255, (1.0 + sigma) * v))
-    kernalSize = 3
+    kernalSize = 1
 
-    #bilateralImage = cv2.bilateralFilter(imgData, kernalSize, 225, 225)
-    #hsv = cv2.cvtColor(bilateralImage, cv2.COLOR_BGR2GRAY)
-
-    hsv = cv2.cvtColor(imgData, cv2.COLOR_BGR2GRAY)
+    bilateralImage = cv2.bilateralFilter(imgData, kernalSize, 225, 225)
+    hsv = cv2.cvtColor(bilateralImage, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(hsv, lower, upper)
 
     return edges
@@ -62,7 +58,8 @@ def applyEdgeFilter(imgData):
 """
 def applyBlurFilter(imgData):
     blurImg = cv2.bilateralFilter(imgData, 3, 225, 225)
-    return blurImg
+    blur = cv2.cvtColor(blurImg, cv2.COLOR_BGR2RGB)
+    return blur
 
 
 """

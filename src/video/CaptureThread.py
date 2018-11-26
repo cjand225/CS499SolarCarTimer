@@ -91,7 +91,7 @@ class CaptureThread(threading.Thread):
             retval, img = capture.retrieve(0)
             #self.showFPS(deltaTime)
 
-            retImg, guiImage = ApplyFilter(img, filterType.BLUR)
+            retImg, guiImage = ApplyFilter(img, filterType.EDGE)
 
             if self.canvas:
                 self.canvas.setPixmap(QPixmap.fromImage(guiImage))
