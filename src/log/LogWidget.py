@@ -15,8 +15,10 @@ class LogWidget(QWidget):
         self.log = getLogger()
 
         # You can format what is printed to text box
-        self.logTextBox.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
+        self.logTextBox.setFormatter(
+            logging.Formatter("[ %(asctime)s ][%(levelname)s] %(message)s", "%Y-%m-%d %H:%M:%S"))
         self.log.addHandler(self.logTextBox)
+
         # You can control the logging level
         self.log.setLevel(logging.DEBUG)
         self.logLayout.addWidget(self.logTextBox.widget)
@@ -27,7 +29,6 @@ class LogWidget(QWidget):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignBottom,
                                             self.size(), QApplication.desktop().availableGeometry()))
-
 
 class QTextEditLogger(logging.Handler):
     def __init__(self, parent):

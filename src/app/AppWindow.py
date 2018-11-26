@@ -47,7 +47,8 @@ class AppWindow(QMainWindow):
         # declare initalizers here
         self.initMainWindow()
         self.initFileDialog()
-        self.connectComponents()
+
+
 
     ''' 
 
@@ -97,20 +98,24 @@ class AppWindow(QMainWindow):
     '''
     def connectComponents(self):
         # view
-        self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
-        self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
-        self.actionAuto.triggered.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
-        self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
-        #self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.GraphWidget), e)
-        #self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
-
-        #Center Widget
-        self.pushTable.clicked.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
-        self.pushSemiAuto.clicked.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
-        self.pushVideo.clicked.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
-        self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
-        self.pushGraph.clicked.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
-        self.pushLogs.clicked.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
+        if(self.TableWidget != None):
+            self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
+            self.pushTable.clicked.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
+        if(self.SemiAutoWidget != None):
+            self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
+            self.pushSemiAuto.clicked.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
+        if(self.VisionWidget != None):
+            self.actionAuto.triggered.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
+            self.pushVideo.clicked.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
+        if(self.LogWidget != None):
+            self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
+            self.pushLogs.clicked.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
+        if(self.GraphWidget != None):
+            self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
+            self.pushGraph.clicked.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
+        if(self.LeaderBoardWidget != None):
+            self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
+            self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
 
         # help
         self.actionAbout.triggered.connect(self.handleAboutDialog)

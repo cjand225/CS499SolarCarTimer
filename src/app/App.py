@@ -44,8 +44,8 @@ class App():
         self.Application = None
         self.mainWindow = None
         self.running = False
-                
-        #creating Logger
+
+        # creating Logger
         createLogger()
 
         # read/write paths
@@ -53,12 +53,13 @@ class App():
 
         # Forward Module Declaration
         self.log = getLogger()
+
         self.tableView = None
+        self.SemiAuto = None
         self.Vision = None
         self.graph = None
         self.logWidget = None
         self.leaderBoard = None
-
 
         # read/write files
         self.writeFile = None
@@ -69,6 +70,7 @@ class App():
         self.initMainWindow()
         self.initLog()
         self.initTableView()
+        self.initSemiAuto()
         self.initVision()
         self.initGraph()
         self.initLeaderBoard()
@@ -76,8 +78,6 @@ class App():
         # adding and connecting essential components to user interface
         self.addComponents()
         self.connectActionsMainWindow()
-
-
 
     def semiAutoStart(self, car, semiAutoIndex, startTime):
         self.tableView.CarStoreList.storageList[car.ID].initialTime = startTime
@@ -134,7 +134,11 @@ class App():
     def initTableView(self):
         self.tableView = Table(type(self).tableUIPath)
         self.tableView.tableView.doubleClicked.connect(self.tableClickEvent)
+        self.log.debug('[' + __name__ + ']' + ' Table Initialized')
 
+
+    def initSemiAuto(self):
+        self.SemiAuto = SemiAutoWidget(type(self).semiAutoUIPath)
     ''' 
 
         Function: initVision(self)
@@ -148,6 +152,7 @@ class App():
 
     def initVision(self):
         self.Vision = Video(self.visionUIPath)
+        self.log.debug('[' + __name__ + ']' + ' Video Initialized')
 
     ''' 
 
@@ -161,6 +166,10 @@ class App():
 
     def initLog(self):
         self.logWidget = LogWidget(self.logUIPath)
+        if (self.logWidget != None):
+            self.log.debug('[' + __name__ + ']' + ' Log module initialized')
+        else:
+            self.log.debug('[' + __name__ + ']' + ' Log module failed to initialize')
 
     ''' 
 
@@ -174,6 +183,10 @@ class App():
 
     def initGraph(self):
         self.graph = Graph(self.GraphUIPath)
+        if (self.graph != None):
+            self.log.debug('[' + __name__ + ']' + ' Graph module initialized')
+        else:
+            self.log.debug('[' + __name__ + ']' + ' Graph module failed to initialize')
 
     ''' 
 
@@ -187,6 +200,10 @@ class App():
 
     def initLeaderBoard(self):
         self.leaderBoard = None
+        if (self.leaderBoard != None):
+            self.log.debug('[' + __name__ + ']' + ' LeaderBoard module initialized')
+        else:
+            self.log.debug('[' + __name__ + ']' + ' LeaderBoard module failed to initialize')
 
     ''' 
 
@@ -199,12 +216,20 @@ class App():
     '''
 
     def addComponents(self):
-        self.mainWindow.addLog(self.logWidget)
-        self.mainWindow.addTable(self.tableView.getTableWidget())
-        self.mainWindow.addSemiAuto(SemiAutoWidget(type(self).semiAutoUIPath))
-        self.mainWindow.addVision(self.Vision.getWidget())
-        self.mainWindow.addGraph(self.graph)
-        # self.mainWindow.addLeaderBoard(self.LeaderBoard.getWidget())
+        if(self.logWidget != None):
+            self.mainWindow.addLog(self.logWidget)
+        if(self.tableView != None):
+            self.mainWindow.addTable(self.tableView.getTableWidget())
+        if(self.SemiAuto != None):
+            self.mainWindow.addSemiAuto(self.SemiAuto)
+        if(self.Vision != None):
+            self.mainWindow.addVision(self.Vision.getWidget())
+        if(self.graph != None):
+            self.mainWindow.addGraph(self.graph)
+        if(self.leaderBoard != None):
+            self.mainWindow.addLeaderBoard(self.leaderBoard.getWidget())
+
+        self.mainWindow.connectComponents()
 
     ''' 
 
@@ -284,6 +309,7 @@ class App():
         self.writeFile = self.mainWindow.saveAsFileDialog()
         # write file to location
         self.saveFile()
+        self.log.info('[' + __name__ + ']' + 'Data saved to: ' + self.writeFile)
 
     ''' 
 
