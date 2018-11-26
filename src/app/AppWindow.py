@@ -21,7 +21,6 @@ from src.table.AddCarDialog import AddCarDialog
 from src.table.Car import Car
 from src.video.Video import Video
 
-
 from src.log.Log import getLogger
 
 
@@ -44,11 +43,9 @@ class AppWindow(QMainWindow):
         self.LeaderBoardWidget = None
         self.Log = getLogger()
 
-        # declare initalizers here
+        # declare initializers here
         self.initMainWindow()
         self.initFileDialog()
-
-
 
     ''' 
 
@@ -63,11 +60,9 @@ class AppWindow(QMainWindow):
     def initMainWindow(self):
         self.mainWindowUI = loadUi(self.UIPath, self)
         self.setAttribute(Qt.WA_DeleteOnClose)
-        #self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
-        #                                    self.size(), QApplication.desktop().availableGeometry()))
-        self.setGeometry(QRect((QApplication.desktop().availableGeometry().width() - self.width()) / 2, self.height()/2, self.width(), self.height()))
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
+                                            self.size(), QApplication.desktop().availableGeometry()))
         self.show()
-
 
     ''' 
 
@@ -75,7 +70,7 @@ class AppWindow(QMainWindow):
         Parameters: widget, e
         Return Value: N/A
         Purpose: static method that involves toggling any of the widgets bound to the main app window, allowing
-                 reduction of repitious code for different widgets
+                 reduction of repetitious code for different widgets
 
     '''
 
@@ -85,7 +80,6 @@ class AppWindow(QMainWindow):
             widget.hide()
         else:
             widget.show()
-
 
     ''' 
 
@@ -98,22 +92,27 @@ class AppWindow(QMainWindow):
     '''
     def connectComponents(self):
         # view
-        if(self.TableWidget != None):
+        if self.TableWidget is not None:
             self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
             self.pushTable.clicked.connect(lambda e: type(self).toggleWidget(self.TableWidget, e))
-        if(self.SemiAutoWidget != None):
+
+        if self.SemiAutoWidget is not None:
             self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
             self.pushSemiAuto.clicked.connect(lambda e: type(self).toggleWidget(self.SemiAutoWidget, e))
-        if(self.VisionWidget != None):
+
+        if self.VisionWidget is not None:
             self.actionAuto.triggered.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
             self.pushVideo.clicked.connect(lambda e: type(self).toggleWidget(self.VisionWidget, e))
-        if(self.LogWidget != None):
+
+        if self.LogWidget is not None:
             self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
             self.pushLogs.clicked.connect(lambda e: type(self).toggleWidget(self.LogWidget, e))
-        if(self.GraphWidget != None):
+
+        if self.GraphWidget is not None:
             self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
             self.pushGraph.clicked.connect(lambda e: type(self).toggleWidget(self.GraphWidget, e))
-        if(self.LeaderBoardWidget != None):
+
+        if self.LeaderBoardWidget is not None:
             self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
             self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.LeaderBoardWidget, e))
 
@@ -245,11 +244,10 @@ class AppWindow(QMainWindow):
     # TODO: set parameters for width/heigh/file formats - also add Save As part as well
     def saveAsFileDialog(self):
         fileName = self.fileDialog.getSaveFileName(self)
-        if fileName:
+        if fileName != '':
             return fileName[0]
         else:
             return None
-        # return fileName[0]
 
     ''' 
     
@@ -311,21 +309,21 @@ class AppWindow(QMainWindow):
                  before calling the AppWindow close event.
     
     '''
+
     def handleWidgetClosing(self):
-        if (self.TableWidget != None):
+        if self.TableWidget is not None:
             self.TableWidget.close()
-        if (self.VisionWidget != None):
+        if self.VisionWidget is not None:
             self.VisionWidget.close()
-        if (self.LogWidget != None):
+        if self.LogWidget is not None:
             self.LogWidget.close()
-        if (self.GraphWidget != None):
+        if self.GraphWidget is not None:
             self.GraphWidget.close()
-        if (self.LeaderBoardWidget != None):
+        if self.LeaderBoardWidget is not None:
             self.LeaderBoardWidget.close()
-        if(self.SemiAutoWidget != None):
+        if self.SemiAutoWidget is not None:
             self.SemiAutoWidget.close()
         self.close()
-
 
     '''
 
@@ -338,10 +336,11 @@ class AppWindow(QMainWindow):
 
 
     '''
+
     def initHelpDialog(self, uiPath, filePath=None):
         self.HelpDialog = QDialog()
         self.HelpDialog.ui = loadUi(uiPath, self.HelpDialog)
-        if(filePath != None):
+        if filePath is not None:
             file = QFile(filePath)
             file.open(QFile.ReadOnly | QFile.Text)
             stream = QTextStream(file)
@@ -357,10 +356,11 @@ class AppWindow(QMainWindow):
                  built into the Dialog's ui file. If no file path is given, it'll just return none 
 
     '''
+
     def initAboutDialog(self, uiPath, filePath=None):
         self.AboutDialog = QDialog()
         self.AboutDialog.ui = loadUi(uiPath, self.AboutDialog)
-        if filePath != None:
+        if filePath is not None:
             file = QFile(filePath)
             file.open(QFile.ReadOnly | QFile.Text)
             stream = QTextStream(file)
@@ -376,11 +376,10 @@ class AppWindow(QMainWindow):
 
 
     '''
+
     def handleAboutDialog(self):
         self.AboutDialog.ui.buttonBox.clicked.connect(self.AboutDialog.close)
         self.AboutDialog.exec()
-
-
 
     '''
         
@@ -392,12 +391,10 @@ class AppWindow(QMainWindow):
     
     
     '''
+
     def handleHelpDialog(self):
         self.HelpDialog.ui.buttonBox.clicked.connect(self.HelpDialog.close)
         self.HelpDialog.exec()
-
-
-
 
 
 

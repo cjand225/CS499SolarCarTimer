@@ -10,25 +10,25 @@ class LogWidget(QWidget):
     def __init__(self, uipath, parent=None):
         super().__init__(parent)
         self.UIPath = uipath
-        self.initUI()
         self.logTextBox = QTextEditLogger(self)
         self.log = getLogger()
 
-        # You can format what is printed to text box
-        self.logTextBox.setFormatter(
-            logging.Formatter("[ %(asctime)s ][%(levelname)s] %(message)s", "%Y-%m-%d %H:%M:%S"))
-        self.log.addHandler(self.logTextBox)
-
-        # You can control the logging level
-        self.log.setLevel(logging.DEBUG)
-        self.logLayout.addWidget(self.logTextBox.widget)
-
+        self.logSetup()
         self.initUI()
 
     def initUI(self):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignBottom,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        self.logLayout.addWidget(self.logTextBox.widget)
+
+    def logSetup(self):
+        # You can format what is printed to text box
+        self.logTextBox.setFormatter(logging.Formatter("[ %(asctime)s ][%(levelname)s] %(message)s", "%Y-%m-%d %H:%M:%S"))
+        self.log.addHandler(self.logTextBox)
+        # You can control the logging level
+        self.log.setLevel(logging.DEBUG)
+
 
 class QTextEditLogger(logging.Handler):
     def __init__(self, parent):

@@ -136,9 +136,20 @@ class App():
         self.tableView.tableView.doubleClicked.connect(self.tableClickEvent)
         self.log.debug('[' + __name__ + ']' + ' Table Initialized')
 
+    '''
+    
+        Function: initSemiAuto(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes the Semi Auto class (w/ path to view's UI) that is its own controller for handling
+                 semi-automatic recording times for the table.
+    
+    '''
 
     def initSemiAuto(self):
         self.SemiAuto = SemiAutoWidget(type(self).semiAutoUIPath)
+        self.log.debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
+
     ''' 
 
         Function: initVision(self)
@@ -152,7 +163,7 @@ class App():
 
     def initVision(self):
         self.Vision = Video(self.visionUIPath)
-        self.log.debug('[' + __name__ + ']' + ' Video Initialized')
+        self.log.debug('[' + __name__ + '] ' + 'Video Initialized')
 
     ''' 
 
@@ -166,10 +177,10 @@ class App():
 
     def initLog(self):
         self.logWidget = LogWidget(self.logUIPath)
-        if (self.logWidget != None):
-            self.log.debug('[' + __name__ + ']' + ' Log module initialized')
+        if self.logWidget is not None:
+            self.log.debug('[' + __name__ + '] ' + 'Log module initialized')
         else:
-            self.log.debug('[' + __name__ + ']' + ' Log module failed to initialize')
+            self.log.debug('[' + __name__ + '] ' + 'Log module failed to initialize')
 
     ''' 
 
@@ -183,10 +194,10 @@ class App():
 
     def initGraph(self):
         self.graph = Graph(self.GraphUIPath)
-        if (self.graph != None):
-            self.log.debug('[' + __name__ + ']' + ' Graph module initialized')
+        if self.graph is not None:
+            self.log.debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:
-            self.log.debug('[' + __name__ + ']' + ' Graph module failed to initialize')
+            self.log.debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
 
     ''' 
 
@@ -200,10 +211,10 @@ class App():
 
     def initLeaderBoard(self):
         self.leaderBoard = None
-        if (self.leaderBoard != None):
-            self.log.debug('[' + __name__ + ']' + ' LeaderBoard module initialized')
+        if self.leaderBoard is not None:
+            self.log.debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
-            self.log.debug('[' + __name__ + ']' + ' LeaderBoard module failed to initialize')
+            self.log.debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
 
     ''' 
 
@@ -216,17 +227,19 @@ class App():
     '''
 
     def addComponents(self):
-        if(self.logWidget != None):
+        self.log.debug('[' + __name__ + '] ' + 'Adding components to Main Window')
+
+        if self.logWidget is not None:
             self.mainWindow.addLog(self.logWidget)
-        if(self.tableView != None):
+        if self.tableView is not None:
             self.mainWindow.addTable(self.tableView.getTableWidget())
-        if(self.SemiAuto != None):
+        if self.SemiAuto is not None:
             self.mainWindow.addSemiAuto(self.SemiAuto)
-        if(self.Vision != None):
+        if self.Vision is not None:
             self.mainWindow.addVision(self.Vision.getWidget())
-        if(self.graph != None):
+        if self.graph is not None:
             self.mainWindow.addGraph(self.graph)
-        if(self.leaderBoard != None):
+        if self.leaderBoard is not None:
             self.mainWindow.addLeaderBoard(self.leaderBoard.getWidget())
 
         self.mainWindow.connectComponents()
@@ -252,7 +265,7 @@ class App():
         # self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
         # self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
         # self.mainWindow.saveShortcut.activated.connect(self.saveFile)
-        # self.tableView.saveShortcut.activated.connect(self.saveFile)
+        self.tableView.saveShortcut.activated.connect(self.saveFile)
 
         # Edit Menu
         self.mainWindow.actionAddCar.triggered.connect(self.addCar)
@@ -285,10 +298,12 @@ class App():
     '''
 
     def saveFile(self):
-        if not self.writeFile:
-            self.writeFile = self.mainWindow.saveAsFileDialog()
-        if self.writeFile:
+        if self.writeFile is not None and self.writeFile != '':
             saveCSV(self.tableView.CarStoreList, self.writeFile)
+            self.log.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
+        else:
+            self.log.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
+            self.saveAsFile()
 
         # else use writeFile
 
@@ -306,10 +321,14 @@ class App():
     '''
 
     def saveAsFile(self):
-        self.writeFile = self.mainWindow.saveAsFileDialog()
-        # write file to location
-        self.saveFile()
-        self.log.info('[' + __name__ + ']' + 'Data saved to: ' + self.writeFile)
+        newFile = self.mainWindow.saveAsFileDialog()
+        if newFile is not None and newFile != '':
+            # write file to location
+            self.writeFile = newFile
+            self.saveFile()
+            self.log.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
+        else:
+            self.log.debug('[' + __name__ + '] ' + 'Could not save data to: ' + newFile)
 
     ''' 
 
@@ -345,6 +364,10 @@ class App():
 
     def newFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
+        if self.writeFile is not None and self.writeFile != '':
+            self.log.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
+        else:
+            self.log.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
 
     def addCar(self, newCar=None):
         if not newCar:
