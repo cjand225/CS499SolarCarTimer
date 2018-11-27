@@ -294,18 +294,14 @@ class AppWindow(QMainWindow):
         Return Value: N/A
         Purpose: Overloads closeEvent Function for AppWindow(QMainWindow), such that it will
                  make sure the user actually intended on closing the program, as well as ensuring
-                 its' children gui components have closed as well via handleWidgetClosing()
+                 its' children gui components have closed as well via handleWidgetClosing() called/
+                 within handleClose() function
     
     '''
 
     def closeEvent(self, a0: QCloseEvent):
-        retval = self.QuitMsg.exec()  # grabs event code from Message box execution
-        if retval == 1:  # if OK clicked - Close
-            a0.accept()
-            self.handleWidgetClosing()
-        # if Cancel or MessageBox is closed - Ignore the signal
-        if retval == 0:
-            a0.ignore()
+        retVal = self.QuitMsg.exec()  # grabs event code from Message box execution
+        self.handleClose(retVal, a0)
 
     ''' 
     
@@ -331,6 +327,22 @@ class AppWindow(QMainWindow):
         if self.semiAutoWidget is not None:
             self.semiAutoWidget.close()
         self.close()
+
+    '''
+        Function: handleClose
+        Parameters: self, Return Value, QCloseEven
+        Return Value: N/A
+        Purpose: Function that handles all closing based on user's choice of wanting to exit the program 
+                 or not. 
+    '''
+
+    def handleClose(self, retVal, a0: QCloseEvent):
+        if retVal == 1:  # if OK clicked - Close
+            a0.accept()
+            self.handleWidgetClosing()
+        # if Cancel or MessageBox is closed - Ignore the signal
+        if retVal == 0:
+            a0.ignore()
 
     '''
 
