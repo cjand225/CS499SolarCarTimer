@@ -376,7 +376,7 @@ class App():
                 newCar.ID = len(self.tableView.CarStoreList.storageList)
         if newCar:
             self.tableView.CarStoreList.addExistingCar(newCar)
-            self.mainWindow.SemiAutoWidget.addCar(newCar)
+            self.mainWindow.semiAutoWidget.addCar(newCar)
             self.graph.addCar(newCar)
 
     # def upload(self):
