@@ -24,3 +24,4 @@ class LeaderBoard():
 
     def updateData(self, data):
         self.dataStorage = data
+        #self.widget.tableView.setModel(self.dataStorage)

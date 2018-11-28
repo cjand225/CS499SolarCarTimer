@@ -56,7 +56,7 @@ class App():
         # Forward Module Declaration
         self.log = getLogger()
 
-        self.tableView = None
+        self.table = None
         self.SemiAuto = None
         self.Vision = None
         self.graph = None
@@ -77,23 +77,12 @@ class App():
         self.initGraph()
         self.initLeaderBoard()
 
+        self.leaderBoard.updateData(self.table.getCarStorage())
+
         # adding and connecting essential components to user interface
         self.addComponents()
         self.connectActionsMainWindow()
 
-    def semiAutoStart(self, car, semiAutoIndex, startTime):
-        self.tableView.CarStoreList.storageList[car.ID].initialTime = startTime
-
-    def semiAutoRecord(self, car, semiAutoIndex, recordedTime):
-        if self.tableView.CarStoreList.storageList[car.ID].LapList:
-            elapsedTime = recordedTime - self.tableView.CarStoreList.storageList[car.ID].LapList[-1].recordedTime
-        else:
-            elapsedTime = recordedTime - car.initialTime
-        self.tableView.CarStoreList.appendLapTime(car.ID, elapsedTime)
-
-    def tableClickEvent(self, i):
-        if i.column() == len(self.tableView.CarStoreList.storageList):
-            self.addCar()
 
     ''' 
 
@@ -134,8 +123,7 @@ class App():
     '''
 
     def initTableView(self):
-        self.tableView = Table(type(self).tableUIPath)
-        self.tableView.tableView.doubleClicked.connect(self.tableClickEvent)
+        self.table = Table(type(self).tableUIPath)
         self.log.debug('[' + __name__ + ']' + ' Table Initialized')
 
     '''
@@ -233,8 +221,8 @@ class App():
 
         if self.logWidget is not None:
             self.mainWindow.addLog(self.logWidget)
-        if self.tableView is not None:
-            self.mainWindow.addTable(self.tableView.getTableWidget())
+        if self.table is not None:
+            self.mainWindow.addTable(self.table.getTableWidget())
         if self.SemiAuto is not None:
             self.mainWindow.addSemiAuto(self.SemiAuto)
         if self.Vision is not None:
@@ -266,11 +254,10 @@ class App():
 
         # self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
         # self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
-        # self.mainWindow.saveShortcut.activated.connect(self.saveFile)
-        self.tableView.saveShortcut.activated.connect(self.saveFile)
+        self.table.Widget.saveShortcut.activated.connect(self.saveFile)
 
         # Edit Menu
-        self.mainWindow.actionAddCar.triggered.connect(self.addCar)
+        self.mainWindow.actionAddCar.triggered.connect(self.table.addCar)
 
         # Help Menu
 
@@ -298,10 +285,10 @@ class App():
                  a file to be created.
 
     '''
-
+    #TODO:Rework so table module data is passed through
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
-            saveCSV(self.tableView.CarStoreList, self.writeFile)
+            saveCSV(self.table.CarStoreList, self.writeFile)
             self.log.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
             self.log.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
@@ -342,15 +329,16 @@ class App():
 
     '''
 
+    #TODO: Rework so that addcar passes in table module data
     def openFile(self):
         readFile = self.mainWindow.openFileDialog()
         if readFile is not None and readFile != '':
             self.writeFile = readFile
             cars = loadCSV(readFile)
             self.mainWindow.SemiAutoWidget.deleteAllCars()
-            self.tableView.CarStoreList = CarStorage()
-            self.tableView.initTableModel()
-            self.tableView.tableView.setModel(self.tableView.TableMod)
+            self.table.CarStoreList = CarStorage()
+            self.table.initTableModel()
+            self.table.tableView.setModel(self.table.TableMod)
             for car in cars:
                 self.addCar(car)
 
@@ -371,15 +359,3 @@ class App():
         else:
             self.log.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
 
-    def addCar(self, newCar=None):
-        if not newCar:
-            newCar = self.mainWindow.addCarDialog()
-            if newCar:
-                newCar.ID = len(self.tableView.CarStoreList.storageList)
-        if newCar:
-            self.tableView.CarStoreList.addExistingCar(newCar)
-            self.mainWindow.semiAutoWidget.addCar(newCar)
-            self.graph.addCar(newCar)
-
-    # def upload(self):
-    #     self.mainWindow.googleDriveDialog()

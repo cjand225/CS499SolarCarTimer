@@ -13,6 +13,7 @@ from src.table.ElidedLabel import ElidedLabel
 
 
 class SemiAutoWidget(QWidget):
+
     carRecord = pyqtSignal(object, int, float)
     startClicked = pyqtSignal(object, int, float)
     predictClicked = pyqtSignal(object, bool, int)
@@ -24,9 +25,13 @@ class SemiAutoWidget(QWidget):
     def __init__(self, uipath):
         super().__init__()
         self.UIPath = uipath
-        self.initUI()
-        self.buttonsLayout.setAlignment(Qt.AlignTop)
         self._cars = []
+
+        self.initUI()
+        self.initButtonLayout()
+
+    def initButtonLayout(self):
+        self.buttonsLayout.setAlignment(Qt.AlignTop)
         self.buttonsLayout.setColumnMinimumWidth(type(self).labelColumn, 100)
         self.buttonsLayout.setColumnMinimumWidth(type(self).boxColumn, 100)
         self.buttonsLayout.setHorizontalSpacing(15)
@@ -59,10 +64,10 @@ class SemiAutoWidget(QWidget):
             recordWidget.clicked.connect(lambda b: self.recordCar(car, index))
             recordWidget.setText("Record time")
         else:
-            recordWidget.clicked.connect(lambda b: self.startCar(car, carIndex))
+            recordWidget.clicked.connect(lambda b: self.startCar(car, index))
         predictWidget = self.buttonsLayout.itemAtPosition(index, type(self).boxColumn).widget()
         predictWidget.clicked.disconnect()
-        predictWidget.clicked.connect(lambda b: self.predictClicked.emit(car, b, carIndex))
+        predictWidget.clicked.connect(lambda b: self.predictClicked.emit(car, b, index))
 
     def deleteCar(self, car):
         carIndex = self._cars.index(car)
