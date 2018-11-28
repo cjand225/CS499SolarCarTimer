@@ -18,6 +18,7 @@ from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.Table import Table
 from src.video.Video import Video
 from src.log.LogWidget import LogWidget
+from src.graph.LeaderBoard import LeaderBoard
 
 from src.log.Log import getLogger, createLogger
 
@@ -37,6 +38,7 @@ class App():
     helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
     aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
     GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
+    LeaderBoardUIPath = os.path.join(resourcesDir, 'LeaderBoard.ui')
     userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
     aboutPath = os.path.join(manualDir, 'about.html')
 
@@ -210,7 +212,7 @@ class App():
     '''
 
     def initLeaderBoard(self):
-        self.leaderBoard = None
+        self.leaderBoard = LeaderBoard(self.LeaderBoardUIPath)
         if self.leaderBoard is not None:
             self.log.debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
