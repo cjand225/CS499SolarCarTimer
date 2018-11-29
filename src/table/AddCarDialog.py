@@ -8,13 +8,22 @@ class AddCarDialog(QDialog):
     def __init__(self, uipath):
         super().__init__()
         self.UIPath = uipath
+
         self.initUI()
-        self.setModal(True)
-        intValidator = QIntValidator(self)
-        self.carNumberEdit.setValidator(intValidator)
-        self.validationError = QErrorMessage(self)
+        self.initValidation()
         # self.buttonBox.accepted.connect(self.validateData)
         # self.buttonBox.rejected.connect(self.reject)
+
+    def initUI(self):
+        self.ui = loadUi(self.UIPath, self)
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
+                                            self.size(), QApplication.desktop().availableGeometry()))
+
+    def initValidation(self):
+        self.setModal(True)
+        self.intValid = QIntValidator(self)
+        self.carNumberEdit.setValidator(self.intValid)
+        self.validationError = QErrorMessage(self)
 
     @property
     def carNumber(self):
@@ -39,10 +48,6 @@ class AddCarDialog(QDialog):
         else:
             super().done(r)
 
-    def initUI(self):
-        self.ui = loadUi(self.UIPath, self)
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
-                                            self.size(), QApplication.desktop().availableGeometry()))
 
     # def validateData(self):
     #     try:

@@ -14,7 +14,6 @@ from src.graph.GraphWidget import Graph
 from src.app.AppWindow import AppWindow
 from src.system.IO import loadCSV, saveCSV
 from src.table.CarStorage import CarStorage
-from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.Table import Table
 from src.video.Video import Video
 from src.log.LogWidget import LogWidget
@@ -27,18 +26,13 @@ class App():
     resourcesDir = os.path.abspath(os.path.join(__file__, "./../../../resources"))
     manualDir = os.path.abspath(os.path.join(__file__, "./../../../manuals"))
 
-    mainUIPath = os.path.join(resourcesDir, 'AppWindow.ui')
-    tableUIPath = os.path.join(resourcesDir, 'TableView.ui')
-    visionUIPath = os.path.join(resourcesDir, 'Video.ui')
     logUIPath = os.path.join(resourcesDir, 'Log.ui')
-    semiAutoUIPath = os.path.join(resourcesDir, 'SemiAuto.ui')
+    mainUIPath = os.path.join(resourcesDir, 'AppWindow.ui')
+    visionUIPath = os.path.join(resourcesDir, 'Video.ui')
     quitDialogUIPath = os.path.join(resourcesDir, 'QuitDialog.ui')
-    addCarDialogUIPath = os.path.join(resourcesDir, 'addCarDialog.ui')
-    # googleDriveUIPath = os.path.join(resourcesDir,'GoogleDriveView.ui')
     helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
     aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
     GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
-    LeaderBoardUIPath = os.path.join(resourcesDir, 'LeaderBoard.ui')
     userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
     aboutPath = os.path.join(manualDir, 'about.html')
 
@@ -71,8 +65,7 @@ class App():
         self.initApplication()
         self.initMainWindow()
         self.initLog()
-        self.initTableView()
-        self.initSemiAuto()
+        self.initTable()
         self.initVision()
         self.initGraph()
         self.initLeaderBoard()
@@ -82,7 +75,6 @@ class App():
         # adding and connecting essential components to user interface
         self.addComponents()
         self.connectActionsMainWindow()
-
 
     ''' 
 
@@ -122,23 +114,9 @@ class App():
 
     '''
 
-    def initTableView(self):
-        self.table = Table(type(self).tableUIPath)
+    def initTable(self):
+        self.table = Table()
         self.log.debug('[' + __name__ + ']' + ' Table Initialized')
-
-    '''
-    
-        Function: initSemiAuto(self)
-        Parameters: self
-        Return Value: N/A
-        Purpose: Initializes the Semi Auto class (w/ path to view's UI) that is its own controller for handling
-                 semi-automatic recording times for the table.
-    
-    '''
-
-    def initSemiAuto(self):
-        self.SemiAuto = SemiAutoWidget(type(self).semiAutoUIPath)
-        self.log.debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
 
     ''' 
 
@@ -200,7 +178,7 @@ class App():
     '''
 
     def initLeaderBoard(self):
-        self.leaderBoard = LeaderBoard(self.LeaderBoardUIPath)
+        self.leaderBoard = LeaderBoard()
         if self.leaderBoard is not None:
             self.log.debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
@@ -223,8 +201,8 @@ class App():
             self.mainWindow.addLog(self.logWidget)
         if self.table is not None:
             self.mainWindow.addTable(self.table.getTableWidget())
-        if self.SemiAuto is not None:
-            self.mainWindow.addSemiAuto(self.SemiAuto)
+        if self.table.getSemiAuto() is not None:
+            self.mainWindow.addSemiAuto(self.table.getSemiAuto())
         if self.Vision is not None:
             self.mainWindow.addVision(self.Vision.getWidget())
         if self.graph is not None:
@@ -245,21 +223,12 @@ class App():
     '''
 
     def connectActionsMainWindow(self):
-        # FileMenu
         self.mainWindow.actionNew.triggered.connect(self.newFile)
         self.mainWindow.actionOpen.triggered.connect(self.openFile)
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
-        # self.mainWindow.actionUpload.triggered.connect(self.upload)
-
-        # self.mainWindow.SemiAutoWidget.startClicked.connect(self.semiAutoStart)
-        # self.mainWindow.SemiAutoWidget.carRecord.connect(self.semiAutoRecord)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
 
-        # Edit Menu
-        self.mainWindow.actionAddCar.triggered.connect(self.table.addCar)
-
-        # Help Menu
 
     ''' 
     
@@ -285,7 +254,8 @@ class App():
                  a file to be created.
 
     '''
-    #TODO:Rework so table module data is passed through
+
+    # TODO:Rework so table module data is passed through
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
             saveCSV(self.table.CarStoreList, self.writeFile)
@@ -329,7 +299,7 @@ class App():
 
     '''
 
-    #TODO: Rework so that addcar passes in table module data
+    # TODO: Rework so that addcar passes in table module data
     def openFile(self):
         readFile = self.mainWindow.openFileDialog()
         if readFile is not None and readFile != '':
@@ -358,4 +328,3 @@ class App():
             self.log.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
         else:
             self.log.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
-

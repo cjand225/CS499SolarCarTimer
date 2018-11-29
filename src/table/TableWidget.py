@@ -11,10 +11,12 @@ class TableWidget(QWidget):
         super().__init__()
         self.uiPath = uipath
         self.tableView = None
+        self.horzHeader = ['Position', 'Team Name', 'Number of Laps Completed', 'Fastest Lap']
 
         self.initUI()
         self.initHeaderHorizontal()
         self.initHeaderVertical()
+        self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"), self)
 
     def initUI(self):
         self.ui = loadUi(self.uiPath, self)
@@ -25,7 +27,6 @@ class TableWidget(QWidget):
     def initHeaderHorizontal(self):
         minSize = 0
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
         for headerIndex in range(len(self.tableView.horizontalHeader())):
             minSize = min(minSize, self.tableView.horizontalHeader().sectionSize(headerIndex))
         self.tableView.horizontalHeader().setMinimumSectionSize(minSize)
@@ -38,7 +39,6 @@ class TableWidget(QWidget):
             minSize = min(minSize, self.tableView.verticalHeader().sectionSize(headerIndex))
         self.tableView.verticalHeader().setMinimumSectionSize(minSize)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
-        self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"), self)
 
     def test(self):
         for i in range(8, 20):

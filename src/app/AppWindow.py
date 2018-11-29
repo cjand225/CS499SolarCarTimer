@@ -15,12 +15,6 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
-
-import src.app.App
-from src.table.AddCarDialog import AddCarDialog
-from src.table.Car import Car
-from src.video.Video import Video
-
 from src.log.Log import getLogger
 
 
@@ -42,6 +36,8 @@ class AppWindow(QMainWindow):
         self.logWidget = None
         self.leaderBoardWidget = None
         self.log = getLogger()
+        self.AboutDialog = None
+        self.HelpDialog = None
 
         # declare initializers here
         self.initMainWindow()
@@ -414,16 +410,3 @@ class AppWindow(QMainWindow):
     def handleHelpDialog(self):
         self.HelpDialog.ui.buttonBox.clicked.connect(self.HelpDialog.close)
         self.HelpDialog.exec()
-
-    def addCarDialog(self):
-        carDialog = AddCarDialog(src.app.App.App.addCarDialogUIPath)
-        retVal = carDialog.exec()
-        if retVal == QDialog.Accepted:
-            carNumber = int(carDialog.carNumber)
-            return Car(0, carDialog.teamName, carNumber)
-        else:
-            return None
-
-    # def googleDriveDialog(self):
-    #     driveDialog = GoogleDriveBrowser(src.app.App.App.googleDriveUIPath)
-    #     retVal = driveDialog.exec()

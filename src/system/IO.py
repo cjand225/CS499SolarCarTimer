@@ -5,7 +5,7 @@ from src.table.CarStorage import CarStorage
 
 def saveCSV(cs, filePath):
     # Save a CarStorage object to a CSV file.
-    if (filePath != ''):
+    if filePath != '':
         with open(filePath, "w") as storageFile:
             storageWriter = csv.writer(storageFile)
             storageWriter.writerows(
@@ -30,3 +30,10 @@ def loadCSV(filePath):
                     newCar.addLapTime(time)
                 carList.append(newCar)
         return carList
+
+
+def loadTable():
+    print("PH")
+
+def saveTable():
+    print("PH")

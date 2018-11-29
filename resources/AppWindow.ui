@@ -127,7 +127,6 @@
     <addaction name="actionSave"/>
     <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
-    <addaction name="actionUpload"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
     <addaction name="separator"/>
@@ -147,7 +146,6 @@
     <addaction name="actionSelectRow"/>
     <addaction name="actionSelectColumn"/>
     <addaction name="separator"/>
-    <addaction name="actionAddCar"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
