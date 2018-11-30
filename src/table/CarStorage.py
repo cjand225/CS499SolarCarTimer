@@ -29,9 +29,6 @@ class CarStorage(QObject):
         self.RegExpOrg = "/^[a-z ,.'-]+$/i"
         self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
 
-
-
-
     def setSeedValue(self, seedTime):
         self.SeedValue = seedTime
 
@@ -41,22 +38,18 @@ class CarStorage(QObject):
     def enableOffsetTime(self, cond):
         self.enableOffset = cond
 
-
     def createCar(self, carNum, carOrg):
-        #check valid carNumber and Valid Car Org
+        # check valid carNumber and Valid Car Org
         newCar = Car(self.getLatestCarID(), carNum, carOrg)
         self.storageList.append(newCar)
         self.LatestCarID += 1
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
 
-
-    #runs each size 2 list item through createCar Function
+    # runs each size 2 list item through createCar Function
     def createCars(self, list):
         for item in list:
             self.createCar(item[0], item[1])
-
-
 
     """
          Function: addCar
@@ -75,7 +68,6 @@ class CarStorage(QObject):
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
         return newCar
-
 
     def addExistingCar(self, car):
         self.storageList.append(car)
@@ -273,9 +265,7 @@ class CarStorage(QObject):
                 highest = newList[x].getLapCount()
         return highest
 
-
-
-    #validation for existing cars
+    # validation for existing cars
     def carNumberExists(self, num):
         check = False
         for item in self.storageList:
@@ -284,15 +274,10 @@ class CarStorage(QObject):
 
         return check
 
-    #validation for existing cars
+    # validation for existing cars
     def carOrgExists(self, org):
         check = False
         for item in self.storageList:
             if item.getOrg == org:
                 check = True
         return check
-
-
-
-
-

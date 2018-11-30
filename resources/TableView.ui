@@ -27,6 +27,9 @@
      </item>
      <item>
       <widget class="QGroupBox" name="groupBox">
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
        <property name="title">
         <string/>
        </property>

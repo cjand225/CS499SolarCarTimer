@@ -15,7 +15,6 @@ from src.table.AddBatchDialog import AddBatchDialog
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-
 class Table():
     resourcesDir = os.path.abspath(os.path.join(__file__, "./../../../resources"))
     tableUIPath = os.path.join(resourcesDir, 'TableView.ui')
@@ -100,7 +99,6 @@ class Table():
     
     '''
 
-
     '''
     
     '''
@@ -120,8 +118,6 @@ class Table():
         if retval == QDialog.Accepted:
             self.createCars(self.addBatchDialog.getList())
             self.addBatchDialog.clear()
-
-
 
     def semiAutoStart(self, car, semiAutoIndex, startTime):
         self.table.CarStoreList.storageList[car.ID].initialTime = startTime

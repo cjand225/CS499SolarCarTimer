@@ -15,7 +15,6 @@ from src.system.Time import Lap_Time
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-
 class Car(QObject):
     lapChanged = pyqtSignal(int)
 
@@ -31,7 +30,6 @@ class Car(QObject):
         self.LatestLapID = 0
         self.LapCount = 0
         self.LapList = []
-
 
     """
         Function: addLapTime

@@ -148,9 +148,9 @@ class App():
     def initLog(self):
         self.logWidget = LogWidget(self.logUIPath)
         if self.logWidget is not None:
-            self.infoLog.debug('[' + __name__ + '] ' + 'Log module initialized')
+            getDebugLog().debug('[' + __name__ + '] ' + 'Log module initialized')
         else:
-            self.infoLog.debug('[' + __name__ + '] ' + 'Log module failed to initialize')
+            getDebugLog().debug('[' + __name__ + '] ' + 'Log module failed to initialize')
 
     ''' 
 

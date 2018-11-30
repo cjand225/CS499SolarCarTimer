@@ -9,7 +9,6 @@ from src.system.Time import strptimeMultiple
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-
 class LapDataTableModel(QAbstractTableModel):
     def __init__(self, parent, cs=None):
         super().__init__(parent)

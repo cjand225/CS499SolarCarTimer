@@ -6,21 +6,9 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>630</width>
-    <height>218</height>
+    <width>592</width>
+    <height>236</height>
    </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>630</width>
-    <height>218</height>
-   </size>
-  </property>
-  <property name="maximumSize">
-   <size>
-    <width>630</width>
-    <height>594</height>
-   </size>
   </property>
   <property name="windowTitle">
    <string>System Log</string>
@@ -33,30 +21,55 @@
        <property name="currentIndex">
         <number>0</number>
        </property>
-       <widget class="QWidget" name="tab">
+       <widget class="QWidget" name="infoTab">
         <attribute name="title">
-         <string>Tab 1</string>
+         <string>Info</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="infoLayout"/>
+         </item>
+        </layout>
        </widget>
-       <widget class="QWidget" name="tab_2">
+       <widget class="QWidget" name="debugTab">
         <attribute name="title">
-         <string>Tab 2</string>
+         <string>Debug</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="debugLayout"/>
+         </item>
+        </layout>
        </widget>
-       <widget class="QWidget" name="tab_3">
+       <widget class="QWidget" name="warningTab">
         <attribute name="title">
-         <string>Page</string>
+         <string>Warning</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_7">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="warningLayout"/>
+         </item>
+        </layout>
        </widget>
-       <widget class="QWidget" name="tab_4">
+       <widget class="QWidget" name="criticalTab">
         <attribute name="title">
-         <string>Page</string>
+         <string>Critical</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_9">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="criticalLayout"/>
+         </item>
+        </layout>
        </widget>
-       <widget class="QWidget" name="tab_5">
+       <widget class="QWidget" name="errorTab">
         <attribute name="title">
-         <string>Page</string>
+         <string>Error</string>
         </attribute>
+        <layout class="QGridLayout" name="gridLayout_11">
+         <item row="0" column="0">
+          <layout class="QGridLayout" name="errorLayout"/>
+         </item>
+        </layout>
        </widget>
       </widget>
      </item>
