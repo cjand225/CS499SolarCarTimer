@@ -25,6 +25,7 @@ from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, ge
 class App():
     resourcesDir = os.path.abspath(os.path.join(__file__, "./../../../resources"))
     manualDir = os.path.abspath(os.path.join(__file__, "./../../../manuals"))
+    settingsDir = os.path.abspath(os.path.join(__file__, "./../../bin/settings"))
 
     logUIPath = os.path.join(resourcesDir, 'Log.ui')
     mainUIPath = os.path.join(resourcesDir, 'AppWindow.ui')
@@ -43,14 +44,15 @@ class App():
 
         initLogs()
 
-
-
         # read/write paths
         self.defaultSavePath = ''
 
         # Forward Module Declaration
         self.infoLog = getInfoLog()
-        self.debugLog = getInfoLog()
+        self.debugLog = getDebugLog()
+        self.warningLog = getWarningLog()
+        self.errorLog = getErrorLog()
+        self.criticalLog = getCriticalLog()
 
         self.table = None
         self.SemiAuto = None
@@ -58,6 +60,7 @@ class App():
         self.graph = None
         self.logWidget = None
         self.leaderBoard = None
+
 
         # read/write files
         self.writeFile = None

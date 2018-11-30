@@ -5,18 +5,18 @@ import sys
 from PyQt5.Qt import QApplication
 from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QPushButton, QVBoxLayout
 
-infoLogDir = os.path.abspath(os.path.join(__file__, "./../../../logs/info"))
-debugLogDir = os.path.abspath(os.path.join(__file__, "./../../../logs/debug"))
-errorLogDir = os.path.abspath(os.path.join(__file__, "./../../../logs/error"))
-criticalLogDir = os.path.abspath(os.path.join(__file__, "./../../../logs/critical"))
-warningLogDir = os.path.abspath(os.path.join(__file__, "./../../../logs/warning"))
+logDir = os.path.abspath(os.path.join(__file__, "./../../../logs/"))
 
-infoLogPath = os.path.abspath(os.path.join(infoLogDir, str(time.asctime()).replace(' ', '_').replace(':', '|')))
-debugLogPath = os.path.abspath(os.path.join(debugLogDir, str(time.asctime()).replace(' ', '_').replace(':', '|')))
-errorLogPath = os.path.abspath(os.path.join(errorLogDir, str(time.asctime()).replace(' ', '_').replace(':', '|')))
-criticalLogPath = os.path.abspath(os.path.join(criticalLogDir, str(time.asctime()).replace(' ', '_').replace(':', '|')))
-warningLogPath = os.path.abspath(os.path.join(warningLogDir, str(time.asctime()).replace(' ', '_').replace(':', '|')))
+infoLogPath = os.path.abspath(os.path.join(logDir, 'info.txt'))
+debugLogPath = os.path.abspath(os.path.join(logDir, 'debug.txt'))
+errorLogPath = os.path.abspath(os.path.join(logDir, 'error.txt'))
+criticalLogPath = os.path.abspath(os.path.join(logDir, 'critical.txt'))
+warningLogPath = os.path.abspath(os.path.join(logDir, 'warning.txt'))
 
+
+def checkDirs():
+    if not os.path.exists(logDir):
+        os.makedirs(logDir)
 
 def getInfoLog():
     return logging.getLogger("INFO")
@@ -39,6 +39,7 @@ def getErrorLog():
 
 
 def initLogs():
+    checkDirs()
     initInfoLog()
     initDebugLog()
     initWarningLog()
@@ -47,6 +48,7 @@ def initLogs():
 
 
 def initInfoLog():
+
     infoLog = logging.getLogger("INFO")
     infoLog.setLevel(logging.INFO)
 
