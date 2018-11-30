@@ -2,6 +2,9 @@
 this is going to be used as a place for functions related to data validation
 '''
 
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
+
 import re
 
 

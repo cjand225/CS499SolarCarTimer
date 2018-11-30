@@ -2,7 +2,8 @@ from PyQt5.QtWidgets import QWidget, QStyle, QApplication, QPlainTextEdit
 from PyQt5.Qt import Qt
 from PyQt5.uic import loadUi
 import logging
-from src.log.Log import getLogger
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 
 class LogWidget(QWidget):
@@ -11,7 +12,7 @@ class LogWidget(QWidget):
         super().__init__(parent)
         self.UIPath = uipath
         self.logTextBox = QTextEditLogger(self)
-        self.log = getLogger()
+        self.log = getInfoLog()
 
         self.logSetup()
         self.initUI()

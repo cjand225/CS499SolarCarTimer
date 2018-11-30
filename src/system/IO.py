@@ -1,6 +1,8 @@
 import csv
 from src.table.Car import Car
 from src.table.CarStorage import CarStorage
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 
 def saveCSV(cs, filePath):

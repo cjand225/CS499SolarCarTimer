@@ -6,6 +6,8 @@ from PyQt5.Qt import Qt
 from PyQt5.QtCore import QAbstractTableModel, QModelIndex
 from src.table.CarStorage import CarStorage
 from src.system.Time import strptimeMultiple
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 
 class LapDataTableModel(QAbstractTableModel):

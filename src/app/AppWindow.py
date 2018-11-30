@@ -15,7 +15,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
-from src.log.Log import getLogger
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
 # from src.cloud.GoogleDriveBrowser import GoogleDriveBrowser
@@ -35,7 +35,7 @@ class AppWindow(QMainWindow):
         self.graphWidget = None
         self.logWidget = None
         self.leaderBoardWidget = None
-        self.log = getLogger()
+        self.infoLog = getInfoLog()
         self.AboutDialog = None
         self.HelpDialog = None
 
@@ -274,7 +274,7 @@ class AppWindow(QMainWindow):
         Function: initCloseDialog(self, uiPAth)
         Parameters: self, uiPath(String)
         Return Value: N/A
-        Purpose: Initalizes a closing dialog for AppWindow, for use in overloading the close event
+        Purpose: Initializes a closing dialog for AppWindow, for use in overloading the close event
                  to protect user from accidental closing and/or losing unsaved work
     
     '''

@@ -12,6 +12,8 @@ from src.table.TableWidget import TableWidget
 from src.table.AddCarDialog import AddCarDialog
 from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.AddBatchDialog import AddBatchDialog
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 
 class Table():

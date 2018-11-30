@@ -2,6 +2,8 @@ import math
 import numpy as np
 import scipy.stats
 from src.system.Time import Lap_Time
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 
 def predictNextLapTime(lapTimes):

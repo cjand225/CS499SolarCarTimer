@@ -11,6 +11,7 @@
 from PyQt5.QtCore import QObject, pyqtSignal
 from src.table.Car import Car
 import re
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
 class CarStorage(QObject):

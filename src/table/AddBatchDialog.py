@@ -2,6 +2,8 @@ from PyQt5.Qt import Qt
 from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle, QPlainTextEdit
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.uic import loadUi
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 
 class AddBatchDialog(QDialog):
