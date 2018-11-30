@@ -23,10 +23,13 @@ class Car(QObject):
         self.OrgName = Org
         self.CarNum = CarNum
 
+        self.SeedValue = None
+        self.initialTime = None
+
         self.LatestLapID = 0
         self.LapCount = 0
         self.LapList = []
-        self.initialTime = None
+
 
     """
         Function: addLapTime

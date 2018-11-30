@@ -44,7 +44,10 @@ class CarStorage(QObject):
     def createCar(self, carNum, carOrg):
         #check valid carNumber and Valid Car Org
         newCar = Car(self.getLatestCarID(), carNum, carOrg)
-
+        self.storageList.append(newCar)
+        self.LatestCarID += 1
+        self.dataModified.emit(newCar.ID, 0)
+        newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
 
 
     #runs each size 2 list item through createCar Function
@@ -265,9 +268,10 @@ class CarStorage(QObject):
         highest = 0
         names = []
         for x in range(0, len(newList)):
-            if (newList[x].getLapCount() > highest):
+            if newList[x].getLapCount() > highest:
                 highest = newList[x].getLapCount()
         return highest
+
 
 
     #validation for existing cars

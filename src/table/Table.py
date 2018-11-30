@@ -88,16 +88,11 @@ class Table():
         self.addDialog = AddCarDialog(self.addCarDialogUIPath)
         self.addBatchDialog = AddBatchDialog(self.addBatchCarDialogUIPath)
 
-
-
-
-
     def createCar(self, carNum, carOrg):
-        print(carNum)
-        print(carOrg)
+        self.CarStoreList.createCar(carNum, carOrg)
 
     def createCars(self, list):
-        print(list)
+        self.CarStoreList.createCars(list)
 
     '''
     

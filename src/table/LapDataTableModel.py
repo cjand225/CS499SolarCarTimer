@@ -11,16 +11,16 @@ from src.system.Time import strptimeMultiple
 class LapDataTableModel(QAbstractTableModel):
     def __init__(self, parent, cs=None):
         super().__init__(parent)
-        # self.data = [[randint(0,5) for i in range(10)] for j in range(10)]
+
         if not cs:
-            cs = CarStorage()
-        self.cs = cs
+            self.cs = CarStorage()
+        else:
+            self.cs = cs
+        self.connectActions()
+        # self.test()
+
+    def connectActions(self):
         self.cs.dataModified.connect(self.storageModifiedEvent)
-        # for i, s in enumerate(ascii_lowercase[:8]):
-        #     self.cs.addCar(i,s,randint(0,100))
-        #     self.cs.storageList[i].initialTime = time.time()
-        #     for j in range(5):
-        #         self.cs.appendLapTime(i,j)
 
     def storageModifiedEvent(self, col, row):
         changeIndex = self.index(row, col)
@@ -44,18 +44,6 @@ class LapDataTableModel(QAbstractTableModel):
                 return str(self.cs.storageList[i.column()].LapList[i.row()])
             else:
                 return None
-
-    # def addCar(self,carOrg,carNum):
-    #     self.cs.addCar(len(self.cs.storageList),carOrg,carNum)
-    #     changeIndex = self.index(len(self.cs.storageList)-1,0)
-    #     self.dataChanged.emit(changeIndex,changeIndex)
-    #     self.headerDataChanged.emit(Qt.Horizontal,len(self.cs.storageList)-1,len(self.cs.storageList)-1)
-
-    # def addLapTime(self,carNum,time):
-    #     self.cs.appendLapTime(carNum,time,0,0,0)
-    #     changeIndex = self.index(len(self.cs.storageList[carNum].LapList)-1,carNum)
-    #     self.dataChanged.emit(changeIndex,changeIndex)
-    #     self.headerDataChanged.emit(Qt.Vertical,len(self.cs.storageList[carNum].LapList)-1,len(self.cs.storageList[carNum].LapList)-1)
 
     def setData(self, i, value, role):
         try:
@@ -102,3 +90,22 @@ class LapDataTableModel(QAbstractTableModel):
         if i.column() < len(self.cs.storageList) and i.row() <= len(self.cs.storageList[i.column()].LapList):
             flags |= Qt.ItemIsEditable
         return flags
+
+    def test(self):
+        for i, s in enumerate(ascii_lowercase[:8]):
+            self.cs.addCar(s, randint(0, 100))
+            self.cs.storageList[i].initialTime = time.time()
+            for j in range(5):
+                self.cs.appendLapTime(i, j)
+
+    # def addCar(self,carOrg,carNum):
+    #     self.cs.addCar(len(self.cs.storageList),carOrg,carNum)
+    #     changeIndex = self.index(len(self.cs.storageList)-1,0)
+    #     self.dataChanged.emit(changeIndex,changeIndex)
+    #     self.headerDataChanged.emit(Qt.Horizontal,len(self.cs.storageList)-1,len(self.cs.storageList)-1)
+
+    # def addLapTime(self,carNum,time):
+    #     self.cs.appendLapTime(carNum,time,0,0,0)
+    #     changeIndex = self.index(len(self.cs.storageList[carNum].LapList)-1,carNum)
+    #     self.dataChanged.emit(changeIndex,changeIndex)
+    #     self.headerDataChanged.emit(Qt.Vertical,len(self.cs.storageList[carNum].LapList)-1,len(self.cs.storageList[carNum].LapList)-1)
