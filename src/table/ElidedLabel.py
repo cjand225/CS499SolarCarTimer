@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QPoint, Qt, pyqtProperty, pyqtSignal
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFontMetrics, QPainter, QTextLayout
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
 class ElidedLabel(QLabel):

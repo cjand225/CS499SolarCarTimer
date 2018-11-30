@@ -12,6 +12,8 @@
 from time import time
 from PyQt5.QtCore import pyqtSignal, QObject
 from src.system.Time import Lap_Time
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 
 class Car(QObject):

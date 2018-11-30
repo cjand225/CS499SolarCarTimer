@@ -4,6 +4,8 @@ from PyQt5.Qt import Qt
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QBrush, QPalette
 from PyQt5.uic import loadUi
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 import sched, time
 

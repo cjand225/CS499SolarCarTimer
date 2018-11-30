@@ -3,6 +3,9 @@ from PyQt5.QtGui import *
 from PyQt5.uic import loadUi
 from PyQt5.Qt import *
 
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
+
 
 class LeaderBoardWidget(QWidget):
 

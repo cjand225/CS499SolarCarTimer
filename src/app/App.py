@@ -19,7 +19,7 @@ from src.video.Video import Video
 from src.log.LogWidget import LogWidget
 from src.graph.LeaderBoard import LeaderBoard
 
-from src.log.Log import getLogger, createLogger
+from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog, initLogs
 
 
 class App():
@@ -41,14 +41,16 @@ class App():
         self.mainWindow = None
         self.running = False
 
-        # creating Logger
-        createLogger()
+        initLogs()
+
+
 
         # read/write paths
         self.defaultSavePath = ''
 
         # Forward Module Declaration
-        self.log = getLogger()
+        self.infoLog = getInfoLog()
+        self.debugLog = getInfoLog()
 
         self.table = None
         self.SemiAuto = None
@@ -93,8 +95,8 @@ class App():
         Function: initMainWindow(self)
         Parameters: self
         Return Value: N/A
-        Purpose: Initializes AppWindow in the mainWindow Variable attatched to App Class as well as
-                 Initalizing any functions related to the AppWindow Class
+        Purpose: Initializes AppWindow in the mainWindow Variable attached to App Class as well as
+                 Initializing any functions related to the AppWindow Class
 
     '''
 
@@ -116,7 +118,7 @@ class App():
 
     def initTable(self):
         self.table = Table()
-        self.log.debug('[' + __name__ + ']' + ' Table Initialized')
+        self.infoLog.debug('[' + __name__ + ']' + ' Table Initialized')
 
     ''' 
 
@@ -131,7 +133,7 @@ class App():
 
     def initVision(self):
         self.Vision = Video(self.visionUIPath)
-        self.log.debug('[' + __name__ + '] ' + 'Video Initialized')
+        self.infoLog.debug('[' + __name__ + '] ' + 'Video Initialized')
 
     ''' 
 
@@ -146,9 +148,9 @@ class App():
     def initLog(self):
         self.logWidget = LogWidget(self.logUIPath)
         if self.logWidget is not None:
-            self.log.debug('[' + __name__ + '] ' + 'Log module initialized')
+            self.infoLog.debug('[' + __name__ + '] ' + 'Log module initialized')
         else:
-            self.log.debug('[' + __name__ + '] ' + 'Log module failed to initialize')
+            self.infoLog.debug('[' + __name__ + '] ' + 'Log module failed to initialize')
 
     ''' 
 
@@ -163,9 +165,9 @@ class App():
     def initGraph(self):
         self.graph = Graph(self.GraphUIPath)
         if self.graph is not None:
-            self.log.debug('[' + __name__ + '] ' + 'Graph module initialized')
+            self.infoLog.debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:
-            self.log.debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
+            self.infoLog.debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
 
     ''' 
 
@@ -180,9 +182,9 @@ class App():
     def initLeaderBoard(self):
         self.leaderBoard = LeaderBoard()
         if self.leaderBoard is not None:
-            self.log.debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
+            self.infoLog.debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
-            self.log.debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
+            self.infoLog.debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
 
     ''' 
 
@@ -195,7 +197,7 @@ class App():
     '''
 
     def addComponents(self):
-        self.log.debug('[' + __name__ + '] ' + 'Adding components to Main Window')
+        self.infoLog.debug('[' + __name__ + '] ' + 'Adding components to Main Window')
 
         if self.logWidget is not None:
             self.mainWindow.addLog(self.logWidget)
@@ -258,9 +260,9 @@ class App():
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
             saveCSV(self.table.CarStoreList, self.writeFile)
-            self.log.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
+            self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
-            self.log.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
+            self.infoLog.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
             self.saveAsFile()
 
         # else use writeFile
@@ -284,9 +286,9 @@ class App():
             # write file to location
             self.writeFile = newFile
             self.saveFile()
-            self.log.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
+            self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
-            self.log.debug('[' + __name__ + '] ' + 'Could not save data to: ' + newFile)
+            self.infoLog.debug('[' + __name__ + '] ' + 'Could not save data to: ' + newFile)
 
     ''' 
 
@@ -324,6 +326,6 @@ class App():
     def newFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
         if self.writeFile is not None and self.writeFile != '':
-            self.log.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
+            self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
         else:
-            self.log.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
+            self.infoLog.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
