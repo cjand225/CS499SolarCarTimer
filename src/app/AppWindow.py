@@ -17,10 +17,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
-
-# from src.cloud.GoogleDriveBrowser import GoogleDriveBrowser
-
-
 class AppWindow(QMainWindow):
 
     def __init__(self, uipath):

@@ -50,9 +50,10 @@ def initInfoLog():
     infoLog = logging.getLogger("INFO")
     infoLog.setLevel(logging.INFO)
 
-    fh = logging.FileHandler(infoLogPath)
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
+    fh = logging.FileHandler(infoLogPath)
+    fh.setLevel(logging.INFO)
     fh.setFormatter(formatter)
 
     infoLog.addHandler(fh)
@@ -84,18 +85,14 @@ def initWarningLog():
     # create file handler which logs even debug messages
     fh = logging.FileHandler(warningLogPath)
     fh.setLevel(logging.DEBUG)
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
 
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
     fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
 
     # add the handlers to the logger
     warningLog.addHandler(fh)
-    warningLog.addHandler(ch)
+
 
 
 def initErrorLog():
