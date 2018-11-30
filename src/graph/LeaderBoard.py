@@ -1,4 +1,3 @@
-
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 
@@ -25,5 +24,4 @@ class LeaderBoard():
 
     def updateData(self, data):
         self.dataStorage = data
-        #self.widget.tableView.setModel(self.dataStorage)
-
+        # self.widget.tableView.setModel(self.dataStorage)

@@ -9,10 +9,10 @@ class AddCarDialog(QDialog):
         super().__init__()
         self.UIPath = uipath
 
+        self._carNumber = 0
+
         self.initUI()
         self.initValidation()
-        # self.buttonBox.accepted.connect(self.validateData)
-        # self.buttonBox.rejected.connect(self.reject)
 
     def initUI(self):
         self.ui = loadUi(self.UIPath, self)
@@ -25,12 +25,16 @@ class AddCarDialog(QDialog):
         self.carNumberEdit.setValidator(self.intValid)
         self.validationError = QErrorMessage(self)
 
+    def clearText(self):
+        self.carNumberEdit.clear()
+        self.teamNameEdit.clear()
+
     @property
     def carNumber(self):
         try:
             return int(self.carNumberEdit.text())
-        except ValueError:
-            return None
+        except:
+            raise ValueError('{0} is not a valid number'.format(self.carNumberEdit.text()))
 
     @property
     def teamName(self):
@@ -47,12 +51,3 @@ class AddCarDialog(QDialog):
                 self.validationError.showMessage("Please enter a value for {0}.".format(self.carNumberLabel.text()))
         else:
             super().done(r)
-
-
-    # def validateData(self):
-    #     try:
-    #         print("GOOD: {}".format(int(self.carNumberEdit.text())))
-    #         self.accept()
-    #     except ValueError:
-    #         error = QErrorMessage(self)
-    #         error.showMessage("Invalid car number {0}!".format(self.carNumberEdit.text()))

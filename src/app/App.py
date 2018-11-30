@@ -229,7 +229,6 @@ class App():
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
 
-
     ''' 
     
         Function: run(self)

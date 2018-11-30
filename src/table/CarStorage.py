@@ -20,10 +20,39 @@ class CarStorage(QObject):
         super().__init__()
         self.storageList = []
         self.LatestCarID = 0
+        self.SeedValue = None
+        self.timeOffset = None
+        self.enableOffset = False
 
         self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
         self.RegExpOrg = "/^[a-z ,.'-]+$/i"
         self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
+
+
+
+
+    def setSeedValue(self, seedTime):
+        self.SeedValue = seedTime
+
+    def setTimeOffset(self, offset):
+        self.timeOffset = offset
+
+    def enableOffsetTime(self, cond):
+        self.enableOffset = cond
+
+
+    def createCar(self, carNum, carOrg):
+        #check valid carNumber and Valid Car Org
+        newCar = Car(self.getLatestCarID(), carNum, carOrg)
+
+
+
+    #runs each size 2 list item through createCar Function
+    def createCars(self, list):
+        for item in list:
+            self.createCar(item[0], item[1])
+
+
 
     """
          Function: addCar
@@ -35,19 +64,14 @@ class CarStorage(QObject):
 
      """
 
-    def addCar(self, ID, carOrg, carNum):
-        newCar = Car(ID, carOrg, carNum)
+    def addCar(self, carNum, carOrg):
+        newCar = Car(self.getLatestCarID(), carOrg, carNum)
         self.storageList.append(newCar)
         self.LatestCarID += 1
-        self.dataModified.emit(ID, 0)
-        newCar.lapChanged.connect(lambda l: self.dataModified.emit(ID, l))
+        self.dataModified.emit(newCar.ID, 0)
+        newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
         return newCar
-        # check ID
-        # IDCheck = self.checkNumRange(ID)
-        # check car Org
-        # OrgCheck = self.checkString(carOrg)
-        # Check CarNum
-        # CarNumCheck = self.checkNumRange(carNum)
+
 
     def addExistingCar(self, car):
         self.storageList.append(car)
@@ -245,43 +269,25 @@ class CarStorage(QObject):
                 highest = newList[x].getLapCount()
         return highest
 
-    """
-         Function: checkNumRange
-         Parameters: self, carNum
-         Return Value: -1 or carNumber
-         Purpose: used as a form of validation to check if either the carNum matches either the pattern
-                 for IDs or the pattern for Vehicle Numbers before returning, if it doesn't it'll return
-                 a -1, meaning failure, or if it does, the actual number of the parameter, meaning a success
 
-     """
+    #validation for existing cars
+    def carNumberExists(self, num):
+        check = False
+        for item in self.storageList:
+            if item.getCarNum() == num:
+                check = True
 
-    def checkNumRange(self, carNum):
-        if (type(carNum) is int):
-            if (carNum > 0):
-                if (re.findall(self.RegExpCarNum, str(carNum)) or re.findall(self.RegExpID, str(carNum))):
-                    return carNum
-                else:
-                    return -1
-            else:
-                return -1
-        else:
-            return -1
+        return check
 
-    """
-         Function: checkString
-         Parameters: self, orgName
-         Return Value: orgName or Empty String
-         Purpose: used as a form of validation to check if either the carNum matches the pattern used
-                  for Organization names. If there is no match, it'll return an empty string, else there is a 
-                  match and it returns the original parameter given.
+    #validation for existing cars
+    def carOrgExists(self, org):
+        check = False
+        for item in self.storageList:
+            if item.getOrg == org:
+                check = True
+        return check
 
-     """
 
-    def checkString(self, orgName):
-        if (type(orgName) is str):
-            if (re.findall(self.RegExpOrg, orgName)):
-                return orgName
-            else:
-                return orgName
-        else:
-            return ''
+
+
+

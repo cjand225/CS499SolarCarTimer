@@ -15,7 +15,6 @@ class LeaderBoardWidget(QWidget):
         self.initHeaderHorizontal()
         self.initHeaderVertical()
 
-
     def initUI(self):
         self.ui = loadUi(self.uiPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
@@ -36,4 +35,3 @@ class LeaderBoardWidget(QWidget):
             minSize = min(minSize, self.tableView.verticalHeader().sectionSize(headerIndex))
         self.tableView.verticalHeader().setMinimumSectionSize(minSize)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
-

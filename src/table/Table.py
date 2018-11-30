@@ -5,11 +5,13 @@ from PyQt5.QtCore import *
 from PyQt5.uic import loadUi
 
 import os
+from src.system.Validation import *
 from src.table.CarStorage import CarStorage
 from src.table.LapDataTableModel import LapDataTableModel
 from src.table.TableWidget import TableWidget
 from src.table.AddCarDialog import AddCarDialog
 from src.table.SemiAutoWidget import SemiAutoWidget
+from src.table.AddBatchDialog import AddBatchDialog
 
 
 class Table():
@@ -17,10 +19,10 @@ class Table():
     tableUIPath = os.path.join(resourcesDir, 'TableView.ui')
     semiAutoUIPath = os.path.join(resourcesDir, 'SemiAuto.ui')
     addCarDialogUIPath = os.path.join(resourcesDir, 'addCarDialog.ui')
+    addBatchCarDialogUIPath = os.path.join(resourcesDir, 'AddBatchDialog.ui')
 
     def __init__(self):
         super().__init__()
-
 
         # things to be initialized later
         self.TableMod = None
@@ -32,26 +34,23 @@ class Table():
         self.semiWidget = None
         self.addDialog = None
 
-
         # Model > UI > UIModel
         self.initCarStorage()
         self.initUI()
         self.initTableModel()
         self.initTable()
-        self.initDialog()
+        self.initDialogs()
         self.initSemiAuto()
         self.connectActions()
-
-
 
     def initUI(self):
         self.Widget = TableWidget(self.tableUIPath)
         self.tableView = self.Widget.tableView
 
     def connectActions(self):
-        self.tableView.doubleClicked.connect(self.tableClickEvent)
-        self.Widget.addCar.clicked.connect(self.handleDialog)
-
+        self.tableView.doubleClicked.connect(self.handleTableDoubleClick)
+        self.Widget.addCar.clicked.connect(self.handleAddDialog)
+        self.Widget.addBatch.clicked.connect(self.handleAddBatchDialog)
 
     def getTableWidget(self):
         return self.Widget
@@ -68,57 +67,6 @@ class Table():
     def getCarStorage(self):
         return self.CarStoreList.getCarListCopy()
 
-    def initSemiAuto(self):
-        self.semiAuto = None
-
-    def getSemiAutoWidget(self):
-        return self.semiWidget
-
-
-    #TODO: Rework Implementation
-    def addCar(self, dialog, newCar=None, ):
-        if not newCar:
-            newCar = dialog
-            if newCar:
-                newCar.ID = len(self.table.CarStoreList.storageList)
-        if newCar:
-            self.table.CarStoreList.addExistingCar(newCar)
-            self.mainWindow.semiAutoWidget.addCar(newCar)
-            self.graph.addCar(newCar)
-
-
-    def semiAutoStart(self, car, semiAutoIndex, startTime):
-        self.table.CarStoreList.storageList[car.ID].initialTime = startTime
-
-    def semiAutoRecord(self, car, semiAutoIndex, recordedTime):
-        if self.table.CarStoreList.storageList[car.ID].LapList:
-            elapsedTime = recordedTime - self.table.CarStoreList.storageList[car.ID].LapList[-1].recordedTime
-        else:
-            elapsedTime = recordedTime - car.initialTime
-        self.table.CarStoreList.appendLapTime(car.ID, elapsedTime)
-
-    def tableClickEvent(self, i):
-        if i.column() == len(self.CarStoreList.storageList):
-            self.addCar()
-
-    def createCar(self, carNum, carOrg):
-        if carNum is not None and carNum != '':
-            if carOrg is not None and carNum != '':
-                print("PH")
-
-
-    '''
-    
-    '''
-    def initDialog(self):
-        self.addDialog = AddCarDialog(self.addCarDialogUIPath)
-
-    '''
-    
-    '''
-    def handleDialog(self):
-        retval = self.addDialog.exec()
-
     '''
 
         Function: initSemiAuto(self)
@@ -131,20 +79,59 @@ class Table():
 
     def initSemiAuto(self):
         self.semiAuto = SemiAutoWidget(type(self).semiAutoUIPath)
-        #self.log.debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
+        # self.log.debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
 
     def getSemiAuto(self):
         return self.semiAuto
 
-
-    # def addCarDialog(self):
-    #     carDialog = AddCarDialog(src.app.App.App.addCarDialogUIPath)
-    #     retVal = carDialog.exec()
-    #     if retVal == QDialog.Accepted:
-    #         carNumber = int(carDialog.carNumber)
-    #         return Car(0, carDialog.teamName, carNumber)
-    #     else:
-    #         return None
+    def initDialogs(self):
+        self.addDialog = AddCarDialog(self.addCarDialogUIPath)
+        self.addBatchDialog = AddBatchDialog(self.addBatchCarDialogUIPath)
 
 
 
+
+
+    def createCar(self, carNum, carOrg):
+        print(carNum)
+        print(carOrg)
+
+    def createCars(self, list):
+        print(list)
+
+    '''
+    
+    '''
+
+
+    '''
+    
+    '''
+
+    def handleTableDoubleClick(self, i):
+        if i.column() == len(self.CarStoreList.storageList):
+            self.handleAddDialog()
+
+    def handleAddDialog(self):
+        retval = self.addDialog.exec()
+        if retval == QDialog.Accepted:
+            self.createCar(self.addDialog.carNumber, self.addDialog.teamName)
+            self.addDialog.clearText()
+
+    def handleAddBatchDialog(self):
+        retval = self.addBatchDialog.exec()
+        if retval == QDialog.Accepted:
+            self.createCars(self.addBatchDialog.getList())
+            self.addBatchDialog.clear()
+
+
+
+    def semiAutoStart(self, car, semiAutoIndex, startTime):
+        self.table.CarStoreList.storageList[car.ID].initialTime = startTime
+
+    def semiAutoRecord(self, car, semiAutoIndex, recordedTime):
+        if self.table.CarStoreList.storageList[car.ID].LapList:
+            elapsedTime = recordedTime - self.table.CarStoreList.storageList[car.ID].LapList[-1].recordedTime
+        else:
+            elapsedTime = recordedTime - car.initialTime
+        self.table.CarStoreList.appendLapTime(car.ID, elapsedTime)

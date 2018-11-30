@@ -13,7 +13,6 @@ from src.table.ElidedLabel import ElidedLabel
 
 
 class SemiAutoWidget(QWidget):
-
     carRecord = pyqtSignal(object, int, float)
     startClicked = pyqtSignal(object, int, float)
     predictClicked = pyqtSignal(object, bool, int)
