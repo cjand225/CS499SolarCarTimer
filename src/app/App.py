@@ -74,6 +74,10 @@ class App():
         self.initGraph()
         self.initLeaderBoard()
 
+        self.mainWindow.pushGraph.clicked.connect(self.graphUpdate)
+        self.mainWindow.actionGraphing.triggered.connect(self.graphUpdate)
+        self.mainWindow.actionSemiAuto.triggered.connect(self.table.updateSemiAuto)
+        self.mainWindow.pushSemiAuto.clicked.connect(self.table.updateSemiAuto)
         self.leaderBoard.updateData(self.table.getCarStorage())
 
         # adding and connecting essential components to user interface
@@ -108,6 +112,8 @@ class App():
         self.mainWindow.initHelpDialog(type(self).helpDialogUIPath, type(self).userManPath)
         self.mainWindow.initAboutDialog(type(self).aboutDialogUIPath, type(self).aboutPath)
 
+
+
     ''' 
 
         Function: initTableview(self)
@@ -120,7 +126,9 @@ class App():
 
     def initTable(self):
         self.table = Table()
+
         self.infoLog.debug('[' + __name__ + ']' + ' Table Initialized')
+
 
     ''' 
 
@@ -135,7 +143,11 @@ class App():
 
     def initVision(self):
         self.Vision = Video(self.visionUIPath)
-        self.infoLog.debug('[' + __name__ + '] ' + 'Video Initialized')
+        if self.Vision is not None:
+            getDebugLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
+        else:
+            getDebugLog().debug('[' + __name__ + '] ' + 'Video module failed to initialize')
+
 
     ''' 
 
@@ -167,9 +179,9 @@ class App():
     def initGraph(self):
         self.graph = Graph(self.GraphUIPath)
         if self.graph is not None:
-            self.infoLog.debug('[' + __name__ + '] ' + 'Graph module initialized')
+            getDebugLog().debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:
-            self.infoLog.debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
+            getDebugLog().debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
 
     ''' 
 
@@ -184,9 +196,9 @@ class App():
     def initLeaderBoard(self):
         self.leaderBoard = LeaderBoard()
         if self.leaderBoard is not None:
-            self.infoLog.debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
+            getDebugLog().debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
-            self.infoLog.debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
+            getDebugLog().debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
 
     ''' 
 
@@ -199,7 +211,7 @@ class App():
     '''
 
     def addComponents(self):
-        self.infoLog.debug('[' + __name__ + '] ' + 'Adding components to Main Window')
+        getDebugLog().debug('[' + __name__ + '] ' + 'Adding components to Main Window')
 
         if self.logWidget is not None:
             self.mainWindow.addLog(self.logWidget)
@@ -227,11 +239,13 @@ class App():
     '''
 
     def connectActionsMainWindow(self):
+        getDebugLog().debug('[' + __name__ + '] ' + 'Binding listeners to Main Window')
         self.mainWindow.actionNew.triggered.connect(self.newFile)
         self.mainWindow.actionOpen.triggered.connect(self.openFile)
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
+        self.graph.TeamChoiceBox.activated.connect(self.graphUpdate)
 
     ''' 
     
@@ -331,3 +345,6 @@ class App():
             self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
         else:
             self.infoLog.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
+
+    def graphUpdate(self):
+        self.graph.handleUpdate(self.table.getCarStorage())

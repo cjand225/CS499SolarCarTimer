@@ -37,7 +37,7 @@ class LapDataTableModel(QAbstractTableModel):
             return 19
 
     def columnCount(self, p):
-        return max(len(self.cs.storageList) + 1, 10)
+        return max(len(self.cs.storageList) + 1, 11)
 
     def data(self, i, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:

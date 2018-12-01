@@ -47,14 +47,22 @@ class Car(QObject):
     #     self.LapCount = len(self.LapList)
     #     self.lapChanged.emit(len(self.LapList))
 
-    def addLapTime(self, time):
+    #TODO: Make time optional, if no time given, take elasped time count (for semi auto)
+    def addLapTime(self, time=None):
         recordedTime = None
-        if self.LapList:
-            recordedTime = self.LapList[-1].recordedTime + time
+
+        #assumes that semi-auto is calling it
+        if time == None:
+            time = 23
+            self.LapList.append(Lap_Time(recordedTime, time))
+            self.lapChanged.emit(len(self.LapList))
         else:
-            recordedTime = self.initialTime
-        self.LapList.append(Lap_Time(recordedTime, time))
-        self.lapChanged.emit(len(self.LapList))
+            if self.LapList:
+                recordedTime = self.LapList[-1].recordedTime + time
+            else:
+                recordedTime = self.initialTime
+            self.LapList.append(Lap_Time(recordedTime, time))
+            self.lapChanged.emit(len(self.LapList))
 
     """
          Function: removeLapTime

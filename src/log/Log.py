@@ -67,18 +67,14 @@ def initDebugLog():
     # create file handler which logs even debug messages
     fh = logging.FileHandler(debugLogPath)
     fh.setLevel(logging.DEBUG)
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
 
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
     fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
 
     # add the handlers to the logger
     infoLog.addHandler(fh)
-    infoLog.addHandler(ch)
+
 
 
 def initWarningLog():
@@ -102,18 +98,14 @@ def initErrorLog():
     # create file handler which logs even debug messages
     fh = logging.FileHandler(errorLogPath)
     fh.setLevel(logging.DEBUG)
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.DEBUG)
+
 
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
     fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
 
     # add the handlers to the logger
     errorLog.addHandler(fh)
-    errorLog.addHandler(ch)
 
 
 def initCriticalLog():
@@ -122,15 +114,9 @@ def initCriticalLog():
     # create file handler which logs even debug messages
     fh = logging.FileHandler(criticalLogPath)
     fh.setLevel(logging.CRITICAL)
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.CRITICAL)
-
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
     fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-
     # add the handlers to the logger
     criticalLog.addHandler(fh)
-    criticalLog.addHandler(ch)
+

@@ -14,6 +14,7 @@ class LeaderBoard():
     def __init__(self):
         self.widget = None
         self.dataStorage = None
+        self.horzHeader = ['Position', 'Team Name', 'Number of Laps Completed', 'Fastest Lap']
 
         self.initWidget()
 

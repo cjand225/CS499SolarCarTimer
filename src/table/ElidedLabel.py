@@ -6,8 +6,8 @@ from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, ge
 
 class ElidedLabel(QLabel):
 
-    def __init__(self, parent, text=""):
-        super().__init__(parent)
+    def __init__(self, text=""):
+        super().__init__()
         self._elided = False
         self.content = text
 

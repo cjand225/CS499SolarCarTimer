@@ -1,22 +1,18 @@
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QWidget, QStyle
+from PyQt5.QtCore import Qt, pyqtSignal
+from PyQt5.QtWidgets import QApplication, QWidget, QStyle, QComboBox
 from PyQt5.uic import loadUi
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from enum import IntEnum
 
 import matplotlib.pyplot as plt
 import numpy as np
 
-GRAPH_LAPVSTIME = "Lap vs Time"
-GRAPH_MINTIME = "Minimum Time"
-GRAPH_MAXTIME = "Maximum Time"
-GRAPH_AVGVSTIME = "Average Lap vs Time"
 
-graphTypes = [
-    GRAPH_LAPVSTIME,
-    GRAPH_AVGVSTIME,
-    GRAPH_MINTIME,
-    GRAPH_MAXTIME
-]
+class GraphType(IntEnum):
+    LAP_TIME = 0,
+    AVG_TIME = 1,
+    MIN_TIME = 2,
+    MAX_TIME = 3
 
 
 class Graph(QWidget):
@@ -25,67 +21,68 @@ class Graph(QWidget):
     def __init__(self, uipath):
         super().__init__()
         self.UIPath = uipath
+        self.GraphDict = ["Lap vs Time", "Average Lap vs Time", "Minimum Time", "Maximum Time"]
         self.graphedTeamList = []
-        self.currentGraphType = graphTypes[0]
+        self.currentGraphType = self.GraphDict[GraphType.LAP_TIME]
         self.currGraphNum = 1
         self.inMinutes = False
 
         self.teamList = []
 
         self.initUI()
+        self.addGraphs()
+        self.handleUpdate(self.teamList)
+        self.bindListeners()
 
     def initUI(self):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
-        self.ApplyGraphBtn.clicked.connect(self.drawGraph)
+    # add graph types
+    def addGraphs(self):
+        for graph in self.GraphDict:
+            self.GraphTypes.addItem(graph)
 
-        # add teams to the choice box
-        index = 0
-        for car in self.teamList:
-            self.TeamChoiceBox.addItem(car.getOrg(), index)
-            index += 1
+    def bindListeners(self):
+        self.ApplyGraphBtn.clicked.connect(self.drawGraph)
+        # action listener for graph type
+        self.GraphTypes.activated[str].connect(self.typeChosen)
+        # add team list listener
+        self.ChosenTeamList.itemDoubleClicked.connect(self.chosenTeamClick)
+        self.MinuteButton.toggled.connect(self.timeToggle)
         # add action listener to team choice
         self.TeamChoiceBox.activated.connect(self.teamChosen)
 
-        # add graph types
-        for graphType in graphTypes:
-            self.GraphTypes.addItem(graphType)
-        # action listener for graph type
-        self.GraphTypes.activated[str].connect(self.typeChosen)
+    def updateTeamList(self, newTeamList):
+        self.teamList = newTeamList
 
-        # add team list listener
-        self.ChosenTeamList.itemDoubleClicked.connect(self.chosenTeamClick)
+    def populateTeamChoiceBox(self):
+        self.graphedTeamList = []
+        self.currGraphNum = 1
+        index = 0
 
-        self.MinuteButton.toggled.connect(self.timeToggle)
+
+        for car in self.teamList:
+            print(car.getOrg())
+            self.TeamChoiceBox.addItem(str(car.getOrg()), index)
+            index += 1
 
     def timeToggle(self):
         self.inMinutes = self.MinuteButton.isChecked()
 
-    def updateTeamList(self, newTeamList):
-        self.graphedTeamList = []
-        self.currGraphNum = 1
-        self.teamList = newTeamList
-
-        index = 0
-        for car in self.teamList:
-            self.TeamChoiceBox.addItem(car.getOrg(), index)
-            index += 1
-
-    def addCar(self, car):
-        teamListLength = len(self.teamList)
-        self.teamList.append(car)
-        self.TeamChoiceBox.addItem(car.getOrg(), teamListLength)
+    def handleUpdate(self, newTeamList):
+        self.updateTeamList(newTeamList)
+        self.populateTeamChoiceBox()
 
     def drawGraph(self):
-        if self.currentGraphType == GRAPH_LAPVSTIME:
+        if self.currentGraphType == self.GraphDict[GraphType.LAP_TIME]:
             self.lapVsTimeGraph()
-        elif self.currentGraphType == GRAPH_AVGVSTIME:
+        elif self.currentGraphType == self.GraphDict[GraphType.AVG_TIME]:
             self.avgLapVsTimeGraph()
-        elif self.currentGraphType == GRAPH_MINTIME:
+        elif self.currentGraphType == self.GraphDict[GraphType.MIN_TIME]:
             self.minTimeGraph()
-        elif self.currentGraphType == GRAPH_MAXTIME:
+        elif self.currentGraphType == self.GraphDict[GraphType.MAX_TIME]:
             self.maxTimeGraph()
 
     def teamChosen(self, index):
@@ -121,7 +118,7 @@ class Graph(QWidget):
 
     def typeChosen(self, text):
         # checks that type is valid (in types list)
-        if text in graphTypes:
+        if text in self.GraphDict:
             self.currentGraphType = text
 
     def getElapsed(self, lapList):

@@ -10,6 +10,7 @@
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from src.table.Car import Car
+from src.system.Validation import carExists
 import re
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
@@ -25,9 +26,7 @@ class CarStorage(QObject):
         self.timeOffset = None
         self.enableOffset = False
 
-        self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
-        self.RegExpOrg = "/^[a-z ,.'-]+$/i"
-        self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
+
 
     def setSeedValue(self, seedTime):
         self.SeedValue = seedTime
@@ -40,7 +39,7 @@ class CarStorage(QObject):
 
     def createCar(self, carNum, carOrg):
         # check valid carNumber and Valid Car Org
-        newCar = Car(self.getLatestCarID(), carNum, carOrg)
+        newCar = Car(self.getLatestCarID(), carNum, str(carOrg))
         self.storageList.append(newCar)
         self.LatestCarID += 1
         self.dataModified.emit(newCar.ID, 0)
@@ -265,19 +264,3 @@ class CarStorage(QObject):
                 highest = newList[x].getLapCount()
         return highest
 
-    # validation for existing cars
-    def carNumberExists(self, num):
-        check = False
-        for item in self.storageList:
-            if item.getCarNum() == num:
-                check = True
-
-        return check
-
-    # validation for existing cars
-    def carOrgExists(self, org):
-        check = False
-        for item in self.storageList:
-            if item.getOrg == org:
-                check = True
-        return check

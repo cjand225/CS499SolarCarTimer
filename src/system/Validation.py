@@ -5,14 +5,20 @@ this is going to be used as a place for functions related to data validation
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 import re
+import os
+
+RegExpID = "^([0-9][0-9]{0,2}|1000)$"
+RegExpOrg = "/^[a-z ,.'-]+$/i"
+RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
+RegExpFileName = "^[a-zA-Z0-9](?[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\.[a-zA-Z0-9_-]+$"
 
 
 def isValidFilePath(path):
-    print("PH")
+    return os.path.exists(path)
 
 
 def isValidFileName(fileName):
-    print("PH")
+    return re.findall(RegExpFileName, fileName)
 
 
 def isValidElaspedTime(inputTime, totalCurrentTime):
@@ -35,11 +41,11 @@ def isValidElaspedTime(inputTime, totalCurrentTime):
 
 
 def isValidString(RegExpOrg, orgName):
-    if (type(orgName) is str):
+    check = False
+    if type(orgName) is str:
         if re.findall(RegExpOrg, orgName):
-            return True
-    else:
-        return False
+            check = True
+    return check
 
 
 """
@@ -53,14 +59,38 @@ def isValidString(RegExpOrg, orgName):
 """
 
 
-def isValidInteger(carNum, RegExpCarNum, RegExpID):
+def isValidInteger(carNum, ExpCarNum):
+    check = False
     if (type(carNum) is int):
         if (carNum > 0):
-            if (re.findall(RegExpCarNum, str(carNum)) or re.findall(RegExpID, str(carNum))):
-                return True
-            else:
-                return False
-        else:
-            return False
-    else:
-        return False
+            if re.findall(ExpCarNum, str(carNum)):
+                check = True
+
+    return check
+
+
+# validation for existing cars
+def carNumberExists(num, storageList):
+    check = False
+    for item in storageList:
+        if item.getCarNum() == num:
+            check = True
+
+    return check
+
+
+# validation for existing cars
+def carOrgExists(org, storageList):
+    check = False
+    for item in storageList:
+        if item.getOrg == org:
+            check = True
+    return check
+
+
+def carExists(storageList, num, org):
+    return carNumberExists(num, storageList) or carOrgExists(org, storageList)
+
+
+def isValidCar(num, org):
+    return isValidInteger(num, RegExpCarNum) and isValidString(org, RegExpOrg)

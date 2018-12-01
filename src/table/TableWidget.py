@@ -12,7 +12,7 @@ class TableWidget(QWidget):
         super().__init__()
         self.uiPath = uipath
         self.tableView = None
-        self.horzHeader = ['Position', 'Team Name', 'Number of Laps Completed', 'Fastest Lap']
+
 
         self.initUI()
         self.initHeaderHorizontal()
