@@ -4,7 +4,6 @@ from PyQt5.QtGui import *
 import os
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
-
 from src.graph.LeaderBoardWidget import *
 
 

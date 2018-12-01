@@ -10,7 +10,7 @@ import sys
 
 from PyQt5.Qt import *
 
-from src.graph.GraphWidget import Graph
+from src.graph.Graph import Graph
 from src.app.AppWindow import AppWindow
 from src.system.IO import loadCSV, saveCSV
 from src.table.CarStorage import CarStorage
@@ -60,7 +60,6 @@ class App():
         self.graph = None
         self.logWidget = None
         self.leaderBoard = None
-
 
         # read/write files
         self.writeFile = None

@@ -8,7 +8,7 @@ Depends On:
             Classes: QWidget, QMainWindow, TableWidget, SemiAutoWidget, VisionWidget, GraphWidget,
                      LogWidget, GraphOptionsWidget
 
-            Files: Table.py, SemiAutoWidget.py, VisionWidget.py, LogWidget.py, GraphWidget.py
+            Files: Table.py, SemiAutoWidget.py, VisionWidget.py, LogWidget.py, Graph.py
                    GraphOptions.py,
 '''
 from PyQt5.QtCore import *
@@ -16,6 +16,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 
 class AppWindow(QMainWindow):
 

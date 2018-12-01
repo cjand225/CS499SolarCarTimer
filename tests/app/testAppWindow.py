@@ -6,8 +6,9 @@ from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.Table import Table
 from src.video.VisionWidget import VisionWidget
 from src.log.LogWidget import LogWidget
-from src.graph.GraphWidget import Graph
+from src.graph.Graph import Graph
 from src.graph.GraphOptionsWidget import GraphOptions
+
 
 class TestAppWindowMethods(unittest.TestCase):
 

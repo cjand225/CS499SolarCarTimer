@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Form</class>
- <widget class="QWidget" name="Form">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>628</width>
-    <height>491</height>
-   </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>628</width>
-    <height>491</height>
-   </size>
-  </property>
-  <property name="windowTitle">
-   <string>Help</string>
-  </property>
-  <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QVBoxLayout" name="verticalLayout">
-     <item>
-      <widget class="QGroupBox" name="groupBox">
-       <property name="title">
-        <string>User Manual</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_3">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QTextBrowser" name="textBrowser">
-            <property name="frameShape">
-             <enum>QFrame::StyledPanel</enum>
-            </property>
-            <property name="frameShadow">
-             <enum>QFrame::Sunken</enum>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Close</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-  </layout>
- </widget>
- <resources/>
- <connections/>
+    <class>Form</class>
+    <widget class="QWidget" name="Form">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>628</width>
+                <height>491</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>628</width>
+                <height>491</height>
+            </size>
+        </property>
+        <property name="windowTitle">
+            <string>Help</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout">
+            <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout">
+                    <item>
+                        <widget class="QGroupBox" name="groupBox">
+                            <property name="title">
+                                <string>User Manual</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_3">
+                                <item row="0" column="0">
+                                    <layout class="QGridLayout" name="gridLayout_2">
+                                        <item row="0" column="0">
+                                            <widget class="QTextBrowser" name="textBrowser">
+                                                <property name="frameShape">
+                                                    <enum>QFrame::StyledPanel</enum>
+                                                </property>
+                                                <property name="frameShadow">
+                                                    <enum>QFrame::Sunken</enum>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QDialogButtonBox" name="buttonBox">
+                            <property name="standardButtons">
+                                <set>QDialogButtonBox::Close</set>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+    <resources/>
+    <connections/>
 </ui>

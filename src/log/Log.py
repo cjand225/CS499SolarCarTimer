@@ -18,6 +18,7 @@ def checkDirs():
     if not os.path.exists(logDir):
         os.makedirs(logDir)
 
+
 def getInfoLog():
     return logging.getLogger("INFO")
 
@@ -48,7 +49,6 @@ def initLogs():
 
 
 def initInfoLog():
-
     infoLog = logging.getLogger("INFO")
     infoLog.setLevel(logging.INFO)
 
@@ -94,7 +94,6 @@ def initWarningLog():
 
     # add the handlers to the logger
     warningLog.addHandler(fh)
-
 
 
 def initErrorLog():

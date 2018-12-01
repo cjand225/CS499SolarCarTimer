@@ -6,6 +6,7 @@ from src.table.Table import Table
 from PyQt5.Qt import QApplication
 from PyQt5.QtWidgets import QMainWindow
 
+
 class TestAppMethods(unittest.TestCase):
 
     def setUp(self):

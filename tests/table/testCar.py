@@ -4,16 +4,17 @@ import re
 
 from src.table.Car import Car
 
+
 class testCar(unittest.TestCase):
 
     def setUp(self):
-        #self.car = Car(0)
+        # self.car = Car(0)
         self.CorrectString = "University of Kentucky"
 
     def testCreateNormal(self):
         myCar = Car(1, "University of Kentucky", 23)
-        self.assertTrue(myCar.ID == 1 )
-        self.assertEqual(myCar.OrgName , self.CorrectString )
+        self.assertTrue(myCar.ID == 1)
+        self.assertEqual(myCar.OrgName, self.CorrectString)
         self.assertTrue(myCar.CarNum == 23)
 
     def testaddTime(self):
@@ -21,7 +22,7 @@ class testCar(unittest.TestCase):
         myCar.addLapTime(1, 2, 3, 32)
         firstLap = myCar.LapList[0]
 
-        #check if all lap data is correct within the list
+        # check if all lap data is correct within the list
         self.assertEqual(firstLap[0], 0)
         self.assertEqual(firstLap[1], 1)
         self.assertEqual(firstLap[2], 2)
@@ -34,7 +35,7 @@ class testCar(unittest.TestCase):
         myCar.addLapTime(6, 7, 8, 9)
         firstLap = myCar.LapList[0]
         secondLap = myCar.LapList[1]
-        #check if both laps match the ones in the list
+        # check if both laps match the ones in the list
         self.assertEqual(secondLap[0], 1)
         self.assertEqual(firstLap[0], 0)
         self.assertEqual(firstLap, myCar.LapList[0])
@@ -93,6 +94,3 @@ class testCar(unittest.TestCase):
         myCar.addLapTime(2, 3, 4, 5)
         myCar.addLapTime(6, 7, 8, 9)
         self.assertEqual(myCar.getLapCount(), 2)
-
-
-

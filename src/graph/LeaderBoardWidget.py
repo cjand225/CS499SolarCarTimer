@@ -6,7 +6,6 @@ from PyQt5.Qt import *
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-
 class LeaderBoardWidget(QWidget):
 
     def __init__(self, uiPath):

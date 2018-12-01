@@ -5,7 +5,6 @@ from src.system.Time import Lap_Time
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-
 def predictNextLapTime(lapTimes):
     # Returns the predicted time for the next lap.
     if len(lapTimes) > 1:

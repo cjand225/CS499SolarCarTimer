@@ -1,8 +1,8 @@
 import csv
+import os
 from src.table.Car import Car
 from src.table.CarStorage import CarStorage
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
-
 
 
 def saveCSV(cs, filePath):
@@ -37,5 +37,11 @@ def loadCSV(filePath):
 def loadTable():
     print("PH")
 
+
 def saveTable():
     print("PH")
+
+
+def createDir(dir):
+    if not os.path.exists(dir):
+        os.mkdir(dir)

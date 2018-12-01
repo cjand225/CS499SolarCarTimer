@@ -4,7 +4,6 @@ from time import time
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-
 def strptimeMultiple(text, formats):
     for f in formats:
         try:

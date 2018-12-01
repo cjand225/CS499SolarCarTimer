@@ -9,7 +9,6 @@ from enum import Enum
 from PyQt5.QtGui import QImage
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
-
 """
     Function: filterType (Class)
     Parameters: N/A

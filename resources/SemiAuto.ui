@@ -1,62 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SemiAuto</class>
- <widget class="QWidget" name="SemiAuto">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>585</width>
-    <height>571</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Semi-Auto</string>
-  </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
-    <layout class="QGridLayout" name="topLayout">
-     <item row="0" column="0">
-      <widget class="QGroupBox" name="ButtonBox">
-       <property name="title">
-        <string>Button List</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <widget class="QScrollArea" name="scrollArea">
-          <property name="minimumSize">
-           <size>
-            <width>541</width>
-            <height>0</height>
-           </size>
-          </property>
-          <property name="widgetResizable">
-           <bool>true</bool>
-          </property>
-          <widget class="QWidget" name="semiAutoButtonArea">
-           <property name="geometry">
+    <class>SemiAuto</class>
+    <widget class="QWidget" name="SemiAuto">
+        <property name="geometry">
             <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>539</width>
-             <height>507</height>
+                <x>0</x>
+                <y>0</y>
+                <width>585</width>
+                <height>571</height>
             </rect>
-           </property>
-           <layout class="QGridLayout" name="gridLayout">
+        </property>
+        <property name="windowTitle">
+            <string>Semi-Auto</string>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_2">
             <item row="0" column="0">
-             <layout class="QGridLayout" name="buttonsLayout"/>
+                <layout class="QGridLayout" name="topLayout">
+                    <item row="0" column="0">
+                        <widget class="QGroupBox" name="ButtonBox">
+                            <property name="title">
+                                <string>Button List</string>
+                            </property>
+                            <layout class="QGridLayout" name="gridLayout_4">
+                                <item row="0" column="0">
+                                    <widget class="QScrollArea" name="scrollArea">
+                                        <property name="minimumSize">
+                                            <size>
+                                                <width>541</width>
+                                                <height>0</height>
+                                            </size>
+                                        </property>
+                                        <property name="widgetResizable">
+                                            <bool>true</bool>
+                                        </property>
+                                        <widget class="QWidget" name="semiAutoButtonArea">
+                                            <property name="geometry">
+                                                <rect>
+                                                    <x>0</x>
+                                                    <y>0</y>
+                                                    <width>539</width>
+                                                    <height>507</height>
+                                                </rect>
+                                            </property>
+                                            <layout class="QGridLayout" name="gridLayout">
+                                                <item row="0" column="0">
+                                                    <layout class="QGridLayout" name="buttonsLayout"/>
+                                                </item>
+                                            </layout>
+                                        </widget>
+                                    </widget>
+                                </item>
+                            </layout>
+                        </widget>
+                    </item>
+                </layout>
             </item>
-           </layout>
-          </widget>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-  </layout>
- </widget>
- <resources/>
- <connections/>
+        </layout>
+    </widget>
+    <resources/>
+    <connections/>
 </ui>

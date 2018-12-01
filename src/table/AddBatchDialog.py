@@ -5,7 +5,6 @@ from PyQt5.uic import loadUi
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-
 class AddBatchDialog(QDialog):
 
     def __init__(self, uipath):
