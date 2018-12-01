@@ -14,6 +14,7 @@ from src.table.AddCarDialog import AddCarDialog
 from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.AddBatchDialog import AddBatchDialog
 from src.table.SemiAuto import SemiAuto
+from src.system.Time import Lap_Time
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -71,6 +72,7 @@ class Table():
         self.CarStoreList.createCar(1,1)
         self.CarStoreList.createCar(2, 2)
 
+
     def getCarStorage(self):
         return self.CarStoreList.getCarListCopy()
 
@@ -85,7 +87,6 @@ class Table():
     '''
 
     def initSemiAuto(self):
-        #self.semiAuto = SemiAutoWidget(type(self).semiAutoUIPath)
         self.semiAuto = SemiAuto(type(self).semiAutoUIPath)
         getDebugLog().debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
 
@@ -96,9 +97,9 @@ class Table():
         self.addDialog = AddCarDialog(self.addCarDialogUIPath)
         self.addBatchDialog = AddBatchDialog(self.addBatchCarDialogUIPath)
 
-    def createCar(self, carNum, carOrg):
-        self.CarStoreList.createCar(carNum, carOrg)
-        getInfoLog().debug('[' + __name__ + '] ' + 'Car Created: ' + ' (' + str(carNum) + ',' + str(carOrg) + ')')
+    def createCar(self, carNum, teamName):
+        self.CarStoreList.createCar(carNum, teamName)
+        getInfoLog().debug('[' + __name__ + '] ' + 'Car Created: ' + ' (' + str(carNum) + ',' + str(teamName) + ')')
 
     def createCars(self, list):
         self.CarStoreList.createCars(list)

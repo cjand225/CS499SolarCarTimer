@@ -64,7 +64,7 @@ class SemiAuto(QWidget):
         for car in self.carStoreRef:
             #create Label
             label =  ElidedLabel()
-            label.setText(str(car.getOrg()))
+            label.setText(str(car.getTeam()))
             label.setMaximumWidth(150)
 
             button = QPushButton()

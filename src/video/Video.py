@@ -6,6 +6,7 @@ Depends On:
 '''
 
 import queue
+import cv2
 
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import *

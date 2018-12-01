@@ -115,8 +115,8 @@ class testCarStorage(unittest.TestCase):
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
         myStore.addCar(myStore.getLatestCarID(), 'University of y', 42)
         newlist = []
-        newlist.append(myStore.getCarByID(0).getOrg())
-        newlist.append(myStore.getCarByID(1).getOrg())
+        newlist.append(myStore.getCarByID(0).getTeam())
+        newlist.append(myStore.getCarByID(1).getTeam())
         self.assertEqual(newlist, myStore.getCarNamesList())
 
     def testgetCarAmount(self):

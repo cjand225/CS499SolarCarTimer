@@ -83,7 +83,7 @@ def carNumberExists(num, storageList):
 def carOrgExists(org, storageList):
     check = False
     for item in storageList:
-        if item.getOrg == org:
+        if item.getTeam == org:
             check = True
     return check
 

@@ -14,7 +14,7 @@ class testCar(unittest.TestCase):
     def testCreateNormal(self):
         myCar = Car(1, "University of Kentucky", 23)
         self.assertTrue(myCar.ID == 1)
-        self.assertEqual(myCar.OrgName, self.CorrectString)
+        self.assertEqual(myCar.TeamName, self.CorrectString)
         self.assertTrue(myCar.CarNum == 23)
 
     def testaddTime(self):
@@ -76,7 +76,7 @@ class testCar(unittest.TestCase):
 
     def testGetCarOrg(self):
         myCar = Car(1, "University of Kentucky", 23)
-        myOrg = myCar.getOrg()
+        myOrg = myCar.getTeam()
         self.assertEqual(myOrg, "University of Kentucky")
 
     def testGetCarNum(self):

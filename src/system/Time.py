@@ -14,12 +14,15 @@ def strptimeMultiple(text, formats):
 
 
 class Lap_Time():
-    def __init__(self, recordedTime, elapsedTime=None):
+    def __init__(self, recordedTime=None, elapsedTime=None):
         self.recordedTime = recordedTime
         self.elapsedTime = elapsedTime
 
     def __str__(self):
         return str(datetime.timedelta(seconds=self.elapsedTime))
+
+    def getElaspedTime(self):
+        return self.elapsedTime
 
     @classmethod
     def fromCurrentTime(cls, previousTime=None):
@@ -35,3 +38,14 @@ class Lap_Time():
 
     # def __ne__(self, other):
     #     return not self == other
+
+
+class LapTime():
+    def __init__(self, timeData):
+        self.elaspedTime = timeData
+
+    def setElasped(self, timeData):
+        self.elaspedTime = timeData
+
+    def getElasped(self):
+        return self.elaspedTime

@@ -78,7 +78,7 @@ class LapDataTableModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 if section < len(self.cs.storageList):
-                    return self.cs.storageList[section].OrgName
+                    return self.cs.storageList[section].TeamName
                 else:
                     return None
             elif orientation == Qt.Vertical:
@@ -99,14 +99,3 @@ class LapDataTableModel(QAbstractTableModel):
             for j in range(5):
                 self.cs.appendLapTime(i, j)
 
-    # def addCar(self,carOrg,carNum):
-    #     self.cs.addCar(len(self.cs.storageList),carOrg,carNum)
-    #     changeIndex = self.index(len(self.cs.storageList)-1,0)
-    #     self.dataChanged.emit(changeIndex,changeIndex)
-    #     self.headerDataChanged.emit(Qt.Horizontal,len(self.cs.storageList)-1,len(self.cs.storageList)-1)
-
-    # def addLapTime(self,carNum,time):
-    #     self.cs.appendLapTime(carNum,time,0,0,0)
-    #     changeIndex = self.index(len(self.cs.storageList[carNum].LapList)-1,carNum)
-    #     self.dataChanged.emit(changeIndex,changeIndex)
-    #     self.headerDataChanged.emit(Qt.Vertical,len(self.cs.storageList[carNum].LapList)-1,len(self.cs.storageList[carNum].LapList)-1)

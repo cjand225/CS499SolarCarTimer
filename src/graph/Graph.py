@@ -62,10 +62,8 @@ class Graph(QWidget):
         self.currGraphNum = 1
         index = 0
 
-
         for car in self.teamList:
-            print(car.getOrg())
-            self.TeamChoiceBox.addItem(str(car.getOrg()), index)
+            self.TeamChoiceBox.addItem(str(car.getTeam()), index)
             index += 1
 
     def timeToggle(self):
@@ -95,7 +93,7 @@ class Graph(QWidget):
 
         # if not in list add it
         if self.teamList[index] not in self.graphedTeamList:
-            self.ChosenTeamList.addItem(self.teamList[index].getOrg())
+            self.ChosenTeamList.addItem(self.teamList[index].getTeam())
             self.graphedTeamList.append(self.teamList[index])
             return True
         return False
@@ -104,7 +102,7 @@ class Graph(QWidget):
         # search graph list and remove found element
         for i in range(len(self.graphedTeamList)):
             team = self.graphedTeamList[i]
-            if team.getOrg() == teamName:
+            if team.getTeam() == teamName:
                 self.graphedTeamList.pop(i)
                 return True
         return False
@@ -141,7 +139,7 @@ class Graph(QWidget):
 
         # plot data
         for team in self.graphedTeamList:
-            plt.plot(graphRange, self.getElapsed(team.LapList), label=team.getOrg())
+            plt.plot(graphRange, self.getElapsed(team.LapList), label=team.getTeam())
 
         # set labels
         plt.title('Lap vs Time')
@@ -178,7 +176,7 @@ class Graph(QWidget):
                 for i in range(len(team.LapList)):
                     lapAverages.append(lapList[i].recordedTime / (i + 1))
 
-            plt.plot(graphRange, lapAverages, label=team.getOrg())
+            plt.plot(graphRange, lapAverages, label=team.getTeam())
 
         # set labels
         plt.title('Lap vs Average Time')
@@ -202,7 +200,7 @@ class Graph(QWidget):
         # calculate minimum times for teams
         for team in self.graphedTeamList:
             data.append(min(self.getElapsed(team.LapList)))
-            labels.append(team.getOrg())
+            labels.append(team.getTeam())
 
         # send data to bar graph
         if self.inMinutes:
@@ -217,7 +215,7 @@ class Graph(QWidget):
         # calculate maximum times for teams
         for team in self.graphedTeamList:
             data.append(max(self.getElapsed(team.LapList)))
-            labels.append(team.getOrg())
+            labels.append(team.getTeam())
 
         # send data to bar graph
         if self.inMinutes:

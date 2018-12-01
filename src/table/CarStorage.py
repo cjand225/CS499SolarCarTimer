@@ -116,11 +116,10 @@ class CarStorage(QObject):
      """
 
     def getCarByID(self, ID):
-        newList = self.storageList.copy()
-        if (ID > len(newList)):
+        if (ID > len(self.storageList)):
             return -1
         else:
-            return newList[ID]
+            return self.storageList[ID]
 
     """
          Function: getCarByNum
@@ -134,8 +133,7 @@ class CarStorage(QObject):
      """
 
     def getCarByNum(self, CarNum):
-        newList = self.storageList.copy()
-        itemList = [item for item in newList if item.getCarNum() == CarNum]
+        itemList = [item for item in self.storageList if item.getCarNum() == CarNum]
         item = itemList[0]
         return item
 
@@ -151,8 +149,7 @@ class CarStorage(QObject):
      """
 
     def getCarByOrg(self, OrgString):
-        newList = self.storageList.copy()
-        itemList = [item for item in newList if item.getOrg() == OrgString]
+        itemList = [item for item in self.storageList if item.getTeam() == OrgString]
         item = itemList[0]
         return item
 
@@ -220,7 +217,7 @@ class CarStorage(QObject):
         newList = self.storageList.copy()
         names = []
         for x in range(0, len(newList)):
-            names.append(newList[x].getOrg())
+            names.append(newList[x].getTeam())
         return names
 
     """
