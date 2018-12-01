@@ -16,11 +16,13 @@ class SemiAuto(QWidget):
         self.labelColumn = 0
         self.buttonColumn = 1
         self.checkBoxColumn = 2
+        self.predictColumn = 3
 
         self.indexList = []
         self.labelList = []
         self.buttonList = []
         self.checkBoxList = []
+        self.predictList = []
 
         #layout of semiAuto
         self.buttons = None
@@ -48,8 +50,10 @@ class SemiAuto(QWidget):
         self.buttons.setColumnStretch(self.checkBoxColumn, 0)
 
     def updateList(self, list):
+        self.clearLists()
         self.carStoreRef = list
         self.createButtons()
+        #self.createPredictionLabels()
         self.bindButtons()
         self.bindCheckBoxes()
 
@@ -61,24 +65,61 @@ class SemiAuto(QWidget):
             #create Label
             label =  ElidedLabel()
             label.setText(str(car.getOrg()))
-            label.setMaximumWidth(225)
+            label.setMaximumWidth(150)
 
             button = QPushButton()
             button.setText("Record Time")
             button.setObjectName(str(labelIndex))
+            button.setMaximumWidth(150)
 
             checkBox = QCheckBox()
             checkBox.setText("Lap Prediction ")
+
+            predictLabel = ElidedLabel()
+            predictLabel.setText("0:00:00")
+            #predictLabel.setStyleSheet("QLabel { color: blue; } ")
+            predictLabel.setHidden(True)
+
 
 
             self.indexList.append(labelIndex)
             self.labelList.append(label)
             self.buttonList.append(button)
             self.checkBoxList.append(checkBox)
+            self.predictList.append(predictLabel)
+
             self.buttons.addWidget(label, labelIndex, self.labelColumn)
             self.buttons.addWidget(button, labelIndex, self.buttonColumn)
             self.buttons.addWidget(checkBox, labelIndex, self.checkBoxColumn)
+            self.buttons.addWidget(predictLabel, labelIndex, self.predictColumn)
             labelIndex += 1
+
+    def clearLists(self):
+        self.unBindButtons()
+        self.clearLayout(self.buttons)
+
+        self.labelList = []
+        self.checkBoxList = []
+        self.buttonList = []
+        self.predictList = []
+
+
+    def unBindButtons(self):
+        for button in self.buttonList:
+            button.clicked.disconnect()
+
+        for checkBox in self.checkBoxList:
+            checkBox.toggled.disconnect()
+
+    def clearLayout(self, layout):
+        if layout is not None:
+            while layout.count():
+                item = layout.takeAt(0)
+                widget = item.widget()
+                if widget is not None:
+                    widget.deleteLater()
+                else:
+                    self.clearLayout(item.layout())
 
 
     def bindButtons(self):
@@ -86,8 +127,6 @@ class SemiAuto(QWidget):
             index = 0
             for button in self.buttonList:
                 self.bindButton(index, button)
-
-
                 index+= 1
 
     def bindButton(self, index, button):
@@ -105,11 +144,15 @@ class SemiAuto(QWidget):
 
     def handleCheck(self, index):
         if self.checkBoxList[index].isChecked():
-                print("PH")
-                #put handle calculation function here
+                self.predictList[index].setVisible(True)
+                # put handle calculation function here
+        else:
+            self.predictList[index].setHidden(True)
+
 
     def handleClick(self, index):
         self.carStoreRef[index].addLapTime()
+
 
 
 
