@@ -8,6 +8,15 @@ conda list --explicit > envBuild.txt
 conda create -n <env-name> --file envBuild.txt
 conda activate <env-name>
 pip install opencv-contrib-python
+pip install pytimeparse
+
+
+#packages required to run
+PyQt5
+Opencv-contrib-python
+numpy
+scipy
+
 
 
 #For Windows

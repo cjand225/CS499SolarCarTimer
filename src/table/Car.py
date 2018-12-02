@@ -105,6 +105,7 @@ class Car(QObject):
                 self.addLapSemiAuto()
             elif timeData.getElapsed() is not None:
                 self.addLapManually(timeData)
+
             self.LapCount = len(self.LapList)
             self.lapChanged.emit(len(self.LapList))
 
@@ -119,12 +120,11 @@ class Car(QObject):
         else:
             recordedTime = timeSinceStart - timeBeforeIndex
 
-        #time couldn't have possibly occured as race hasn't lastest long enough
-        if(recordedTime < 0):
+        # time couldn't have possibly occured as race hasn't lastest long enough
+        if (recordedTime < 0):
             recordedTime = 0
 
-
-
+        getInfoLog().info('Lap Added to Car: {}' )
         self.LapList.append(LapTime(int(recordedTime)))
 
     def addLapManually(self, timeData):
@@ -149,7 +149,7 @@ class Car(QObject):
 
             self.LapList[index].setElapsed(newTime)
 
-            #valid index + 1, so another cell exists below current cell
+            # valid index + 1, so another cell exists below current cell
             if index <= len(self.LapList) - 1:
                 cellBelow = self.LapList[index + 1].getElapsed()
                 totalTime = oldTime + cellBelow

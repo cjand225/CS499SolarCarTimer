@@ -102,10 +102,11 @@ class Table():
 
     def createCar(self, carNum, teamName):
         self.CarStoreList.createCar(carNum, teamName)
-        getInfoLog().debug('[' + __name__ + '] ' + 'Car Created: ' + ' (' + str(carNum) + ',' + str(teamName) + ')')
+        self.semiAuto.updateList(self.CarStoreList.storageList)
 
     def createCars(self, list):
         self.CarStoreList.createCars(list)
+        self.semiAuto.updateList(self.CarStoreList.storageList)
 
     def handleStart(self):
         self.CarStoreList.setSeedValue(time.time())
