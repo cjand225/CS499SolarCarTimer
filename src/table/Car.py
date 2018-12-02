@@ -140,10 +140,12 @@ class Car(QObject):
       newTime = timeData
       timeDiff = newTime - oldTime
 
+      self.LapList[index].setElapsed(newTime)
+
       if timeDiff < 0:
         timeDiff *= -1
 
-      if index < len(self.LapList) + 1:
+      if index < len(self.LapList) - 1:
         cellTime = self.LapList[index + 1].getElapsed()
         cellTime += timeDiff
         self.LapList[index + 1].setElapsed(cellTime)
@@ -197,9 +199,9 @@ class Car(QObject):
    """
   def getTotalElapsedTime(self, index):
     totalElasped = 0
-    if index != 0 and index < len(self.LapList):
-      for currLap in range(1, index - 1):
-        totalElasped += self.LapList[currLap].getElapsed()
+    for currLap in range(1, index):
+        totalElasped += int(self.LapList[currLap].getElapsed())
+        print(totalElasped)
 
     print(totalElasped)
     return int(totalElasped)

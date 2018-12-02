@@ -45,18 +45,24 @@ class TableModel(QAbstractTableModel):
         if role == Qt.DisplayRole:
             if item.column() < len(self.carStore.storageList) and item.row() < len(
                     self.carStore.storageList[item.column()].LapList):
-                return str(self.carStore.storageList[item.column()].LapList[item.row()].getElapsed())
+                timeData = self.carStore.storageList[item.column()].LapList[item.row()].getElapsed()
+                newString = self.intergerToTimeString(timeData)
+                return str(newString)
             else:
                 return QVariant()
 
     def setData(self, item, value, role):
         formattedValue = self.formatValue(value)
-        if role == Qt.EditRole:
-            if item.column() < len(self.carStore.storageList) and item.row() == len(self.carStore.storageList[item.column()].LapList):
-               self.carStore.appendLapTime(item.column(), formattedValue)
+        if formattedValue is not None:
+            if role == Qt.EditRole:
+                if item.column() < len(self.carStore.storageList) and item.row() == len(
+                        self.carStore.storageList[item.column()].LapList):
+                        self.carStore.appendLapTime(item.column(), formattedValue)
+                else:
+                    self.carStore.storageList[item.column()].editLapTime(item.row(), formattedValue)
+                return True
             else:
-                self.carStore.storageList[item.column()].editLapTime(item.row(), formattedValue)
-            return True
+                return False
         else:
             return False
 
@@ -79,9 +85,11 @@ class TableModel(QAbstractTableModel):
             flags |= Qt.ItemIsEditable
         return flags
 
+    #takes a time string and converts to workable format
     def formatValue(self, value):
-        if(value.isdigit()):
+        if (value.isdigit()):
             formString = self.valueToTimeString(value)
+            # print(formString)
             return pytimeparse.parse(formString)
 
     def valueToTimeString(self, val):
@@ -106,6 +114,26 @@ class TableModel(QAbstractTableModel):
             formString = formString + "s"
 
         return formString
+
+    def intergerToTimeString(self, int):
+        Hours = divmod(int, 3600)
+        Minutes = divmod(int, 60)
+        Seconds = divmod(int, 60)
+
+        Hours = str(Hours[0])
+        Minutes = str(Minutes[0])
+        Seconds = str(Seconds[1])
+
+        if len(Hours) == 1:
+            Hours = '0' + Hours
+
+        if len(Minutes) == 1:
+            Minutes = '0' + Minutes
+
+        if len(Seconds) == 1:
+            Seconds = '0' + Seconds
+
+        return Hours + ':' + Minutes + ":" + Seconds
 
     def assignStorage(self, storage):
         if not storage:
