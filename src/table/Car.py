@@ -150,7 +150,7 @@ class Car(QObject):
             self.LapList[index].setElapsed(newTime)
 
             # valid index + 1, so another cell exists below current cell
-            if index <= len(self.LapList) - 1:
+            if index < len(self.LapList) - 1:
                 cellBelow = self.LapList[index + 1].getElapsed()
                 totalTime = oldTime + cellBelow
 

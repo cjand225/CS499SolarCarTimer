@@ -58,6 +58,7 @@ class Table():
         self.Widget.addCar.clicked.connect(self.handleAddDialog)
         self.Widget.addBatch.clicked.connect(self.handleAddBatchDialog)
         self.Widget.startRace.clicked.connect(self.handleStart)
+        self.CarStoreList.dataModified.connect(self.updateSemiAuto)
 
     def getTableWidget(self):
         return self.Widget
@@ -102,11 +103,9 @@ class Table():
 
     def createCar(self, carNum, teamName):
         self.CarStoreList.createCar(carNum, teamName)
-        self.semiAuto.updateList(self.CarStoreList.storageList)
 
     def createCars(self, list):
         self.CarStoreList.createCars(list)
-        self.semiAuto.updateList(self.CarStoreList.storageList)
 
     def handleStart(self):
         self.CarStoreList.setSeedValue(time.time())

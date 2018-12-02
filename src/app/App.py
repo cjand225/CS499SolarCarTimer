@@ -74,11 +74,11 @@ class App():
         self.initGraph()
         self.initLeaderBoard()
 
-        self.mainWindow.pushGraph.clicked.connect(self.graphUpdate)
-        self.mainWindow.actionGraphing.triggered.connect(self.graphUpdate)
+
+
         self.mainWindow.actionSemiAuto.triggered.connect(self.table.updateSemiAuto)
         self.mainWindow.pushSemiAuto.clicked.connect(self.table.updateSemiAuto)
-        self.leaderBoard.updateData(self.table.getCarStorage())
+
 
         # adding and connecting essential components to user interface
         self.addComponents()
@@ -245,7 +245,7 @@ class App():
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
-        self.graph.TeamChoiceBox.activated.connect(self.graphUpdate)
+        self.table.CarStoreList.dataModified.connect(self.graphUpdate)
 
     ''' 
     
