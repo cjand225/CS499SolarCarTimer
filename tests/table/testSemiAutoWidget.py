@@ -5,9 +5,8 @@ sys.path.insert(0, os.path.abspath("src"))
 from PyQt5.Qt import QApplication, Qt
 from PyQt5.QtTest import QSignalSpy
 from PyQt5.QtGui import QBrush, QPalette
-from src.table.SemiAutoWidget import SemiAutoWidget
 from src.app.App import App
-from src.table.Car import car
+from src.table.Car import Car
 
 
 class TestSemiAutoWidget(unittest.TestCase):

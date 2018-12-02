@@ -8,11 +8,9 @@ import time
 import os
 from src.system.Validation import *
 from src.table.CarStorage import CarStorage
-from src.table.LapDataTableModel import LapDataTableModel
 from src.table.TableModel import TableModel
 from src.table.TableWidget import TableWidget
 from src.table.AddCarDialog import AddCarDialog
-from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.AddBatchDialog import AddBatchDialog
 from src.table.SemiAuto import SemiAuto
 
