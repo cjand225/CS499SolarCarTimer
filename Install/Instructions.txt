@@ -12,23 +12,16 @@ pip install pytimeparse
 
 
 #packages required to run
-Python3 = 3.7 or above
-PyQt5 = 5.6 or above
-Opencv-contrib-python = 3.4.3 or above
-numpy = 1.5.4 or above
-matplotlib = LTS or above
-scipy = LTS or above
+Python3
+PyQt5
+Opencv-contrib-python
+numpy
+matplotlib
+scipy
 
 #for Vision Module
 tesseract
 imutils
 
 Windows specfic:
-pyWin32 = latest version
-
-
-
-#For Windows
-
-
-#For Mac
+pyWin32
