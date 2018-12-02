@@ -9,12 +9,13 @@ import os
 from src.system.Validation import *
 from src.table.CarStorage import CarStorage
 from src.table.LapDataTableModel import LapDataTableModel
+from src.table.TableModel import TableModel
 from src.table.TableWidget import TableWidget
 from src.table.AddCarDialog import AddCarDialog
 from src.table.SemiAutoWidget import SemiAutoWidget
 from src.table.AddBatchDialog import AddBatchDialog
 from src.table.SemiAuto import SemiAuto
-from src.system.Time import Lap_Time
+
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -62,13 +63,15 @@ class Table():
         return self.Widget
 
     def initTableModel(self):
-        self.TableMod = LapDataTableModel(self.Widget, self.CarStoreList)
+        #self.TableMod = LapDataTableModel(self.Widget, self.CarStoreList)
+        self.TableMod = TableModel(self.Widget, self.CarStoreList)
 
     def initTable(self):
         self.tableView.setModel(self.TableMod)
 
     def initCarStorage(self):
         self.CarStoreList = CarStorage()
+
         self.CarStoreList.createCar(1,1)
         self.CarStoreList.createCar(2, 2)
 
@@ -104,14 +107,6 @@ class Table():
     def createCars(self, list):
         self.CarStoreList.createCars(list)
 
-    '''
-    
-    '''
-
-    '''
-    
-    '''
-
     def handleStart(self):
         self.CarStoreList.setSeedValue(time.time())
 
@@ -130,17 +125,6 @@ class Table():
         if retval == QDialog.Accepted:
             self.createCars(self.addBatchDialog.getList())
             self.addBatchDialog.clear()
-
-    def semiAutoStart(self, car, semiAutoIndex, startTime):
-        self.CarStoreList.storageList[car.ID].initialTime = startTime
-
-    def semiAutoRecord(self, car, semiAutoIndex, recordedTime):
-        if self.CarStoreList.storageList[car.ID].LapList:
-            elapsedTime = recordedTime - self.CarStoreList.storageList[car.ID].LapList[-1].recordedTime
-        else:
-            elapsedTime = recordedTime - car.initialTime
-        self.CarStoreList.appendLapTime(car.ID, elapsedTime)
-
 
     def updateSemiAuto(self):
         self.semiAuto.updateList(self.CarStoreList.storageList)

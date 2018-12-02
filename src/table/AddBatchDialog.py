@@ -55,9 +55,7 @@ class AddBatchDialog(QDialog):
             if self.batchEdit.toPlainText():
                 super().done(r)
                 self.createList()
-
             else:
-                print("PH")
-                # self.validationError.showMessage("Please enter a value for {0}.".format(self.teamNameLabel.text()))
+                super().done(r)
         else:
             super().done(r)

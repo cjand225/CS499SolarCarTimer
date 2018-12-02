@@ -19,11 +19,14 @@ class TableWidget(QWidget):
         self.initHeaderVertical()
         self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"), self)
 
+
     def initUI(self):
         self.ui = loadUi(self.uiPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
         self.show()
+
+
 
     def initHeaderHorizontal(self):
         minSize = 0

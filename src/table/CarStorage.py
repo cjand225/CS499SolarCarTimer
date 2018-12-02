@@ -10,6 +10,7 @@
 
 from PyQt5.QtCore import QObject, pyqtSignal
 from src.table.Car import Car
+from src.system.TimeReferences import LapTime
 from src.system.Validation import carExists
 import re
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
@@ -26,10 +27,14 @@ class CarStorage(QObject):
         self.timeOffset = None
         self.enableOffset = False
 
-
-
     def setSeedValue(self, seedTime):
-        self.SeedValue = seedTime
+        if self.SeedValue is None:
+            self.SeedValue = seedTime
+            self.setSeeds()
+
+    def setSeeds(self):
+        for car in self.storageList:
+            car.setSeedValue(self.SeedValue)
 
     def setTimeOffset(self, offset):
         self.timeOffset = offset
@@ -40,6 +45,8 @@ class CarStorage(QObject):
     def createCar(self, carNum, carOrg):
         # check valid carNumber and Valid Car Org
         newCar = Car(self.getLatestCarID(), carNum, str(carOrg))
+        if self.SeedValue is not None:
+            newCar.setSeedValue(self.SeedValue)
         self.storageList.append(newCar)
         self.LatestCarID += 1
         self.dataModified.emit(newCar.ID, 0)
@@ -51,7 +58,7 @@ class CarStorage(QObject):
             self.createCar(item[0], item[1])
 
     """
-         Function: addCar
+         Function: addExistingCar
          Parameters: self, ID, carOrg, carNum
          Return Value: N/A
          Purpose: appends a car class structure to the storageList by receiving input values
@@ -60,16 +67,10 @@ class CarStorage(QObject):
 
      """
 
-    def addCar(self, carNum, carOrg):
-        newCar = Car(self.getLatestCarID(), carOrg, carNum)
-        self.storageList.append(newCar)
-        self.LatestCarID += 1
-        self.dataModified.emit(newCar.ID, 0)
-        newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
-        return newCar
-
     def addExistingCar(self, car):
         self.storageList.append(car)
+        if self.SeedValue is not None:
+            car.setSeedValue(self.SeedValue)
         self.LatestCarID += 1
         self.dataModified.emit(car.ID, 0)
         car.lapChanged.connect(lambda l: self.dataModified.emit(car.ID, l))
@@ -164,7 +165,7 @@ class CarStorage(QObject):
      """
 
     def appendLapTime(self, carID, time):
-        self.storageList[carID].addLapTime(time)
+        self.storageList[carID].addLapTime(LapTime(time))
         # self.dataChanged.emit(carId,len
 
     """

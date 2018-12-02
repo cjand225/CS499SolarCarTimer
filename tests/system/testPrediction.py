@@ -3,7 +3,7 @@ import os, sys, unittest
 sys.path.insert(0, os.path.abspath("src"))
 from time import time
 from src.system.Prediction import predictNextLapTime, LapPredictionError
-from src.system.Time import Lap_Time
+from src.system.TimeReferences import LapTime
 from tests.system.GenerateLapTimes import generateLapTimes
 
 
@@ -21,7 +21,7 @@ class TestPrediction(unittest.TestCase):
     def testSingleLapPrediction(self):
         elapsedTime = 100
         recordedTime = time()
-        lapTimes = [Lap_Time(recordedTime, elapsedTime)]
+        lapTimes = [LapTime(recordedTime, elapsedTime)]
         predictedTime = predictNextLapTime(lapTimes)
         self.assertEqual(predictedTime.elapsedTime, elapsedTime)
         self.assertEqual(abs(predictedTime.recordedTime - recordedTime) - elapsedTime, 0)

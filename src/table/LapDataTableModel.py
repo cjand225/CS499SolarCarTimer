@@ -5,7 +5,7 @@ import time
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QAbstractTableModel, QModelIndex
 from src.table.CarStorage import CarStorage
-from src.system.Time import strptimeMultiple
+from src.system.TimeReferences import strptimeMultiple
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -47,11 +47,14 @@ class LapDataTableModel(QAbstractTableModel):
                 return None
 
     def setData(self, i, value, role):
+        self.formatTime(value)
         try:
             value_split = value.split(".")
             value_time = strptimeMultiple(value_split[0], ["%H:%M:%S", "%M:%S", "%S"])
             seconds = timedelta(hours=value_time.hour, minutes=value_time.minute,
                                 seconds=value_time.second).total_seconds()
+
+
             if len(value_split) == 2:
                 milliseconds = int(value_split[1])
                 seconds = seconds + (milliseconds / pow(10, len(value_split[1])))
@@ -61,7 +64,9 @@ class LapDataTableModel(QAbstractTableModel):
             return False
         if role == Qt.EditRole:
             if i.column() < len(self.cs.storageList):
+
                 if not self.cs.storageList[i.column()].initialTime:
+
                     self.cs.storageList[i.column()].initialTime = time.time()
                 # lapTime = Lap_Time(self.cs.storageList[i.column()-1].recordedTime+seconds,seconds)
                 if i.row() < len(self.cs.storageList[i.column()].LapList):
@@ -92,10 +97,16 @@ class LapDataTableModel(QAbstractTableModel):
             flags |= Qt.ItemIsEditable
         return flags
 
-    def test(self):
-        for i, s in enumerate(ascii_lowercase[:8]):
-            self.cs.addCar(s, randint(0, 100))
-            self.cs.storageList[i].initialTime = time.time()
-            for j in range(5):
-                self.cs.appendLapTime(i, j)
+
+
+    def formatTime(self, value):
+        if(len(value) > 0 and len(value) <= 2):
+            print(time.strptime(value, "%S").tm_sec)
+        elif len(value) > 2 and len(value) <= 4:
+            print(time.strptime(value, "%M %S").tm_min)
+        elif len(value) > 4 and len(value) <= 6:
+            print(time.strptime(value, "%H %M %S").tm_hour)
+
+
+
 

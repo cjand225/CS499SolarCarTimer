@@ -1,5 +1,6 @@
 import unittest
 import sys
+import time
 import re
 
 from src.table.Car import Car
@@ -19,19 +20,17 @@ class testCar(unittest.TestCase):
 
     def testaddTime(self):
         myCar = Car(1, "University of Kentucky", 23)
-        myCar.addLapTime(1, 2, 3, 32)
-        firstLap = myCar.LapList[0]
+        seedTime = time.time()
+        myCar.setSeedValue(seedTime)
+        testTime = time.time()
+        myCar.addLapTime(testTime)
+        firstLap = testTime - seedTime
 
-        # check if all lap data is correct within the list
-        self.assertEqual(firstLap[0], 0)
-        self.assertEqual(firstLap[1], 1)
-        self.assertEqual(firstLap[2], 2)
-        self.assertEqual(firstLap[3], 3)
-        self.assertEqual(firstLap[4], 32)
+        self.assertEqual(firstLap, myCar.getLap(0))
 
     def testAddMultipleLaps(self):
         myCar = Car(1, "University of Kentucky", 23)
-        myCar.addLapTime(2, 3, 4, 5)
+        myCar.addLapTime(time.time())
         myCar.addLapTime(6, 7, 8, 9)
         firstLap = myCar.LapList[0]
         secondLap = myCar.LapList[1]
