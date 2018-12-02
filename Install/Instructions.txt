@@ -7,19 +7,21 @@ conda list --explicit > envBuild.txt
 #To Install Existing env from file
 conda create -n <env-name> --file envBuild.txt
 conda activate <env-name>
+
+#Must Install before using Application via Pip:
 pip install opencv-contrib-python
 pip install pytimeparse
 
 
-#packages required to run
-Python3
+#Package Dependencies:
+Python 3.6
 PyQt5
 Opencv-contrib-python
 numpy
 matplotlib
 scipy
 
-#for Vision Module
+#for Vision Module (For un-implemented Detection)
 tesseract
 imutils
 
