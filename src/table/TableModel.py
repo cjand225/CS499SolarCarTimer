@@ -34,12 +34,12 @@ class TableModel(QAbstractTableModel):
     def rowCount(self, p):
         lapListLengths = [len(i.LapList) for i in self.carStore.storageList]
         if lapListLengths:
-            return max(max(lapListLengths), self.defaultRows)
+            return max(max(lapListLengths)+1, self.defaultRows)
         else:
             return self.defaultRows
 
     def columnCount(self, p):
-        return max(len(self.carStore.storageList), self.defaultColumns)
+        return max(len(self.carStore.storageList)+1, self.defaultColumns)
 
     def data(self, item, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
