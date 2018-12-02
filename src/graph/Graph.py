@@ -22,12 +22,13 @@ class Graph(QWidget):
         super().__init__()
         self.UIPath = uipath
         self.GraphDict = ["Lap vs Time", "Average Lap vs Time", "Minimum Time", "Maximum Time"]
-        self.graphedTeamList = []
         self.currentGraphType = self.GraphDict[GraphType.LAP_TIME]
+        self.graphedTeamList = []
         self.currGraphNum = 1
         self.inMinutes = False
 
         self.teamList = []
+
 
         self.initUI()
         self.addGraphs()
@@ -44,14 +45,12 @@ class Graph(QWidget):
         for graph in self.GraphDict:
             self.GraphTypes.addItem(graph)
 
+
     def bindListeners(self):
         self.ApplyGraphBtn.clicked.connect(self.drawGraph)
-        # action listener for graph type
         self.GraphTypes.activated[str].connect(self.typeChosen)
-        # add team list listener
         self.ChosenTeamList.itemDoubleClicked.connect(self.chosenTeamClick)
         self.MinuteButton.toggled.connect(self.timeToggle)
-        # add action listener to team choice
         self.TeamChoiceBox.activated.connect(self.teamChosen)
 
     def updateTeamList(self, newTeamList):
@@ -59,12 +58,9 @@ class Graph(QWidget):
 
     def populateTeamChoiceBox(self):
         self.graphedTeamList = []
-        self.currGraphNum = 1
-        index = 0
-
-        for car in self.teamList:
-            self.TeamChoiceBox.addItem(str(car.getTeam()), index)
-            index += 1
+        self.TeamChoiceBox.clear()
+        for x in range(0, len(self.teamList)):
+            self.TeamChoiceBox.addItem(str(self.teamList[x].getTeam()), x)
 
     def timeToggle(self):
         self.inMinutes = self.MinuteButton.isChecked()
@@ -84,7 +80,7 @@ class Graph(QWidget):
             self.maxTimeGraph()
 
     def teamChosen(self, index):
-        self.addTeamToGraphList(self.TeamChoiceBox.itemData(index))
+        self.addTeamToGraphList(self.TeamChoiceBox.currentIndex())
 
     def addTeamToGraphList(self, index):
         # check for space in list
@@ -92,7 +88,7 @@ class Graph(QWidget):
             return False
 
         # if not in list add it
-        if self.teamList[index] not in self.graphedTeamList:
+        if not (self.teamList[index] in self.graphedTeamList):
             self.ChosenTeamList.addItem(self.teamList[index].getTeam())
             self.graphedTeamList.append(self.teamList[index])
             return True
@@ -100,7 +96,7 @@ class Graph(QWidget):
 
     def removeTeamFromGraphList(self, teamName):
         # search graph list and remove found element
-        for i in range(len(self.graphedTeamList)):
+        for i in range(0, len(self.graphedTeamList) - 1):
             team = self.graphedTeamList[i]
             if team.getTeam() == teamName:
                 self.graphedTeamList.pop(i)
@@ -123,24 +119,15 @@ class Graph(QWidget):
         elapsed = []
         if self.inMinutes:
             for lap in lapList:
-                elapsed.append(lap.elapsedTime / 60)
+                elapsed.append(lap / 60)
         else:
             for lap in lapList:
-                elapsed.append(lap.elapsedTime)
-
+                elapsed.append(lap)
         return elapsed
 
     def lapVsTimeGraph(self):
-        # increments the figure number to guarantee new window
+
         plt.figure(self.currGraphNum)
-        self.currGraphNum += 1
-
-        graphRange = np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0)
-
-        # plot data
-        for team in self.graphedTeamList:
-            plt.plot(graphRange, self.getElapsed(team.LapList), label=team.getTeam())
-
         # set labels
         plt.title('Lap vs Time')
         plt.xlabel('Lap')
@@ -149,12 +136,29 @@ class Graph(QWidget):
         else:
             plt.ylabel('Time (seconds)')
 
-        plt.xticks(np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0))
-        plt.legend()
+        # plot data
+        index = 0
+        for team in self.graphedTeamList:
+            durationList = []
+            graphRange = np.arange(0, len(self.graphedTeamList[index].LapList), 1.0)
+            plt.xticks(np.arange(1.0, len(self.graphedTeamList[index].LapList) + 1, 1.0))
+            for lap in team.LapList:
+                durationList.append(lap.getElapsed())
+            durationList = self.getElapsed(durationList)
+            #plot curent Team
+            print(team.getTeam())
+            print(team.getCarNum())
+            plt.plot(graphRange, durationList, label=team.getTeam())
+            index += 1
 
+
+        plt.legend()
         plt.tight_layout()
         plt.grid(True)
         plt.show()
+
+        # increments the figure number to guarantee new window for next graph
+        self.currGraphNum += 1
 
     def avgLapVsTimeGraph(self):
         # increments the figure number to guarantee new window
