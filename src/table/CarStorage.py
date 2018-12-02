@@ -44,7 +44,7 @@ class CarStorage(QObject):
 
     def createCar(self, carNum, carOrg):
         # check valid carNumber and Valid Car Org
-        newCar = Car(self.getLatestCarID(), carNum, str(carOrg))
+        newCar = Car(self.getLatestCarID(), str(carOrg), carNum)
         if self.SeedValue is not None:
             newCar.setSeedValue(self.SeedValue)
         self.storageList.append(newCar)
@@ -55,7 +55,10 @@ class CarStorage(QObject):
     # runs each size 2 list item through createCar Function
     def createCars(self, list):
         for item in list:
-            self.createCar(item[0], item[1])
+            if(str(item[0]).isdigit()):
+                self.createCar(item[0], item[1])
+            else:
+                self.createCar(item[1], item[0])
 
     """
          Function: addExistingCar
