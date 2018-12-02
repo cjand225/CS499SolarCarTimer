@@ -146,13 +146,11 @@ class Graph(QWidget):
                 durationList.append(lap.getElapsed())
             durationList = self.getElapsed(durationList)
             #plot curent Team
-            print(team.getTeam())
-            print(team.getCarNum())
             plt.plot(graphRange, durationList, label=team.getTeam())
             index += 1
 
-
-        plt.legend()
+        if len(self.graphedTeamList) > 0:
+            plt.legend()
         plt.tight_layout()
         plt.grid(True)
         plt.show()
@@ -161,26 +159,8 @@ class Graph(QWidget):
         self.currGraphNum += 1
 
     def avgLapVsTimeGraph(self):
-        # increments the figure number to guarantee new window
+
         plt.figure(self.currGraphNum)
-        self.currGraphNum += 1
-
-        graphRange = np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0)
-
-        # plot team lap averages
-        for team in self.graphedTeamList:
-            lapAverages = []
-            lapList = team.LapList
-
-            # for every lap for current team calculate the average time
-            if self.inMinutes:
-                for i in range(len(team.LapList)):
-                    lapAverages.append(lapList[i].recordedTime / ((i + 1) * 60))
-            else:
-                for i in range(len(team.LapList)):
-                    lapAverages.append(lapList[i].recordedTime / (i + 1))
-
-            plt.plot(graphRange, lapAverages, label=team.getTeam())
 
         # set labels
         plt.title('Lap vs Average Time')
@@ -190,12 +170,32 @@ class Graph(QWidget):
         else:
             plt.ylabel('Average Time (seconds)')
 
-        plt.xticks(np.arange(1.0, len(self.graphedTeamList[0].LapList) + 1, 1.0))
-        plt.legend()
+        # plot team lap averages
+        index = 0
+        for team in self.graphedTeamList:
+            lapAverages = []
+            graphRange = np.arange(0, len(team.LapList), 1.0)
+            plt.xticks(np.arange(1.0, len(team.LapList) + 1, 1.0))
+
+            # for every lap for current team calculate the average time
+            currLap = 0
+            for lap in team.LapList:
+                if self.inMinutes:
+                    lapAverages.append((lap.getElapsed() / ((currLap + 1) * 60)))
+                else:
+                    lapAverages.append(lap.getElapsed() / (currLap + 1))
+                currLap += 1
+
+            plt.plot(graphRange, lapAverages, label=team.getTeam())
+        if len(self.graphedTeamList) > 0:
+            plt.legend()
 
         plt.tight_layout()
         plt.grid(True)
         plt.show()
+
+        # increments the figure number to guarantee new window
+        self.currGraphNum += 1
 
     def minTimeGraph(self):
         labels = []
@@ -203,7 +203,12 @@ class Graph(QWidget):
 
         # calculate minimum times for teams
         for team in self.graphedTeamList:
-            data.append(min(self.getElapsed(team.LapList)))
+            lapList = []
+            for lap in team.LapList:
+                if lap.getElapsed() != 0:
+                    lapList.append(lap.getElapsed())
+
+            data.append(min(lapList))
             labels.append(team.getTeam())
 
         # send data to bar graph
@@ -216,10 +221,16 @@ class Graph(QWidget):
         labels = []
         data = []
 
-        # calculate maximum times for teams
+        # calculate minimum times for teams
         for team in self.graphedTeamList:
-            data.append(max(self.getElapsed(team.LapList)))
+            lapList = []
+            for lap in team.LapList:
+                if lap.getElapsed() != 0:
+                    lapList.append(lap.getElapsed())
+
+            data.append(max(lapList))
             labels.append(team.getTeam())
+
 
         # send data to bar graph
         if self.inMinutes:
@@ -252,7 +263,8 @@ class Graph(QWidget):
         # remove x ticks
         plt.xticks(index, ' ')
         # add legend
-        plt.legend()
+        if len(data) > 0:
+            plt.legend()
 
         plt.tight_layout()
         plt.show()

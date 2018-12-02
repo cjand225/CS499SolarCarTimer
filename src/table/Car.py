@@ -111,7 +111,6 @@ class Car(QObject):
 
     def addLapSemiAuto(self):
         timeBeforeIndex = self.getTotalElapsedTime(self.LapCount)
-        print(timeBeforeIndex)
         timeSinceStart = time.time() - self.SeedValue
         recordedTime = 0
 
