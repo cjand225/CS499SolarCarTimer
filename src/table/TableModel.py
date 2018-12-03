@@ -34,12 +34,12 @@ class TableModel(QAbstractTableModel):
     def rowCount(self, p):
         lapListLengths = [len(i.LapList) for i in self.carStore.storageList]
         if lapListLengths:
-            return max(max(lapListLengths)+1, self.defaultRows)
+            return max(max(lapListLengths) + 1, self.defaultRows)
         else:
             return self.defaultRows
 
     def columnCount(self, p):
-        return max(len(self.carStore.storageList)+1, self.defaultColumns)
+        return max(len(self.carStore.storageList) + 1, self.defaultColumns)
 
     def data(self, item, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
@@ -57,7 +57,7 @@ class TableModel(QAbstractTableModel):
             if role == Qt.EditRole:
                 if item.column() < len(self.carStore.storageList) and item.row() == len(
                         self.carStore.storageList[item.column()].LapList):
-                        self.carStore.appendLapTime(item.column(), formattedValue)
+                    self.carStore.appendLapTime(item.column(), formattedValue)
                 else:
                     self.carStore.storageList[item.column()].editLapTime(item.row(), formattedValue)
                 return True
@@ -85,12 +85,20 @@ class TableModel(QAbstractTableModel):
             flags |= Qt.ItemIsEditable
         return flags
 
-    #takes a time string and converts to workable format
+    # takes a time string and converts to workable format
+    # def formatValue(self, value):
+    #     if (value.isdigit()):
+    #         formString = self.valueToTimeString(value)
+    #         # print(formString)
+    #         return pytimeparse.parse(formString)
+
     def formatValue(self, value):
         if (value.isdigit()):
             formString = self.valueToTimeString(value)
-            # print(formString)
             return pytimeparse.parse(formString)
+        else:
+            getDebugLog("Format Value {} was not a digit.".format(value))
+            # print("Was not digit.")
 
     def valueToTimeString(self, val):
         timeList = [val[i:i + 2] for i in range(0, len(val), 2)]
@@ -113,17 +121,21 @@ class TableModel(QAbstractTableModel):
         if len(formString) <= 2:
             formString = formString + "s"
 
+        #print(formString)
+
         return formString
 
     def intergerToTimeString(self, int):
-        Hours = divmod(int, 3600)
-        Minutes = divmod(int, 60)
-        Seconds = divmod(int, 60)
+        Days = divmod(int, 24 * 3600)
+        Hours = divmod(Days[1], 3600)
+        Minutes = divmod(Hours[1], 60)
+        Seconds = divmod(Minutes[1], 60)
 
         Hours = str(Hours[0])
         Minutes = str(Minutes[0])
         Seconds = str(Seconds[1])
 
+        #print(Minutes)
         if len(Hours) == 1:
             Hours = '0' + Hours
 
@@ -132,6 +144,8 @@ class TableModel(QAbstractTableModel):
 
         if len(Seconds) == 1:
             Seconds = '0' + Seconds
+
+        #print(Hours + ':' + Minutes + ":" + Seconds)
 
         return Hours + ':' + Minutes + ":" + Seconds
 
