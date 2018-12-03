@@ -43,28 +43,50 @@ class TableModel(QAbstractTableModel):
 
     def data(self, item, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
-            if item.column() < len(self.carStore.storageList) and item.row() < len(
-                    self.carStore.storageList[item.column()].LapList):
+            if item.column() < len(self.carStore.storageList) and item.row() < len(self.carStore.storageList[item.column()].LapList):
                 timeData = self.carStore.storageList[item.column()].LapList[item.row()].getElapsed()
-                newString = self.intergerToTimeString(timeData)
+                #newString = self.intergerToTimeString(timeData)
+                newString = str(timedelta(seconds=timeData))
                 return str(newString)
             else:
                 return QVariant()
 
-    def setData(self, item, value, role):
-        formattedValue = self.formatValue(value)
-        if formattedValue is not None:
-            if role == Qt.EditRole:
-                if item.column() < len(self.carStore.storageList) and item.row() == len(
-                        self.carStore.storageList[item.column()].LapList):
-                        self.carStore.appendLapTime(item.column(), formattedValue)
-                else:
-                    self.carStore.storageList[item.column()].editLapTime(item.row(), formattedValue)
-                return True
+    def setData(self, i, value, role):
+        #formattedValue = self.formatValue(value)
+        try:
+            value_split = value.split(".")
+            value_time = strptimeMultiple(value_split[0],["%H:%M:%S","%M:%S","%S"])
+            seconds = timedelta(hours=value_time.hour,minutes=value_time.minute,seconds=value_time.second).total_seconds()
+            if len(value_split) == 2:
+                milliseconds = int(value_split[1])
+                seconds = seconds + (milliseconds/pow(10,len(value_split[1])))
+            elif len(value_split) > 2:
+                return False
+        except ValueError:
+            return False
+        if role == Qt.EditRole:
+            if i.column()<len(self.carStore.storageList):
+                #lapTime = Lap_Time(self.cs.storageList[i.column()-1].recordedTime+seconds,seconds)
+                if  i.row() < len(self.carStore.storageList[i.column()].LapList):
+                    #self.cs.storageList[i.column()].LapList[i.row()][1] = value
+                    self.carStore.storageList[i.column()].editLapTime(i.row(),seconds)
+                    return True
+                elif i.row()==len(self.carStore.storageList[i.column()].LapList):
+                    self.carStore.appendLapTime(i.column(),seconds)
+                    return True
             else:
                 return False
-        else:
-            return False
+        # if formattedValue is not None:
+        #     if role == Qt.EditRole:
+        #         if item.column() < len(self.carStore.storageList) and item.row() == len(self.carStore.storageList[item.column()].LapList):
+        #                 self.carStore.appendLapTime(item.column(), formattedValue)
+        #         else:
+        #             self.carStore.storageList[item.column()].editLapTime(item.row(), formattedValue)
+        #         return True
+        #     else:
+        #         return False
+        # else:
+        #     return False
 
     def headerData(self, section, orientation, role):
         if role == Qt.DisplayRole:
@@ -87,10 +109,13 @@ class TableModel(QAbstractTableModel):
 
     #takes a time string and converts to workable format
     def formatValue(self, value):
+        #strptimeMultiple(value,["%H:%M:%S","%M:%S","%S"])
         if (value.isdigit()):
             formString = self.valueToTimeString(value)
             # print(formString)
             return pytimeparse.parse(formString)
+        else:
+            print("Was not digit.")
 
     def valueToTimeString(self, val):
         timeList = [val[i:i + 2] for i in range(0, len(val), 2)]

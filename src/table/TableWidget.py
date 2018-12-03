@@ -30,7 +30,7 @@ class TableWidget(QWidget):
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         for headerIndex in range(len(self.tableView.horizontalHeader())):
             # sectionSize computes the width of the column header.
-            # As a side effect, it also forces the header to resize to fit its container.
+            # As a side effect, it also forces the header to resize to f it its container.
             self.tableView.horizontalHeader().sectionSize(headerIndex)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
         
