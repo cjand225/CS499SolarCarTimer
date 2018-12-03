@@ -97,8 +97,9 @@ def isValidCar(num, org):
 
 
 def intergerToTimeString(int):
-    Hours = divmod(int, 3600)
-    Minutes = divmod(int, 60)
+    Days = divmod(int, 24 * 3600)
+    Hours = divmod(Days[1], 3600)
+    Minutes = divmod(Hours[1], 60)
     Seconds = divmod(int, 60)
 
     Hours = str(Hours[0])

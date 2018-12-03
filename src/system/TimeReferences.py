@@ -37,9 +37,6 @@ def splitTimes(text):
       min = int(text[0:2])
       sec = int(text[2:])
 
-      print([min, sec])
-      print('\n')
-
       delta = datetime.timedelta(minutes=min, seconds=sec).total_seconds()
     # seconds
     elif len(text) >= 1 and len(text) <= 2:
