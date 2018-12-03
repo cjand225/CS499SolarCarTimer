@@ -1,6 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.Qt import Qt
+from PyQt5.QtCore import QObject, pyqtSignal, QSortFilterProxyModel
 from PyQt5.QtCore import QSize
 
 from operator import itemgetter
@@ -8,23 +9,45 @@ import os
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 from src.graph.LeaderBoardWidget import LeaderBoardWidget
 from src.graph.LeaderBoardModel import LeaderBoardModel
+from src.graph.LeaderBoardSortFilterProxyModel import LeaderBoardSortFilterProxyModel
 
 
 class LeaderBoard():
     resourcesDir = os.path.abspath(os.path.join(__file__, "./../../../resources"))
     LeaderBoardUIPath = os.path.join(resourcesDir, 'LeaderBoard.ui')
 
-    def __init__(self):
+    def sort(self):
+        oldSort = self.boardModel.sortColumn()
+        self.boardModel.invalidate()
+        self.widget.tableView.sortByColumn(oldSort,Qt.AscendingOrder)
+        #self.boardModel.sort(self.boardModel.sortColumn())
+
+    def __init__(self,cs=None):
         self.widget = None
         self.dataStorage = None
-        self.horzHeader = ['Position', 'Car Number', 'Team Name', 'Number of Laps Completed', 'Fastest Lap']
-
+        self.horzHeader = ['Car Number', 'Team Name', 'Laps Completed', 'Fastest Lap']
+        self.sortableColumns = [2,3]
         self.newCarList = [[]]
 
         self.initWidget()
-        self.boardModel = LeaderBoardModel(self.widget, self.horzHeader, self.dataStorage)
+        self.carStore = cs
+        self.boardModel = LeaderBoardSortFilterProxyModel(self.widget.tableView,self.sortableColumns)
+        self.boardModel.setSourceModel(LeaderBoardModel(self.widget.tableView, self.horzHeader, self.carStore))
+        self.boardModel.setSortRole(Qt.UserRole)
+        #self.boardModel.sort(4)
+        self.widget.tableView.setSortingEnabled(True)
+        self.boardModel.sourceModel().dataChanged.connect(self.sort)
+        self.widget.tableView.horizontalHeader().sortIndicatorChanged.connect(self.sortIndicatorChangedEvent)
+        #print(self.boardModel.sortColumn())
         self.widget.tableView.setModel(self.boardModel)
+        self.widget.fixHeaders(True)
+        self.widget.tableView.sortByColumn(3,Qt.AscendingOrder)
+        #self.widget.tableView.horizontalHeader().sectionResized.connect(self.widget.columnResized)
 
+    def sortIndicatorChangedEvent(self,index,order):
+        if not index in self.sortableColumns:
+            self.widget.tableView.horizontalHeader().setSortIndicator(index,self.boardModel.sortOrder())
+        
     def initWidget(self):
         self.widget = LeaderBoardWidget(self.LeaderBoardUIPath)
 

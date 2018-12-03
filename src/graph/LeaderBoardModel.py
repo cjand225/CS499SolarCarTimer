@@ -11,51 +11,95 @@ from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, ge
 
 
 class LeaderBoardModel(QAbstractTableModel):
-    def __init__(self, parent, headerData, tableList=None):
+    @staticmethod
+    def lapsCompletedKey(c):
+        return c.getLapCount()
+
+    @staticmethod
+    def fastestLapKey(c):
+        return c.getFastestLap()
+    
+    def __init__(self, parent, headerData, cs=None):
         super().__init__(parent)
 
-        self.defaultColumns = 5
+        self.defaultColumns = len(headerData)
         self.defaultRows = 10
-        self.dataList = None
-        self.tableList = tableList
+        # self.dataList = None
+        # self.tableList = tableList
         self.header = headerData
-        self.assignStorage(tableList)
+        self.carStore = cs
+        self.connectActions()
+        #self.dataChanged.connect(lambda: print("hello world1"))
+        #self.sort = type(self).fastestLapKey
+        #self.assignStorage(tableList)
 
-    def setModelData(self, data):
-        self.dataList = data
+    def storageModifiedEvent(self,col,row):
+        # print("storage modified: ",col)
+        leftChangeIndex = self.index(col, 0)
+        rightChangeIndex = self.index(col, self.columnCount())
+        self.dataChanged.emit(leftChangeIndex, leftChangeIndex)
+        # self.headerDataChanged.emit(Qt.Horizontal, col, col)
+        self.headerDataChanged.emit(Qt.Vertical, row, row)
+            
+
+    def connectActions(self):
+        self.carStore.dataModified.connect(self.storageModifiedEvent)
+
+    # def setModelData(self, data):
+    #     self.dataList = data
 
     def rowCount(self, p):
-        if len(self.dataList) > self.defaultRows:
-            return len(self.dataList)
-        else:
-            return self.defaultRows
+        #print(max(len(self.carStore.storageList),self.defaultRows))
+        return max(len(self.carStore.storageList),self.defaultRows)
 
-    def columnCount(self, p):
+    def columnCount(self, p=None):
         return self.defaultColumns
 
-    def setData(self, item, value, role):
-        if role == Qt.DisplayRole:
-            if (item.column() < self.defaultColumns) and item.row() < len(self.dataList):
-                return str(self.getItemAt(item.row(), item.column()))
-            else:
-                return QVariant()
-        else:
-            return QVariant()
+    # def setData(self, item, value, role):
+    #     if role == Qt.EditRole:
+            
+        # if role == Qt.DisplayRole:
+        #     if (item.column() < self.defaultColumns) and item.row() < len(self.dataList):
+        #         return str(self.getItemAt(item.row(), item.column()))
+        #     else:
+        #         return QVariant()
+        # else:
+        #     return QVariant()
 
-    def data(self, item, role=Qt.DisplayRole):
+    def data(self, item, role):
+        #print("data called")
         if role == Qt.DisplayRole:
-            if (item.column() < self.defaultColumns) and item.row() < len(self.dataList):
-                return str(self.getItemAt(item.row(), item.column()))
+            if (item.column() < self.defaultColumns) and item.row() < len(self.carStore.storageList):
+                #print("Item at...")
+                return str(self.getDisplayItemAt(item.row(), item.column()))
+            else:
+                return QVariant()
+        elif role == Qt.UserRole:
+            if (item.column() < self.defaultColumns) and item.row() < len(self.carStore.storageList):
+                return self.getSortItemAt(item.row(), item.column())
             else:
                 return QVariant()
         else:
             return QVariant()
+        
 
     def headerData(self, section, orientation, role):
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
                 if section < self.defaultColumns:
                     return self.header[section]
+                else:
+                    return None
+        elif role == Qt.UserRole:
+            if orientation == Qt.Vertical:
+                if section < len(self.carStore.storageList):
+                    return section+1
+                else:
+                    return None
+        elif role == Qt.UserRole+1:
+            if orientation == Qt.Vertical:
+                if section < len(self.carStore.storageList):
+                    return len(self.carStore.storageList)-section
                 else:
                     return None
 
@@ -108,22 +152,39 @@ class LeaderBoardModel(QAbstractTableModel):
 
         return Hours + ':' + Minutes + ":" + Seconds
 
-    def assignStorage(self, storage):
-        if not storage:
-            self.dataList = []
-        else:
-            self.dataList = storage
+    # def assignStorage(self, storage):
+    #     if not storage:
+    #         self.dataList = []
+    #     else:
+    #         self.dataList = storage
 
-    def getItemAt(self, index, subIndex):
+    def getDisplayItemAt(self, index, subIndex):
         if subIndex == 0:
-            return self.dataList[index].getID() + 1
+            return self.carStore.storageList[index].getCarNum()
         elif subIndex == 1:
-            return self.dataList[index].getCarNum()
+            return self.carStore.storageList[index].getTeam()
         elif subIndex == 2:
-            return self.dataList[index].getTeam()
+            return max(self.carStore.storageList[index].getLapCount()-1,0)
         elif subIndex == 3:
-            return self.dataList[index].getFastestLap()
-        elif subIndex == 4:
-            return self.dataList[index].getLapCount()
+            fastLap = self.carStore.storageList[index].getFastestLap()
+            if fastLap is not None:
+                return str(timedelta(seconds=fastLap))
+            else:
+                return ""
+        else:
+            return None
+
+    def getSortItemAt(self, index, subIndex):
+        if subIndex == 0:
+            return self.carStore.storageList[index].getCarNum()
+        elif subIndex == 1:
+            return self.carStore.storageList[index].getTeam()
+        elif subIndex == 2:
+            # This is kind of a hack, but it's the easiest way to
+            # ensure that getFastestLAp and getLapCount have
+            # compatible orders.
+            return -max(self.carStore.storageList[index].getLapCount()-1,0)
+        elif subIndex == 3:
+            return self.carStore.storageList[index].getFastestLap()
         else:
             return None

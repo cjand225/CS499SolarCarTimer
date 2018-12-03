@@ -72,7 +72,7 @@ class App():
         self.initTable()
         self.initVision()
         self.initGraph()
-        #self.initLeaderBoard()
+        self.initLeaderBoard()
 
 
 
@@ -190,7 +190,7 @@ class App():
     '''
 
     def initLeaderBoard(self):
-        self.leaderBoard = LeaderBoard()
+        self.leaderBoard = LeaderBoard(self.table.CarStoreList)
         if self.leaderBoard is not None:
             getDebugLog().debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
@@ -242,7 +242,7 @@ class App():
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
         self.table.CarStoreList.dataModified.connect(self.graphUpdate)
-        #self.table.CarStoreList.dataModified.connect(self.leaderBoardUpdate)
+        # self.table.CarStoreList.dataModified.connect(self.leaderBoardUpdate)
 
     ''' 
     

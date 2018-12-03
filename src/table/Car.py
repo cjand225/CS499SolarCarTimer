@@ -226,12 +226,17 @@ class Car(QObject):
 
      """
     def getFastestLap(self):
-        fastLap = 999
-        for lap in self.LapList:
-            if lap.getElapsed() > 0 and fastLap == 999:
-                fastLap = lap.getElapsed()
-            else:
-                if fastLap is not None:
-                    if fastLap > lap.getElapsed() and lap.getElapsed() > 0:
-                        fastLap = lap.getElapsed()
-        return fastLap
+        allLaps = self.LapList[1:]
+        if allLaps:
+            # for lap in self.LapList:
+            #     if lap.getElapsed() > 0 and fastLap == 999:
+            #         fastLap = lap.getElapsed()
+            #     else:
+            #         if fastLap is not None:
+            #             if fastLap > lap.getElapsed() and lap.getElapsed() > 0:
+            #                 fastLap = lap.getElapsed()
+            # print([lap.getElapsed() for lap in allLaps])
+            return min([lap.getElapsed() for lap in allLaps])
+        else:
+            return None
+                            
