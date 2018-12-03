@@ -8,7 +8,6 @@ import time
 import os
 from src.system.Validation import *
 from src.table.CarStorage import CarStorage
-from src.table.LapDataTableModel import LapDataTableModel
 from src.table.TableModel import TableModel
 from src.table.TableWidget import TableWidget
 from src.table.AddCarDialog import AddCarDialog
@@ -45,12 +44,19 @@ class Table():
         self.initUI()
         self.initTableModel()
         self.initTable()
+        self.fixHeaders()
         self.initDialogs()
         self.initSemiAuto()
         self.connectActions()
 
+    def fixHeaders(self):
+        self.Widget.initHeaderHorizontal()
+        self.Widget.initHeaderVertical()
+
     def initUI(self):
         self.Widget = TableWidget(self.tableUIPath)
+        self.Widget.initHeaderVertical()
+        self.Widget.show()
         self.tableView = self.Widget.tableView
 
     def connectActions(self):
@@ -69,6 +75,7 @@ class Table():
 
     def initTable(self):
         self.tableView.setModel(self.TableMod)
+
 
     def initCarStorage(self):
         self.CarStoreList = CarStorage()

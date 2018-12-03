@@ -15,7 +15,7 @@ class TableModel(QAbstractTableModel):
     def __init__(self, parent, cs=None):
         super().__init__(parent)
 
-        self.defaultColumns = 19
+        self.defaultColumns = 10
         self.defaultRows = 20
 
         self.assignStorage(cs)

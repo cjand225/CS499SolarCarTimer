@@ -13,10 +13,7 @@ class TableWidget(QWidget):
         self.uiPath = uipath
         self.tableView = None
 
-
         self.initUI()
-        self.initHeaderHorizontal()
-        self.initHeaderVertical()
         self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"), self)
 
 
@@ -29,19 +26,22 @@ class TableWidget(QWidget):
 
 
     def initHeaderHorizontal(self):
-        minSize = 0
+        # Resizes the horizontal header so that the table fits initially without scrollbars.
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         for headerIndex in range(len(self.tableView.horizontalHeader())):
-            minSize = min(minSize, self.tableView.horizontalHeader().sectionSize(headerIndex))
-        self.tableView.horizontalHeader().setMinimumSectionSize(minSize)
+            # sectionSize computes the width of the column header.
+            # As a side effect, it also forces the header to resize to fit its container.
+            self.tableView.horizontalHeader().sectionSize(headerIndex)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        
 
     def initHeaderVertical(self):
-        minSize = 0
+        # Resizes the vertical header so that the table fits initially without scrollbars.
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         for headerIndex in range(len(self.tableView.verticalHeader())):
-            minSize = min(minSize, self.tableView.verticalHeader().sectionSize(headerIndex))
-        self.tableView.verticalHeader().setMinimumSectionSize(minSize)
+            # sectionSize computes the height of the row header.
+            # As a side effect, it also forces the header to resize to fit its container.
+            self.tableView.verticalHeader().sectionSize(headerIndex)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
 
     def test(self):
