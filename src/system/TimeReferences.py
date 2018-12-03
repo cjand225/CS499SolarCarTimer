@@ -3,15 +3,22 @@ import time
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
-def strptimeMultiple(text, formats):
-  myForm = None
-  for f in formats:
-    try:
-      if datetime.datetime.strptime(text, f).time() is not None:
-        return str(datetime.datetime.strptime(text, f).time())
-    except ValueError:
-      pass
-  return myForm
+def strptimeMultiple(text,formats):
+    for f in formats:
+        try:
+            return datetime.datetime.strptime(text,f)
+        except ValueError:
+            pass
+    raise ValueError()
+# def strptimeMultiple(text, formats):
+#   myForm = None
+#   for f in formats:
+#     try:
+#       if datetime.datetime.strptime(text, f).time() is not None:
+#         return str(datetime.datetime.strptime(text, f).time())
+#     except ValueError:
+#       pass
+#   return myForm
 
 
 def splitTimes(text):
