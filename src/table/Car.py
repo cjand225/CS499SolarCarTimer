@@ -123,7 +123,7 @@ class Car(QObject):
         if (recordedTime < 0):
             recordedTime = 0
 
-        getInfoLog().info('Lap Added to Car: {}' )
+        getInfoLog().info('Lap Added to Car: {}')
         self.LapList.append(LapTime(int(recordedTime)))
 
     def addLapManually(self, timeData):
@@ -197,7 +197,7 @@ class Car(QObject):
         return len(self.LapList) - 1
 
     """
-         Function: getTotalElaspedTimeUpToIndex
+         Function: getTotalElaspedTime
          Parameters: self, index
          Return Value: totalElasped (elapsed Time)
          Purpose: Sums the total elapsed time since the seedValue as occured and returns it as time var
@@ -209,3 +209,24 @@ class Car(QObject):
         for currLap in range(0, index):
             totalElasped += int(self.LapList[currLap].getElapsed())
         return totalElasped
+
+    """
+         Function: getFasestLap
+         Parameters: self, index
+         Return Value: fastestLap (in seconds)
+         Purpose: gets the fastest lap that has happened within lapList, Initalially is None, and adds the first
+                  lap that is greater than 0 if the current fastLap is none, then when it has a value, if the value
+                  in the list is lower, it chooses that value for the new fastLap value and repeats until the lowest
+                  value has been found.
+
+     """
+    def getFastestLap(self):
+        fastLap = 999
+        for lap in self.LapList:
+            if lap.getElapsed() > 0 and fastLap == 999:
+                fastLap = lap.getElapsed()
+            else:
+                if fastLap is not None:
+                    if fastLap > lap.getElapsed() and lap.getElapsed() > 0:
+                        fastLap = lap.getElapsed()
+        return fastLap

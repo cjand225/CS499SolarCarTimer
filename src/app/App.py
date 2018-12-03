@@ -76,8 +76,7 @@ class App():
 
 
 
-        self.mainWindow.actionSemiAuto.triggered.connect(self.table.updateSemiAuto)
-        self.mainWindow.pushSemiAuto.clicked.connect(self.table.updateSemiAuto)
+
 
 
         # adding and connecting essential components to user interface
@@ -246,6 +245,7 @@ class App():
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
         self.table.CarStoreList.dataModified.connect(self.graphUpdate)
+        self.table.CarStoreList.dataModified.connect(self.leaderBoardUpdate)
 
     ''' 
     
@@ -304,7 +304,7 @@ class App():
             self.saveFile()
             self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
-            self.infoLog.debug('[' + __name__ + '] ' + 'Could not save data to: ' + newFile)
+            self.infoLog.debug('[' + __name__ + '] ' + 'Could not save data to: ' + str(newFile))
 
     ''' 
 
@@ -321,13 +321,9 @@ class App():
         readFile = self.mainWindow.openFileDialog()
         if readFile is not None and readFile != '':
             self.writeFile = readFile
-            cars = loadCSV(readFile)
-            self.mainWindow.SemiAutoWidget.deleteAllCars()
-            self.table.CarStoreList = CarStorage()
-            self.table.initTableModel()
-            self.table.tableView.setModel(self.table.TableMod)
-            for car in cars:
-                self.addCar(car)
+
+
+
 
     ''' 
 
@@ -348,3 +344,6 @@ class App():
 
     def graphUpdate(self):
         self.graph.handleUpdate(self.table.getCarStorage())
+
+    def leaderBoardUpdate(self):
+        self.leaderBoard.updateData(self.table.getCarStorage())

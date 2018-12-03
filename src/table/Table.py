@@ -69,7 +69,6 @@ class Table():
         return self.Widget
 
     def initTableModel(self):
-        #self.TableMod = LapDataTableModel(self.Widget, self.CarStoreList)
         self.TableMod = TableModel(self.Widget, self.CarStoreList)
 
     def initTable(self):

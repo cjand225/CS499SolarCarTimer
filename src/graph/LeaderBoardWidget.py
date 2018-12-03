@@ -2,7 +2,6 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.uic import loadUi
 from PyQt5.Qt import *
-
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -14,13 +13,14 @@ class LeaderBoardWidget(QWidget):
         self.uiPath = uiPath
 
         self.initUI()
-        self.initHeaderHorizontal()
-        self.initHeaderVertical()
 
     def initUI(self):
         self.ui = loadUi(self.uiPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
+    def resizeEvent(self, a0: QResizeEvent):
+        self.initHeaderHorizontal()
+        self.initHeaderVertical()
 
     def initHeaderHorizontal(self):
         minSize = 0

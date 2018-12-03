@@ -7,7 +7,6 @@
     Depends On: Car
 
 """
-
 from PyQt5.QtCore import QObject, pyqtSignal
 from src.table.Car import Car
 from src.system.TimeReferences import LapTime
@@ -60,23 +59,6 @@ class CarStorage(QObject):
             else:
                 self.createCar(item[1], item[0])
 
-    """
-         Function: addExistingCar
-         Parameters: self, ID, carOrg, carNum
-         Return Value: N/A
-         Purpose: appends a car class structure to the storageList by receiving input values
-                 for the car via parameters and increments the nextID to be used to indexing
-                 each car within the list with its current position within the list.
-
-     """
-
-    def addExistingCar(self, car):
-        self.storageList.append(car)
-        if self.SeedValue is not None:
-            car.setSeedValue(self.SeedValue)
-        self.LatestCarID += 1
-        self.dataModified.emit(car.ID, 0)
-        car.lapChanged.connect(lambda l: self.dataModified.emit(car.ID, l))
 
     """
          Function: removeCar
@@ -208,6 +190,7 @@ class CarStorage(QObject):
 
     def getCarListCopy(self):
         return self.storageList.copy()
+
 
     """
          Function: getCarNamesList
