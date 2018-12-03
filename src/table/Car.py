@@ -1,6 +1,7 @@
 import time
 from PyQt5.QtCore import pyqtSignal, QObject
 from src.system.TimeReferences import LapTime
+from src.system.Validation import intergerToTimeString
 from datetime import timedelta
 from src.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
@@ -125,9 +126,11 @@ class Car(QObject):
 
         getInfoLog().info('Lap Added to Car: {}')
         self.LapList.append(LapTime(int(recordedTime)))
+        getInfoLog().info('Lap Time {} added Car: {} , {} by SemiAuto.'.format(intergerToTimeString(int(recordedTime)),self.TeamName, self.CarNum))
 
     def addLapManually(self, timeData):
         self.LapList.append(LapTime(timeData))
+        getInfoLog().info('Lap Time {} added Car: {} , {} by Manual.'.format(intergerToTimeString(int(timeData)),self.TeamName, self.CarNum))
 
     """
          Function: editLapTime
@@ -159,6 +162,7 @@ class Car(QObject):
                     self.LapList[index + 1].setElapsed(0)
 
             self.lapChanged.emit(len(self.LapList))
+            getInfoLog().info('Lap {} edited for Car: {} , {} '.format(index, self.TeamName, self.CarNum))
 
     """
          Function: getLap
@@ -184,6 +188,7 @@ class Car(QObject):
 
     def removeLapTime(self, lapID):
         self.LapList[lapID] = LapTime(self.SeedValue - self.SeedValue)
+        getInfoLog().info('Lap {} removed for Car: {} , {} '.format(lapID, self.TeamName, self.CarNum))
 
     """
          Function: getLatestLapID

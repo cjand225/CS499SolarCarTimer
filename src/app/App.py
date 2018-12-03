@@ -72,10 +72,7 @@ class App():
         self.initTable()
         self.initVision()
         self.initGraph()
-        self.initLeaderBoard()
-
-
-
+        #self.initLeaderBoard()
 
 
 
@@ -245,7 +242,7 @@ class App():
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
         self.table.CarStoreList.dataModified.connect(self.graphUpdate)
-        self.table.CarStoreList.dataModified.connect(self.leaderBoardUpdate)
+        #self.table.CarStoreList.dataModified.connect(self.leaderBoardUpdate)
 
     ''' 
     

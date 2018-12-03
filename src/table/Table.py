@@ -78,9 +78,6 @@ class Table():
     def initCarStorage(self):
         self.CarStoreList = CarStorage()
 
-        self.CarStoreList.createCar(1,1)
-        self.CarStoreList.createCar(2, 2)
-
 
     def getCarStorage(self):
         return self.CarStoreList.getCarListCopy()

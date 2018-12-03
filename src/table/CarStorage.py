@@ -27,8 +27,9 @@ class CarStorage(QObject):
         self.enableOffset = False
 
     def setSeedValue(self, seedTime):
-        if self.SeedValue is None:
+        if self.SeedValue is None and len(self.storageList) > 0:
             self.SeedValue = seedTime
+            getInfoLog().info('[' + __name__ + ']' + 'Setting Seed Value for All Cars')
             self.setSeeds()
 
     def setSeeds(self):
@@ -47,6 +48,7 @@ class CarStorage(QObject):
         if self.SeedValue is not None:
             newCar.setSeedValue(self.SeedValue)
         self.storageList.append(newCar)
+        getInfoLog().info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(carOrg, carNum))
         self.LatestCarID += 1
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))

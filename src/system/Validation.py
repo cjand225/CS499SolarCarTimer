@@ -94,3 +94,24 @@ def carExists(storageList, num, org):
 
 def isValidCar(num, org):
     return isValidInteger(num, RegExpCarNum) and isValidString(org, RegExpOrg)
+
+
+def intergerToTimeString(int):
+    Hours = divmod(int, 3600)
+    Minutes = divmod(int, 60)
+    Seconds = divmod(int, 60)
+
+    Hours = str(Hours[0])
+    Minutes = str(Minutes[0])
+    Seconds = str(Seconds[1])
+
+    if len(Hours) == 1:
+        Hours = '0' + Hours
+
+    if len(Minutes) == 1:
+        Minutes = '0' + Minutes
+
+    if len(Seconds) == 1:
+        Seconds = '0' + Seconds
+
+    return Hours + ':' + Minutes + ":" + Seconds
