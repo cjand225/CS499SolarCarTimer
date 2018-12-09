@@ -1,0 +1,2 @@
+recursive-include manuals *
+recursive-include resources *
