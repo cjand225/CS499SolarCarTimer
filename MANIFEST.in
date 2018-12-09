@@ -1,2 +1,3 @@
 recursive-include manuals *
 recursive-include resources *
+global-exclude .gitignore
