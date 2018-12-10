@@ -60,7 +60,7 @@ class LapTime():
     return int(self.elapsedTime)
 
   def __str__(self):
-    return str(round(datetime.timedelta(seconds=self.elapsedTime)))
+    return str(round(datetime.timedelta(seconds=self.elapsedTime).seconds))
 
   def __int__(self):
       return int(datetime.timedelta(seconds=self.elapsedTime).total_seconds())
