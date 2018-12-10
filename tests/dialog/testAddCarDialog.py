@@ -2,8 +2,8 @@ import sys, unittest
 from PyQt5.Qt import QApplication, Qt
 from PyQt5.QtWidgets import QDialog
 from PyQt5.QtTest import QSignalSpy
-from src.app.App import App
-from src.table.AddCarDialog import AddCarDialog
+from SCTimeUtility.app.App import App
+from SCTimeUtility.table.AddCarDialog import AddCarDialog
 
 
 class TestAddCarDialog(unittest.TestCase):

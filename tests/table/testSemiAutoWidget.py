@@ -1,12 +1,12 @@
 import sys, os, unittest, time
 from threading import Thread
 
-sys.path.insert(0, os.path.abspath("src"))
+sys.path.insert(0, os.path.abspath("SCTimeUtility"))
 from PyQt5.Qt import QApplication, Qt
 from PyQt5.QtTest import QSignalSpy
 from PyQt5.QtGui import QBrush, QPalette
-from src.app.App import App
-from src.table.Car import Car
+from SCTimeUtility.app.App import App
+from SCTimeUtility.table.Car import Car
 
 
 class TestSemiAutoWidget(unittest.TestCase):

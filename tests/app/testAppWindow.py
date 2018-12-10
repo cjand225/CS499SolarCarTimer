@@ -1,13 +1,13 @@
 import unittest
 import sys
-from src.app.App import App
-from src.app.AppWindow import AppWindow
-from src.table.SemiAutoWidget import SemiAutoWidget
-from src.table.Table import Table
-from src.video.VisionWidget import VisionWidget
-from src.log.LogWidget import LogWidget
-from src.graph.Graph import Graph
-from src.graph.GraphOptionsWidget import GraphOptions
+from SCTimeUtility.app.App import App
+from SCTimeUtility.app.AppWindow import AppWindow
+from SCTimeUtility.table.SemiAutoWidget import SemiAutoWidget
+from SCTimeUtility.table.Table import Table
+from SCTimeUtility.video.VisionWidget import VisionWidget
+from SCTimeUtility.log.LogWidget import LogWidget
+from SCTimeUtility.graph.Graph import Graph
+from SCTimeUtility.graph.GraphOptionsWidget import GraphOptions
 
 
 class TestAppWindowMethods(unittest.TestCase):

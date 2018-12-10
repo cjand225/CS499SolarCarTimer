@@ -1,9 +1,9 @@
 import os, sys, unittest
 
-sys.path.insert(0, os.path.abspath("src"))
+sys.path.insert(0, os.path.abspath("SCTimeUtility"))
 from time import time
-from src.system.Prediction import predictNextLapTime, LapPredictionError
-from src.system.TimeReferences import LapTime
+from SCTimeUtility.system.Prediction import predictNextLapTime, LapPredictionError
+from SCTimeUtility.system.TimeReferences import LapTime
 from tests.system.GenerateLapTimes import generateLapTimes
 
 

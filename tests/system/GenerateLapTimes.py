@@ -1,6 +1,6 @@
 from time import time
 import numpy as np
-from src.system.TimeReferences import Lap_Time
+from SCTimeUtility.system.TimeReferences import Lap_Time
 
 
 def generateLapTimes(elapsedMean, elapsedStd, n, seed=None, currentTime=None):

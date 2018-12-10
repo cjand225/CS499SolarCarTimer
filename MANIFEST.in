@@ -1,3 +1,4 @@
 recursive-include manuals *
 recursive-include resources *
+include SCTimeUtility/resources/*.ui
 global-exclude .gitignore

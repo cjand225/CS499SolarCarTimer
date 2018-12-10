@@ -1,6 +1,6 @@
 import sys, os, unittest, time
 
-sys.path.insert(0, os.path.abspath("src"))
+sys.path.insert(0, os.path.abspath("SCTimeUtility"))
 from PyQt5.Qt import QApplication
 from PyQt5.QtTest import QSignalSpy
 from tests.table.ElidedLabelTestWidget import ElidedLabelTestWidget

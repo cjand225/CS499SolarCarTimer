@@ -3,7 +3,7 @@ import sys
 import time
 import re
 
-from src.table.Car import Car
+from SCTimeUtility.table.Car import Car
 
 
 class testCar(unittest.TestCase):

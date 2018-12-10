@@ -1,5 +1,5 @@
-from src.table.Car import Car
-from src.table.CarStorage import CarStorage
+from SCTimeUtility.table.Car import Car
+from SCTimeUtility.table.CarStorage import CarStorage
 import re
 import unittest
 

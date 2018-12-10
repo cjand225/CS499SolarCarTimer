@@ -1,7 +1,7 @@
 import unittest
 import sys
-from src.app.App import App
-from src.table.Table import Table
+from SCTimeUtility.app.App import App
+from SCTimeUtility.table.Table import Table
 
 from PyQt5.Qt import QApplication
 from PyQt5.QtWidgets import QMainWindow
