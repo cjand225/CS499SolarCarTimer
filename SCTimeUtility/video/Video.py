@@ -11,7 +11,7 @@ import cv2
 from PyQt5.QtGui import QImage, QPixmap
 from PyQt5.QtCore import *
 
-from SCTimeUtility.video.VisionWidget import VisionWidget
+from SCTimeUtility.video.VideoWidget import VisionWidget
 from SCTimeUtility.video.CaptureThread import CaptureThread
 from SCTimeUtility.video.ImageProcessThread import ImageProcessThread
 from SCTimeUtility.video.DetectionThread import DetectThread
@@ -98,8 +98,9 @@ class Video():
         if self.DetectThread.isRunning():
             self.DetectThread.stop()
             self.DetectThread.join()
+        self.VisWidget.clearCanvas()
 
     def startThreads(self):
         self.CapThread.start()
         self.ProcThread.start()
-        # self.DetectThread.start()
+        self.DetectThread.start()

@@ -8,7 +8,7 @@ Depends On:
             Classes: QWidget, QMainWindow, TableWidget, SemiAutoWidget, VisionWidget, GraphWidget,
                      LogWidget, GraphOptionsWidget
 
-            Files: Table.py, SemiAutoWidget.py, VisionWidget.py, LogWidget.py, Graph.py
+            Files: Table.py, SemiAutoWidget.py, VideoWidget.py, LogWidget.py, Graph.py
                    GraphOptions.py,
 '''
 from PyQt5.QtCore import *

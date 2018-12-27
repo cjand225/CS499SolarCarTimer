@@ -1,5 +1,5 @@
 '''
-Module: VisionWidget.py
+Module: VideoWidget.py
 Purpose:
 Depends on:
 '''
@@ -16,7 +16,7 @@ class VisionWidget(QWidget):
     def __init__(self, uipath):
         super().__init__()
         self.UIPath = uipath
-        self.ImgCanvas = None
+        self.imgCanvas = None
         self.ImgCanvasWidth = None
         self.ImgCanvasHeight = None
 
@@ -36,10 +36,13 @@ class VisionWidget(QWidget):
         return self.ImgCanvasWidth
 
     def getCanvas(self):
-        return self.ImgCanvas
+        return self.imgCanvas
 
     def getStartButton(self):
         return self.startButton
 
     def getStopButton(self):
         return self.stopButton
+
+    def clearCanvas(self):
+        self.imgCanvas.clear()

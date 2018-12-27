@@ -10,8 +10,7 @@ import cv2
 import numpy as np
 import time
 
-from SCTimeUtility.system.Graphics import ApplyFilter, applyEdgeFilter, applyBlurFilter, filterType
-
+from SCTimeUtility.system.Graphics import ApplyFilter, filterType
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
@@ -41,7 +40,7 @@ class ImageProcessThread(threading.Thread):
         self.running = True
 
     def processFrames(self):
-        # self.running = True
+        #self.running = True
         self.running = False
 
         # create the kernal and background subtractor

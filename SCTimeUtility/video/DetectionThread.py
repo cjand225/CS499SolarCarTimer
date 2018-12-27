@@ -9,6 +9,7 @@ import cv2
 import time
 
 
+
 class DetectThread(threading.Thread):
 
     def __init__(self, detectQ):

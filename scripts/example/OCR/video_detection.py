@@ -111,7 +111,7 @@ def main():
             image_cropped = frame_original[startY:endY, startX:endX]
             # uncomment the line below to detect black text instead of white text
             image_cropped = cv2.bitwise_not(image_cropped)
-            # attempt preprocessing on the image
+            # attempt prepossessing on the image
             try:
                 image_gray = cv2.cvtColor(image_cropped, cv2.COLOR_BGR2GRAY)
             except:

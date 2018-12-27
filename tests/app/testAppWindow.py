@@ -4,7 +4,7 @@ from SCTimeUtility.app.App import App
 from SCTimeUtility.app.AppWindow import AppWindow
 from SCTimeUtility.table.SemiAutoWidget import SemiAutoWidget
 from SCTimeUtility.table.Table import Table
-from SCTimeUtility.video.VisionWidget import VisionWidget
+from SCTimeUtility.video.VideoWidget import VisionWidget
 from SCTimeUtility.log.LogWidget import LogWidget
 from SCTimeUtility.graph.Graph import Graph
 from SCTimeUtility.graph.GraphOptionsWidget import GraphOptions
