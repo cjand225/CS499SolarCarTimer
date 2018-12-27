@@ -21,13 +21,39 @@ class Car(QObject):
         self.LapCount = 0
         self.LapList = []
 
-    # Car Related
+
+    """
+          Function: setSeedValue
+          Parameters: self, value
+          Return Value: N/A
+          Purpose: sets the member variable "self.SeedValue" to the value parameter passed, and then
+                   calls createFirstLap before returning. Used for initializing lap times for each car.
+
+    """
     def setSeedValue(self, value):
         self.SeedValue = value
         self.createFirstLap()
 
+    """
+          Function: getSeedValue
+          Parameters: self
+          Return Value: self.SeedValue
+          Purpose: returns the seed value at which all lap times are based upon, otherwise known as 
+                   starting time.
+
+    """
+
     def getSeedValue(self):
         return self.SeedValue
+
+    """
+          Function: createFirstLap
+          Parameters: self
+          Return Value: N/A
+          Purpose: creates the first lap of the car based on seed value, emits that the 
+                    object has been changed for model to update to view.
+
+    """
 
     def createFirstLap(self):
         self.LapList.append(LapTime(self.SeedValue - self.SeedValue))
@@ -40,7 +66,7 @@ class Car(QObject):
           Return Value: self.ID
           Purpose: returns the currently set carID, primarily used with indexing lists
   
-      """
+    """
 
     def getID(self):
         return self.ID
@@ -51,7 +77,7 @@ class Car(QObject):
          Return Value: self.TeamName
          Purpose: Returns the currently set Team name, used as part of a search and ease of access
   
-     """
+    """
 
     def getTeam(self):
         return self.TeamName
@@ -62,7 +88,7 @@ class Car(QObject):
          Return Value: self.CarNum
          Purpose: Returns the currently set CarNum, used as part of a search function and ease of access.
   
-     """
+    """
 
     def getCarNum(self):
         return self.CarNum
@@ -74,7 +100,7 @@ class Car(QObject):
          Purpose: Edits the currently set self.ID to a new ID, used as part of a indexing function within
                   CarStorage class.
   
-     """
+    """
 
     def setID(self, ID):
         self.ID = ID
@@ -93,10 +119,13 @@ class Car(QObject):
 
     """
         Function: addLapTime
-        Parameters: self, hours, minutes, seconds, milliseconds
+        Parameters: self, timeData
         Return Value: N/A
-        Purpose: appends a laptime to the current LapList of the Car, and then increments what the
-                 next ID to be used for the next Lap that will be.
+        Purpose: Function that gets called when needing to add a laptime to a car, checks if the car
+                 has a set seedvalue (if it doesn't, nothing gets recorded), then proceeds to check if
+                 a parameter has been supplied or not, which if it has will understand that the lap was
+                 inputted manually, if not, it understands that the lap was inputted via Semi-Auto widget,
+                 after which it then emits the new lapList length to be updated in the model.
   
     """
 
@@ -109,6 +138,16 @@ class Car(QObject):
 
             self.LapCount = len(self.LapList)
             self.lapChanged.emit(len(self.LapList))
+
+    """
+        Function: addLapSemiAuto
+        Parameters: self
+        Return Value: N/A
+        Purpose: appends a laptime to the current LapList of the Car based on the amount of time
+                 that has passed and all previous laptimes, invoke via user interface by user within
+                 the Semi-Auto widget.
+
+    """
 
     def addLapSemiAuto(self):
         timeBeforeIndex = self.getTotalElapsedTime(self.LapCount)
@@ -126,11 +165,25 @@ class Car(QObject):
 
         getInfoLog().info('Lap Added to Car: {}')
         self.LapList.append(LapTime(int(recordedTime)))
-        getInfoLog().info('Lap Time {} added Car: {} , {} by SemiAuto.'.format(intergerToTimeString(int(recordedTime)),self.TeamName, self.CarNum))
+        getInfoLog().info(
+            'Lap Time {} added Car: {} , {} by SemiAuto.'.format(intergerToTimeString(int(recordedTime)), self.TeamName,
+                                                                 self.CarNum))
+
+
+    """
+        Function: addLapManually
+        Parameters: self
+        Return Value: N/A
+        Purpose: invoked via addLapTime, understands that a parameter called time data has been applied and then adds
+                 that time to the end of the lap list.
+
+    """
 
     def addLapManually(self, timeData):
         self.LapList.append(LapTime(timeData))
-        getInfoLog().info('Lap Time {} added Car: {} , {} by Manual.'.format(intergerToTimeString(int(timeData)),self.TeamName, self.CarNum))
+        getInfoLog().info(
+            'Lap Time {} added Car: {} , {} by Manual.'.format(intergerToTimeString(int(timeData)), self.TeamName,
+                                                               self.CarNum))
 
     """
          Function: editLapTime
@@ -225,18 +278,10 @@ class Car(QObject):
                   value has been found.
 
      """
+
     def getFastestLap(self):
         allLaps = self.LapList[1:]
         if allLaps:
-            # for lap in self.LapList:
-            #     if lap.getElapsed() > 0 and fastLap == 999:
-            #         fastLap = lap.getElapsed()
-            #     else:
-            #         if fastLap is not None:
-            #             if fastLap > lap.getElapsed() and lap.getElapsed() > 0:
-            #                 fastLap = lap.getElapsed()
-            # print([lap.getElapsed() for lap in allLaps])
             return min([lap.getElapsed() for lap in allLaps])
         else:
             return None
-                            

@@ -26,22 +26,63 @@ class CarStorage(QObject):
         self.timeOffset = None
         self.enableOffset = False
 
+
+    """
+          Function: setSeedValue
+          Parameters: self, seedTime
+          Return Value: N/A
+          Purpose: Function that sets the Seed Value of Car Storage and then calls setSeeds to globally
+                  set that value for each car.
+
+    """
     def setSeedValue(self, seedTime):
         if self.SeedValue is None and len(self.storageList) > 0:
             self.SeedValue = seedTime
             getInfoLog().info('[' + __name__ + ']' + 'Setting Seed Value for All Cars')
             self.setSeeds()
 
+    """
+          Function: setSeeds
+          Parameters: self
+          Return Value: N/A
+          Purpose: Function that sets the Seed Value of each car with the value of the "Global" SeedValue
+                   that is stored within Car Storage.
+
+    """
     def setSeeds(self):
         for car in self.storageList:
             car.setSeedValue(self.SeedValue)
 
+    """
+          Function: setOffsetTime
+          Parameters: self, cond
+          Return Value: N/A
+          Purpose: Function that offsets absolute times calculated for reporting the time of day.
+
+    """
     def setTimeOffset(self, offset):
         self.timeOffset = offset
 
+    """
+          Function: enableOffsetTime
+          Parameters: self, cond
+          Return Value: N/A
+          Purpose: Function that flags CarStorage to offset the time of all the cars to better fit
+                   the Time supplied to it. (May be deprecated later.)
+
+    """
     def enableOffsetTime(self, cond):
         self.enableOffset = cond
+    """
+          Function: createCars
+          Parameters: self, list
+          Return Value: N/A
+          Purpose: Goes through list parameter, checks if the first item is a digit. If so, it assumes
+                   that is it the car number and creates that car with Item 0 as ID and Item 1 as Team Name,
+                   otherwise it assumes Item 1 is ID and Item 0 is Team Name. Validation is done via
+                   AddBatchDialog.
 
+    """
     def createCar(self, carNum, carOrg):
         # check valid carNumber and Valid Car Org
         newCar = Car(self.getLatestCarID(), str(carOrg), carNum)
@@ -53,7 +94,16 @@ class CarStorage(QObject):
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
 
-    # runs each size 2 list item through createCar Function
+    """
+          Function: createCars
+          Parameters: self, list
+          Return Value: N/A
+          Purpose: Goes through list parameter, checks if the first item is a digit. If so, it assumes
+                   that is it the car number and creates that car with Item 0 as ID and Item 1 as Team Name,
+                   otherwise it assumes Item 1 is ID and Item 0 is Team Name. Validation is done via
+                   AddBatchDialog.
+
+    """
     def createCars(self, list):
         for item in list:
             if(str(item[0]).isdigit()):
@@ -68,10 +118,10 @@ class CarStorage(QObject):
          Return Value: N/A
          Purpose: Removes a car by its ID number within the list, from the view side, it'll likely
                   be the column number in which the car is placed. After removal, the list is then
-                  reindexed to its proper positions starting where the object was removed to the
+                  re-indexed to its proper positions starting where the object was removed to the
                   end of the list, to allow for proper ID management.
 
-     """
+    """
 
     def removeCar(self, ID):
         self.storageList.remove(self.getCarByID(ID))
@@ -85,7 +135,7 @@ class CarStorage(QObject):
                   used soley after a removal has been processed to prevent off by 1 errors or out of
                   bounds errors with the StorageList.
 
-     """
+    """
 
     def reindexStorage(self, ID):
         for x in range(ID, len(self.storageList) - 1):
@@ -101,7 +151,7 @@ class CarStorage(QObject):
                   within carStorage w/ no intentions of altering the original car. Used only when index
                   Number is Known.
 
-     """
+    """
 
     def getCarByID(self, ID):
         if (ID > len(self.storageList)):
@@ -118,7 +168,7 @@ class CarStorage(QObject):
                   within carStorage w/ no intentions of altering the original car. Used when only Vehicle Number
                   is Known.
 
-     """
+    """
 
     def getCarByNum(self, CarNum):
         itemList = [item for item in self.storageList if item.getCarNum() == CarNum]
@@ -134,7 +184,7 @@ class CarStorage(QObject):
                   within carStorage w/ no intentions of altering the original car. Used when only Vehicle Organization
                   is Known.
 
-     """
+    """
 
     def getCarByOrg(self, OrgString):
         itemList = [item for item in self.storageList if item.getTeam() == OrgString]
@@ -149,7 +199,7 @@ class CarStorage(QObject):
                   which will then add the specific lap information to the specified car class given
                   from the parameters.
 
-     """
+    """
 
     def appendLapTime(self, carID, time):
         self.storageList[carID].addLapTime(LapTime(time))
@@ -163,7 +213,7 @@ class CarStorage(QObject):
                   which will then edit the specific lap information to the specified car class given
                   from the parameters.
 
-     """
+    """
 
     def editLapTime(self, carID, LapID, hours, minutes, seconds, milliseconds):
         self.storageList[carID].editLapTime(LapID, hours, minutes, seconds, milliseconds)
@@ -176,7 +226,7 @@ class CarStorage(QObject):
                   which will then add the specific lap information to the specified car class given
                   from the parameters.
 
-     """
+    """
 
     def removeLapTime(self, carID, LapID):
         self.getCarByID(carID).removeLapTime(LapID)
@@ -186,9 +236,9 @@ class CarStorage(QObject):
          Parameters: self
          Return Value: copy of StorageList
          Purpose: Used for getting a copy of the model for usage within other modules within the Application
-                  such as view comonents like graphing/TableView/etc.
+                  such as view components like graphing/TableView/etc.
 
-     """
+    """
 
     def getCarListCopy(self):
         return self.storageList.copy()
@@ -198,9 +248,9 @@ class CarStorage(QObject):
          Function: getCarNamesList
          Parameters: self
          Return Value: list of Org names of all cars
-         Purpose: used as a convient method for accesing all the car Orgs Names
+         Purpose: Used as a convenient method for accessing all the cars' Team Name.
 
-     """
+    """
 
     def getCarNamesList(self):
         newList = self.storageList.copy()
@@ -215,7 +265,7 @@ class CarStorage(QObject):
          Return Value: LatestCarID(int)
          Purpose: Used for finding what the next ID to be used for the carStorage list should be.
 
-     """
+    """
 
     def getLatestCarID(self):
         return self.LatestCarID

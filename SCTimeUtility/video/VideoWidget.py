@@ -1,6 +1,6 @@
 '''
 Module: VideoWidget.py
-Purpose:
+Purpose: used as the view in the MVC design pattern for the Video Module.
 Depends on:
 '''
 

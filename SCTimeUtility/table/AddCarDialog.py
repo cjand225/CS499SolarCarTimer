@@ -10,6 +10,10 @@ class AddCarDialog(QDialog):
         super().__init__()
         self.UIPath = uipath
 
+        self.ui = None
+        self.intValid = None
+        self.validationError = None
+
         self._carNumber = 0
 
         self.initUI()
