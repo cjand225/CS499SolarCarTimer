@@ -1,11 +1,8 @@
-import sys
 from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
-from PyQt5.uic import loadUi
 
-import time
-import os
+
+import time, os
+
 from SCTimeUtility.system.Validation import *
 from SCTimeUtility.table.CarStorage import CarStorage
 from SCTimeUtility.table.TableModel import TableModel
@@ -13,7 +10,6 @@ from SCTimeUtility.table.TableWidget import TableWidget
 from SCTimeUtility.table.AddCarDialog import AddCarDialog
 from SCTimeUtility.table.AddBatchDialog import AddBatchDialog
 from SCTimeUtility.table.SemiAuto import SemiAuto
-
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 

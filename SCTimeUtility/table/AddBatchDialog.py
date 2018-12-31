@@ -1,5 +1,5 @@
 from PyQt5.Qt import Qt
-from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle, QPlainTextEdit
+from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.uic import loadUi
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
@@ -20,7 +20,6 @@ class AddBatchDialog(QDialog):
         self.initUI()
         self.initValidation()
 
-
     """
           Function: initUI
           Parameters: self
@@ -28,6 +27,7 @@ class AddBatchDialog(QDialog):
           Purpose: Initializes the Batch Dialog's UI which is loaded from a resource file.
 
     """
+
     def initUI(self):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
@@ -41,6 +41,7 @@ class AddBatchDialog(QDialog):
                    the dialog.
 
     """
+
     def initValidation(self):
         self.setModal(True)
         self.regValid = QRegExpValidator(self)
@@ -57,6 +58,7 @@ class AddBatchDialog(QDialog):
                     be retrieved later.
 
     """
+
     def createList(self):
         bcList = []
         self.data = self.batchEdit.toPlainText()
@@ -71,7 +73,6 @@ class AddBatchDialog(QDialog):
                 if tempList[0] != '' and tempList[1] != '':
                     self.carList.append(tempList)
 
-
     """
           Function: getList
           Parameters: self
@@ -79,6 +80,7 @@ class AddBatchDialog(QDialog):
           Purpose: Function that returns the list of the dialog after user has input information.
 
     """
+
     def getList(self):
         return self.carList
 
@@ -89,10 +91,10 @@ class AddBatchDialog(QDialog):
           Purpose: cleans up input from previous user input entry. (will be replaced later)
 
     """
+
     def clear(self):
         self.batchEdit.clear()
         self.carList = []
-
 
     """
           Function: done
@@ -102,6 +104,7 @@ class AddBatchDialog(QDialog):
                    OK/APPLY/CANCEL and makes finishes processing upon Accepted state.
 
     """
+
     def done(self, r):
         if r == QDialog.Accepted:
             if self.batchEdit.toPlainText():

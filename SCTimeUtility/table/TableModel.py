@@ -34,45 +34,47 @@ class TableModel(QAbstractTableModel):
     def rowCount(self, p):
         lapListLengths = [len(i.LapList) for i in self.carStore.storageList]
         if lapListLengths:
-            return max(max(lapListLengths)+1, self.defaultRows)
+            return max(max(lapListLengths) + 1, self.defaultRows)
         else:
             return self.defaultRows
 
     def columnCount(self, p):
-        return max(len(self.carStore.storageList)+1, self.defaultColumns)
+        return max(len(self.carStore.storageList) + 1, self.defaultColumns)
 
     def data(self, item, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
-            if item.column() < len(self.carStore.storageList) and item.row() < len(self.carStore.storageList[item.column()].LapList):
+            if item.column() < len(self.carStore.storageList) and item.row() < len(
+                    self.carStore.storageList[item.column()].LapList):
                 timeData = self.carStore.storageList[item.column()].LapList[item.row()].getElapsed()
-                #newString = self.intergerToTimeString(timeData)
+                # newString = self.intergerToTimeString(timeData)
                 newString = str(timedelta(seconds=timeData))
                 return str(newString)
             else:
                 return QVariant()
 
     def setData(self, i, value, role):
-        #formattedValue = self.formatValue(value)
+        # formattedValue = self.formatValue(value)
         try:
             value_split = value.split(".")
-            value_time = strptimeMultiple(value_split[0],["%H:%M:%S","%M:%S","%S"])
-            seconds = timedelta(hours=value_time.hour,minutes=value_time.minute,seconds=value_time.second).total_seconds()
+            value_time = strptimeMultiple(value_split[0], ["%H:%M:%S", "%M:%S", "%S"])
+            seconds = timedelta(hours=value_time.hour, minutes=value_time.minute,
+                                seconds=value_time.second).total_seconds()
             if len(value_split) == 2:
                 milliseconds = int(value_split[1])
-                seconds = seconds + (milliseconds/pow(10,len(value_split[1])))
+                seconds = seconds + (milliseconds / pow(10, len(value_split[1])))
             elif len(value_split) > 2:
                 return False
         except ValueError:
             return False
         if role == Qt.EditRole:
-            if i.column()<len(self.carStore.storageList):
-                #lapTime = Lap_Time(self.cs.storageList[i.column()-1].recordedTime+seconds,seconds)
-                if  i.row() < len(self.carStore.storageList[i.column()].LapList):
-                    #self.cs.storageList[i.column()].LapList[i.row()][1] = value
-                    self.carStore.storageList[i.column()].editLapTime(i.row(),seconds)
+            if i.column() < len(self.carStore.storageList):
+                # lapTime = Lap_Time(self.cs.storageList[i.column()-1].recordedTime+seconds,seconds)
+                if i.row() < len(self.carStore.storageList[i.column()].LapList):
+                    # self.cs.storageList[i.column()].LapList[i.row()][1] = value
+                    self.carStore.storageList[i.column()].editLapTime(i.row(), seconds)
                     return True
-                elif i.row()==len(self.carStore.storageList[i.column()].LapList):
-                    self.carStore.appendLapTime(i.column(),seconds)
+                elif i.row() == len(self.carStore.storageList[i.column()].LapList):
+                    self.carStore.appendLapTime(i.column(), seconds)
                     return True
             else:
                 return False
@@ -107,9 +109,9 @@ class TableModel(QAbstractTableModel):
             flags |= Qt.ItemIsEditable
         return flags
 
-    #takes a time string and converts to workable format
+    # takes a time string and converts to workable format
     def formatValue(self, value):
-        #strptimeMultiple(value,["%H:%M:%S","%M:%S","%S"])
+        # strptimeMultiple(value,["%H:%M:%S","%M:%S","%S"])
         if (value.isdigit()):
             formString = self.valueToTimeString(value)
             # print(formString)

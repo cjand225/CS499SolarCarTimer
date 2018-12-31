@@ -4,8 +4,7 @@ this is going to be used as a place for functions related to data validation
 
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
-import re
-import os
+import re, os
 
 RegExpID = "^([0-9][0-9]{0,2}|1000)$"
 RegExpOrg = "/^[a-z ,.'-]+$/i"

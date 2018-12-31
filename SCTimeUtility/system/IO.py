@@ -46,5 +46,6 @@ def createDir(dir):
     if not os.path.exists(dir):
         os.mkdir(dir)
 
+
 def reverseString(self, string):
     return string[::-1]

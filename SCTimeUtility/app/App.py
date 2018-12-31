@@ -13,7 +13,6 @@ from PyQt5.Qt import *
 from SCTimeUtility.graph.Graph import Graph
 from SCTimeUtility.app.AppWindow import AppWindow
 from SCTimeUtility.system.IO import loadCSV, saveCSV
-from SCTimeUtility.table.CarStorage import CarStorage
 from SCTimeUtility.table.Table import Table
 from SCTimeUtility.video.Video import Video
 from SCTimeUtility.log.LogWidget import LogWidget
@@ -74,8 +73,6 @@ class App():
         self.initGraph()
         self.initLeaderBoard()
 
-
-
         # adding and connecting essential components to user interface
         self.addComponents()
         self.connectActionsMainWindow()
@@ -108,8 +105,6 @@ class App():
         self.mainWindow.initHelpDialog(type(self).helpDialogUIPath, type(self).userManPath)
         self.mainWindow.initAboutDialog(type(self).aboutDialogUIPath, type(self).aboutPath)
 
-
-
     ''' 
 
         Function: initTableview(self)
@@ -124,7 +119,6 @@ class App():
         self.table = Table()
 
         self.infoLog.debug('[' + __name__ + ']' + ' Table Initialized')
-
 
     ''' 
 
@@ -143,7 +137,6 @@ class App():
             getDebugLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
         else:
             getDebugLog().debug('[' + __name__ + '] ' + 'Video module failed to initialize')
-
 
     ''' 
 
@@ -318,9 +311,6 @@ class App():
         readFile = self.mainWindow.openFileDialog()
         if readFile is not None and readFile != '':
             self.writeFile = readFile
-
-
-
 
     ''' 
 

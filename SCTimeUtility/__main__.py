@@ -1,7 +1,3 @@
-import sys
-
-from PyQt5.Qt import QApplication
-#from PyQt5.QtWidgets import QApplication
 from SCTimeUtility.app.App import App
 
 if __name__ == '__main__':

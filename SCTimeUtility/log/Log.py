@@ -1,9 +1,5 @@
 import logging
 import os
-import time
-import sys
-from PyQt5.Qt import QApplication
-from PyQt5.QtWidgets import QPlainTextEdit, QDialog, QPushButton, QVBoxLayout
 
 logDir = os.path.abspath(os.path.join(__file__, "./../../../logs/"))
 
@@ -76,7 +72,6 @@ def initDebugLog():
     infoLog.addHandler(fh)
 
 
-
 def initWarningLog():
     warningLog = logging.getLogger("WARNING")
     warningLog.setLevel(logging.DEBUG)
@@ -99,7 +94,6 @@ def initErrorLog():
     fh = logging.FileHandler(errorLogPath)
     fh.setLevel(logging.DEBUG)
 
-
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
     fh.setFormatter(formatter)
@@ -119,4 +113,3 @@ def initCriticalLog():
     fh.setFormatter(formatter)
     # add the handlers to the logger
     criticalLog.addHandler(fh)
-

@@ -2,7 +2,6 @@ import time
 from PyQt5.QtCore import pyqtSignal, QObject
 from SCTimeUtility.system.TimeReferences import LapTime
 from SCTimeUtility.system.Validation import intergerToTimeString
-from datetime import timedelta
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -21,7 +20,6 @@ class Car(QObject):
         self.LapCount = 0
         self.LapList = []
 
-
     """
           Function: setSeedValue
           Parameters: self, value
@@ -30,6 +28,7 @@ class Car(QObject):
                    calls createFirstLap before returning. Used for initializing lap times for each car.
 
     """
+
     def setSeedValue(self, value):
         self.SeedValue = value
         self.createFirstLap()
@@ -168,7 +167,6 @@ class Car(QObject):
         getInfoLog().info(
             'Lap Time {} added Car: {} , {} by SemiAuto.'.format(intergerToTimeString(int(recordedTime)), self.TeamName,
                                                                  self.CarNum))
-
 
     """
         Function: addLapManually

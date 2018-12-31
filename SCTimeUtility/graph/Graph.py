@@ -1,11 +1,12 @@
 from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QWidget, QStyle, QComboBox
 from PyQt5.uic import loadUi
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 from enum import IntEnum
 
 import matplotlib.pyplot as plt
 import numpy as np
+
+from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
 class GraphType(IntEnum):

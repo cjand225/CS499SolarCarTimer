@@ -1,8 +1,8 @@
-import sys
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QWidget, QApplication, QHeaderView, QShortcut, QStyle
 from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 from PyQt5.uic import loadUi
+
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -16,14 +16,11 @@ class TableWidget(QWidget):
         self.initUI()
         self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"), self)
 
-
     def initUI(self):
         self.ui = loadUi(self.uiPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
         self.show()
-
-
 
     def initHeaderHorizontal(self):
         # Resizes the horizontal header so that the table fits initially without scrollbars.
@@ -33,7 +30,6 @@ class TableWidget(QWidget):
             # As a side effect, it also forces the header to resize to f it its container.
             self.tableView.horizontalHeader().sectionSize(headerIndex)
         self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
-        
 
     def initHeaderVertical(self):
         # Resizes the vertical header so that the table fits initially without scrollbars.

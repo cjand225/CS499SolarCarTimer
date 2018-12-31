@@ -6,10 +6,6 @@ Depends On:
 '''
 
 import queue
-import cv2
-
-from PyQt5.QtGui import QImage, QPixmap
-from PyQt5.QtCore import *
 
 from SCTimeUtility.video.VideoWidget import VisionWidget
 from SCTimeUtility.video.CaptureThread import CaptureThread

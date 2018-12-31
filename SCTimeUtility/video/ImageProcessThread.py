@@ -40,7 +40,7 @@ class ImageProcessThread(threading.Thread):
         self.running = True
 
     def processFrames(self):
-        #self.running = True
+        # self.running = True
         self.running = False
 
         # create the kernal and background subtractor

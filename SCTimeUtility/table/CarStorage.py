@@ -8,10 +8,9 @@
 
 """
 from PyQt5.QtCore import QObject, pyqtSignal
+
 from SCTimeUtility.table.Car import Car
 from SCTimeUtility.system.TimeReferences import LapTime
-from SCTimeUtility.system.Validation import carExists
-import re
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -26,7 +25,6 @@ class CarStorage(QObject):
         self.timeOffset = None
         self.enableOffset = False
 
-
     """
           Function: setSeedValue
           Parameters: self, seedTime
@@ -35,6 +33,7 @@ class CarStorage(QObject):
                   set that value for each car.
 
     """
+
     def setSeedValue(self, seedTime):
         if self.SeedValue is None and len(self.storageList) > 0:
             self.SeedValue = seedTime
@@ -49,6 +48,7 @@ class CarStorage(QObject):
                    that is stored within Car Storage.
 
     """
+
     def setSeeds(self):
         for car in self.storageList:
             car.setSeedValue(self.SeedValue)
@@ -60,6 +60,7 @@ class CarStorage(QObject):
           Purpose: Function that offsets absolute times calculated for reporting the time of day.
 
     """
+
     def setTimeOffset(self, offset):
         self.timeOffset = offset
 
@@ -71,8 +72,10 @@ class CarStorage(QObject):
                    the Time supplied to it. (May be deprecated later.)
 
     """
+
     def enableOffsetTime(self, cond):
         self.enableOffset = cond
+
     """
           Function: createCars
           Parameters: self, list
@@ -83,6 +86,7 @@ class CarStorage(QObject):
                    AddBatchDialog.
 
     """
+
     def createCar(self, carNum, carOrg):
         # check valid carNumber and Valid Car Org
         newCar = Car(self.getLatestCarID(), str(carOrg), carNum)
@@ -104,13 +108,13 @@ class CarStorage(QObject):
                    AddBatchDialog.
 
     """
+
     def createCars(self, list):
         for item in list:
-            if(str(item[0]).isdigit()):
+            if (str(item[0]).isdigit()):
                 self.createCar(item[0], item[1])
             else:
                 self.createCar(item[1], item[0])
-
 
     """
          Function: removeCar
@@ -243,7 +247,6 @@ class CarStorage(QObject):
     def getCarListCopy(self):
         return self.storageList.copy()
 
-
     """
          Function: getCarNamesList
          Parameters: self
@@ -299,4 +302,3 @@ class CarStorage(QObject):
             if newList[x].getLapCount() > highest:
                 highest = newList[x].getLapCount()
         return highest
-

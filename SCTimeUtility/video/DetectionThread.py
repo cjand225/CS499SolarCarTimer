@@ -41,15 +41,3 @@ class DetectThread(threading.Thread):
             # make sure thread runs 3 frames behind image process thread
             if self.DetectQueue.qsize() > 3:
                 next = self.DetectQueue.get()
-
-                # if self.DetectQ.qsize() > 3:
-                #     if self.canvas:
-                #         #last = self.DetectQ.get()
-                #         currentImage = self.DetectQ.get()
-                #         fgmask = fgbg.apply(currentImage)
-                #         fgmask = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
-
-                #         fg = QImage(fgmask, fgmask.shape[1], fgmask.shape[0], fgmask.strides[0], QImage.Format_Grayscale8)
-
-                #        #cv2.imwrite(self.VidPath, fg)
-                #        self.canvas.setPixmap(QPixmap.fromImage(fg))

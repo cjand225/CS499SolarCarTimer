@@ -7,7 +7,6 @@ import cv2
 import numpy as np
 from enum import Enum
 from PyQt5.QtGui import QImage
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 """
     Function: filterType (Class)

@@ -1,4 +1,3 @@
-from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
 from PyQt5.Qt import Qt
 from PyQt5.QtCore import QObject, pyqtSignal, QSortFilterProxyModel
@@ -6,10 +5,11 @@ from PyQt5.QtCore import QSize
 
 from operator import itemgetter
 import os
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
 from SCTimeUtility.graph.LeaderBoardWidget import LeaderBoardWidget
 from SCTimeUtility.graph.LeaderBoardModel import LeaderBoardModel
 from SCTimeUtility.graph.LeaderBoardSortFilterProxyModel import LeaderBoardSortFilterProxyModel
+from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
 class LeaderBoard():
@@ -19,35 +19,35 @@ class LeaderBoard():
     def sort(self):
         oldSort = self.boardModel.sortColumn()
         self.boardModel.invalidate()
-        self.widget.tableView.sortByColumn(oldSort,Qt.AscendingOrder)
-        #self.boardModel.sort(self.boardModel.sortColumn())
+        self.widget.tableView.sortByColumn(oldSort, Qt.AscendingOrder)
+        # self.boardModel.sort(self.boardModel.sortColumn())
 
-    def __init__(self,cs=None):
+    def __init__(self, cs=None):
         self.widget = None
         self.dataStorage = None
         self.horzHeader = ['Car Number', 'Team Name', 'Laps Completed', 'Fastest Lap']
-        self.sortableColumns = [2,3]
+        self.sortableColumns = [2, 3]
         self.newCarList = [[]]
 
         self.initWidget()
         self.carStore = cs
-        self.boardModel = LeaderBoardSortFilterProxyModel(self.widget.tableView,self.sortableColumns)
+        self.boardModel = LeaderBoardSortFilterProxyModel(self.widget.tableView, self.sortableColumns)
         self.boardModel.setSourceModel(LeaderBoardModel(self.widget.tableView, self.horzHeader, self.carStore))
         self.boardModel.setSortRole(Qt.UserRole)
-        #self.boardModel.sort(4)
+        # self.boardModel.sort(4)
         self.widget.tableView.setSortingEnabled(True)
         self.boardModel.sourceModel().dataChanged.connect(self.sort)
         self.widget.tableView.horizontalHeader().sortIndicatorChanged.connect(self.sortIndicatorChangedEvent)
-        #print(self.boardModel.sortColumn())
+        # print(self.boardModel.sortColumn())
         self.widget.tableView.setModel(self.boardModel)
         self.widget.fixHeaders(True)
-        self.widget.tableView.sortByColumn(3,Qt.AscendingOrder)
-        #self.widget.tableView.horizontalHeader().sectionResized.connect(self.widget.columnResized)
+        self.widget.tableView.sortByColumn(3, Qt.AscendingOrder)
+        # self.widget.tableView.horizontalHeader().sectionResized.connect(self.widget.columnResized)
 
-    def sortIndicatorChangedEvent(self,index,order):
+    def sortIndicatorChangedEvent(self, index, order):
         if not index in self.sortableColumns:
-            self.widget.tableView.horizontalHeader().setSortIndicator(index,self.boardModel.sortOrder())
-        
+            self.widget.tableView.horizontalHeader().setSortIndicator(index, self.boardModel.sortOrder())
+
     def initWidget(self):
         self.widget = LeaderBoardWidget(self.LeaderBoardUIPath)
 
@@ -62,7 +62,6 @@ class LeaderBoard():
     def testLap(self):
         self.sortCarByFastestLap()
 
-
     def sortCarByFastestLap(self):
         self.newCarList = [[]]
         self.carList = []
@@ -75,12 +74,10 @@ class LeaderBoard():
             if itemgetter(1) is not None:
                 self.newCarList = sorted(self.newCarList, key=itemgetter(1))
 
-
         for x in range(0, len(self.newCarList)):
             self.carList.append(self.dataStorage[self.newCarList[x][0]])
 
         self.updateBoard(self.carList)
-
 
     def updateBoard(self, data):
         self.widget.resize(QSize(self.widget.width() + 1, self.widget.height()))
@@ -88,4 +85,3 @@ class LeaderBoard():
         self.widget.initHeaderHorizontal()
         self.widget.initHeaderVertical()
         self.widget.resize(QSize(self.widget.width() - 1, self.widget.height()))
-

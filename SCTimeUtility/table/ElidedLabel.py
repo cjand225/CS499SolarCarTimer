@@ -1,4 +1,10 @@
-from PyQt5.QtCore import QPoint, Qt, pyqtProperty, pyqtSignal
+'''
+Module: ElidedLabel.py
+Purpose:
+
+Depends On:
+'''
+from PyQt5.QtCore import Qt, pyqtProperty, pyqtSignal
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFontMetrics, QPainter, QTextLayout
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog

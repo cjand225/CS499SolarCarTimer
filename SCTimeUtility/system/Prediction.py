@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import scipy.stats
-from SCTimeUtility.system.TimeReferences import Lap_Time
+from SCTimeUtility.system.TimeReferences import LapTime
 from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
 
 
@@ -19,7 +19,7 @@ def predictNextLapTime(lapTimes):
     else:
         raise LapPredictionError("Need at least one lap time to predict.")
     newestTime = max(lapTimes, key=lambda t: t.recordedTime)
-    return Lap_Time(newestTime.recordedTime + lower, lower)
+    return LapTime(newestTime.recordedTime + lower, lower)
 
 
 class LapPredictionError(Exception):
