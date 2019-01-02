@@ -1,9 +1,7 @@
 import pytimeparse
 from datetime import datetime, timedelta
 
-from PyQt5.Qt import Qt
-from PyQt5.QtCore import QAbstractTableModel, QModelIndex, QVariant
-from SCTimeUtility.system.TimeReferences import strptimeMultiple, splitTimes, LapTime
+from PyQt5.QtCore import QAbstractTableModel, QVariant, Qt
 from SCTimeUtility.log.Log import getLog
 
 

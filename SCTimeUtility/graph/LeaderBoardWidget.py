@@ -1,7 +1,7 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
+from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QResizeEvent
+from PyQt5.QtWidgets import QWidget, QApplication, QStyle, QHeaderView
 from PyQt5.uic import loadUi
-from PyQt5.Qt import *
 from SCTimeUtility.log.Log import getLog
 
 

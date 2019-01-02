@@ -4,11 +4,9 @@ Purpose: used as the view in the MVC design pattern for the Video Module.
 Depends on:
 '''
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QApplication, QStyle
 from PyQt5.uic import loadUi
-from PyQt5.QtCore import *
 
 
 class VisionWidget(QWidget):

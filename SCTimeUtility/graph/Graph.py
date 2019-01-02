@@ -1,10 +1,12 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
 from PyQt5.QtCore import Qt, pyqtSignal
-from PyQt5.QtWidgets import QApplication, QWidget, QStyle, QComboBox
+from PyQt5.QtWidgets import QApplication, QWidget, QStyle
 from PyQt5.uic import loadUi
 from enum import IntEnum
 
-import matplotlib.pyplot as plt
-import numpy as np
+
 
 from SCTimeUtility.log.Log import getLog
 
@@ -30,7 +32,6 @@ class Graph(QWidget):
 
         self.teamList = []
 
-
         self.initUI()
         self.addGraphs()
         self.handleUpdate(self.teamList)
@@ -45,7 +46,6 @@ class Graph(QWidget):
     def addGraphs(self):
         for graph in self.GraphDict:
             self.GraphTypes.addItem(graph)
-
 
     def bindListeners(self):
         self.ApplyGraphBtn.clicked.connect(self.drawGraph)
@@ -146,7 +146,7 @@ class Graph(QWidget):
             for lap in team.LapList:
                 durationList.append(lap.getElapsed())
             durationList = self.getElapsed(durationList)
-            #plot curent Team
+            # plot curent Team
             plt.plot(graphRange, durationList, label=team.getTeam())
             index += 1
 
@@ -231,7 +231,6 @@ class Graph(QWidget):
 
             data.append(max(lapList))
             labels.append(team.getTeam())
-
 
         # send data to bar graph
         if self.inMinutes:

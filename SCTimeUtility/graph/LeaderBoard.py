@@ -1,10 +1,6 @@
-from PyQt5.QtGui import *
-from PyQt5.Qt import Qt
-from PyQt5.QtCore import QObject, pyqtSignal, QSortFilterProxyModel
-from PyQt5.QtCore import QSize
-
-from operator import itemgetter
 import os
+from PyQt5.QtCore import Qt, QSize
+from operator import itemgetter
 
 from SCTimeUtility.graph.LeaderBoardWidget import LeaderBoardWidget
 from SCTimeUtility.graph.LeaderBoardModel import LeaderBoardModel

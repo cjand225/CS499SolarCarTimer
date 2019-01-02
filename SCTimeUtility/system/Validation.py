@@ -2,9 +2,8 @@
 this is going to be used as a place for functions related to data validation
 '''
 
-from SCTimeUtility.log.Log import getLog
-
 import re, os
+from SCTimeUtility.log.Log import getLog
 
 RegExpID = "^([0-9][0-9]{0,2}|1000)$"
 RegExpOrg = "/^[a-z ,.'-]+$/i"

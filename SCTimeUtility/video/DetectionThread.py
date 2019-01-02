@@ -4,10 +4,7 @@ Purpose: Processes framedata passed from ImageProcessThread to get check OCR
 Depends: Queue, Threading, cv2
 '''
 
-import threading
-import cv2
-import time
-
+import threading, cv2, time
 
 
 class DetectThread(threading.Thread):

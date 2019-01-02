@@ -7,14 +7,11 @@ Depends On: threading, cv2(OpenCV)
 
 '''
 
-import threading
-import cv2
-import time
-from SCTimeUtility.system.Graphics import ApplyFilter, filterType
+import threading, cv2, time
 
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QPixmap
+
+from SCTimeUtility.system.Graphics import ApplyFilter, filterType
 
 
 class CaptureThread(threading.Thread):
@@ -80,6 +77,7 @@ class CaptureThread(threading.Thread):
         capture.open(self.captureCam)
 
         # set initial target/current times
+        guiImage = None
         currentTime = targetTime = time.time()
         while (self.running):
             # calculate difference in time and get the current time

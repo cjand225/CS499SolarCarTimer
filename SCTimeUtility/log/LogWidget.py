@@ -1,9 +1,8 @@
+import logging
+
 from PyQt5.QtWidgets import QWidget, QStyle, QApplication, QPlainTextEdit
 from PyQt5.Qt import Qt
 from PyQt5.uic import loadUi
-
-import logging
-
 
 from SCTimeUtility.log.Log import getLog
 from SCTimeUtility.log.logFilters import infoFilter, debugFilter, criticalFilter, warningFilter, errorFilter
@@ -47,7 +46,7 @@ class LogWidget(QWidget):
         self.log.addHandler(self.criticalLogTextBox)
         self.log.addHandler(self.errorLogTextBox)
 
-        #create widget UI and add new widgets
+        # create widget UI and add new widgets
         self.initUI()
 
     def initUI(self):

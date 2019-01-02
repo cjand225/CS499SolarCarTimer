@@ -1,9 +1,8 @@
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QDialog
 
 
 import time, os
 
-from SCTimeUtility.system.Validation import *
 from SCTimeUtility.table.CarStorage import CarStorage
 from SCTimeUtility.table.TableModel import TableModel
 from SCTimeUtility.table.TableWidget import TableWidget

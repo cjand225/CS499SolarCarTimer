@@ -1,5 +1,4 @@
-import logging
-import os
+import logging, os
 
 logDir = os.path.abspath(os.path.join(__file__, "./../../../logs/"))
 infoLogPath = os.path.abspath(os.path.join(logDir, 'SCT.log'))

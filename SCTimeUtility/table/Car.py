@@ -1,5 +1,7 @@
 import time
+
 from PyQt5.QtCore import pyqtSignal, QObject
+
 from SCTimeUtility.system.TimeReferences import LapTime
 from SCTimeUtility.system.Validation import intergerToTimeString
 from SCTimeUtility.log.Log import getLog
@@ -166,8 +168,9 @@ class Car(QObject):
         self.logger.info('Lap Added to Car: {}')
         self.LapList.append(LapTime(int(recordedTime)))
         self.logger.info(
-            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(intergerToTimeString(int(recordedTime)), self.TeamName,
-                                                                 self.CarNum))
+            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(intergerToTimeString(int(recordedTime)),
+                                                                  self.TeamName,
+                                                                  self.CarNum))
 
     """
         Function: addLapManually
@@ -182,7 +185,7 @@ class Car(QObject):
         self.LapList.append(LapTime(timeData))
         self.logger.info(
             'Lap Time {} added Car: {} , {} via Manual.'.format(intergerToTimeString(int(timeData)), self.TeamName,
-                                                               self.CarNum))
+                                                                self.CarNum))
 
     """
          Function: editLapTime

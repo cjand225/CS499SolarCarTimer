@@ -5,15 +5,9 @@ Purpose: Processes framedata passed from CaptureThread for further processing be
 Depends: Queue, Threading, cv2
 '''
 
-import threading
-import cv2
-import numpy as np
-import time
+import threading, cv2, time, numpy as np
 
 from SCTimeUtility.system.Graphics import ApplyFilter, filterType
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-
 
 class ImageProcessThread(threading.Thread):
 

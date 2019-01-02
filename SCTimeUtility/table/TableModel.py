@@ -1,13 +1,9 @@
-from random import randint
-from string import ascii_lowercase
-import pytimeparse
-from datetime import datetime, timedelta
-import time
+import random, string, pytimeparse, datetime, time
 
-from PyQt5.Qt import Qt
-from PyQt5.QtCore import QAbstractTableModel, QModelIndex, QVariant
+from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
+
 from SCTimeUtility.table.CarStorage import CarStorage
-from SCTimeUtility.system.TimeReferences import strptimeMultiple, splitTimes, LapTime
+from SCTimeUtility.system.TimeReferences import strptimeMultiple
 from SCTimeUtility.log.Log import getLog
 
 
@@ -47,7 +43,7 @@ class TableModel(QAbstractTableModel):
                     self.carStore.storageList[item.column()].LapList):
                 timeData = self.carStore.storageList[item.column()].LapList[item.row()].getElapsed()
                 # newString = self.intergerToTimeString(timeData)
-                newString = str(timedelta(seconds=timeData))
+                newString = str(datetime.timedelta(seconds=timeData))
                 return str(newString)
             else:
                 return QVariant()
@@ -57,8 +53,8 @@ class TableModel(QAbstractTableModel):
         try:
             value_split = value.split(".")
             value_time = strptimeMultiple(value_split[0], ["%H:%M:%S", "%M:%S", "%S"])
-            seconds = timedelta(hours=value_time.hour, minutes=value_time.minute,
-                                seconds=value_time.second).total_seconds()
+            seconds = datetime.timedelta(hours=value_time.hour, minutes=value_time.minute,
+                                         seconds=value_time.second).total_seconds()
             if len(value_split) == 2:
                 milliseconds = int(value_split[1])
                 seconds = seconds + (milliseconds / pow(10, len(value_split[1])))
@@ -169,8 +165,8 @@ class TableModel(QAbstractTableModel):
             self.carStore = storage
 
     def test(self):
-        for i, s in enumerate(ascii_lowercase[:8]):
-            self.carStore.addCar(s, randint(0, 100))
+        for i, s in enumerate(string.ascii_lowercase[:8]):
+            self.carStore.addCar(s, random.randint(0, 100))
             self.carStore.storageList[i].initialTime = time.time()
             for j in range(5):
                 self.carStore.appendLapTime(i, j)

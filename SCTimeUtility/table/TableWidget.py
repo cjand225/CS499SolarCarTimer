@@ -1,6 +1,6 @@
 from PyQt5.QtWidgets import QWidget, QApplication, QHeaderView, QShortcut, QStyle
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
 
 from SCTimeUtility.log.Log import getLog

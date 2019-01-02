@@ -5,10 +5,8 @@ Purpose: Controller for entire application, used to periodically update project 
 
 '''
 
-import os
-import sys, logging
-
-from PyQt5.Qt import *
+import os, sys
+from PyQt5.Qt import QApplication
 
 from SCTimeUtility.graph.Graph import Graph
 from SCTimeUtility.app.AppWindow import AppWindow

@@ -11,9 +11,9 @@ Depends On:
             Files: Table.py, SemiAutoWidget.py, VideoWidget.py, LogWidget.py, Graph.py
                    GraphOptions.py,
 '''
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QFile, QTextStream, Qt
+from PyQt5.QtGui import QCloseEvent
+from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog, QStyle
 from PyQt5.uic import loadUi
 
 from SCTimeUtility.log.Log import getLog
