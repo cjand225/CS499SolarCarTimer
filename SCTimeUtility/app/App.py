@@ -6,7 +6,7 @@ Purpose: Controller for entire application, used to periodically update project 
 '''
 
 import os
-import sys
+import sys, logging
 
 from PyQt5.Qt import *
 
@@ -17,8 +17,7 @@ from SCTimeUtility.table.Table import Table
 from SCTimeUtility.video.Video import Video
 from SCTimeUtility.log.LogWidget import LogWidget
 from SCTimeUtility.graph.LeaderBoard import LeaderBoard
-
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog, initLogs
+from SCTimeUtility.log.Log import getLog
 
 
 class App():
@@ -41,17 +40,12 @@ class App():
         self.mainWindow = None
         self.running = False
 
-        initLogs()
-
         # read/write paths
         self.defaultSavePath = ''
 
         # Forward Module Declaration
-        self.infoLog = getInfoLog()
-        self.debugLog = getDebugLog()
-        self.warningLog = getWarningLog()
-        self.errorLog = getErrorLog()
-        self.criticalLog = getCriticalLog()
+        self.logger = getLog()
+
 
         self.table = None
         self.SemiAuto = None
@@ -117,8 +111,10 @@ class App():
 
     def initTable(self):
         self.table = Table()
-
-        self.infoLog.debug('[' + __name__ + ']' + ' Table Initialized')
+        if self.table is not None:
+            self.logger.debug('[' + __name__ + ']' + ' Table Initialized')
+        else:
+            self.logger.debug('[' + __name__ + ']' + ' Table failed to initialize')
 
     ''' 
 
@@ -134,9 +130,9 @@ class App():
     def initVision(self):
         self.Vision = Video(self.visionUIPath)
         if self.Vision is not None:
-            getDebugLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
+            getLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
         else:
-            getDebugLog().debug('[' + __name__ + '] ' + 'Video module failed to initialize')
+            getLog().debug('[' + __name__ + '] ' + 'Video module failed to initialize')
 
     ''' 
 
@@ -151,9 +147,9 @@ class App():
     def initLog(self):
         self.logWidget = LogWidget(self.logUIPath)
         if self.logWidget is not None:
-            getDebugLog().debug('[' + __name__ + '] ' + 'Log module initialized')
+            getLog().debug('[' + __name__ + '] ' + 'Log module initialized')
         else:
-            getDebugLog().debug('[' + __name__ + '] ' + 'Log module failed to initialize')
+            getLog().debug('[' + __name__ + '] ' + 'Log module failed to initialize')
 
     ''' 
 
@@ -168,9 +164,9 @@ class App():
     def initGraph(self):
         self.graph = Graph(self.GraphUIPath)
         if self.graph is not None:
-            getDebugLog().debug('[' + __name__ + '] ' + 'Graph module initialized')
+            getLog().debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:
-            getDebugLog().debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
+            getLog().debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
 
     ''' 
 
@@ -185,9 +181,9 @@ class App():
     def initLeaderBoard(self):
         self.leaderBoard = LeaderBoard(self.table.CarStoreList)
         if self.leaderBoard is not None:
-            getDebugLog().debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
+            getLog().debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
-            getDebugLog().debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
+            getLog().debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
 
     ''' 
 
@@ -200,7 +196,7 @@ class App():
     '''
 
     def addComponents(self):
-        getDebugLog().debug('[' + __name__ + '] ' + 'Adding components to Main Window')
+        getLog().debug('[' + __name__ + '] ' + 'Adding components to Main Window')
 
         if self.logWidget is not None:
             self.mainWindow.addLog(self.logWidget)
@@ -228,14 +224,13 @@ class App():
     '''
 
     def connectActionsMainWindow(self):
-        getDebugLog().debug('[' + __name__ + '] ' + 'Binding listeners to Main Window')
+        getLog().debug('[' + __name__ + '] ' + 'Binding listeners to Main Window')
         self.mainWindow.actionNew.triggered.connect(self.newFile)
         self.mainWindow.actionOpen.triggered.connect(self.openFile)
         self.mainWindow.actionSave.triggered.connect(self.saveFile)
         self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
         self.table.Widget.saveShortcut.activated.connect(self.saveFile)
         self.table.CarStoreList.dataModified.connect(self.graphUpdate)
-        # self.table.CarStoreList.dataModified.connect(self.leaderBoardUpdate)
 
     ''' 
     
@@ -266,9 +261,9 @@ class App():
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
             saveCSV(self.table.CarStoreList, self.writeFile)
-            self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
+            self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
-            self.infoLog.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
+            self.logger.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
             self.saveAsFile()
 
         # else use writeFile
@@ -292,9 +287,9 @@ class App():
             # write file to location
             self.writeFile = newFile
             self.saveFile()
-            self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
+            self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
-            self.infoLog.debug('[' + __name__ + '] ' + 'Could not save data to: ' + str(newFile))
+            self.logger.debug('[' + __name__ + '] ' + 'Could not save data to: ' + str(newFile))
 
     ''' 
 
@@ -325,9 +320,9 @@ class App():
     def newFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
         if self.writeFile is not None and self.writeFile != '':
-            self.infoLog.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
+            self.logger.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
         else:
-            self.infoLog.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
+            self.logger.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
 
     def graphUpdate(self):
         self.graph.handleUpdate(self.table.getCarStorage())

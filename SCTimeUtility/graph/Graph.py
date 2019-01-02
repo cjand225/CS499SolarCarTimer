@@ -6,7 +6,7 @@ from enum import IntEnum
 import matplotlib.pyplot as plt
 import numpy as np
 
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class GraphType(IntEnum):

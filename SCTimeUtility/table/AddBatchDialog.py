@@ -2,7 +2,7 @@ from PyQt5.Qt import Qt
 from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.uic import loadUi
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class AddBatchDialog(QDialog):

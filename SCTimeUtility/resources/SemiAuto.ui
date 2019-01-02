@@ -39,7 +39,7 @@
              <x>0</x>
              <y>0</y>
              <width>539</width>
-             <height>525</height>
+             <height>490</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout">
@@ -54,38 +54,52 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QGroupBox" name="Global_Options">
+      <widget class="QGroupBox" name="globalOptions">
        <property name="title">
         <string>Global Options</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="2" column="0">
-         <layout class="QGridLayout" name="gridLayout_3">
+         <layout class="QGridLayout" name="globalOptionsLayout">
           <item row="0" column="0">
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="globalStart">
             <property name="text">
-             <string>Start</string>
+             <string>Start All</string>
             </property>
            </widget>
           </item>
           <item row="0" column="1">
-           <widget class="QPushButton" name="pushButton_2">
+           <widget class="QPushButton" name="globalStop">
             <property name="text">
-             <string>End</string>
+             <string>Stop All</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="removeCar">
+            <property name="text">
+             <string>Remove Car</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QPushButton" name="editCar">
+            <property name="text">
+             <string>Edit Car</string>
             </property>
            </widget>
           </item>
           <item row="1" column="0">
-           <widget class="QPushButton" name="pushButton_3">
+           <widget class="QPushButton" name="addCar">
             <property name="text">
              <string>Add Car</string>
             </property>
            </widget>
           </item>
-          <item row="1" column="1">
-           <widget class="QPushButton" name="pushButton_4">
+          <item row="2" column="0">
+           <widget class="QPushButton" name="addMultiple">
             <property name="text">
-             <string>Edit Car</string>
+             <string>Add Multiple</string>
             </property>
            </widget>
           </item>

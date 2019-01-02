@@ -2,7 +2,7 @@ import csv
 import os
 from SCTimeUtility.table.Car import Car
 from SCTimeUtility.table.CarStorage import CarStorage
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 def saveCSV(cs, filePath):

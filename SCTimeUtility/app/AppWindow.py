@@ -16,7 +16,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.uic import loadUi
 
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class AppWindow(QMainWindow):
@@ -33,7 +33,7 @@ class AppWindow(QMainWindow):
         self.graphWidget = None
         self.logWidget = None
         self.leaderBoardWidget = None
-        self.infoLog = getInfoLog()
+        self.logger = getLog()
         self.AboutDialog = None
         self.HelpDialog = None
 

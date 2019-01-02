@@ -11,7 +11,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 from SCTimeUtility.table.Car import Car
 from SCTimeUtility.system.TimeReferences import LapTime
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class CarStorage(QObject):
@@ -19,6 +19,7 @@ class CarStorage(QObject):
 
     def __init__(self):
         super().__init__()
+        self.logger = getLog()
         self.storageList = []
         self.LatestCarID = 0
         self.SeedValue = None
@@ -37,7 +38,7 @@ class CarStorage(QObject):
     def setSeedValue(self, seedTime):
         if self.SeedValue is None and len(self.storageList) > 0:
             self.SeedValue = seedTime
-            getInfoLog().info('[' + __name__ + ']' + 'Setting Seed Value for All Cars')
+            self.logger.info('[' + __name__ + ']' + 'Setting Seed Value for All Cars')
             self.setSeeds()
 
     """
@@ -93,7 +94,7 @@ class CarStorage(QObject):
         if self.SeedValue is not None:
             newCar.setSeedValue(self.SeedValue)
         self.storageList.append(newCar)
-        getInfoLog().info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(carOrg, carNum))
+        self.logger.info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(carOrg, carNum))
         self.LatestCarID += 1
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))

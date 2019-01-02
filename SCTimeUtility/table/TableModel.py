@@ -8,7 +8,7 @@ from PyQt5.Qt import Qt
 from PyQt5.QtCore import QAbstractTableModel, QModelIndex, QVariant
 from SCTimeUtility.table.CarStorage import CarStorage
 from SCTimeUtility.system.TimeReferences import strptimeMultiple, splitTimes, LapTime
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class TableModel(QAbstractTableModel):

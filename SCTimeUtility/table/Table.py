@@ -10,7 +10,7 @@ from SCTimeUtility.table.TableWidget import TableWidget
 from SCTimeUtility.table.AddCarDialog import AddCarDialog
 from SCTimeUtility.table.AddBatchDialog import AddBatchDialog
 from SCTimeUtility.table.SemiAuto import SemiAuto
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class Table():
@@ -23,6 +23,7 @@ class Table():
     def __init__(self):
         super().__init__()
 
+        self.logger = getLog()
         # things to be initialized later
         self.TableMod = None
         self.Widget = None
@@ -90,7 +91,7 @@ class Table():
 
     def initSemiAuto(self):
         self.semiAuto = SemiAuto(type(self).semiAutoUIPath)
-        getDebugLog().debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
+        self.logger.debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
 
     def getSemiAuto(self):
         return self.semiAuto

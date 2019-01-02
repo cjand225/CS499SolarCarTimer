@@ -4,7 +4,9 @@ from PyQt5.uic import loadUi
 
 import logging
 
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+
+from SCTimeUtility.log.Log import getLog
+from SCTimeUtility.log.logFilters import infoFilter, debugFilter, criticalFilter, warningFilter, errorFilter
 
 
 class LogWidget(QWidget):
@@ -13,41 +15,51 @@ class LogWidget(QWidget):
         super().__init__(parent)
         self.UIPath = uipath
 
+        # get log
+        self.log = getLog()
+        self.format = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
+
+        # create handlers
         self.infoLogTextBox = QTextEditLogger(self)
         self.debugLogTextBox = QTextEditLogger(self)
         self.warningLogTextBox = QTextEditLogger(self)
         self.criticalLogTextBox = QTextEditLogger(self)
         self.errorLogTextBox = QTextEditLogger(self)
 
-        self.infoLog = getInfoLog()
-        self.debugLog = getDebugLog()
-        self.warningLog = getWarningLog()
-        self.criticalLog = getCriticalLog()
-        self.errorLog = getErrorLog()
+        # set format for handlers
+        self.infoLogTextBox.setFormatter(self.format)
+        self.debugLogTextBox.setFormatter(self.format)
+        self.warningLogTextBox.setFormatter(self.format)
+        self.criticalLogTextBox.setFormatter(self.format)
+        self.errorLogTextBox.setFormatter(self.format)
 
-        self.setupLogs()
+        # add filters to widget handlers
+        self.infoLogTextBox.addFilter(infoFilter())
+        self.debugLogTextBox.addFilter(debugFilter())
+        self.warningLogTextBox.addFilter(warningFilter())
+        self.criticalLogTextBox.addFilter(criticalFilter())
+        self.errorLogTextBox.addFilter(errorFilter())
+
+        # add new widget handlers
+        self.log.addHandler(self.infoLogTextBox)
+        self.log.addHandler(self.debugLogTextBox)
+        self.log.addHandler(self.warningLogTextBox)
+        self.log.addHandler(self.criticalLogTextBox)
+        self.log.addHandler(self.errorLogTextBox)
+
+        #create widget UI and add new widgets
         self.initUI()
 
     def initUI(self):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignBottom,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        # add widgets to ui
         self.infoLayout.addWidget(self.infoLogTextBox.widget)
         self.debugLayout.addWidget(self.debugLogTextBox.widget)
         self.warningLayout.addWidget(self.warningLogTextBox.widget)
         self.criticalLayout.addWidget(self.criticalLogTextBox.widget)
         self.errorLayout.addWidget(self.errorLogTextBox.widget)
-
-    def logSetup(self, log, logBox):
-        logBox.setFormatter(logging.Formatter("[ %(asctime)s ][%(levelname)s] %(message)s", "%Y-%m-%d %H:%M:%S"))
-        log.addHandler(logBox)
-
-    def setupLogs(self):
-        self.logSetup(self.infoLog, self.infoLogTextBox)
-        self.logSetup(self.debugLog, self.debugLogTextBox)
-        self.logSetup(self.warningLog, self.warningLogTextBox)
-        self.logSetup(self.criticalLog, self.criticalLogTextBox)
-        self.logSetup(self.errorLog, self.errorLogTextBox)
 
 
 class QTextEditLogger(logging.Handler):

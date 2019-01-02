@@ -1,6 +1,6 @@
 import datetime
 import time
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 def strptimeMultiple(text, formats):

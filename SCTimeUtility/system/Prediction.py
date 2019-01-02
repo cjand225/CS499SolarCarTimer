@@ -2,7 +2,7 @@ import math
 import numpy as np
 import scipy.stats
 from SCTimeUtility.system.TimeReferences import LapTime
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 def predictNextLapTime(lapTimes):

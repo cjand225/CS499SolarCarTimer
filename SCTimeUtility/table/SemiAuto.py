@@ -3,7 +3,7 @@ from PyQt5.Qt import Qt
 from PyQt5.uic import loadUi
 
 from SCTimeUtility.table.ElidedLabel import ElidedLabel
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class SemiAuto(QWidget):

@@ -2,7 +2,7 @@ import time
 from PyQt5.QtCore import pyqtSignal, QObject
 from SCTimeUtility.system.TimeReferences import LapTime
 from SCTimeUtility.system.Validation import intergerToTimeString
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class Car(QObject):
@@ -10,6 +10,7 @@ class Car(QObject):
 
     def __init__(self, ID, Team, CarNum):
         super().__init__()
+        self.logger = getLog()
         self.ID = ID
         self.TeamName = str(Team)
         self.CarNum = CarNum
@@ -162,10 +163,10 @@ class Car(QObject):
         if (recordedTime < 0):
             recordedTime = 0
 
-        getInfoLog().info('Lap Added to Car: {}')
+        self.logger.info('Lap Added to Car: {}')
         self.LapList.append(LapTime(int(recordedTime)))
-        getInfoLog().info(
-            'Lap Time {} added Car: {} , {} by SemiAuto.'.format(intergerToTimeString(int(recordedTime)), self.TeamName,
+        self.logger.info(
+            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(intergerToTimeString(int(recordedTime)), self.TeamName,
                                                                  self.CarNum))
 
     """
@@ -179,8 +180,8 @@ class Car(QObject):
 
     def addLapManually(self, timeData):
         self.LapList.append(LapTime(timeData))
-        getInfoLog().info(
-            'Lap Time {} added Car: {} , {} by Manual.'.format(intergerToTimeString(int(timeData)), self.TeamName,
+        self.logger.info(
+            'Lap Time {} added Car: {} , {} via Manual.'.format(intergerToTimeString(int(timeData)), self.TeamName,
                                                                self.CarNum))
 
     """
@@ -213,7 +214,7 @@ class Car(QObject):
                     self.LapList[index + 1].setElapsed(0)
 
             self.lapChanged.emit(len(self.LapList))
-            getInfoLog().info('Lap {} edited for Car: {} , {} '.format(index, self.TeamName, self.CarNum))
+            self.logger.info('Lap {} edited for Car: {} , {} '.format(index, self.TeamName, self.CarNum))
 
     """
          Function: getLap
@@ -239,7 +240,7 @@ class Car(QObject):
 
     def removeLapTime(self, lapID):
         self.LapList[lapID] = LapTime(self.SeedValue - self.SeedValue)
-        getInfoLog().info('Lap {} removed for Car: {} , {} '.format(lapID, self.TeamName, self.CarNum))
+        self.logger.info('Lap {} removed for Car: {} , {} '.format(lapID, self.TeamName, self.CarNum))
 
     """
          Function: getLatestLapID

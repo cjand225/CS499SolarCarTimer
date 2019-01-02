@@ -9,7 +9,7 @@ import os
 from SCTimeUtility.graph.LeaderBoardWidget import LeaderBoardWidget
 from SCTimeUtility.graph.LeaderBoardModel import LeaderBoardModel
 from SCTimeUtility.graph.LeaderBoardSortFilterProxyModel import LeaderBoardSortFilterProxyModel
-from SCTimeUtility.log.Log import getInfoLog, getCriticalLog, getDebugLog, getErrorLog, getWarningLog
+from SCTimeUtility.log.Log import getLog
 
 
 class LeaderBoard():
