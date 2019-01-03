@@ -1,9 +1,12 @@
 import sys, unittest
-from PyQt5.Qt import QApplication, Qt
-from PyQt5.QtWidgets import QDialog
+
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QDialog, QApplication
 from PyQt5.QtTest import QSignalSpy
+
 from SCTimeUtility.app.App import App
 from SCTimeUtility.table.AddCarDialog import AddCarDialog
+from SCTimeUtility.table.Table import Table
 
 
 class TestAddCarDialog(unittest.TestCase):
@@ -12,7 +15,7 @@ class TestAddCarDialog(unittest.TestCase):
 
     @staticmethod
     def createWidget():
-        addCarDialog = AddCarDialog(App.addCarDialogUIPath)
+        addCarDialog = AddCarDialog(Table.addCarDialogUIPath)
         addCarDialog.show()
         return addCarDialog
 

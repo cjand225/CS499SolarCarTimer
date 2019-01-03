@@ -2,12 +2,11 @@ import unittest
 import sys
 from SCTimeUtility.app.App import App
 from SCTimeUtility.app.AppWindow import AppWindow
-from SCTimeUtility.table.SemiAutoWidget import SemiAutoWidget
+from SCTimeUtility.table.SemiAuto import SemiAuto
 from SCTimeUtility.table.Table import Table
 from SCTimeUtility.video.VideoWidget import VisionWidget
 from SCTimeUtility.log.LogWidget import LogWidget
 from SCTimeUtility.graph.Graph import Graph
-from SCTimeUtility.graph.GraphOptionsWidget import GraphOptions
 
 
 class TestAppWindowMethods(unittest.TestCase):
@@ -18,30 +17,25 @@ class TestAppWindowMethods(unittest.TestCase):
 
     def testAddVision(self):
         vis = VisionWidget(App.visionUIPath)
-        self.MyAppWindow.addVison(vis)
-        self.assertTrue(self.MyAppWindow.VisionWidget, vis)
+        self.MyAppWindow.addVision(vis)
+        self.assertTrue(self.MyAppWindow.visionWidget, vis)
 
     def testAddTable(self):
-        mytable = Table(App.tableUIPath)
+        mytable = Table()
         self.MyAppWindow.addTable(mytable)
-        self.assertTrue(self.MyAppWindow.TableWidget, mytable)
+        self.assertTrue(self.MyAppWindow.tableWidget, mytable)
 
     def testAddLog(self):
         myLog = LogWidget(App.logUIPath)
         self.MyAppWindow.addLog(myLog)
-        self.assertTrue(self.MyAppWindow.LogWidget, myLog)
+        self.assertTrue(self.MyAppWindow.logWidget, myLog)
 
     def testaddSemiAuto(self):
-        mySemi = SemiAutoWidget(App.semiAutoUIPath)
+        mySemi = SemiAuto(Table.semiAutoUIPath)
         self.MyAppWindow.addSemiAuto(mySemi)
-        self.assertTrue(self.MyAppWindow.SemiAutoWidget, mySemi)
+        self.assertTrue(self.MyAppWindow.semiAutoWidget, mySemi)
 
     def testAddGraphWidget(self):
-        myGraph = Graph(App.quitDialogPath)
+        myGraph = Graph(App.graphUIPath)
         self.MyAppWindow.addGraph(myGraph)
-        self.assertTrue(self.MyAppWindow.GraphWidget, myGraph)
-
-    def testAddGraphOptionsWidget(self):
-        myGraphOps = GraphOptions(App.graphOptionsPath)
-        self.MyAppWindow.addGraphOptions(myGraphOps)
-        self.assertTrue(self.MyAppWindow.GraphOptionsWidget, myGraphOps)
+        self.assertTrue(self.MyAppWindow.graphWidget, myGraph)

@@ -1,7 +1,7 @@
+import re, unittest
+
 from SCTimeUtility.table.Car import Car
 from SCTimeUtility.table.CarStorage import CarStorage
-import re
-import unittest
 
 
 class testCarStorage(unittest.TestCase):

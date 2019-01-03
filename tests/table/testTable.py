@@ -1,10 +1,9 @@
-import unittest
-import sys
+import unittest, sys
+
+from PyQt5.QtWidgets import QMainWindow, QApplication
+
 from SCTimeUtility.app.App import App
 from SCTimeUtility.table.Table import Table
-
-from PyQt5.Qt import QApplication
-from PyQt5.QtWidgets import QMainWindow
 
 
 class TestAppMethods(unittest.TestCase):

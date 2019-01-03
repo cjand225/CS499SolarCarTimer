@@ -1,7 +1,4 @@
-import unittest
-import sys
-import time
-import re
+import unittest, sys, time, re
 
 from SCTimeUtility.table.Car import Car
 

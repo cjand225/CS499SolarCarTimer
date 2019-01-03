@@ -6,15 +6,17 @@ Purpose: Controller for entire application, used to periodically update project 
 '''
 
 import os, sys
-from PyQt5.Qt import QApplication
+from PyQt5.QtWidgets import QApplication
 
-from SCTimeUtility.graph.Graph import Graph
 from SCTimeUtility.app.AppWindow import AppWindow
+from SCTimeUtility.graph.Graph import Graph
+from SCTimeUtility.graph.LeaderBoard import LeaderBoard
+
 from SCTimeUtility.system.IO import loadCSV, saveCSV
 from SCTimeUtility.table.Table import Table
 from SCTimeUtility.video.Video import Video
 from SCTimeUtility.log.LogWidget import LogWidget
-from SCTimeUtility.graph.LeaderBoard import LeaderBoard
+
 from SCTimeUtility.log.Log import getLog
 
 
@@ -29,7 +31,7 @@ class App():
     quitDialogUIPath = os.path.join(resourcesDir, 'QuitDialog.ui')
     helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
     aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
-    GraphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
+    graphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
     userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
     aboutPath = os.path.join(manualDir, 'about.html')
 
@@ -46,8 +48,8 @@ class App():
 
 
         self.table = None
-        self.SemiAuto = None
-        self.Vision = None
+        self.semiAuto = None
+        self.vision = None
         self.graph = None
         self.logWidget = None
         self.leaderBoard = None
@@ -126,8 +128,8 @@ class App():
     '''
 
     def initVision(self):
-        self.Vision = Video(self.visionUIPath)
-        if self.Vision is not None:
+        self.vision = Video(self.visionUIPath)
+        if self.vision is not None:
             getLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
         else:
             getLog().debug('[' + __name__ + '] ' + 'Video module failed to initialize')
@@ -160,7 +162,7 @@ class App():
     '''
 
     def initGraph(self):
-        self.graph = Graph(self.GraphUIPath)
+        self.graph = Graph(self.graphUIPath)
         if self.graph is not None:
             getLog().debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:
@@ -202,8 +204,8 @@ class App():
             self.mainWindow.addTable(self.table.getTableWidget())
         if self.table.getSemiAuto() is not None:
             self.mainWindow.addSemiAuto(self.table.getSemiAuto())
-        if self.Vision is not None:
-            self.mainWindow.addVision(self.Vision.getWidget())
+        if self.vision is not None:
+            self.mainWindow.addVision(self.vision.getWidget())
         if self.graph is not None:
             self.mainWindow.addGraph(self.graph)
         if self.leaderBoard is not None:

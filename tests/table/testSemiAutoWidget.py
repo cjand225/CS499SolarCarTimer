@@ -1,12 +1,16 @@
-import sys, os, unittest, time
-from threading import Thread
+import sys, os, unittest, time, threading
 
-sys.path.insert(0, os.path.abspath("SCTimeUtility"))
-from PyQt5.Qt import QApplication, Qt
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication
 from PyQt5.QtTest import QSignalSpy
 from PyQt5.QtGui import QBrush, QPalette
+
 from SCTimeUtility.app.App import App
+from SCTimeUtility.table.Table import Table
 from SCTimeUtility.table.Car import Car
+from SCTimeUtility.table.SemiAuto import SemiAuto
+
+sys.path.insert(0, os.path.abspath("SCTimeUtility"))
 
 
 class TestSemiAutoWidget(unittest.TestCase):
@@ -15,13 +19,13 @@ class TestSemiAutoWidget(unittest.TestCase):
 
     @staticmethod
     def createWidget():
-        semiAutoWidget = SemiAutoWidget(App.semiAutoUIPath)
+        semiAutoWidget = SemiAuto(Table.semiAutoUIPath)
         semiAutoWidget.show()
         return semiAutoWidget
 
     @staticmethod
     def addCar(semiAutoWidget):
-        testCar = car(0, "University of Kentucky")
+        testCar = Car(0, "University of Kentucky")
         semiAutoWidget.addCar(testCar)
         return testCar
 
@@ -29,23 +33,23 @@ class TestSemiAutoWidget(unittest.TestCase):
         semiAutoWidget = type(self).createWidget()
         testCar = type(self).addCar(semiAutoWidget)
         self.assertEqual(testCar, semiAutoWidget.cars[0])
-        carLabel = semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAutoWidget.labelColumn).widget()
+        carLabel = semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAuto.labelColumn).widget()
         self.assertEqual(testCar.carOrg,
-                         semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAutoWidget.labelColumn).widget().text())
+                         semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAuto.labelColumn).widget().text())
         semiAutoWidget.close()
 
     def testSetCar(self):
-        newCar = car(1, "Foboar")
+        newCar = Car(1, "Foboar")
         semiAutoWidget = type(self).createWidget()
         type(self).addCar(semiAutoWidget)
         semiAutoWidget.setCar(0, newCar)
         self.assertEqual(newCar, semiAutoWidget.cars[0])
         self.assertEqual(newCar.carOrg,
-                         semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAutoWidget.labelColumn).widget().text())
+                         semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAuto.labelColumn).widget().text())
         semiAutoWidget.close()
 
     def testDeleteCar(self):
-        newCars = [car(1, "Foo"), car(2, "Baz")]
+        newCars = [Car(1, "Foo"), Car(2, "Baz")]
         semiAutoWidget = type(self).createWidget()
         type(self).addCar(semiAutoWidget)
         for newCar in newCars:
@@ -53,11 +57,11 @@ class TestSemiAutoWidget(unittest.TestCase):
         semiAutoWidget.deleteCar(newCars[0])
         self.assertEqual(newCars[1], semiAutoWidget.cars[1])
         self.assertEqual(newCars[1].carOrg,
-                         semiAutoWidget.buttonsLayout.itemAtPosition(1, SemiAutoWidget.labelColumn).widget().text())
+                         semiAutoWidget.buttonsLayout.itemAtPosition(1, SemiAuto.labelColumn).widget().text())
         semiAutoWidget.deleteCarAtIndex(0)
         self.assertEqual(newCars[1], semiAutoWidget.cars[0])
         self.assertEqual(newCars[1].carOrg,
-                         semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAutoWidget.labelColumn).widget().text())
+                         semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAuto.labelColumn).widget().text())
         semiAutoWidget.close()
 
     def testRecordTime(self):
@@ -94,14 +98,14 @@ class TestSemiAutoWidget(unittest.TestCase):
         palette = QPalette()
         semiAutoWidget = type(self).createWidget()
         testCar = type(self).addCar(semiAutoWidget)
-        carButton = semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAutoWidget.buttonColumn).widget()
+        carButton = semiAutoWidget.buttonsLayout.itemAtPosition(0, SemiAuto.buttonColumn).widget()
         semiAutoWidget.showPredictAtIndex(0)
-        self.assertEqual(carButton.palette().color(carButton.backgroundRole()), SemiAutoWidget.predictColor)
+        self.assertEqual(carButton.palette().color(carButton.backgroundRole()), SemiAuto.predictColor)
         semiAutoWidget.clearPredictAtIndex(0)
         self.assertEqual(carButton.palette().color(carButton.backgroundRole()),
                          palette.color(carButton.backgroundRole()))
         semiAutoWidget.showPredict(testCar)
-        self.assertEqual(carButton.palette().color(carButton.backgroundRole()), SemiAutoWidget.predictColor)
+        self.assertEqual(carButton.palette().color(carButton.backgroundRole()), SemiAuto.predictColor)
         semiAutoWidget.clearPredict(testCar)
         self.assertEqual(carButton.palette().color(carButton.backgroundRole()),
                          palette.color(carButton.backgroundRole()))

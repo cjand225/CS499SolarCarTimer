@@ -1,7 +1,7 @@
 import logging
 
 from PyQt5.QtWidgets import QWidget, QStyle, QApplication, QPlainTextEdit
-from PyQt5.Qt import Qt
+from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
 
 from SCTimeUtility.log.Log import getLog

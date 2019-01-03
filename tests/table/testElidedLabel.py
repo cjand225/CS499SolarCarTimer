@@ -1,9 +1,10 @@
 import sys, os, unittest, time
 
-sys.path.insert(0, os.path.abspath("SCTimeUtility"))
-from PyQt5.Qt import QApplication
+from PyQt5.uic import loadUi
+from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtTest import QSignalSpy
-from tests.table.ElidedLabelTestWidget import ElidedLabelTestWidget
+
+sys.path.insert(0, os.path.abspath("SCTimeUtility"))
 
 
 class TestElidedLabel(unittest.TestCase):
@@ -30,3 +31,12 @@ class TestElidedLabel(unittest.TestCase):
 
     def tearDown(self):
         self.app.quit()
+
+
+class ElidedLabelTestWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.ui = loadUi("resources/ElidedLabelTestWidget.ui", self)
