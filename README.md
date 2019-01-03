@@ -39,17 +39,19 @@ First:
 
 If you have Anaconda Package Manager installed and have your %PATH% env setup correctly.
 (If you're not sure, be sure to use "Anaconda Prompt" which is provided with the installation of Anaconda3)
+### Creating an Environment
 
+### Using pre-existing package list 
 
-#### Windows
+##### Windows
 
     conda create -n <name> --file Install\envBuild_Windows.txt
     
-#### Linux
+##### Linux
 
     conda create -n <name> --file Install\envBuild_Linux.txt
     
-### MacOS
+#### MacOS
 
     conda create -n <name> --file Install\envBuild_MacOS.txt
 
@@ -65,6 +67,28 @@ Running project from `terminal` or `command prompt`:
 _Note: All builds provided will only work on their respective 64-bit systems_
 
 _(Env Build testing was performed on Ubuntu 18.04 and Windows 10 respectively.)_
+
+### Creating a Clean Environment
+
+First, create the environment using:
+
+    conda create -n <name>
+    
+Activate it using:
+
+    conda activate <name>
+    
+Then install the packages (from the package list) using either `pip` or `conda`:
+
+    conda install <package-name>
+    pip install <package-name>
+    
+    
+After installing all the required packages, run (in the project folder):
+
+    python -m SCTimeUtility.__main__
+    
+_Note: If using conda to install packages, you may want to use `conda-forge` as the package provider._
 
 
 ## Installation
