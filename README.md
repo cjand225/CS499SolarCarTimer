@@ -106,7 +106,7 @@ Otherwise, Just use click the shortcut in either the start menu or desktop.
 _note: shortcuts are currently a work in progress and will be implemented shortly(For now, just use the command above after installing)_
 
 	
-#Authors and license
+# Authors and license
 
 Licensed under GNU General Public License v3.0
 
