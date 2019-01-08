@@ -41,6 +41,10 @@ class ImageProcessThread(threading.Thread):
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         fgbg = cv2.createBackgroundSubtractorMOG2()
 
+        #frames needed to calculate if a frame should be added to next queue
+        prevFrame = None
+        difference = None
+
         # initalize fps lock based on time
         currentTime = targetTime = time.time()
         while self.running:

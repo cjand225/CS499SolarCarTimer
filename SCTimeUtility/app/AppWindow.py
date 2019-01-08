@@ -34,8 +34,8 @@ class AppWindow(QMainWindow):
         self.logWidget = None
         self.leaderBoardWidget = None
         self.logger = getLog()
-        self.AboutDialog = None
-        self.HelpDialog = None
+        self.aboutDialog = None
+        self.helpDialog = None
 
         # declare initializers here
         self.initMainWindow()
@@ -202,7 +202,7 @@ class AppWindow(QMainWindow):
         Function: initFileDialog(self)
         Parameters: self
         Return Value: N/A
-        Purpose: Initalizes a QFileDialog used primarily for getting input from the user on where they 
+        Purpose: Initializes a QFileDialog used primarily for getting input from the user on where they 
                  would like to read or write a file. Needs to be called before openFileDialog, saveAsFileDialog,
                  and saveFileDialog
     
@@ -223,9 +223,9 @@ class AppWindow(QMainWindow):
     '''
 
     def openFileDialog(self):
-        fileName = self.fileDialog.getOpenFileName(self, 'Open File')
-        if fileName:
-            return fileName[0]
+        filename = self.fileDialog.getOpenFileName(self, 'Open File')
+        if filename:
+            return filename[0]
         else:
             return None
 
@@ -239,11 +239,10 @@ class AppWindow(QMainWindow):
                  file.
     '''
 
-    # TODO: set parameters for width/heigh/file formats - also add Save As part as well
     def saveAsFileDialog(self):
-        fileName = self.fileDialog.getSaveFileName(self, 'Save File')
-        if fileName != '':
-            return fileName[0]
+        filename = self.fileDialog.getSaveFileName(self, 'Save File')
+        if filename != '':
+            return filename[0]
         else:
             return None
 
@@ -261,9 +260,9 @@ class AppWindow(QMainWindow):
 
     # TODO: set parameters for width/heigh/file formats
     def newFileDialog(self):
-        fileName = self.fileDialog.getSaveFileName(self, 'New File')
-        if fileName != '':
-            return fileName[0]
+        filename = self.fileDialog.getSaveFileName(self, 'New File')
+        if filename != '':
+            return filename[0]
         else:
             return None
 
@@ -351,13 +350,13 @@ class AppWindow(QMainWindow):
     '''
 
     def initHelpDialog(self, uiPath, filePath=None):
-        self.HelpDialog = QDialog()
-        self.HelpDialog.ui = loadUi(uiPath, self.HelpDialog)
+        self.helpDialog = QDialog()
+        self.helpDialog.ui = loadUi(uiPath, self.helpDialog)
         if filePath is not None:
             file = QFile(filePath)
             file.open(QFile.ReadOnly | QFile.Text)
             stream = QTextStream(file)
-            self.HelpDialog.ui.textBrowser.setHtml(stream.readAll())
+            self.helpDialog.ui.textBrowser.setHtml(stream.readAll())
 
     '''
 
@@ -371,13 +370,13 @@ class AppWindow(QMainWindow):
     '''
 
     def initAboutDialog(self, uiPath, filePath=None):
-        self.AboutDialog = QDialog()
-        self.AboutDialog.ui = loadUi(uiPath, self.AboutDialog)
+        self.aboutDialog = QDialog()
+        self.aboutDialog.ui = loadUi(uiPath, self.aboutDialog)
         if filePath is not None:
             file = QFile(filePath)
             file.open(QFile.ReadOnly | QFile.Text)
             stream = QTextStream(file)
-            self.AboutDialog.ui.textBrowser.setHtml(stream.readAll())
+            self.aboutDialog.ui.textBrowser.setHtml(stream.readAll())
 
     '''
 
@@ -391,8 +390,8 @@ class AppWindow(QMainWindow):
     '''
 
     def handleAboutDialog(self):
-        self.AboutDialog.ui.buttonBox.clicked.connect(self.AboutDialog.close)
-        self.AboutDialog.exec()
+        self.aboutDialog.ui.buttonBox.clicked.connect(self.aboutDialog.close)
+        self.aboutDialog.exec()
 
     '''
         
@@ -406,5 +405,5 @@ class AppWindow(QMainWindow):
     '''
 
     def handleHelpDialog(self):
-        self.HelpDialog.ui.buttonBox.clicked.connect(self.HelpDialog.close)
-        self.HelpDialog.exec()
+        self.helpDialog.ui.buttonBox.clicked.connect(self.helpDialog.close)
+        self.helpDialog.exec()

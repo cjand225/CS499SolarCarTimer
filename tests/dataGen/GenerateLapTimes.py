@@ -2,6 +2,7 @@ import time, numpy as np
 
 from SCTimeUtility.system.TimeReferences import LapTime
 
+
 def generateLapTimes(elapsedMean, elapsedStd, n, seed=None, currentTime=None):
     if seed is not None:
         np.random.seed(seed)

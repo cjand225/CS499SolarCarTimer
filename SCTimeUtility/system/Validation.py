@@ -1,58 +1,83 @@
 '''
-this is going to be used as a place for functions related to data validation
+Module: Validation.py
+Purpose: assortment of functions used to validate data before it is used for certain objects.
+
 '''
 
 import re, os
 from SCTimeUtility.log.Log import getLog
 
 RegExpID = "^([0-9][0-9]{0,2}|1000)$"
-RegExpOrg = "/^[a-z ,.'-]+$/i"
+RegExpTeamName = "^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"
 RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
 RegExpFileName = "^[a-zA-Z0-9](?[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\.[a-zA-Z0-9_-]+$"
 
+"""
 
-def isValidFilePath(path):
+    Function: isValidFilename
+    Parameters: regExpFileName, filename 
+    Return Value: Boolean indicator
+    Purpose: Boolean check if given parameter filename matches the regular expression.
+
+"""
+
+
+def isValidPath(path):
     return os.path.exists(path)
 
 
-def isValidFileName(fileName):
-    return re.findall(RegExpFileName, fileName)
+"""
+
+    Function: isValidFilename
+    Parameters: regExpFileName, filename 
+    Return Value: Boolean indicator
+    Purpose: Boolean check if given parameter filename matches the regular expression.
+
+"""
+
+
+def isValidFilename(regExpFileName, filename):
+    return re.findall(regExpFileName, filename)
+
+
+"""
+
+    Function: isValidElapsedTime
+    Parameters: inputTime, totalCurrentTime
+    Return Value: Boolean indicator
+    Purpose: Boolean check if given parameter inputTime doesn't go past the total amount of time that
+             has occurred.
+
+"""
 
 
 def isValidElaspedTime(inputTime, totalCurrentTime):
-    if inputTime >= totalCurrentTime:
-        return False
-    else:
-        return True
+    return inputTime >= totalCurrentTime
 
 
 """
 
     Function: checkString
-    Parameters: self, orgName
-    Return Value: orgName or Empty String
-    Purpose: used as a form of validation to check if either the carNum matches the pattern used
-             for Organization names. If there is no match, it'll return an empty string, else there is a 
-             match and it returns the original parameter given.
+    Parameters: regExpTeamName, teamName
+    Return Value: Boolean indicator
+    Purpose: Boolean check if given parameter teamName matches regexp given which checks the name of the team.
 
 """
 
 
-def isValidString(RegExpOrg, orgName):
+def isValidTeamName(regExpTeamName, teamName):
     check = False
-    if type(orgName) is str:
-        if re.findall(RegExpOrg, orgName):
+    if type(teamName) is str:
+        if re.findall(regExpTeamName, teamName):
             check = True
     return check
 
 
 """
     Function: checkNumRange
-    Parameters: self, carNum
-    Return Value: -1 or carNumber
-    Purpose: used as a form of validation to check if either the carNum matches either the pattern
-             for IDs or the pattern for Vehicle Numbers before returning, if it doesn't it'll return
-             a -1, meaning failure, or if it does, the actual number of the parameter, meaning a success
+    Parameters: carNum, ExpCarNum
+    Return Value: boolean indicator
+    Purpose: Boolean check if given parameter carNum matches regexp given which checks the range of the carNum
 
 """
 
@@ -67,34 +92,77 @@ def isValidInteger(carNum, ExpCarNum):
     return check
 
 
-# validation for existing cars
-def carNumberExists(num, storageList):
+"""
+    Function: carNumberExists
+    Parameters: num, storageList
+    Return Value: boolean indicator
+    Purpose: Boolean check if the given parameter num, matches an existing carNum.
+
+"""
+
+
+def existsCarNumber(num, storageList):
     check = False
     for item in storageList:
         if item.getCarNum() == num:
             check = True
-
     return check
 
 
-# validation for existing cars
-def carOrgExists(org, storageList):
+"""
+    Function: teamNameExists
+    Parameters: teamName, StorageList
+    Return Value: boolean indicator
+    Purpose: used as a form of validation to check if the given parameter exists or not.
+
+"""
+
+
+def existsTeamName(teamName, storageList):
     check = False
     for item in storageList:
-        if item.getTeam == org:
+        if item.getTeam() == teamName:
             check = True
     return check
 
 
-def carExists(storageList, num, org):
-    return carNumberExists(num, storageList) or carOrgExists(org, storageList)
+"""
+    Function: existsCar
+    Parameters: teamName, StorageList
+    Return Value: boolean indicator
+    Purpose: used as a form of validation to check if the given parameters do or do not exist already within
+             another car's variables.
+
+"""
 
 
-def isValidCar(num, org):
-    return isValidInteger(num, RegExpCarNum) and isValidString(org, RegExpOrg)
+def existsCar(storageList, num, org):
+    return existsCarNumber(num, storageList) or existsTeamName(org, storageList)
 
 
-def intergerToTimeString(int):
+"""
+    Function: isValidCar
+    Parameters: num, teamName
+    Return Value: boolean indicator
+    Purpose: used as a form of validation to check if the given parameters are valid before car creation. 
+
+"""
+
+
+def isValidCar(num, teamName):
+    return isValidInteger(num, RegExpCarNum) and isValidTeamName(teamName, RegExpTeamName)
+
+
+"""
+    Function: intToTimeStr
+    Parameters: int
+    Return Value: str
+    Purpose: converts an integeter that represents milliseconds into a time string in the format "HH:MM:SS"
+
+"""
+
+
+def intToTimeStr(int):
     Days = divmod(int, 24 * 3600)
     Hours = divmod(Days[1], 3600)
     Minutes = divmod(Hours[1], 60)

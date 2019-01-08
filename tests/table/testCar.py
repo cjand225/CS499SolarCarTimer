@@ -1,76 +1,103 @@
-import unittest, sys, time, re
+import unittest, sys, time, re, random
 
+from SCTimeUtility.system.TimeReferences import LapTime
 from SCTimeUtility.table.Car import Car
 
 
 class testCar(unittest.TestCase):
 
     def setUp(self):
-        # self.car = Car(0)
-        self.CorrectString = "University of Kentucky"
+        self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
+        self.RegExpTeamName = "^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"
+        self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
 
     def testCreateNormal(self):
         myCar = Car(1, "University of Kentucky", 23)
-        self.assertTrue(myCar.ID == 1)
-        self.assertEqual(myCar.TeamName, self.CorrectString)
-        self.assertTrue(myCar.CarNum == 23)
+        self.assertRegex(str(myCar.ID), self.RegExpID)
+        self.assertRegex(str(myCar.CarNum), self.RegExpCarNum)
+        self.assertRegex(str(myCar.TeamName), self.RegExpTeamName)
+
+    def testCreateMalformed(self):
+        myCar = Car("A", "hi", 23)
+        self.assertNotEqual(myCar.getID(), "A")
+        self.assertNotEqual(myCar.ID, "A")
+
+    def testSetCarID(self):
+        myCar = Car(1, "University of Kentucky", 23)
+        myCar.setID(2)
+        self.assertEqual(myCar.ID, 2)
+
+    def testSeedValue(self):
+        myCar = Car(1, "University of Kentucky", 23)
+        seedVal = time.time()
+        myCar.setSeedValue(seedVal)
+        self.assertIsNotNone(myCar.getSeedValue())
+        self.assertIsNotNone(myCar.SeedValue)
+        self.assertEqual(myCar.SeedValue, myCar.getSeedValue())
+        self.assertEqual(myCar.getSeedValue(), seedVal)
+        self.assertEqual(myCar.SeedValue, seedVal)
 
     def testaddTime(self):
         myCar = Car(1, "University of Kentucky", 23)
         seedTime = time.time()
-        myCar.setSeedValue(seedTime)
         testTime = time.time()
-        myCar.addLapTime(testTime)
-        firstLap = testTime - seedTime
-
-        self.assertEqual(firstLap, myCar.getLap(0))
+        myCar.setSeedValue(seedTime)
+        myCar.addLapManually(testTime)
+        firstLap = LapTime(testTime).getElapsed()
+        self.assertEqual(firstLap, myCar.getLap(1).getElapsed())
 
     def testAddMultipleLaps(self):
+        numOfLaps = 500
         myCar = Car(1, "University of Kentucky", 23)
-        myCar.addLapTime(time.time())
-        myCar.addLapTime(6, 7, 8, 9)
-        firstLap = myCar.LapList[0]
-        secondLap = myCar.LapList[1]
-        # check if both laps match the ones in the list
-        self.assertEqual(secondLap[0], 1)
-        self.assertEqual(firstLap[0], 0)
-        self.assertEqual(firstLap, myCar.LapList[0])
-        self.assertEqual(secondLap, myCar.LapList[1])
+        myCar.setSeedValue(time.time())
+        lapList = []
+        for x in range(0, numOfLaps):
+            timeAdd = time.time()
+            lapList.append(LapTime(timeAdd))
+            myCar.addLapManually(timeAdd)
+        # check if all laps added
+        self.assertEqual(numOfLaps, myCar.getLapCount())
+        # check for accuracy of each lap
+        for x in range(0, numOfLaps - 1):
+            self.assertEqual(lapList[x].getElapsed(), myCar.getLap(x + 1).getElapsed())
 
     def testGetLap(self):
+        numOfLaps = 500
         myCar = Car(1, "University of Kentucky", 23)
-        myCar.addLapTime(2, 3, 4, 5)
-        myCar.addLapTime(6, 7, 8, 9)
-        firstLap = myCar.LapList[0]
-        myCar.editLapTime(0, 1, 1, 1, 1)
-        firstLapCopy = myCar.getLapByID(0)
-        self.assertNotEqual(firstLap, firstLapCopy)
+        myCar.setSeedValue(time.time())
+        lapList = []
+        for x in range(0, numOfLaps):
+            timeAdd = time.time()
+            lapList.append(LapTime(timeAdd))
+            myCar.addLapTime(timeAdd)
+        randomLap = random.randint(0, 499)
+        self.assertEqual(myCar.getLap(randomLap), myCar.LapList[randomLap])
 
     def testRemoveLap(self):
+        numOfLaps = 500
         myCar = Car(1, "University of Kentucky", 23)
-        myCar.addLapTime(2, 3, 4, 5)
-        myCar.addLapTime(6, 7, 8, 9)
-        secondLap = myCar.LapList[1]
-        myCar.removeLapTime(1)
-        self.assertNotEqual(secondLap, myCar.LapList[1])
+        myCar.setSeedValue(time.time())
+        lapList = []
+        for x in range(0, numOfLaps):
+            lapList.append(time.time())
+            myCar.addLapTime(lapList[x])
+        # only first 5, since list index would be Out of range after removal
+        lapRemoved = random.randint(0, 5)
+        self.assertNotEqual(lapList[lapRemoved], myCar.LapList[lapRemoved])
 
     def testRemoveMultipleLaps(self):
+        numOfLaps = 50
         myCar = Car(1, "University of Kentucky", 23)
-        myCar.addLapTime(2, 3, 4, 5)
-        myCar.addLapTime(6, 7, 8, 9)
-        firstLap = myCar.LapList[0]
-        secondLap = myCar.LapList[1]
-        myCar.removeLapTime(0)
-        myCar.removeLapTime(1)
-        self.assertNotEqual(firstLap, myCar.LapList[0])
-        self.assertNotEqual(secondLap, myCar.LapList[1])
+        myCar.setSeedValue(time.time())
+        lapList = []
+        removalList = []
 
     def testGetCarID(self):
         myCar = Car(1, "University of Kentucky", 23)
-        myID = myCar.getCarID()
+        myID = myCar.getID()
         self.assertEqual(myID, 1)
 
-    def testGetCarOrg(self):
+    def testGetCarTeamName(self):
         myCar = Car(1, "University of Kentucky", 23)
         myOrg = myCar.getTeam()
         self.assertEqual(myOrg, "University of Kentucky")
@@ -80,13 +107,9 @@ class testCar(unittest.TestCase):
         myCarNum = myCar.getCarNum()
         self.assertEqual(myCarNum, 23)
 
-    def testIDChanged(self):
-        myCar = Car(1, "University of Kentucky", 23)
-        myCar.editID(0)
-        self.assertEqual(myCar.getCarID(), 0)
-
     def testLapCount(self):
         myCar = Car(1, "University of Kentucky", 23)
-        myCar.addLapTime(2, 3, 4, 5)
-        myCar.addLapTime(6, 7, 8, 9)
-        self.assertEqual(myCar.getLapCount(), 2)
+        myCar.setSeedValue(time.time())
+        for x in range(0, 4):
+            myCar.addLapTime(time.time())
+        self.assertEqual(myCar.getLapCount(), 4)

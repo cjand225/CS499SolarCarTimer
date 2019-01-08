@@ -6,8 +6,6 @@ from PyQt5.QtWidgets import QApplication, QWidget, QStyle
 from PyQt5.uic import loadUi
 from enum import IntEnum
 
-
-
 from SCTimeUtility.log.Log import getLog
 
 

@@ -21,7 +21,6 @@ class CarStorage(QObject):
         super().__init__()
         self.logger = getLog()
         self.storageList = []
-        self.LatestCarID = 0
         self.SeedValue = None
         self.timeOffset = None
         self.enableOffset = False
@@ -88,16 +87,16 @@ class CarStorage(QObject):
 
     """
 
-    def createCar(self, carNum, carOrg):
+    def createCar(self, teamName, carNum):
         # check valid carNumber and Valid Car Org
-        newCar = Car(self.getLatestCarID(), str(carOrg), carNum)
+        newCar = Car(self.getLatestCarID(), str(teamName), carNum)
         if self.SeedValue is not None:
             newCar.setSeedValue(self.SeedValue)
         self.storageList.append(newCar)
-        self.logger.info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(carOrg, carNum))
-        self.LatestCarID += 1
+
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
+        self.logger.info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(teamName, carNum))
 
     """
           Function: createCars
@@ -112,10 +111,10 @@ class CarStorage(QObject):
 
     def createCars(self, list):
         for item in list:
-            if (str(item[0]).isdigit()):
+            if len(item) == 2:
                 self.createCar(item[0], item[1])
             else:
-                self.createCar(item[1], item[0])
+                continue
 
     """
          Function: removeCar
@@ -144,8 +143,7 @@ class CarStorage(QObject):
 
     def reindexStorage(self, ID):
         for x in range(ID, len(self.storageList) - 1):
-            self.storageList[x].editID(x - 1)
-        self.LatestCarID -= 1
+            self.storageList[x].setID(x - 1)
 
     """
          Function: getCarByID
@@ -175,10 +173,10 @@ class CarStorage(QObject):
 
     """
 
-    def getCarByNum(self, CarNum):
-        itemList = [item for item in self.storageList if item.getCarNum() == CarNum]
-        item = itemList[0]
-        return item
+    def getCarByNum(self, carNum):
+        for item in self.storageList:
+            if item.getCarNum() == carNum:
+                return item
 
     """
          Function: getCarByOrg
@@ -191,8 +189,8 @@ class CarStorage(QObject):
 
     """
 
-    def getCarByOrg(self, OrgString):
-        itemList = [item for item in self.storageList if item.getTeam() == OrgString]
+    def getCarByTeamName(self, teamName):
+        itemList = [item for item in self.storageList if item.getTeam() == teamName]
         item = itemList[0]
         return item
 
@@ -267,12 +265,12 @@ class CarStorage(QObject):
          Function: getLatestCarID
          Parameters: self
          Return Value: LatestCarID(int)
-         Purpose: Used for finding what the next ID to be used for the carStorage list should be.
+         Purpose: gives the next ID to be used, which is the length of the storageList
 
     """
 
     def getLatestCarID(self):
-        return self.LatestCarID
+        return len(self.storageList)
 
     """
         

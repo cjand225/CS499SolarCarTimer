@@ -1,7 +1,7 @@
 '''
 Module: App.py
 Purpose: Controller for entire application, used to periodically update project with data to and from the
-         modal.
+         model.
 
 '''
 
@@ -11,12 +11,10 @@ from PyQt5.QtWidgets import QApplication
 from SCTimeUtility.app.AppWindow import AppWindow
 from SCTimeUtility.graph.Graph import Graph
 from SCTimeUtility.graph.LeaderBoard import LeaderBoard
-
 from SCTimeUtility.system.IO import loadCSV, saveCSV
 from SCTimeUtility.table.Table import Table
 from SCTimeUtility.video.Video import Video
 from SCTimeUtility.log.LogWidget import LogWidget
-
 from SCTimeUtility.log.Log import getLog
 
 
@@ -45,7 +43,6 @@ class App():
 
         # Forward Module Declaration
         self.logger = getLog()
-
 
         self.table = None
         self.semiAuto = None
@@ -257,7 +254,6 @@ class App():
 
     '''
 
-    # TODO:Rework so table module data is passed through
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
             saveCSV(self.table.CarStoreList, self.writeFile)
@@ -265,10 +261,6 @@ class App():
         else:
             self.logger.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
             self.saveAsFile()
-
-        # else use writeFile
-
-        # continue to dump save file
 
     ''' 
 

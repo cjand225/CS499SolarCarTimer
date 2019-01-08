@@ -1,27 +1,48 @@
-import re, unittest
+import re, unittest, random, string
 
 from SCTimeUtility.table.Car import Car
 from SCTimeUtility.table.CarStorage import CarStorage
 
+from tests.dataGen.testFunctions import randomWord
+
 
 class testCarStorage(unittest.TestCase):
 
+    def setUp(self):
+        self.maxCars = 500
+        self.carListData = []
+        self.randTeamName = ''
+
+        for x in range(0, self.maxCars):
+            clist = []
+            wordLength = random.randint(0, 20)
+            randLetters = randomWord(wordLength)
+            if self.randTeamName == '':
+                self.randTeamName = randLetters
+            clist.append(randLetters)
+            clist.append(random.randint(0, 500))
+            self.carListData.append(clist)
+
     def testCreateCarStorage(self):
         myStore = CarStorage()
-        self.assertIs(myStore.__class__, CarStorage)
+        self.assertIsInstance(myStore, CarStorage)
 
-    def testAddCar(self):
+    def testCreateCar(self):
         myStore = CarStorage()
-        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
-        testCar = myStore.storageList[0]
-        self.assertEqual(myStore.storageList[0], testCar)
+        myStore.createCar(self.carListData[0][0], self.carListData[0][1])
+        self.assertIsInstance(myStore.storageList[0], Car)
+        self.assertEqual(self.carListData[0], [myStore.storageList[0].TeamName, myStore.storageList[0].CarNum])
+
+    def testCreateCars(self):
+        myStore = CarStorage()
+        myStore.createCars(self.carListData)
+        self.assertEqual(self.maxCars, myStore.getCarAmount())
+        for x in range(0, self.maxCars):
+            self.assertEqual(self.carListData[x], [myStore.storageList[x].TeamName, myStore.storageList[x].CarNum])
 
     def testRemoveCar(self):
         myStore = CarStorage()
-        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
-        myStore.addCar(myStore.getLatestCarID(), 'University', 11)
-        myStore.addCar(myStore.getLatestCarID(), 'University', 11)
-        myStore.addCar(myStore.getLatestCarID(), 'of', 32)
+        myStore.createCars(self.carListData)
         testCar = myStore.getCarByID(0)
         reIndexedCar = myStore.getCarByID(1)
         myStore.removeCar(0)
@@ -30,55 +51,45 @@ class testCarStorage(unittest.TestCase):
 
     def testgetCarByCarNum(self):
         myStore = CarStorage()
-        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
-        myStore.addCar(myStore.getLatestCarID(), 'University', 11)
-        myStore.addCar(myStore.getLatestCarID(), 'of', 32)
-        myCar = myStore.getCarByNum(32)
-        self.assertEqual(myStore.storageList[2], myCar)
+        myStore.createCars(self.carListData)
+        randCar = random.randint(0, len(self.carListData) - 2)
+        self.assertEqual(myStore.getCarByNum(randCar).CarNum, randCar)
 
     def testgetCarByID(self):
         myStore = CarStorage()
-        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
-        myStore.addCar(myStore.getLatestCarID(), 'University', 11)
-        myStore.addCar(myStore.getLatestCarID(), 'of', 32)
+        myStore.createCars(self.carListData)
         myCar = myStore.getCarByID(1)
-        self.assertEqual(myStore.storageList[1], myCar)
+        self.assertIsInstance(myStore.storageList[1].ID, int)
+        self.assertEqual(myStore.storageList[1].ID, myCar.ID)
 
     def testgetCarByOrg(self):
         myStore = CarStorage()
-        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
-        myStore.addCar(myStore.getLatestCarID(), 'University', 11)
-        myStore.addCar(myStore.getLatestCarID(), 'of', 32)
-        myCar = myStore.getCarByOrg('University')
-        self.assertEqual(myStore.storageList[1], myCar)
+        myStore.createCars(self.carListData)
+        for x in range(0, self.maxCars):
+            self.assertIsInstance(myStore.getCarByTeamName(self.randTeamName).TeamName, str)
+            self.assertEqual(myStore.getCarByTeamName(self.randTeamName).TeamName, self.randTeamName)
 
     def testreindex(self):
         myStore = CarStorage()
-        myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
-        myStore.addCar(myStore.getLatestCarID(), 'University', 12)
-        myStore.addCar(myStore.getLatestCarID(), 'of', 33)
-        myStore.addCar(myStore.getLatestCarID(), 'Univerity of Kentucky', 42)
-        myStore.addCar(myStore.getLatestCarID(), 'Univesity', 1)
-        myStore.addCar(myStore.getLatestCarID(), 'of', 2)
-        newCar = myStore.getCarByID(1)
-        secCar = myStore.getCarByID(2)
-        myStore.storageList.remove(newCar)
-        myStore.reindexStorage(1)
-        self.assertNotEqual(newCar, myStore.storageList[1])
-        self.assertEqual(secCar, myStore.storageList[1])
+        myStore.createCars(self.carListData)
+        firstCar = myStore.getCarByID(1)
+        secondCar = myStore.getCarByID(2)
+        myStore.removeCar(firstCar.ID)
+        myStore.reindexStorage(firstCar.ID)
+        self.assertNotEqual(firstCar, myStore.getCarByID(1))
+        self.assertEqual(secondCar, myStore.storageList[1])
 
-    def appendLapTime(self):
+    def testAppendLapTime(self):
         myStore = CarStorage()
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
         myCar = myStore.getCarByID(0)
-        myStore.appendLapTime(0, 1, 5, 3, 2)
         CarLap = myCar.getLapByID(0)
         self.assertEqual(CarLap[1], 1)
         self.assertEqual(CarLap[2], 5)
         self.assertEqual(CarLap[3], 3)
         self.assertEqual(CarLap[4], 2)
 
-    def testeditLaptime(self):
+    def testEditLaptime(self):
         myStore = CarStorage()
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
         myCar = myStore.getCarByID(0)
@@ -90,7 +101,7 @@ class testCarStorage(unittest.TestCase):
         self.assertEqual(LapOne[3], 32)
         self.assertEqual(LapOne[4], 23)
 
-    def testgetCopyStorage(self):
+    def testGetCopyStorage(self):
         myStore = CarStorage()
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
         newList = myStore.getCarListCopy()
@@ -119,13 +130,13 @@ class testCarStorage(unittest.TestCase):
         newlist.append(myStore.getCarByID(1).getTeam())
         self.assertEqual(newlist, myStore.getCarNamesList())
 
-    def testgetCarAmount(self):
+    def testGetCarAmount(self):
         myStore = CarStorage()
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
         myStore.addCar(myStore.getLatestCarID(), 'University of y', 42)
         self.assertEqual(myStore.getCarAmount(), 2)
 
-    def testgetHighestLapCount(self):
+    def testGetHighestLapCount(self):
         myStore = CarStorage()
         myStore.addCar(myStore.getLatestCarID(), 'University of Kentucky', 45)
         myStore.addCar(myStore.getLatestCarID(), 'University of y', 42)

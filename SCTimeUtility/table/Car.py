@@ -3,7 +3,7 @@ import time
 from PyQt5.QtCore import pyqtSignal, QObject
 
 from SCTimeUtility.system.TimeReferences import LapTime
-from SCTimeUtility.system.Validation import intergerToTimeString
+from SCTimeUtility.system.Validation import intToTimeStr
 from SCTimeUtility.log.Log import getLog
 
 
@@ -13,6 +13,7 @@ class Car(QObject):
     def __init__(self, ID, Team, CarNum):
         super().__init__()
         self.logger = getLog()
+
         self.ID = ID
         self.TeamName = str(Team)
         self.CarNum = CarNum
@@ -117,7 +118,7 @@ class Car(QObject):
     """
 
     def getLapCount(self):
-        return self.LapCount
+        return len(self.LapList) - 1
 
     """
         Function: addLapTime
@@ -135,7 +136,7 @@ class Car(QObject):
         if self.SeedValue is not None:
             if timeData is None:
                 self.addLapSemiAuto()
-            elif timeData.getElapsed() is not None:
+            else:
                 self.addLapManually(timeData)
 
             self.LapCount = len(self.LapList)
@@ -168,7 +169,7 @@ class Car(QObject):
         self.logger.info('Lap Added to Car: {}')
         self.LapList.append(LapTime(int(recordedTime)))
         self.logger.info(
-            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(intergerToTimeString(int(recordedTime)),
+            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(intToTimeStr(int(recordedTime)),
                                                                   self.TeamName,
                                                                   self.CarNum))
 
@@ -184,7 +185,7 @@ class Car(QObject):
     def addLapManually(self, timeData):
         self.LapList.append(LapTime(timeData))
         self.logger.info(
-            'Lap Time {} added Car: {} , {} via Manual.'.format(intergerToTimeString(int(timeData)), self.TeamName,
+            'Lap Time {} added Car: {} , {} via Manual.'.format(intToTimeStr(int(timeData)), self.TeamName,
                                                                 self.CarNum))
 
     """
@@ -228,7 +229,10 @@ class Car(QObject):
      """
 
     def getLap(self, lapID):
-        return self.LapList[lapID]
+        if lapID < (len(self.LapList)):
+            return self.LapList[lapID]
+        else:
+            return LapTime(0)
 
     """
          Function: removeLapTime
