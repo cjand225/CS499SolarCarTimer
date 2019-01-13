@@ -11,7 +11,6 @@ class SemiAuto(QWidget):
     def __init__(self, uiPath):
         super().__init__()
         self.UIPath = uiPath
-        self.carStoreRef = []
 
         self.labelColumn = 0
         self.buttonColumn = 1
@@ -19,12 +18,9 @@ class SemiAuto(QWidget):
         self.startStopButtonColumn = 3
         self.predictColumn = 4
 
-        self.indexList = []
-        self.labelList = []
-        self.buttonList = []
-        self.startStopList = []
-        self.checkBoxList = []
-        self.predictList = []
+        self.carStoreRef = []
+        self.indexList, self.labelList, self.buttonList = [], [], []
+        self.startStopList, self.checkBoxList, self.predictList = [], [], []
 
         # layout of semiAuto
         self.buttons = None
@@ -99,11 +95,11 @@ class SemiAuto(QWidget):
         self.unBindButtons()
         self.clearLayout(self.buttons)
 
-        self.labelList = []
-        self.checkBoxList = []
-        self.buttonList = []
-        self.startStopList = []
-        self.predictList = []
+        self.labelList.clear()
+        self.checkBoxList.clear()
+        self.buttonList.clear()
+        self.startStopList.clear()
+        self.predictList.clear()
 
     def unBindButtons(self):
         for button in self.buttonList:
@@ -157,8 +153,8 @@ class SemiAuto(QWidget):
             self.predictList[index].setHidden(True)
 
     def clickRecord(self, index):
-        self.carStoreRef[index].addLapTime()
+        self.carStoreRef[index - 1].addLapTime()
 
     def clickStartStop(self, index):
-        self.startStopList[(index-1)].setText("Stop")
-        #toggle start/stop of car here
+        self.startStopList[(index - 1)].setText("Stop")
+        # toggle start/stop of car here

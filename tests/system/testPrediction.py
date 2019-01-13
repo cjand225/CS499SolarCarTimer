@@ -3,7 +3,7 @@ import os, sys, unittest
 sys.path.insert(0, os.path.abspath("SCTimeUtility"))
 from time import time
 from SCTimeUtility.system.Prediction import predictNextLapTime, LapPredictionError
-from SCTimeUtility.system.TimeReferences import LapTime
+from SCTimeUtility.table.LapTime import LapTime
 from tests.system.GenerateLapTimes import generateLapTimes
 
 

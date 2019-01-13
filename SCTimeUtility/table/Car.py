@@ -2,7 +2,7 @@ import time
 
 from PyQt5.QtCore import pyqtSignal, QObject
 
-from SCTimeUtility.system.TimeReferences import LapTime
+from SCTimeUtility.table.LapTime import LapTime
 from SCTimeUtility.system.Validation import intToTimeStr
 from SCTimeUtility.log.Log import getLog
 
@@ -14,9 +14,21 @@ class Car(QObject):
         super().__init__()
         self.logger = getLog()
 
-        self.ID = ID
-        self.TeamName = str(Team)
-        self.CarNum = CarNum
+        try:
+            self.ID = int(ID)
+            self.CarNum = int(CarNum)
+        except ValueError:
+            raise ValueError
+
+        if type(Team) is not str:
+            raise ValueError
+        else:
+            self.TeamName = str(Team)
+
+        if not self.ID:
+            self.ID = -1
+        if not self.CarNum:
+            self.CarNum = -1
 
         self.SeedValue = None
         self.initialTime = None
@@ -59,6 +71,7 @@ class Car(QObject):
     """
 
     def createFirstLap(self):
+        self.LapList.clear()
         self.LapList.append(LapTime(self.SeedValue - self.SeedValue))
         self.LapCount = len(self.LapList)
         self.lapChanged.emit(len(self.LapList))
@@ -138,7 +151,6 @@ class Car(QObject):
                 self.addLapSemiAuto()
             else:
                 self.addLapManually(timeData)
-
             self.LapCount = len(self.LapList)
             self.lapChanged.emit(len(self.LapList))
 
@@ -153,7 +165,7 @@ class Car(QObject):
     """
 
     def addLapSemiAuto(self):
-        timeBeforeIndex = self.getTotalElapsedTime(self.LapCount)
+        timeBeforeIndex = self.getTotalElapsedTime(self.getLapCount())
         timeSinceStart = time.time() - self.SeedValue
         recordedTime = 0
 
@@ -166,7 +178,6 @@ class Car(QObject):
         if (recordedTime < 0):
             recordedTime = 0
 
-        self.logger.info('Lap Added to Car: {}')
         self.LapList.append(LapTime(int(recordedTime)))
         self.logger.info(
             'Lap Time {} added Car: {} , {} via SemiAuto.'.format(intToTimeStr(int(recordedTime)),
@@ -190,71 +201,94 @@ class Car(QObject):
 
     """
          Function: editLapTime
-         Parameters: self, index, timeData(inputted as SS -> MM -> HH) like on a stopwatch
+         Parameters: self, index, timeData
          Return Value: N/A
-         Purpose: Edits the current index with new time and offsets the index+1 laptime to keep time
-                  consistent, if the time is greater than the total time of the cells, we assume
-                  user would like to 0 out the index + 1 cell, afterwards, emits a signal to tell the Model
-                  to update.
+         Purpose: Edits current given index in lapList, if lap below given index exists, the lap below is
+                  offset by the difference between the lap below's value and the newly given value from
+                  timeData.
   
      """
 
     def editLapTime(self, index, timeData):
-        if index != 0 and index < len(self.LapList):
-            oldTime = self.LapList[index].getElapsed()
-            newTime = timeData
-            timeDiff = oldTime - newTime
+        editCondition = False
+        edit = timeData
+        # both cell above and cell below exists
+        if self.indexExists(index) and self.indexExists(index + 1) and timeData is not None and timeData >= 0:
 
-            self.LapList[index].setElapsed(newTime)
+            totalTime = self.LapList[index].elapsedTime + self.LapList[index + 1].elapsedTime
+            editBelow = totalTime - edit
 
-            # valid index + 1, so another cell exists below current cell
-            if index < len(self.LapList) - 1:
-                cellBelow = self.LapList[index + 1].getElapsed()
-                totalTime = oldTime + cellBelow
+            # edit both cells with new edit
+            if self.editCell(index, edit) and self.editCell(index + 1, editBelow):
+                editCondition = True
+                self.logger.info('Lap {} edited for Car: {} , {} '.format(index, self.TeamName, self.CarNum))
+            else:
+                self.logger.info('Failed to Edit Lap {} for Car: {} '.format(index, self.ID))
+        # if the index given is the last index in the list
+        elif self.indexExists(index) and not self.indexExists(index + 1) and timeData is not None and timeData >= 0:
+            # only current index cell exists
+            if self.editCell(index, edit):
+                editCondition = True
+                self.logger.info('Lap {} edited for Car: {} , {} '.format(index, self.TeamName, self.CarNum))
+            else:
+                self.logger.info('Failed to Edit Lap {} for Car: {} '.format(index, self.ID))
+        else:
+            self.logger.info(
+                "Failed to Edit Lap {} for Car: {} : Index isn't within range of LapList".format(index, self.ID))
 
-                if newTime <= totalTime:
-                    self.LapList[index + 1].setElapsed(cellBelow + timeDiff)
-                else:
-                    self.LapList[index + 1].setElapsed(0)
+        self.lapChanged.emit(len(self.LapList))
+        return editCondition
 
-            self.lapChanged.emit(len(self.LapList))
-            self.logger.info('Lap {} edited for Car: {} , {} '.format(index, self.TeamName, self.CarNum))
+    def editCell(self, index, timeData):
+        if self.indexExists(index):
+            self.LapList[index].elapsedTime = timeData
+            return True
+        else:
+            return False
+
+    def indexExists(self, index):
+        return index in range(0, len(self.LapList))
 
     """
          Function: getLap
          Parameters: self ID
          Return Value: copy of Lap, found by an Index ID
          Purpose: Returns the Lap found at the index ID.
-  
+    
      """
 
     def getLap(self, lapID):
-        if lapID < (len(self.LapList)):
+        if lapID in range(0, len(self.LapList)):
             return self.LapList[lapID]
         else:
-            return LapTime(0)
+            return LapTime(-1)
 
     """
          Function: removeLapTime
          Parameters: self, lapID
          Return Value: N/A
-         Purpose: "Removes" a Laptime in the sense that it will Zero out whatever laptime given at the
-                  current index denoted by lapID. Mainly implemented this way with the assumption that
+         Purpose: Zeros out the laptime given by lapID. Mainly implemented with the assumption that
                   the user does not want the amount of laps to change but may simply want to delete
                   a specified lap in order to put in more accurate data later.
-  
+    
      """
 
     def removeLapTime(self, lapID):
-        self.LapList[lapID] = LapTime(self.SeedValue - self.SeedValue)
-        self.logger.info('Lap {} removed for Car: {} , {} '.format(lapID, self.TeamName, self.CarNum))
+        if lapID in range(1, len(self.LapList) - 1):
+            self.LapList[lapID] = LapTime(self.SeedValue - self.SeedValue)
+            self.logger.info('Lap {} removed for Car: {} , {}!'.format(lapID, self.TeamName, self.CarNum))
+            return True
+        else:
+            self.logger.info('Failed to Remove Lap {} for Car: {} , {}!'.format(lapID, self.TeamName, self.CarNum))
+            self.logger.debug('Lap Removal {}, Car: {}: Invalid Index'.format(lapID, self.ID))
+            return False
 
     """
          Function: getLatestLapID
          Parameters: self
          Return Value: LatestLapID(Int)
          Purpose: Returns an integer that would be the current ID to be used for next lap input.
-  
+    
      """
 
     def getLatestLapID(self):
@@ -265,14 +299,17 @@ class Car(QObject):
          Parameters: self, index
          Return Value: totalElasped (elapsed Time)
          Purpose: Sums the total elapsed time since the seedValue as occured and returns it as time var
-  
+    
      """
 
     def getTotalElapsedTime(self, index):
         totalElasped = 0
-        for currLap in range(0, index):
-            totalElasped += int(self.LapList[currLap].getElapsed())
-        return totalElasped
+
+        for currLap in self.LapList:
+            totalElasped += currLap.getElapsed()
+            # for currLap in range(0, index):
+            #     totalElasped += int(self.LapList[currLap].getElapsed())
+            return totalElasped
 
     """
          Function: getFasestLap
@@ -282,7 +319,7 @@ class Car(QObject):
                   lap that is greater than 0 if the current fastLap is none, then when it has a value, if the value
                   in the list is lower, it chooses that value for the new fastLap value and repeats until the lowest
                   value has been found.
-
+    
      """
 
     def getFastestLap(self):

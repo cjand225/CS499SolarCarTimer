@@ -10,7 +10,7 @@
 from PyQt5.QtCore import QObject, pyqtSignal
 
 from SCTimeUtility.table.Car import Car
-from SCTimeUtility.system.TimeReferences import LapTime
+from SCTimeUtility.table.LapTime import LapTime
 from SCTimeUtility.log.Log import getLog
 
 
@@ -110,11 +110,14 @@ class CarStorage(QObject):
     """
 
     def createCars(self, list):
+        index = 0
         for item in list:
+            #print(len(list))
             if len(item) == 2:
                 self.createCar(item[0], item[1])
             else:
                 continue
+            index += 1
 
     """
          Function: removeCar
@@ -157,10 +160,10 @@ class CarStorage(QObject):
     """
 
     def getCarByID(self, ID):
-        if (ID > len(self.storageList)):
-            return -1
-        else:
+        if ID in range(0, len(self.storageList) - 1):
             return self.storageList[ID]
+        else:
+            return False
 
     """
          Function: getCarByNum

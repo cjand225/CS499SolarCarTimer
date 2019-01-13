@@ -1,7 +1,5 @@
 import datetime
-import time
 from SCTimeUtility.log.Log import getLog
-
 
 def strptimeMultiple(text, formats):
     for f in formats:
@@ -12,20 +10,8 @@ def strptimeMultiple(text, formats):
     raise ValueError()
 
 
-# def strptimeMultiple(text, formats):
-#   myForm = None
-#   for f in formats:
-#     try:
-#       if datetime.datetime.strptime(text, f).time() is not None:
-#         return str(datetime.datetime.strptime(text, f).time())
-#     except ValueError:
-#       pass
-#   return myForm
-
-
 def splitTimes(text):
     delta = None
-
     if text.isdigit():
         # hours/min/sec
         if len(text) > 4:
@@ -49,24 +35,3 @@ def splitTimes(text):
             delta = datetime.timedelta(seconds=0).total_seconds()
 
     return int(delta)
-
-
-class LapTime():
-    def __init__(self, timeData):
-        self.elapsedTime = timeData
-
-    def setElapsed(self, timeData):
-        self.elapsedTime = timeData
-
-    def getElapsed(self):
-        return int(self.elapsedTime)
-
-    def __str__(self):
-        return str(round(datetime.timedelta(seconds=self.elapsedTime).seconds))
-
-    def __int__(self):
-        return int(datetime.timedelta(seconds=self.elapsedTime).total_seconds())
-
-    def __sub__(self, other):
-        sub = int(self.elapsedTime) - other
-        return sub

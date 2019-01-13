@@ -1,7 +1,7 @@
 import math
 import numpy as np
 import scipy.stats
-from SCTimeUtility.system.TimeReferences import LapTime
+from SCTimeUtility.table.LapTime import LapTime
 from SCTimeUtility.log.Log import getLog
 
 
