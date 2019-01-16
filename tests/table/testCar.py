@@ -132,13 +132,15 @@ class testCar(unittest.TestCase):
         myCar = Car(1, "University of Kentucky", 23)
         myCar.setSeedValue(time.time())
         totalElapsed = 0
-        randIndex = random.randint(0, self.numOfLaps)
+        randIndex = random.randint(0, self.numOfLaps - 1)
         lapData = generateLapData(self.numOfLaps)
         for lap in lapData:
             myCar.addLapTime(LapTime(lap))
-        for x in range(0, randIndex - 1):
-            totalElapsed += LapTime(lapData[x]).getElapsed()
-        self.assertEqual(totalElapsed, myCar.getTotalElapsedTime(randIndex))
+
+        allLaps = myCar.LapList[1:randIndex]
+        totalElapsed = sum([lap.getElapsed() for lap in allLaps])
+        totalFromCar = myCar.getTotalElapsedTime(randIndex)
+        self.assertEqual(totalElapsed, totalFromCar)
 
     def testGetFastestLap(self):
         myCar = Car(1, "University of Kentucky", 23)

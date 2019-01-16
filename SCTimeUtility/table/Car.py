@@ -303,13 +303,11 @@ class Car(QObject):
      """
 
     def getTotalElapsedTime(self, index):
-        totalElasped = 0
-
-        for currLap in self.LapList:
-            totalElasped += currLap.getElapsed()
-            # for currLap in range(0, index):
-            #     totalElasped += int(self.LapList[currLap].getElapsed())
-            return totalElasped
+        if index in range(0, len(self.LapList) - 1):
+            allLaps = self.LapList[1:index]
+            return sum([lap.getElapsed() for lap in allLaps])
+        else:
+            print("failed")
 
     """
          Function: getFasestLap
