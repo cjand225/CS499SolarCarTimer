@@ -7,9 +7,8 @@ from SCTimeUtility.table.Car import Car
 def generateLapData(numOfLaps):
     lapList = []
     for x in range(0, numOfLaps):
-        lapList.append(time.time())
         sleepAmount = float(random.randrange(0, 100) / 1000)
-        time.sleep(sleepAmount)
+        lapList.append(time.time() * sleepAmount)
     return lapList
 
 

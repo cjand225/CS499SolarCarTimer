@@ -131,7 +131,7 @@ class Car(QObject):
     """
 
     def getLapCount(self):
-        return len(self.LapList) - 1
+        return len(self.LapList)
 
     """
         Function: addLapTime
@@ -239,12 +239,28 @@ class Car(QObject):
         self.lapChanged.emit(len(self.LapList))
         return editCondition
 
+    """
+         Function: editCell
+         Parameters: self index, timeData
+         Return Value: Boolean Condition
+         Purpose: Returns a Boolean Condition to indicate whether a cell(LapTime) has been edited
+
+     """
+
     def editCell(self, index, timeData):
         if self.indexExists(index):
             self.LapList[index].elapsedTime = timeData
             return True
         else:
             return False
+
+    """
+         Function: indexExists
+         Parameters: self, index
+         Return Value: Boolean Condition
+         Purpose: Returns a Boolean Condition to indicate whether an index is within range of the LapList
+
+     """
 
     def indexExists(self, index):
         return index in range(0, len(self.LapList))
@@ -264,6 +280,17 @@ class Car(QObject):
             return LapTime(-1)
 
     """
+         Function: getLastLapIndex
+         Parameters: self
+         Return Value: int
+         Purpose: Returns the index postion of the last element in the laplist
+
+     """
+
+    def getLastLapIndex(self):
+        return len(self.LapList) - 2
+
+    """
          Function: removeLapTime
          Parameters: self, lapID
          Return Value: N/A
@@ -275,7 +302,7 @@ class Car(QObject):
 
     def removeLapTime(self, lapID):
         if lapID in range(1, len(self.LapList) - 1):
-            self.LapList[lapID] = LapTime(self.SeedValue - self.SeedValue)
+            self.LapList[lapID].clear()
             self.logger.info('Lap {} removed for Car: {} , {}!'.format(lapID, self.TeamName, self.CarNum))
             return True
         else:

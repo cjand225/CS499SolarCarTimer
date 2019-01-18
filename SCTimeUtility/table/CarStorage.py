@@ -8,6 +8,7 @@
 
 """
 from PyQt5.QtCore import QObject, pyqtSignal
+import copy
 
 from SCTimeUtility.table.Car import Car
 from SCTimeUtility.table.LapTime import LapTime
@@ -93,7 +94,6 @@ class CarStorage(QObject):
         if self.SeedValue is not None:
             newCar.setSeedValue(self.SeedValue)
         self.storageList.append(newCar)
-
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
         self.logger.info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(teamName, carNum))
@@ -112,7 +112,7 @@ class CarStorage(QObject):
     def createCars(self, list):
         index = 0
         for item in list:
-            #print(len(list))
+            # print(len(list))
             if len(item) == 2:
                 self.createCar(item[0], item[1])
             else:
@@ -182,9 +182,9 @@ class CarStorage(QObject):
                 return item
 
     """
-         Function: getCarByOrg
+         Function: getCarByTeamName
          Parameters: OrgString
-         Return Value: copy of Car that contains value orgString
+         Return Value: copy of Car that contains value teamName
          Purpose:  Used for getting a reference to a copy of a specific car within carStorage, typically used
                   for easier access of each car without having to know specifically where its at
                   within carStorage w/ no intentions of altering the original car. Used when only Vehicle Organization
@@ -247,17 +247,21 @@ class CarStorage(QObject):
     """
 
     def getCarListCopy(self):
-        return self.storageList.copy()
+        storageCopy = []
+        storageCopy.clear()
+        for car in range(0, len(storageCopy) - 1):
+            storageCopy.append(copy.deepcopy(self.storageList[car]))
+        return storageCopy  # .copy()
 
     """
-         Function: getCarNamesList
+         Function: getCarNames
          Parameters: self
          Return Value: list of Org names of all cars
          Purpose: Used as a convenient method for accessing all the cars' Team Name.
 
     """
 
-    def getCarNamesList(self):
+    def getCarNames(self):
         newList = self.storageList.copy()
         names = []
         for x in range(0, len(newList)):
@@ -277,14 +281,14 @@ class CarStorage(QObject):
 
     """
         
-        Function: getCarAmount
+        Function: getCarCount
         Parameters: self
         Return Value: N/A
         Purpose: Used to find how many cars are stored within CarStorage
     
     """
 
-    def getCarAmount(self):
+    def getCarCount(self):
         return len(self.storageList)
 
     """

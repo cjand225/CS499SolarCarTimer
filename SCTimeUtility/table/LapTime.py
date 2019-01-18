@@ -11,6 +11,9 @@ class LapTime():
     def getElapsed(self):
         return int(self.elapsedTime)
 
+    def clear(self):
+        self.elapsedTime = 0.0
+
     def __str__(self):
         return str(round(datetime.timedelta(seconds=self.elapsedTime).seconds))
 

@@ -63,9 +63,9 @@ class testCar(unittest.TestCase):
             timeAdd = time.time()
             lapList.append(LapTime(timeAdd))
             myCar.addLapManually(timeAdd)
-        # check if all laps added
-        self.assertEqual(self.numOfLaps, myCar.getLapCount())
-        # check for accuracy of each lap
+        # check if all laps added - account for seed value in first index
+        self.assertEqual(self.numOfLaps, myCar.getLapCount() - 1)
+        # check for accuracy of each lap - account for seed value
         for x in range(0, self.numOfLaps - 1):
             self.assertEqual(lapList[x].getElapsed(), myCar.getLap(x + 1).getElapsed())
 
@@ -100,11 +100,12 @@ class testCar(unittest.TestCase):
         for x in range(0, self.numOfLaps):
             myCar.addLapTime(lapList[x])
 
-        for x in range(0, self.numOfLaps):
-            randLap = random.randint(0, myCar.getLapCount() - 1)
+        for x in range(0, self.numOfLaps - 1):
+            # account for amount of laps,
+            randLap = random.randint(0, myCar.getLastLapIndex())
             myCar.removeLapTime(randLap)
-            self.assertEqual(self.numOfLaps, myCar.getLapCount())
-            self.assertNotEqual(lapList[randLap], myCar.getLap(randLap))
+            self.assertEqual(self.numOfLaps + 1, myCar.getLapCount())
+            self.assertEqual(0, myCar.getLap(randLap).elapsedTime)
 
     def testGetCarID(self):
         myCar = Car(1, "University of Kentucky", 23)
@@ -126,7 +127,8 @@ class testCar(unittest.TestCase):
         myCar.setSeedValue(time.time())
         for x in range(0, self.numOfLaps):
             myCar.addLapTime(time.time())
-        self.assertEqual(myCar.getLapCount(), self.numOfLaps)
+        # check if laps added is same - account for seedvalue offset
+        self.assertEqual(myCar.getLapCount(), self.numOfLaps + 1)
 
     def testGetTotalElapsedTime(self):
         myCar = Car(1, "University of Kentucky", 23)
