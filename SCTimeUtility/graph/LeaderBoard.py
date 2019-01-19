@@ -12,12 +12,6 @@ class LeaderBoard():
     resourcesDir = os.path.abspath(os.path.join(__file__, "./../../resources"))
     LeaderBoardUIPath = os.path.join(resourcesDir, 'LeaderBoard.ui')
 
-    def sort(self):
-        oldSort = self.boardModel.sortColumn()
-        self.boardModel.invalidate()
-        self.widget.tableView.sortByColumn(oldSort, Qt.AscendingOrder)
-        # self.boardModel.sort(self.boardModel.sortColumn())
-
     def __init__(self, cs=None):
         self.widget = None
         self.dataStorage = None
@@ -40,23 +34,79 @@ class LeaderBoard():
         self.widget.tableView.sortByColumn(3, Qt.AscendingOrder)
         # self.widget.tableView.horizontalHeader().sectionResized.connect(self.widget.columnResized)
 
+    '''  
+        Function: sort
+        Parameters: self
+        Return Value: N/A
+        Purpose: sorts the Model based on whats been clicked
+    '''
+
+    def sort(self):
+        oldSort = self.boardModel.sortColumn()
+        self.boardModel.invalidate()
+        self.widget.tableView.sortByColumn(oldSort, Qt.AscendingOrder)
+        # self.boardModel.sort(self.boardModel.sortColumn())
+
+    '''  
+        Function: sortIndicatorChangedEvent
+        Parameters: self, index, order
+        Return Value: N/A
+        Purpose: checks if index is within the alotted columns and then indicates that a sort event has happened.
+    '''
+
     def sortIndicatorChangedEvent(self, index, order):
         if not index in self.sortableColumns:
             self.widget.tableView.horizontalHeader().setSortIndicator(index, self.boardModel.sortOrder())
 
+    '''  
+        Function: initWidget
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes the widget for the leader board module.
+    '''
+
     def initWidget(self):
         self.widget = LeaderBoardWidget(self.LeaderBoardUIPath)
 
+    '''  
+        Function: getWidget
+        Parameters: self
+        Return Value: self.widget
+        Purpose: Returns a reference to the widget stored within the LeaderBoard Module.
+    '''
+
     def getWidget(self):
         return self.widget
+
+    '''  
+        Function: updateData
+        Parameters: self, data
+        Return Value: N/A
+        Purpose: Periodically called function used to update the data contained within leader board module.
+    '''
 
     def updateData(self, data):
         self.dataStorage = data
         self.updateBoard(data)
         self.sortCarByFastestLap()
 
+    '''  
+        Function: testLap
+        Parameters: self
+        Return Value: N/A
+        Purpose: test function used to check the sorting by fastest lap function.
+    '''
+
     def testLap(self):
         self.sortCarByFastestLap()
+
+    '''  
+        Function: sortCar
+        Parameters: self
+        Return Value: N/A
+        Purpose: Interates through the cars within datastorage and gets their fastest lap, appending it to a list
+                 and updating the board based on that.
+    '''
 
     def sortCarByFastestLap(self):
         self.newCarList = [[]]
@@ -74,6 +124,13 @@ class LeaderBoard():
             self.carList.append(self.dataStorage[self.newCarList[x][0]])
 
         self.updateBoard(self.carList)
+
+    '''  
+        Function: updateBoard
+        Parameters: self, data
+        Return Value: N/A
+        Purpose: Updates the view of the leader board module with the data supplied from the parameter.
+    '''
 
     def updateBoard(self, data):
         self.widget.resize(QSize(self.widget.width() + 1, self.widget.height()))
