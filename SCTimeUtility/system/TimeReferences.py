@@ -1,6 +1,15 @@
 import datetime
 from SCTimeUtility.log.Log import getLog
 
+'''  
+    Function: strpTimeMultiple
+    Parameters: text, formats
+    Return Value: dateTime str
+    Purpose: Returns a conversion of text into the specified format within the formats list in relation to datetime
+             strptime.
+'''
+
+
 def strptimeMultiple(text, formats):
     for f in formats:
         try:
@@ -8,6 +17,14 @@ def strptimeMultiple(text, formats):
         except ValueError:
             pass
     raise ValueError()
+
+
+'''  
+    Function: splitTimes
+    Parameters: text
+    Return Value: int
+    Purpose: Returns a conversion of the string text into the equivalent amount of time in integer form.
+'''
 
 
 def splitTimes(text):

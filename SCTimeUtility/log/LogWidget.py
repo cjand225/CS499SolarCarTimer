@@ -49,6 +49,13 @@ class LogWidget(QWidget):
         # create widget UI and add new widgets
         self.initUI()
 
+    '''  
+        Function: initUI
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes, Loads and Adds UI components to LogWidget.
+    '''
+
     def initUI(self):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignBottom,
@@ -66,6 +73,13 @@ class QTextEditLogger(logging.Handler):
         super().__init__()
         self.widget = QPlainTextEdit(parent)
         self.widget.setReadOnly(True)
+
+    '''  
+        Function: emit
+        Parameters: self, record
+        Return Value: N/A
+        Purpose: Emits records that can be attached and filtered via filtering classes.
+    '''
 
     def emit(self, record):
         msg = self.format(record)

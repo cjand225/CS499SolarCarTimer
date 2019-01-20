@@ -1,8 +1,16 @@
-import csv
-import os
+import csv, os
+
 from SCTimeUtility.table.Car import Car
 from SCTimeUtility.table.CarStorage import CarStorage
 from SCTimeUtility.log.Log import getLog
+
+'''  
+    Function: saveCSV
+    Parameters: cs, filePath
+    Return Value: N/A
+    Purpose: Receives an instance of carStorage and a file path in which to dump all the contents of every object
+             within CarStorage instance.
+'''
 
 
 def saveCSV(cs, filePath):
@@ -13,6 +21,14 @@ def saveCSV(cs, filePath):
             storageWriter.writerows(
                 [[c.ID, c.TeamName, c.CarNum, c.initialTime] + [t.elapsedTime for t in c.LapList] for c in
                  cs.storageList])
+
+
+'''  
+    Function: loadCSV
+    Parameters: filePath
+    Return Value: List [car info]
+    Purpose: Loads a file assumed to be CSV format, into a list that is returned to the invoker.
+'''
 
 
 def loadCSV(filePath):

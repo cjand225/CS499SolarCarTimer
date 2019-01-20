@@ -1,8 +1,15 @@
-import math
-import numpy as np
-import scipy.stats
+import math, numpy as np, scipy.stats
+
 from SCTimeUtility.table.LapTime import LapTime
 from SCTimeUtility.log.Log import getLog
+
+'''  
+    Function: predictNextLapTime
+    Parameters: lapTimes (lists
+    Return Value: LapTime Object
+    Purpose: Returns an estimated approximation on when the next lap will occur based on the current laps
+             provided by the lapTimes parameter.
+'''
 
 
 def predictNextLapTime(lapTimes):
