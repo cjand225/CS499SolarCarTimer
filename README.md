@@ -1,4 +1,4 @@
-# Solar Car Timing Utility
+# SCTiming Utility
 
 An application written in python to track lap times during solar car races. Tracking comes in three different modes: Manual Entry, Semi-Automatic, Automatic.
 
