@@ -1,4 +1,4 @@
-from SCTimeUtility.app.App import App
+from SCTimeUtility.App.App import App
 
 if __name__ == '__main__':
     MyApp = App()

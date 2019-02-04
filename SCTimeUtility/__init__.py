@@ -1,3 +1,3 @@
-from SCTimeUtility.log.Log import initLogs
+from SCTimeUtility.Log.Log import initLogs
 
 initLogs()
