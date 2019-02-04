@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+    <title>USER_MANUAL.html</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+
+</head>
+
+<body>
+
+<h1>User manual</h1>
+
+<h2>Running the program</h2>
+
+<p>After installing the <code>conda</code> environment, it will be necessary to activate the environment before running.
+</p>
+
+<h3>On Windows</h3>
+
+<p>From a Command Prompt (or Anaconda's "Anaconda Prompt"), run</p>
+
+<pre><code>activate "timer-utility"
+</code></pre>
+
+<h3>On macOS and Linux</h3>
+
+<p>From a terminal, run</p>
+
+<pre><code>source activate "timer-utility"
+</code></pre>
+
+<p>Once the environment has been activated, the program may be run using <code>python</code> from the root directory of
+    the repository. Depending on your system, the command may look like one of the following:</p>
+
+<pre><code>python3 -m src.main
+</code></pre>
+
+<p>or </p>
+
+<pre><code>python -m src.main
+</code></pre>
+
+<h2>Using the program</h2>
+
+<p>Once the program starts, a GUI similar to the one below should appear.</p>
+
+<p><img src="Screenshots/gui_screen1.png" alt="Initial GUI" title=""/></p>
+
+<p>From this screen, existing data may be loaded from the <strong>File</strong> menu.</p>
+
+<p>Currently, the <strong>Open</strong>, <strong>Save</strong>, and <strong>Save as</strong> actions work correctly and
+    can be used to save or load lap data files in a CSV format.</p>
+
+<h3>Adding cars to the table</h3>
+
+<p>Upon opening the application, it may become apparent that no cells in the Lap Table can be editted immediately. This
+    is intentional; before any lap data can be entered, the cars to be tracked must first be added to the table.</p>
+
+<p>A car may be added to the table through the <strong>Edit</strong> menu by selecting <strong>Edit</strong> > <strong>Add
+    Car</strong>. This action will display a dialog prompting for information about the car to be added.</p>
+
+<p><img src="Screenshots/gui_screen2.png" alt="Car dialog" title=""/></p>
+
+<p>Once a car is added, the Team name associated with the car will appear in the header of one of the columns. At that
+    point, lap data may be entered into the column using one of the methods described in <strong>Adding and editing lap
+        data</strong> below.</p>
+
+<p>Cars may also be added without the menu. Double clicking any cell in the leftmost column unassigned to a car will
+    produce the same <strong>Add Car</strong> dialog accessible from the <strong>Edit</strong> menu.</p>
+
+<h3>Adding and editing lap data</h3>
+
+<p>Two working methods are currently available for inputting lap data. Both methods should be usable simultaneously; the
+    application is not limited to using one method at a time.</p>
+
+<h4>Manual lap entry</h4>
+
+<p>The simplest way of entering lap data is by entering the elapsed times directly into the table. All filled rows in a
+    column are editable. This allows changing of previously entered lap times.</p>
+
+<p>Additionally, the cell immediately below the last filled cell in a column is editable. This allows appending of a new
+    lap time for a car. If no lap times appear in the column, the first cell the column will be editable.</p>
+
+<p><img src="Screenshots/gui_screen3.png" alt="Appending lap time" title=""/></p>
+
+<p>The lap times entered into the cells in the table are expected to be in the format <code>%H:%M:%S.%m</code>, where
+    <code>%H</code> represents the number of hours, <code>%M</code> represents the number of minutes, <code>%S</code>
+    represents the number of seconds, and <code>%m</code> represents the number of milliseconds. The milliseconds,
+    hours, and minutes are optional, so the time entered may be given in the format, <code>%M:%S</code>, for example.
+</p>
+
+<h4>Semi-automatic lap entry</h4>
+
+<p>Laps may also be entered into the table semi-automatically through the use of buttons which simply record the latest
+    lap time based on previous times in the table.</p>
+
+<p>The Semi-Automatic mode may be accessed by opening <strong>Semi-Auto</strong> through the <strong>View</strong> menu.
+</p>
+
+<p>As cars are added to the table, buttons corresponding to each team are added to the Semi-automatic mode window.</p>
+
+<p><img src="Screenshots/gui_screen4.png" alt="Semi-auto mode" title=""/></p>
+
+<p>To begin recording times for car using the Semi-automatic mode, click the <strong>Start</strong> button for the car.
+    This will begin the first lap for the car. Once the lap has been completed, clicking <strong>Record time</strong>
+    will add the elapsed time to the table and begin the next lap for the car.</p>
+
+</body>
+</html>

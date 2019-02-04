@@ -1,7 +1,5 @@
-from SCTimeUtility.app.App import App
-from SCTimeUtility.log.Log import initLogs
+from SCTimeUtility.App.App import App
 
 if __name__ == '__main__':
-    initLogs()
     MyApp = App()
     MyApp.run()
