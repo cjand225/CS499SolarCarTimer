@@ -2,6 +2,7 @@ import os
 from PyQt5.QtCore import Qt, QSize
 from operator import itemgetter
 
+from SCTimeUtility.graph import LeaderBoardUIPath
 from SCTimeUtility.graph.LeaderBoardWidget import LeaderBoardWidget
 from SCTimeUtility.graph.LeaderBoardModel import LeaderBoardModel
 from SCTimeUtility.graph.LeaderBoardSortFilterProxyModel import LeaderBoardSortFilterProxyModel
@@ -9,8 +10,6 @@ from SCTimeUtility.log.Log import getLog
 
 
 class LeaderBoard():
-    resourcesDir = os.path.abspath(os.path.join(__file__, "./../../resources"))
-    LeaderBoardUIPath = os.path.join(resourcesDir, 'LeaderBoard.ui')
 
     def __init__(self, cs=None):
         self.widget = None
@@ -66,7 +65,7 @@ class LeaderBoard():
     '''
 
     def initWidget(self):
-        self.widget = LeaderBoardWidget(self.LeaderBoardUIPath)
+        self.widget = LeaderBoardWidget(LeaderBoardUIPath)
 
     '''  
         Function: getWidget

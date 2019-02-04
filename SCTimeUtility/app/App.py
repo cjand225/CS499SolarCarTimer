@@ -5,9 +5,11 @@ Purpose: Controller for entire application, used to periodically update project 
 
 '''
 
-import os, sys
+import sys
 from PyQt5.QtWidgets import QApplication
 
+from SCTimeUtility.app import logUIPath, mainUIPath, visionUIPath, quitDialogUIPath, helpDialogUIPath, \
+    aboutDialogUIPath, graphUIPath, userManPath, aboutPath
 from SCTimeUtility.app.AppWindow import AppWindow
 from SCTimeUtility.graph.Graph import Graph
 from SCTimeUtility.graph.LeaderBoard import LeaderBoard
@@ -19,19 +21,6 @@ from SCTimeUtility.log.Log import getLog
 
 
 class App():
-    resourcesDir = os.path.abspath(os.path.join(__file__, "./../../resources"))
-    manualDir = os.path.abspath(os.path.join(__file__, "./../../../manuals"))
-    settingsDir = os.path.abspath(os.path.join(__file__, "./../../bin/settings"))
-
-    logUIPath = os.path.join(resourcesDir, 'Log.ui')
-    mainUIPath = os.path.join(resourcesDir, 'AppWindow.ui')
-    visionUIPath = os.path.join(resourcesDir, 'Video.ui')
-    quitDialogUIPath = os.path.join(resourcesDir, 'QuitDialog.ui')
-    helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
-    aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
-    graphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
-    userManPath = os.path.join(manualDir, 'USER_MANUAL.html')
-    aboutPath = os.path.join(manualDir, 'about.html')
 
     def __init__(self):
         self.Application = None
@@ -57,6 +46,18 @@ class App():
 
         # Initializing everything
         self.initApplication()
+
+    ''' 
+
+        Function: initApplication(self)
+        Parameters: self
+        Return Value: N/A
+        Purpose: Initializes the QApplication, required for running and maintaing program.
+
+    '''
+
+    def initApplication(self):
+        self.Application = QApplication(sys.argv)
         self.initMainWindow()
         self.initLog()
         self.initTable()
@@ -70,18 +71,6 @@ class App():
 
     ''' 
 
-        Function: initApplication(self)
-        Parameters: self
-        Return Value: N/A
-        Purpose: Initializes the QApplication, required for running and maintaing program.
-
-    '''
-
-    def initApplication(self):
-        self.Application = QApplication(sys.argv)
-
-    ''' 
-
         Function: initMainWindow(self)
         Parameters: self
         Return Value: N/A
@@ -91,10 +80,10 @@ class App():
     '''
 
     def initMainWindow(self):
-        self.mainWindow = AppWindow(type(self).mainUIPath)
-        self.mainWindow.initCloseDialog(type(self).quitDialogUIPath)
-        self.mainWindow.initHelpDialog(type(self).helpDialogUIPath, type(self).userManPath)
-        self.mainWindow.initAboutDialog(type(self).aboutDialogUIPath, type(self).aboutPath)
+        self.mainWindow = AppWindow(mainUIPath)
+        self.mainWindow.initCloseDialog(quitDialogUIPath)
+        self.mainWindow.initHelpDialog(helpDialogUIPath, userManPath)
+        self.mainWindow.initAboutDialog(aboutDialogUIPath, aboutPath)
 
     ''' 
 
@@ -125,7 +114,7 @@ class App():
     '''
 
     def initVision(self):
-        self.vision = Video(self.visionUIPath)
+        self.vision = Video(visionUIPath)
         if self.vision is not None:
             getLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
         else:
@@ -142,7 +131,7 @@ class App():
     '''
 
     def initLog(self):
-        self.logWidget = LogWidget(self.logUIPath)
+        self.logWidget = LogWidget(logUIPath)
         if self.logWidget is not None:
             getLog().debug('[' + __name__ + '] ' + 'Log module initialized')
         else:
@@ -159,7 +148,7 @@ class App():
     '''
 
     def initGraph(self):
-        self.graph = Graph(self.graphUIPath)
+        self.graph = Graph(graphUIPath)
         if self.graph is not None:
             getLog().debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:

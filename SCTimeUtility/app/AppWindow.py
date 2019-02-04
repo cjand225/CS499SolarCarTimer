@@ -378,6 +378,7 @@ class AppWindow(QMainWindow):
             stream = QTextStream(file)
             self.aboutDialog.ui.textBrowser.setHtml(stream.readAll())
 
+
     '''
 
         Function: handleAboutDialog

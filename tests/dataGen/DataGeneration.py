@@ -47,3 +47,4 @@ def populateStorage(numOfCars, storage):
     for car in carInfo:
         storage.createCar(car[0], car[1])
     return storage
+

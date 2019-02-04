@@ -9,7 +9,7 @@ from SCTimeUtility.table.Table import Table
 class TestAppMethods(unittest.TestCase):
 
     def setUp(self):
-        self.App = QApplication()
+        self.App = QApplication(sys.argv)
         self.AppWindow = QMainWindow()
 
     def testCreateTable(self):

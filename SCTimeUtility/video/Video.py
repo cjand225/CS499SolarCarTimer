@@ -11,6 +11,7 @@ from SCTimeUtility.video.VideoWidget import VisionWidget
 from SCTimeUtility.video.CaptureThread import CaptureThread
 from SCTimeUtility.video.ImageProcessThread import ImageProcessThread
 from SCTimeUtility.video.DetectionThread import DetectThread
+from SCTimeUtility.video.VideoOptionsWidget import VideoOptionsWidget
 
 
 class Video():
@@ -62,6 +63,10 @@ class Video():
 
     def initDetectThread(self):
         self.DetectThread = DetectThread(self.ProcessedQ)
+
+    def initVideoOptions(self):
+        # self.vidOptionsWidget = VideoOptionsWidget()
+        print()
 
     def bindStart(self):
         self.VisWidget.getStartButton().clicked.connect(self.startVideo)

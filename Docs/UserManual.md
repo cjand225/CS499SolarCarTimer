@@ -28,7 +28,7 @@ or
 
 Once the program starts, a GUI similar to the one below should appear.
 
-![Initial GUI](gui_screen1.png)
+![Initial GUI](Screenshots/gui_screen1.png)
 
 From this screen, existing data may be loaded from the **File** menu.
 
@@ -40,7 +40,7 @@ Upon opening the application, it may become apparent that no cells in the Lap Ta
 
 A car may be added to the table through the **Edit** menu by selecting **Edit** > **Add Car**. This action will display a dialog prompting for information about the car to be added.
 
-![Car dialog](gui_screen2.png)
+![Car dialog](Screenshots/gui_screen2.png)
 
 Once a car is added, the Team name associated with the car will appear in the header of one of the columns. At that point, lap data may be entered into the column using one of the methods described in **Adding and editing lap data** below.
 
@@ -56,7 +56,7 @@ The simplest way of entering lap data is by entering the elapsed times directly 
 
 Additionally, the cell immediately below the last filled cell in a column is editable. This allows appending of a new lap time for a car. If no lap times appear in the column, the first cell the column will be editable.
 
-![Appending lap time](gui_screen3.png)
+![Appending lap time](Screenshots/gui_screen3.png)
 
 The lap times entered into the cells in the table are expected to be in the format `%H:%M:%S.%m`, where `%H` represents the number of hours, `%M` represents the number of minutes, `%S` represents the number of seconds, and `%m` represents the number of milliseconds. The milliseconds, hours, and minutes are optional, so the time entered may be given in the format, `%M:%S`, for example.
 
@@ -68,6 +68,6 @@ The Semi-Automatic mode may be accessed by opening **Semi-Auto** through the **V
 
 As cars are added to the table, buttons corresponding to each team are added to the Semi-automatic mode window.
 
-![Semi-auto mode](gui_screen4.png)
+![Semi-auto mode](Screenshots/gui_screen4.png)
 
 To begin recording times for car using the Semi-automatic mode, click the **Start** button for the car. This will begin the first lap for the car. Once the lap has been completed, clicking **Record time** will add the elapsed time to the table and begin the next lap for the car.

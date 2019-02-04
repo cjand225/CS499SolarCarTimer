@@ -2,6 +2,7 @@ from PyQt5.QtWidgets import QDialog
 
 import time, os
 
+from SCTimeUtility.table import tableUIPath, semiAutoUIPath, addCarDialogUIPath, addBatchCarDialogUIPath
 from SCTimeUtility.table.CarStorage import CarStorage
 from SCTimeUtility.table.TableModel import TableModel
 from SCTimeUtility.table.TableWidget import TableWidget
@@ -12,11 +13,6 @@ from SCTimeUtility.log.Log import getLog
 
 
 class Table():
-    resourcesDir = os.path.abspath(os.path.join(__file__, "./../../resources"))
-    tableUIPath = os.path.join(resourcesDir, 'TableView.ui')
-    semiAutoUIPath = os.path.join(resourcesDir, 'SemiAuto.ui')
-    addCarDialogUIPath = os.path.join(resourcesDir, 'addCarDialog.ui')
-    addBatchCarDialogUIPath = os.path.join(resourcesDir, 'AddBatchDialog.ui')
 
     def __init__(self):
         super().__init__()
@@ -45,7 +41,7 @@ class Table():
     '''
 
     def initUI(self):
-        self.Widget = TableWidget(self.tableUIPath)
+        self.Widget = TableWidget(tableUIPath)
         self.Widget.initHeaderVertical()
         self.Widget.show()
         self.tableView = self.Widget.tableView
@@ -145,7 +141,7 @@ class Table():
     '''
 
     def initSemiAuto(self):
-        self.semiAuto = SemiAuto(type(self).semiAutoUIPath)
+        self.semiAuto = SemiAuto(semiAutoUIPath)
         self.logger.debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
 
     '''
@@ -170,8 +166,8 @@ class Table():
     '''
 
     def initDialogs(self):
-        self.addDialog = AddCarDialog(self.addCarDialogUIPath)
-        self.addBatchDialog = AddBatchDialog(self.addBatchCarDialogUIPath)
+        self.addDialog = AddCarDialog(addCarDialogUIPath)
+        self.addBatchDialog = AddBatchDialog(addBatchCarDialogUIPath)
 
     '''
 

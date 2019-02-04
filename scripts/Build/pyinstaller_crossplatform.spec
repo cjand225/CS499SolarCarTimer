@@ -5,10 +5,10 @@
 block_cipher = None
 
 import os
-resource_path = os.path.abspath("./SCTimeUtility/resources/*.ui")
-script_path = os.path.abspath("./SCTimeUtility/__main__.py")
+resource_path = os.path.abspath("./../SCTimeUtility/resources/*.ui")
+script_path = os.path.abspath("./../SCTimeUtility/__main__.py")
 project_path = os.path.abspath(".")
-dist_path = os.path.join("./SCTimeUtility/resources/")
+dist_path = os.path.join("./../SCTimeUtility/resources/")
 
 a = Analysis([script_path],
              pathex=[project_path],

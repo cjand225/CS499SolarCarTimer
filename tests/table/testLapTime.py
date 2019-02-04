@@ -42,4 +42,3 @@ class testLapTime(unittest.TestCase):
         nVal = 32.04
         myLap.setElapsed(nVal)
         self.assertEqual(int(nVal), myLap.getElapsed())
-   
