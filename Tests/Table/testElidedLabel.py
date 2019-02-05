@@ -39,4 +39,4 @@ class ElidedLabelTestWidget(QWidget):
         self.initUI()
 
     def initUI(self):
-        self.ui = loadUi("Resources/ElidedLabelTestWidget.ui", self)
+        self.ui = loadUi("./../../SCTimeUtility/Resources/UI/ElidedLabelTestWidget.ui", self)

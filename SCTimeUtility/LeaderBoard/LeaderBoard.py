@@ -1,12 +1,10 @@
-import os
 from PyQt5.QtCore import Qt, QSize
 from operator import itemgetter
 
-from SCTimeUtility.Graph import LeaderBoardUIPath
-from SCTimeUtility.Graph.LeaderBoardWidget import LeaderBoardWidget
-from SCTimeUtility.Graph.LeaderBoardModel import LeaderBoardModel
-from SCTimeUtility.Graph.LeaderBoardSortFilterProxyModel import LeaderBoardSortFilterProxyModel
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.LeaderBoard import LeaderBoardUIPath
+from SCTimeUtility.LeaderBoard.LeaderBoardWidget import LeaderBoardWidget
+from SCTimeUtility.LeaderBoard.LeaderBoardModel import LeaderBoardModel
+from SCTimeUtility.LeaderBoard.LeaderBoardSortFilterProxyModel import LeaderBoardSortFilterProxyModel
 
 
 class LeaderBoard():
@@ -23,15 +21,12 @@ class LeaderBoard():
         self.boardModel = LeaderBoardSortFilterProxyModel(self.widget.tableView, self.sortableColumns)
         self.boardModel.setSourceModel(LeaderBoardModel(self.widget.tableView, self.horzHeader, self.carStore))
         self.boardModel.setSortRole(Qt.UserRole)
-        # self.boardModel.sort(4)
         self.widget.tableView.setSortingEnabled(True)
         self.boardModel.sourceModel().dataChanged.connect(self.sort)
         self.widget.tableView.horizontalHeader().sortIndicatorChanged.connect(self.sortIndicatorChangedEvent)
-        # print(self.boardModel.sortColumn())
         self.widget.tableView.setModel(self.boardModel)
-        self.widget.fixHeaders(True)
+        self.widget.adjustHeaders(True)
         self.widget.tableView.sortByColumn(3, Qt.AscendingOrder)
-        # self.widget.tableView.horizontalHeader().sectionResized.connect(self.widget.columnResized)
 
     '''  
         Function: sort
@@ -44,7 +39,6 @@ class LeaderBoard():
         oldSort = self.boardModel.sortColumn()
         self.boardModel.invalidate()
         self.widget.tableView.sortByColumn(oldSort, Qt.AscendingOrder)
-        # self.boardModel.sort(self.boardModel.sortColumn())
 
     '''  
         Function: sortIndicatorChangedEvent

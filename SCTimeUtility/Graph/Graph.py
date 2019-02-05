@@ -1,3 +1,10 @@
+"""
+
+    Currently entire graphing class
+    TODO: Rework to Graph Module Controller
+
+"""
+
 import matplotlib.pyplot as plt, numpy as np
 from enum import IntEnum
 
@@ -5,6 +12,7 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QWidget, QStyle
 from PyQt5.uic import loadUi
 
+from SCTimeUtility.Graph import graphUIPath
 from SCTimeUtility.Log.Log import getLog
 
 
@@ -18,9 +26,8 @@ class GraphType(IntEnum):
 class Graph(QWidget):
     maxGraphNumber = 100
 
-    def __init__(self, uipath):
+    def __init__(self):
         super().__init__()
-        self.UIPath = uipath
         self.GraphDict = ["Lap vs Time", "Average Lap vs Time", "Minimum Time", "Maximum Time"]
         self.currentGraphType = self.GraphDict[GraphType.LAP_TIME]
         self.graphedTeamList = []
@@ -42,7 +49,7 @@ class Graph(QWidget):
     '''
 
     def initUI(self):
-        self.ui = loadUi(self.UIPath, self)
+        self.ui = loadUi(graphUIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
 

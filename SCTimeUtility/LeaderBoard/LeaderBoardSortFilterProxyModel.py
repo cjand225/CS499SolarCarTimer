@@ -16,15 +16,11 @@ class LeaderBoardSortFilterProxyModel(QSortFilterProxyModel):
     '''
 
     def lessThan(self, sourceLeft, sourceRight):
-        # print(sourceLeft)
         if sourceLeft.data(Qt.UserRole) is None:
-            # print("left",sourceRight.data(Qt.UserRole),sourceLeft.data(Qt.UserRole))
             return False
         elif sourceRight.data(Qt.UserRole) is None:
-            # print("right",sourceRight.data(Qt.UserRole),sourceLeft.data(Qt.UserRole))
             return False
         else:
-            # print(sourceRight.data(Qt.UserRole),sourceLeft.data(Qt.UserRole))
             return super().lessThan(sourceLeft, sourceRight)
 
     '''  

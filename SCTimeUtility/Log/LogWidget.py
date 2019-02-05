@@ -1,53 +1,37 @@
 import logging
 
-from PyQt5.QtWidgets import QWidget, QStyle, QApplication, QPlainTextEdit
+from PyQt5.QtWidgets import QWidget, QStyle, QApplication, QPlainTextEdit, QTabWidget, QGridLayout
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
 
+from SCTimeUtility.Log import logUIPath, defaultLogFormat
 from SCTimeUtility.Log.Log import getLog
-from SCTimeUtility.Log.logFilters import infoFilter, debugFilter, criticalFilter, warningFilter, errorFilter
+from SCTimeUtility.Log.LogFilters import infoFilter, debugFilter, criticalFilter, warningFilter, errorFilter
 
 
 class LogWidget(QWidget):
 
-    def __init__(self, uipath, parent=None):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self.UIPath = uipath
-
-        # get Log
-        self.log = getLog()
-        self.format = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
-
-        # create handlers
-        self.infoLogTextBox = QTextEditLogger(self)
-        self.debugLogTextBox = QTextEditLogger(self)
-        self.warningLogTextBox = QTextEditLogger(self)
-        self.criticalLogTextBox = QTextEditLogger(self)
-        self.errorLogTextBox = QTextEditLogger(self)
-
-        # set format for handlers
-        self.infoLogTextBox.setFormatter(self.format)
-        self.debugLogTextBox.setFormatter(self.format)
-        self.warningLogTextBox.setFormatter(self.format)
-        self.criticalLogTextBox.setFormatter(self.format)
-        self.errorLogTextBox.setFormatter(self.format)
-
-        # add filters to widget handlers
-        self.infoLogTextBox.addFilter(infoFilter())
-        self.debugLogTextBox.addFilter(debugFilter())
-        self.warningLogTextBox.addFilter(warningFilter())
-        self.criticalLogTextBox.addFilter(criticalFilter())
-        self.errorLogTextBox.addFilter(errorFilter())
-
-        # add new widget handlers
-        self.log.addHandler(self.infoLogTextBox)
-        self.log.addHandler(self.debugLogTextBox)
-        self.log.addHandler(self.warningLogTextBox)
-        self.log.addHandler(self.criticalLogTextBox)
-        self.log.addHandler(self.errorLogTextBox)
 
         # create widget UI and add new widgets
         self.initUI()
+
+        # get Log
+        self.log = getLog()
+        self.filterList = [infoFilter, debugFilter, warningFilter, errorFilter, criticalFilter]
+        self.filterTabNames = ['Info', 'Debug', 'Warning', 'Error', 'Critical']
+        self.handlerAmount = len(self.filterTabNames)
+        self.handlerList = [] * self.handlerAmount
+
+        # create QTabWidget and lists for dynamically creating handlers
+        self.tabWidget = QTabWidget()
+        self.tabsList = [] * self.handlerAmount
+        self.tabLayouts = [] * self.handlerAmount
+
+        # create tabs, add to tabwidget, add tabwidget to logWidget
+        self.initTabs()
+        self.ui.logLayout.addWidget(self.tabWidget)
 
     '''  
         Function: initUI
@@ -57,15 +41,49 @@ class LogWidget(QWidget):
     '''
 
     def initUI(self):
-        self.ui = loadUi(self.UIPath, self)
+        self.ui = loadUi(logUIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignBottom,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        # add widgets to ui
-        self.infoLayout.addWidget(self.infoLogTextBox.widget)
-        self.debugLayout.addWidget(self.debugLogTextBox.widget)
-        self.warningLayout.addWidget(self.warningLogTextBox.widget)
-        self.criticalLayout.addWidget(self.criticalLogTextBox.widget)
-        self.errorLayout.addWidget(self.errorLogTextBox.widget)
+
+    '''  
+        Function: setFormat
+        Parameters: self format
+        Return Value: N/A
+        Purpose: Changes the format in which log message records are displayed.
+    '''
+
+    def initTabs(self):
+        # iterate through the amount of possible filters for log and add to widget
+        for x in range(0, self.handlerAmount):
+            handler = QTextEditLogger(self)
+            handler.setFormatter(defaultLogFormat)
+            handler.addFilter(self.filterList[x]())
+            self.log.addHandler(handler)
+
+            # create a tab and its layout, add it to the tab widget
+            tab = QWidget()
+            self.tabWidget.addTab(tab, self.filterTabNames[x])
+            tabLayout = QGridLayout(tab)
+
+            tab.setLayout(tabLayout)
+            tabLayout.addWidget(handler.widget)
+
+            # add the recently created objects to a list in case of need later.
+            self.handlerList.append(handler)
+            self.tabsList.append(tab)
+            self.tabLayouts.append(tabLayout)
+
+    '''  
+        Function: setFormat
+        Parameters: self format
+        Return Value: N/A
+        Purpose: Changes the format in which log message records are displayed.
+    '''
+
+    def setFormat(self, format):
+        self.format = format
+        for x in range(0, self.handlerAmount):
+            self.handlerList[x].setFormatter(self.format)
 
 
 class QTextEditLogger(logging.Handler):

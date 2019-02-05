@@ -103,6 +103,7 @@ def exportCSV(path, carStorage):
     if fileExists(path):
         with open(path, 'w', newline='') as f:
             writer = csv.writer(f)
+
             for car in carStorage.storageList:
                 writer.writerow(car.ID)
                 writer.writerow(car.TeamName)
@@ -114,11 +115,11 @@ def exportCSV(path, carStorage):
 
 
 '''  
-    Function: isFileExtension
+    Function: isValidExtension
     Parameters: path, extension (str, str)
     Return Value: Boolean Condition
     Purpose: Checks if a string/path has the correct file extension located in extensionList and returns boolean 
              condition based on outcome.
 '''
 
-# def isFileExtension(path, extensionList):
+# def isValidExtension(path, extensionList):
