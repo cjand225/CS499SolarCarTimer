@@ -50,7 +50,7 @@ class Graph(QWidget):
 
     def initUI(self):
         self.ui = loadUi(graphUIPath, self)
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
+        self.setGeometry(QStyle.alignedRect(Qt.RightToLeft, Qt.AlignBottom,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
     '''  

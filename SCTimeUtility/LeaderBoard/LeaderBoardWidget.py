@@ -61,7 +61,7 @@ class LeaderBoardWidget(QWidget):
 
     def initUI(self):
         self.ui = loadUi(self.uiPath, self)
-        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
+        self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignLeft,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
     '''  
