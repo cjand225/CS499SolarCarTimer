@@ -169,13 +169,13 @@ class Car(QObject):
         timeSinceStart = time.time() - self.SeedValue
         recordedTime = 0
 
-        if (round(timeBeforeIndex) <= 0):
+        if timeBeforeIndex == -1:
             recordedTime = timeSinceStart
         else:
             recordedTime = timeSinceStart - timeBeforeIndex
 
         # time couldn't have possibly occured as race hasn't lastest long enough
-        if (recordedTime < 0):
+        if recordedTime < 0:
             recordedTime = 0
 
         self.LapList.append(LapTime(int(recordedTime)))
@@ -330,17 +330,17 @@ class Car(QObject):
      """
 
     def getTotalElapsedTime(self, index):
-        if index in range(0, len(self.LapList) - 1):
+        if not index in range(0, len(self.LapList) - 1):
             allLaps = self.LapList[1:index]
             return sum([lap.getElapsed() for lap in allLaps])
         else:
-            print("failed")
+            return -1
 
     """
          Function: getFasestLap
          Parameters: self, index
          Return Value: fastestLap (in seconds)
-         Purpose: gets the fastest lap that has happened within lapList, Initalially is None, and adds the first
+         Purpose: gets the fastest lap that has happened within lapList, Initially is None, and adds the first
                   lap that is greater than 0 if the current fastLap is none, then when it has a value, if the value
                   in the list is lower, it chooses that value for the new fastLap value and repeats until the lowest
                   value has been found.
