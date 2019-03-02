@@ -5,11 +5,10 @@ Purpose: Controller for entire application, used to periodically update project 
 
 '''
 
-import sys
+import sys, os
 from PyQt5.QtWidgets import QApplication
 
-# from SCTimeUtility.System.FileSystem import importCSV, exportCSV
-
+from SCTimeUtility.System.FileSystem import importCSV, exportCSV
 from SCTimeUtility.System.IO import saveCSV
 from SCTimeUtility.App import mainUIPath, quitDialogUIPath, helpDialogUIPath, aboutDialogUIPath, userManPath, aboutPath
 from SCTimeUtility.App.AppWindow import AppWindow
@@ -248,6 +247,7 @@ class App(QApplication):
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
             saveCSV(self.table.CarStoreList, self.writeFile)
+            exportCSV(self.table.getCarStorage(), self.writeFile)
             self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
             self.logger.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
@@ -265,7 +265,7 @@ class App(QApplication):
     '''
 
     def saveAsFile(self):
-        newFile = self.mainWindow.saveAsFileDialog()
+        newFile = os.path.join(self.mainWindow.saveAsFileDialog())
         if newFile is not None and newFile != '':
             # write file to location
             self.writeFile = newFile
@@ -286,7 +286,7 @@ class App(QApplication):
 
     # TODO: Rework so that addcar passes in Table module data
     def openFile(self):
-        readFile = self.mainWindow.openFileDialog()
+        readFile = os.path.join(self.mainWindow.openFileDialog())
         if readFile is str and not readFile:
             self.writeFile = readFile
 

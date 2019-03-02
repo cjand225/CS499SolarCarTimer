@@ -1,4 +1,4 @@
-import csv, os
+import csv, os, pandas
 
 from SCTimeUtility.Table.Car import Car
 from SCTimeUtility.Table.CarStorage import CarStorage
@@ -18,6 +18,7 @@ def saveCSV(cs, filePath):
     if filePath != '':
         with open(filePath, "w") as storageFile:
             storageWriter = csv.writer(storageFile)
+            # storageWriter.writeHeaders(['Car ID', 'Team Name', 'Car Num', 'Lap Times'])
             storageWriter.writerows(
                 [[c.ID, c.TeamName, c.CarNum, c.initialTime] + [t.elapsedTime for t in c.LapList] for c in
                  cs.storageList])
