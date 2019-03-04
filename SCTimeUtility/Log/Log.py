@@ -1,7 +1,7 @@
 import logging, os, datetime
 
 logDir = os.path.abspath(os.path.join(__file__, "./../../Settings/logs"))
-infoLogPath = os.path.abspath(os.path.join(logDir, str(datetime.datetime.now()) + '.log'))
+infoLogPath = os.path.abspath(os.path.join(logDir, str(datetime.datetime.now()).strip().replace(':','-') + '.log')).strip()
 
 '''  
     Function: checkDirs
