@@ -1,7 +1,8 @@
 import os
 
-resourcesDir = os.path.abspath(os.path.join(__file__, "./../../Resources"))
-tableUIPath = os.path.join(resourcesDir, 'TableView.ui')
-semiAutoUIPath = os.path.join(resourcesDir, 'SemiAuto.ui')
-addCarDialogUIPath = os.path.join(resourcesDir, 'addCarDialog.ui')
-addBatchCarDialogUIPath = os.path.join(resourcesDir, 'AddBatchDialog.ui')
+from SCTimeUtility.App import uiDir
+
+tableUIPath = os.path.join(uiDir, 'TableView.ui')
+semiAutoUIPath = os.path.join(uiDir, 'SemiAuto.ui')
+addCarDialogUIPath = os.path.join(uiDir, 'addCarDialog.ui')
+addBatchCarDialogUIPath = os.path.join(uiDir, 'AddBatchDialog.ui')

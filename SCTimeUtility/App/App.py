@@ -5,25 +5,25 @@ Purpose: Controller for entire application, used to periodically update project 
 
 '''
 
-import sys
+import sys, os
 from PyQt5.QtWidgets import QApplication
 
-from SCTimeUtility.App import logUIPath, mainUIPath, visionUIPath, quitDialogUIPath, helpDialogUIPath, \
-    aboutDialogUIPath, graphUIPath, userManPath, aboutPath
+from SCTimeUtility.System.FileSystem import importCSV, exportCSV
+from SCTimeUtility.System.IO import saveCSV
+from SCTimeUtility.App import mainUIPath, quitDialogUIPath, helpDialogUIPath, aboutDialogUIPath, userManPath, aboutPath
 from SCTimeUtility.App.AppWindow import AppWindow
-from SCTimeUtility.Graph.Graph import Graph
-from SCTimeUtility.Graph.LeaderBoard import LeaderBoard
-from SCTimeUtility.System.IO import loadCSV, saveCSV
 from SCTimeUtility.Table.Table import Table
 from SCTimeUtility.Video.Video import Video
-from SCTimeUtility.Log.LogWidget import LogWidget
+from SCTimeUtility.Graph.Graph import Graph
+from SCTimeUtility.LeaderBoard.LeaderBoard import LeaderBoard
 from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.LogWidget import LogWidget
 
 
-class App():
+class App(QApplication):
 
     def __init__(self):
-        self.Application = None
+        super(App, self).__init__(sys.argv)
         self.mainWindow = None
         self.running = False
 
@@ -32,6 +32,8 @@ class App():
 
         # Forward Module Declaration
         self.logger = getLog()
+
+        self.ModuleList = []
 
         self.table = None
         self.semiAuto = None
@@ -57,7 +59,6 @@ class App():
     '''
 
     def initApplication(self):
-        self.Application = QApplication(sys.argv)
         self.initMainWindow()
         self.initLog()
         self.initTable()
@@ -114,7 +115,7 @@ class App():
     '''
 
     def initVision(self):
-        self.vision = Video(visionUIPath)
+        self.vision = Video()
         if self.vision is not None:
             getLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
         else:
@@ -131,7 +132,7 @@ class App():
     '''
 
     def initLog(self):
-        self.logWidget = LogWidget(logUIPath)
+        self.logWidget = LogWidget()
         if self.logWidget is not None:
             getLog().debug('[' + __name__ + '] ' + 'Log module initialized')
         else:
@@ -148,7 +149,7 @@ class App():
     '''
 
     def initGraph(self):
-        self.graph = Graph(graphUIPath)
+        self.graph = Graph()
         if self.graph is not None:
             getLog().debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:
@@ -230,7 +231,7 @@ class App():
 
     def run(self):
         self.running = True
-        sys.exit(self.Application.exec_())
+        sys.exit(self.exec_())
 
     ''' 
 
@@ -246,6 +247,7 @@ class App():
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
             saveCSV(self.table.CarStoreList, self.writeFile)
+            exportCSV(self.table.getCarStorage(), self.writeFile)
             self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
             self.logger.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
@@ -263,7 +265,7 @@ class App():
     '''
 
     def saveAsFile(self):
-        newFile = self.mainWindow.saveAsFileDialog()
+        newFile = os.path.join(self.mainWindow.saveAsFileDialog())
         if newFile is not None and newFile != '':
             # write file to location
             self.writeFile = newFile
@@ -284,8 +286,8 @@ class App():
 
     # TODO: Rework so that addcar passes in Table module data
     def openFile(self):
-        readFile = self.mainWindow.openFileDialog()
-        if readFile is not None and readFile != '':
+        readFile = os.path.join(self.mainWindow.openFileDialog())
+        if readFile is str and not readFile:
             self.writeFile = readFile
 
     ''' 
@@ -300,13 +302,31 @@ class App():
 
     def newFile(self):
         self.writeFile = self.mainWindow.saveAsFileDialog()
-        if self.writeFile is not None and self.writeFile != '':
+        if self.writeFile is str and not self.writeFile:
             self.logger.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
         else:
             self.logger.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
 
+    '''
+        Function: graphUpdate
+        Parameters: self
+        Return Value: N/A
+        Purpose: Binds an update function to pass a copy of carStorage to the graph if the table is ever updated with
+                 new information (based on qt signals emitted by cars).
+    
+    '''
+
     def graphUpdate(self):
         self.graph.handleUpdate(self.table.getCarStorage())
+
+    '''
+        Function: graphUpdate
+        Parameters: self
+        Return Value: N/A
+        Purpose: Binds an update function to pass a copy of carStorage to the leaderboard if the table is ever updated 
+                 with new information (based on qt signals emitted by cars).
+
+    '''
 
     def leaderBoardUpdate(self):
         self.leaderBoard.updateData(self.table.getCarStorage())

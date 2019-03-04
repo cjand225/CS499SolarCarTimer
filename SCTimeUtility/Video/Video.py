@@ -7,6 +7,7 @@ Depends On:
 
 import queue
 
+from SCTimeUtility.Video import videoUIPath
 from SCTimeUtility.Video.VideoWidget import VisionWidget
 from SCTimeUtility.Video.CaptureThread import CaptureThread
 from SCTimeUtility.Video.ImageProcessThread import ImageProcessThread
@@ -16,8 +17,7 @@ from SCTimeUtility.Video.VideoOptionsWidget import VideoOptionsWidget
 
 class Video():
 
-    def __init__(self, uipath):
-        self.UIpath = uipath
+    def __init__(self):
         self.VisWidget = None
 
         # device requirements
@@ -40,7 +40,7 @@ class Video():
         self.initBinds()
 
     def initUI(self):
-        self.VisWidget = VisionWidget(self.UIpath)
+        self.VisWidget = VisionWidget(videoUIPath)
         self.ImgCanvasWidth = self.VisWidget.getWidth()
         self.ImgCanvasHeight = self.VisWidget.getHeight()
 

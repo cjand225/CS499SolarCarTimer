@@ -9,7 +9,7 @@ Depends On:
                      LogWidget, GraphOptionsWidget
 
             Files: Table.py, SemiAutoWidget.py, VideoWidget.py, LogWidget.py, Graph.py
-                   GraphOptions.py,
+                   GraphWidget.py,
 '''
 from PyQt5.QtCore import QFile, QTextStream, Qt
 from PyQt5.QtGui import QCloseEvent
@@ -377,7 +377,6 @@ class AppWindow(QMainWindow):
             file.open(QFile.ReadOnly | QFile.Text)
             stream = QTextStream(file)
             self.aboutDialog.ui.textBrowser.setHtml(stream.readAll())
-
 
     '''
 

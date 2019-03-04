@@ -3,13 +3,16 @@ import os
 resourcesDir = os.path.abspath(os.path.join(__file__, "./../../Resources"))
 manualDir = os.path.abspath(os.path.join(__file__, "./../../../Docs"))
 settingsDir = os.path.abspath(os.path.join(__file__, "./../../bin/Settings"))
+uiDir = os.path.join(resourcesDir, './UI')
 
-logUIPath = os.path.join(resourcesDir, 'Log.ui')
-mainUIPath = os.path.join(resourcesDir, 'AppWindow.ui')
-visionUIPath = os.path.join(resourcesDir, 'Video.ui')
-quitDialogUIPath = os.path.join(resourcesDir, 'QuitDialog.ui')
-helpDialogUIPath = os.path.join(resourcesDir, 'HelpDialog.ui')
-aboutDialogUIPath = os.path.join(resourcesDir, 'AboutDialog.ui')
-graphUIPath = os.path.join(resourcesDir, 'GraphOptions.ui')
+# ui file paths
+mainUIPath = os.path.join(uiDir, 'AppWindow.ui')
+
+# ui Dialog paths
+quitDialogUIPath = os.path.join(uiDir, 'QuitDialog.ui')
+helpDialogUIPath = os.path.join(uiDir, 'HelpDialog.ui')
+aboutDialogUIPath = os.path.join(uiDir, 'AboutDialog.ui')
+
+# resource manual paths
 userManPath = os.path.join(manualDir, 'UserManual.html')
 aboutPath = os.path.join(manualDir, 'About.html')

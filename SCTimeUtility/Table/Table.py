@@ -262,7 +262,7 @@ class Table():
 
     '''
 
-        Function: fixHeaders
+        Function: adjustHeaders
         Parameters: self
         Return Value: N/A
         Purpose: Temp fix for widget stuff

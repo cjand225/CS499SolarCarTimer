@@ -66,7 +66,7 @@ def createFile(path, arg, data):
 
 
 def exportImage(path, img):
-    print()
+    pass
 
 
 '''  
@@ -99,26 +99,29 @@ def importCSV(path):
 '''
 
 
-def exportCSV(path, carStorage):
-    if fileExists(path):
-        with open(path, 'w', newline='') as f:
+def exportCSV(carStorage, path):
+    for car in carStorage:
+        fileName = str(car.CarNum) + '-' + str(car.TeamName)
+        if not dirExists(path):
+            makeDir(path)
+        filePath = os.path.join(path, fileName)
+        with open(filePath, 'w', newline='') as f:
             writer = csv.writer(f)
-            for car in carStorage.storageList:
-                writer.writerow(car.ID)
-                writer.writerow(car.TeamName)
-                writer.writerow(car.CarNum)
-                writer.writerow('\n')
-                writer.writerows(car.LapList)
-    else:
-        return None
+            writer.writerows(car.LapList)
 
 
 '''  
-    Function: isFileExtension
+    Function: isValidExtension
     Parameters: path, extension (str, str)
     Return Value: Boolean Condition
     Purpose: Checks if a string/path has the correct file extension located in extensionList and returns boolean 
              condition based on outcome.
 '''
 
-# def isFileExtension(path, extensionList):
+
+def isValidExtension(path, extensionList):
+    pass
+
+
+def isValidFileName(path, regExp):
+    pass

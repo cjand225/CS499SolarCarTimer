@@ -1,4 +1,5 @@
 import os
 
-resourcesDir = os.path.abspath(os.path.join(__file__, "./../../Resources"))
-LeaderBoardUIPath = os.path.join(resourcesDir, 'LeaderBoard.ui')
+from SCTimeUtility.App import uiDir
+
+graphUIPath = os.path.join(uiDir, 'GraphOptions.ui')

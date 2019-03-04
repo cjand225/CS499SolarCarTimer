@@ -1,7 +1,7 @@
-import logging, os
+import logging, os, datetime
 
 logDir = os.path.abspath(os.path.join(__file__, "./../../Settings/logs"))
-infoLogPath = os.path.abspath(os.path.join(logDir, 'SCT.Log'))
+infoLogPath = os.path.abspath(os.path.join(logDir, str(datetime.datetime.now()).strip().replace(':','-') + '.log')).strip()
 
 '''  
     Function: checkDirs
@@ -54,7 +54,7 @@ def initLog():
     infoLog.setLevel(logging.DEBUG)
 
     # create formatter and add it to the handlers
-    formatter = logging.Formatter('[%(asctime)s] - [%(name)s] - [%(levelname)s] - %(message)s')
+    formatter = logging.Formatter('[%(asctime)s] - [%(levelname)s] - %(message)s')
     fh = logging.FileHandler(infoLogPath)
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
