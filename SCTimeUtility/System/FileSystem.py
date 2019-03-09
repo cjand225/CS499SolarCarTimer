@@ -1,42 +1,18 @@
 import os, csv, datetime
 
 '''  
-    Function: createFile
-    Parameters: path (str), args (str)
-    Return Value: 
-    Purpose: Creates a file with provided path and arguments.
-'''
-
-
-def createFile(path, arg, data):
-    if not os.path.isfile(path):
-        fp = open(path, arg)
-        for dataLine in data:
-            if arg == "w":
-                fp.write(dataLine)
-            else:
-                fp.read(dataLine)
-        fp.close()
-
-
-'''  
     Function: importCSV
     Parameters: path (str)
     Return Value: List with CSV contents
-    Purpose: Imports the file given by the path parameter of a CSV and returns it as a list.
+    Purpose: parses and imports data from a directory containing CSVs.
 '''
 
 
 def importCSV(path):
-    if os.path.isfile(path):
-        csvList = []
-        with open(path, newline='') as csvFile:
-            csvReader = csv.reader(csvFile, delimiter=' ', quotechar='|')
-            for row in csvReader:
-                csvList.append(row)
-        return csvList
+    if os.path.exists(path):
+        pass
     else:
-        return None
+        pass
 
 
 '''
@@ -50,11 +26,9 @@ def importCSV(path):
 
 
 def exportCSV(carStorage, path):
-    # print(path)
     folderPath = os.path.join(path, datetime.datetime.now().strftime('%Y-%b-%d_%H%M'))
     if not os.path.exists(folderPath):
         os.makedirs(folderPath)
-    # print(folderPath)
     for car in carStorage.storageList:
         fileName = str(car.CarNum) + '-' + str(car.TeamName) + '.csv'
         filePath = os.path.join(folderPath, fileName)
