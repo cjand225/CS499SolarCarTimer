@@ -4,27 +4,13 @@ Purpose: assortment of functions used to validate data before it is used for cer
 
 '''
 
-import re, os
+import re
 from SCTimeUtility.Log.Log import getLog
 
 RegExpID = "^([0-9][0-9]{0,2}|1000)$"
 RegExpTeamName = "^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"
 RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
 RegExpFileName = "^[a-zA-Z0-9](?[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\.[a-zA-Z0-9_-]+$"
-
-"""
-
-    Function: isValidFilename
-    Parameters: regExpFileName, filename 
-    Return Value: Boolean indicator
-    Purpose: Boolean check if given parameter filename matches the regular expression.
-
-"""
-
-
-def isValidPath(path):
-    return os.path.exists(path)
-
 
 """
 
@@ -151,34 +137,3 @@ def existsCar(storageList, num, org):
 
 def isValidCar(num, teamName):
     return isValidInteger(num, RegExpCarNum) and isValidTeamName(teamName, RegExpTeamName)
-
-
-"""
-    Function: intToTimeStr
-    Parameters: int
-    Return Value: str
-    Purpose: converts an integeter that represents milliseconds into a time string in the format "HH:MM:SS"
-
-"""
-
-
-def intToTimeStr(int):
-    Days = divmod(int, 24 * 3600)
-    Hours = divmod(Days[1], 3600)
-    Minutes = divmod(Hours[1], 60)
-    Seconds = divmod(int, 60)
-
-    Hours = str(Hours[0])
-    Minutes = str(Minutes[0])
-    Seconds = str(Seconds[1])
-
-    if len(Hours) == 1:
-        Hours = '0' + Hours
-
-    if len(Minutes) == 1:
-        Minutes = '0' + Minutes
-
-    if len(Seconds) == 1:
-        Seconds = '0' + Seconds
-
-    return Hours + ':' + Minutes + ":" + Seconds

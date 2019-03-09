@@ -1,42 +1,4 @@
-import os, csv
-
-'''  
-    Function: makeDir
-    Parameters: dirName
-    Return Value: Boolean cond
-    Purpose: Checks if the logging path exists and if not makes the directory to complete the path.
-'''
-
-
-def makeDir(dirName):
-    if not os.path.exists(dirName):
-        os.makedirs(dirName)
-    return True
-
-
-'''  
-    Function: dirExists
-    Parameters: dirName (str)
-    Return Value: Boolean cond
-    Purpose: Returns a boolean cond that determines whether a directory exists or not.
-'''
-
-
-def dirExists(dirName):
-    return os.path.exists(dirName)
-
-
-'''  
-    Function: fileExists
-    Parameters: path (str)
-    Return Value: Boolean cond
-    Purpose: Returns a boolean cond that determines whether a file exists or not.
-'''
-
-
-def fileExists(path):
-    return os.path.isfile(path)
-
+import os, csv, datetime
 
 '''  
     Function: createFile
@@ -47,7 +9,7 @@ def fileExists(path):
 
 
 def createFile(path, arg, data):
-    if not fileExists(path):
+    if not os.path.isfile(path):
         fp = open(path, arg)
         for dataLine in data:
             if arg == "w":
@@ -55,18 +17,6 @@ def createFile(path, arg, data):
             else:
                 fp.read(dataLine)
         fp.close()
-
-
-'''  
-    Function: exportImage
-    Parameters: path (str), img (image file)
-    Return Value: Boolean Cond
-    Purpose: Exports a Graph image from application to path given by user.
-'''
-
-
-def exportImage(path, img):
-    pass
 
 
 '''  
@@ -78,7 +28,7 @@ def exportImage(path, img):
 
 
 def importCSV(path):
-    if fileExists(path):
+    if os.path.isfile(path):
         csvList = []
         with open(path, newline='') as csvFile:
             csvReader = csv.reader(csvFile, delimiter=' ', quotechar='|')
@@ -93,39 +43,22 @@ def importCSV(path):
     Function: exportCSV
     Parameters: path, carStorage
     Return Value: Boolean Condition
-    Purpose: Exports CarStorage to a csv formatted file.
-
+    Purpose: Exports every car in CarStorage instance to timestamped directory with each csv file being comprised
+             of the car name, a dash, teamName, and the csv file extension inside the directory.
 
 '''
 
 
 def exportCSV(carStorage, path):
-    print(path)
+    # print(path)
+    folderPath = os.path.join(path, datetime.datetime.now().strftime('%Y-%b-%d_%H%M'))
+    if not os.path.exists(folderPath):
+        os.makedirs(folderPath)
+    # print(folderPath)
     for car in carStorage.storageList:
         fileName = str(car.CarNum) + '-' + str(car.TeamName) + '.csv'
-        print(fileName)
-        if not dirExists(path):
-            makeDir(path)
-        filePath = os.path.join(path, fileName)
+        filePath = os.path.join(folderPath, fileName)
         with open(filePath, 'w', newline='') as f:
             writer = csv.writer(f)
             for lap in car.LapList:
                 writer.writerow([lap])
-
-
-
-'''  
-    Function: isValidExtension
-    Parameters: path, extension (str, str)
-    Return Value: Boolean Condition
-    Purpose: Checks if a string/path has the correct file extension located in extensionList and returns boolean 
-             condition based on outcome.
-'''
-
-
-def isValidExtension(path, extensionList):
-    pass
-
-
-def isValidFileName(path, regExp):
-    pass
