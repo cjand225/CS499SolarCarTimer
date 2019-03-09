@@ -247,7 +247,10 @@ class SemiAuto(QWidget):
     '''
 
     def clickRecord(self, index):
-        self.carStoreRef[index - 1].addLapTime()
+        if index - 1 < 0:
+            self.carStoreRef[index].addLapTime()
+        else:
+            self.carStoreRef[index - 1].addLapTime()
 
     '''  
         Function: clickStartStop 

@@ -61,6 +61,7 @@ class Table():
         self.Widget.addBatch.clicked.connect(self.handleAddBatchDialog)
         self.Widget.startRace.clicked.connect(self.handleStart)
         self.CarStoreList.dataModified.connect(self.updateSemiAuto)
+        self.CarStoreList.dataModified.connect(self.fixHeaders)
 
     '''
 

@@ -3,7 +3,6 @@ import time
 from PyQt5.QtCore import pyqtSignal, QObject
 
 from SCTimeUtility.Table.LapTime import LapTime
-from SCTimeUtility.System.Validation import intToTimeStr
 from SCTimeUtility.Log.Log import getLog
 
 
@@ -178,11 +177,9 @@ class Car(QObject):
         if recordedTime < 0:
             recordedTime = 0
 
-        self.LapList.append(LapTime(int(recordedTime)))
+        self.LapList.append(LapTime(recordedTime))
         self.logger.info(
-            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(intToTimeStr(int(recordedTime)),
-                                                                  self.TeamName,
-                                                                  self.CarNum))
+            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(recordedTime, self.TeamName, self.CarNum))
 
     """
         Function: addLapManually
@@ -196,18 +193,17 @@ class Car(QObject):
     def addLapManually(self, timeData):
         self.LapList.append(LapTime(timeData))
         self.logger.info(
-            'Lap Time {} added Car: {} , {} via Manual.'.format(intToTimeStr(int(timeData)), self.TeamName,
-                                                                self.CarNum))
+            'Lap Time {} added Car: {} , {} via Manual.'.format(timeData, self.TeamName, self.CarNum))
 
-    """
-         Function: editLapTime
-         Parameters: self, index, timeData
-         Return Value: N/A
-         Purpose: Edits current given index in lapList, if lap below given index exists, the lap below is
-                  offset by the difference between the lap below's value and the newly given value from
-                  timeData.
-  
-     """
+        """
+             Function: editLapTime
+             Parameters: self, index, timeData
+             Return Value: N/A
+             Purpose: Edits current given index in lapList, if lap below given index exists, the lap below is
+                      offset by the difference between the lap below's value and the newly given value from
+                      timeData.
+      
+         """
 
     def editLapTime(self, index, timeData):
         editCondition = False
