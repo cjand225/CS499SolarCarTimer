@@ -11,6 +11,8 @@ Depends On:
             Files: Table.py, SemiAutoWidget.py, VideoWidget.py, LogWidget.py, Graph.py
                    GraphWidget.py,
 '''
+import os
+from pathlib import Path
 from PyQt5.QtCore import QFile, QTextStream, Qt
 from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog, QStyle
@@ -117,8 +119,8 @@ class AppWindow(QMainWindow):
             self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
 
         # help
-        self.actionAbout.triggered.connect(self.handleAboutDialog)
-        self.actionHelp.triggered.connect(self.handleHelpDialog)
+        # self.actionAbout.triggered.connect(self.handleAboutDialog)
+        # self.actionHelp.triggered.connect(self.handleHelpDialog)
 
     ''' 
     
@@ -326,55 +328,6 @@ class AppWindow(QMainWindow):
 
     '''
 
-        Function: createHelpDialog
-        Parameters: uiPath, filePath
-        Return Value: N/A
-        Purpose: Instances a QDialog given a filepath in UIpath parameter and a file containing data to display
-                 given by filePath, loads file into a text stream that then is set as html for the textbrowser
-                 built into the Dialog's ui file. If no file path is given, it'll just return none
-
-
-    '''
-
-    def createHelpDialog(self, uiPath, filePath=None):
-        helpDialog = QDialog()
-        helpDialog.ui = loadUi(uiPath, helpDialog)
-        if filePath is not None:
-            file = QFile(filePath)
-            file.open(QFile.ReadOnly | QFile.Text)
-            stream = QTextStream(file)
-            helpDialog.ui.textBrowser.setHtml(stream.readAll())
-        helpDialog.ui.buttonBox.clicked.connect(helpDialog.close)
-        helpDialog.exec()
-        helpDialog.ui.buttonBox.clicked.disconnect()
-        helpDialog.deleteLater()
-
-    '''
-
-        Function: createAboutDialog
-        Parameters: uiPath, filePath
-        Return Value: N/A
-        Purpose: Instances a QDialog given a filepath in UIpath parameter and a file containing data to display
-                 given by filePath, loads file into a text stream that then is set as html for the textbrowser
-                 built into the Dialog's ui file. If no file path is given, it'll just return none 
-
-    '''
-
-    def createAboutDialog(self, uiPath, filePath=None):
-        aboutDialog = QDialog()
-        aboutDialog.ui = loadUi(uiPath, aboutDialog)
-        if filePath is not None:
-            file = QFile(filePath)
-            file.open(QFile.ReadOnly | QFile.Text)
-            stream = QTextStream(file)
-            aboutDialog.ui.textBrowser.setHtml(stream.readAll())
-        aboutDialog.ui.buttonBox.clicked.connect(aboutDialog.close)
-        aboutDialog.exec()
-        aboutDialog.ui.buttonBox.clicked.disconnect()
-        aboutDialog.deleteLater()
-
-    '''
-
         Function: createBrowserDialog
         Parameters: self, uiPath, filePath
         Return Value: return value of execution
@@ -395,9 +348,22 @@ class AppWindow(QMainWindow):
             # direct stream as HTML, connect close button, execute and return value after close.
             browserDialog.ui.textBrowser.setHtml(stream.readAll())
             browserDialog.ui.buttonBox.clicked.connect(browserDialog.close)
-            return browserDialog.exec()
+            browserDialog.exec()
+            # clean up after execution
+            browserDialog.ui.buttonBox.clicked.disconnect()
+            browserDialog.close()
+            browserDialog.deleteLater()
+            return QDialog.Accepted
         else:
             return QDialog.Rejected
 
-    def createDialog(self, b):
+    '''
+        Function: createDecisionDialog
+        Parameters: self, uiPath, filePath
+        Return Value: QDialog.Accepted | QDialog.Rejected
+        Purpose: Given paramaters, creates a decision based dialog i.e. yes or no, ok/cancel, to determine how to handle
+                 next user interaction.
+    '''
+
+    def createDecisionDialog(self, uiPath, textField):
         pass

@@ -101,3 +101,6 @@ class AddCarDialog(QDialog):
                 self.validationError.showMessage("Please enter a value for {0}.".format(self.carNumberLabel.text()))
         else:
             super().done(r)
+
+    def showValidationUser(self):
+        pass

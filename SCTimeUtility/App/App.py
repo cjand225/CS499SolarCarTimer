@@ -264,7 +264,6 @@ class App(QApplication):
 
     def saveAsFile(self):
         newFile = os.path.join(self.mainWindow.openDirDialog())
-        print("hi")
         exportCSV(self.table.CarStoreList, newFile)
         if newFile is not None and newFile != '':
             # write file to location
@@ -286,9 +285,7 @@ class App(QApplication):
 
     # TODO: Rework so that addcar passes in Table module data
     def openFile(self):
-        readFile = os.path.join(self.mainWindow.openFileDialog()[0])
-        if readFile is str and not readFile:
-            self.writeFile = readFile
+        readFile = os.path.join(self.mainWindow.openDirDialog())
 
     ''' 
 
