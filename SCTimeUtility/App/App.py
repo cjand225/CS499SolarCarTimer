@@ -8,8 +8,6 @@ Purpose: Controller for entire application, used to periodically update project 
 import sys, os
 from PyQt5.QtWidgets import QApplication
 
-from SCTimeUtility.System.FileSystem import importCSV, exportCSV
-from SCTimeUtility.System.IO import saveCSV
 from SCTimeUtility.App import mainUIPath, quitDialogUIPath, helpDialogUIPath, aboutDialogUIPath, userManPath, aboutPath
 from SCTimeUtility.App.AppWindow import AppWindow
 from SCTimeUtility.Table.Table import Table
@@ -18,6 +16,7 @@ from SCTimeUtility.Graph.Graph import Graph
 from SCTimeUtility.LeaderBoard.LeaderBoard import LeaderBoard
 from SCTimeUtility.Log.Log import getLog
 from SCTimeUtility.Log.LogWidget import LogWidget
+from SCTimeUtility.System.FileSystem import exportCSV
 
 
 class App(QApplication):
@@ -83,8 +82,8 @@ class App(QApplication):
     def initMainWindow(self):
         self.mainWindow = AppWindow(mainUIPath)
         self.mainWindow.initCloseDialog(quitDialogUIPath)
-        self.mainWindow.initHelpDialog(helpDialogUIPath, userManPath)
-        self.mainWindow.initAboutDialog(aboutDialogUIPath, aboutPath)
+        # self.mainWindow.createHelpDialog(helpDialogUIPath, userManPath)
+        # self.mainWindow.createAboutDialog(aboutDialogUIPath, aboutPath)
 
     ''' 
 
@@ -246,8 +245,7 @@ class App(QApplication):
 
     def saveFile(self):
         if self.writeFile is not None and self.writeFile != '':
-            saveCSV(self.table.CarStoreList, self.writeFile)
-            exportCSV(self.table.getCarStorage(), self.writeFile)
+            # TODO: rework savefile
             self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
         else:
             self.logger.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
@@ -265,7 +263,9 @@ class App(QApplication):
     '''
 
     def saveAsFile(self):
-        newFile = os.path.join(self.mainWindow.saveAsFileDialog())
+        newFile = os.path.join(self.mainWindow.openDirDialog())
+        print("hi")
+        exportCSV(self.table.CarStoreList, newFile)
         if newFile is not None and newFile != '':
             # write file to location
             self.writeFile = newFile
@@ -286,7 +286,7 @@ class App(QApplication):
 
     # TODO: Rework so that addcar passes in Table module data
     def openFile(self):
-        readFile = os.path.join(self.mainWindow.openFileDialog())
+        readFile = os.path.join(self.mainWindow.openFileDialog()[0])
         if readFile is str and not readFile:
             self.writeFile = readFile
 

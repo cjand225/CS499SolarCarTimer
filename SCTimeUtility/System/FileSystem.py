@@ -100,14 +100,18 @@ def importCSV(path):
 
 
 def exportCSV(carStorage, path):
-    for car in carStorage:
-        fileName = str(car.CarNum) + '-' + str(car.TeamName)
+    print(path)
+    for car in carStorage.storageList:
+        fileName = str(car.CarNum) + '-' + str(car.TeamName) + '.csv'
+        print(fileName)
         if not dirExists(path):
             makeDir(path)
         filePath = os.path.join(path, fileName)
         with open(filePath, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerows(car.LapList)
+            for lap in car.LapList:
+                writer.writerow([lap])
+
 
 
 '''  

@@ -1,6 +1,6 @@
-import os, logging
+import logging
 
-from SCTimeUtility.App import uiDir
+from SCTimeUtility.Resources.UI import logWidPath
 
-logUIPath = os.path.join(uiDir, 'LogWidget.ui')
+logUIPath = logWidPath
 defaultLogFormat = logging.Formatter('[%(asctime)s] - [%(levelname)s] - %(message)s')

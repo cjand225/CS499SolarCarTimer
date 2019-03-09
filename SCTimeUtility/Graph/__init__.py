@@ -1,5 +1,3 @@
-import os
+from SCTimeUtility.Resources.UI import graphWidPath
 
-from SCTimeUtility.App import uiDir
-
-graphUIPath = os.path.join(uiDir, 'GraphOptions.ui')
+graphUIPath = graphWidPath

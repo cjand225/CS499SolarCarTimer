@@ -1,8 +1,6 @@
-import os
+from SCTimeUtility.Resources.UI import tableViewPath, semiAutoPath, addCarPath, addBatchPath
 
-from SCTimeUtility.App import uiDir
-
-tableUIPath = os.path.join(uiDir, 'TableView.ui')
-semiAutoUIPath = os.path.join(uiDir, 'SemiAuto.ui')
-addCarDialogUIPath = os.path.join(uiDir, 'addCarDialog.ui')
-addBatchCarDialogUIPath = os.path.join(uiDir, 'AddBatchDialog.ui')
+tableUIPath = tableViewPath
+semiAutoUIPath = semiAutoPath
+addCarDialogUIPath = addCarPath
+addBatchCarDialogUIPath = addBatchPath

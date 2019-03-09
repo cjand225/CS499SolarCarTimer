@@ -3,8 +3,7 @@
     Purpose: Related graphics functions kept here for use in various parts of Video module
 
 """
-import cv2
-import numpy as np
+import cv2, numpy as np
 from enum import Enum
 from PyQt5.QtGui import QImage
 

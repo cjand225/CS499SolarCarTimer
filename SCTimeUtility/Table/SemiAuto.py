@@ -184,7 +184,7 @@ class SemiAuto(QWidget):
         if len(self.buttonList) == len(self.carStoreRef):
             index = 0
             for button in self.buttonList:
-                button.clicked.connect(lambda b: self.clickRecord(index))
+                self.bindButtonRecord(index - 1, button)
                 index += 1
             index = 0
             for button in self.startStopList:
@@ -198,7 +198,7 @@ class SemiAuto(QWidget):
         Purpose: Binds button to the corresponding index given in parameters located within the button list.
     '''
 
-    def bindButton(self, index, button):
+    def bindButtonRecord(self, index, button):
         button.clicked.connect(lambda b: self.clickRecord(index))
 
     '''  

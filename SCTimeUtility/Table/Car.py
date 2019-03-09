@@ -353,3 +353,18 @@ class Car(QObject):
             return min([lap.getElapsed() for lap in allLaps])
         else:
             return None
+
+    def hasSeed(self):
+        pass
+
+    def editTeamName(self, newName):
+        pass
+
+    def editCarNumber(self, newNumber):
+        pass
+
+    def pauseRecording(self):
+        pass
+
+    def resumeRecording(self):
+        pass

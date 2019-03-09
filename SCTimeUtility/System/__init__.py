@@ -1,3 +1,2 @@
-import os
+from SCTimeUtility.Resources import settingsDir
 
-settingsDir = os.path.abspath(os.path.join(__file__, "./../../Settings"))
