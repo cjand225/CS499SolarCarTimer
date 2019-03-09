@@ -56,6 +56,8 @@ class AppWindow(QMainWindow):
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        # windows hack because for some undocumented reason anything aligned at the top of screen hides title bar.
+        self.move(self.x(), self.y() - self.menuBar().y())
         self.show()
 
     ''' 
