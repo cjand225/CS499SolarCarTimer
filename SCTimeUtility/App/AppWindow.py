@@ -118,10 +118,6 @@ class AppWindow(QMainWindow):
             self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
             self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
 
-        # help
-        # self.actionAbout.triggered.connect(self.handleAboutDialog)
-        # self.actionHelp.triggered.connect(self.handleHelpDialog)
-
     ''' 
     
         Function: addVision

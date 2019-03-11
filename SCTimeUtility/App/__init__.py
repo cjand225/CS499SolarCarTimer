@@ -1,6 +1,6 @@
 from SCTimeUtility.Resources import resourceDir
 from SCTimeUtility.Resources.UI import appWinPath, quitDialogPath, helpDialogPath, aboutDialogPath
-from SCTimeUtility.Resources.Docs import userPath, adminPath
+from SCTimeUtility.Resources.Docs import userPath, adminPath, aboutPath
 
 resourcesDir = resourceDir
 
@@ -14,4 +14,5 @@ aboutDialogUIPath = aboutDialogPath
 
 # resource manual paths
 userManPath = userPath
-aboutPath = adminPath
+adminManPath = adminPath
+aboutManPath = aboutPath

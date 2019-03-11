@@ -126,10 +126,9 @@
     </property>
     <addaction name="actionNew"/>
     <addaction name="actionOpen"/>
-    <addaction name="actionRecent"/>
     <addaction name="separator"/>
+    <addaction name="actionImport_Data"/>
     <addaction name="actionSave"/>
-    <addaction name="actionSaveAs"/>
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="actionClose"/>
@@ -159,14 +158,15 @@
     <addaction name="actionSemiAuto"/>
     <addaction name="actionAuto"/>
     <addaction name="actionGraphing"/>
-    <addaction name="actionLog"/>
     <addaction name="actionLeaderBoard"/>
+    <addaction name="actionLog"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionHelp"/>
+    <addaction name="actionUserMan"/>
+    <addaction name="actionAdminMan"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuFile"/>
@@ -176,7 +176,7 @@
   </widget>
   <action name="actionNew">
    <property name="text">
-    <string>New</string>
+    <string>New Session</string>
    </property>
    <property name="shortcut">
     <string>Shift+N</string>
@@ -184,7 +184,7 @@
   </action>
   <action name="actionOpen">
    <property name="text">
-    <string>Open</string>
+    <string>Open Directory</string>
    </property>
    <property name="shortcut">
     <string>Shift+O</string>
@@ -206,7 +206,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Table</string>
+    <string>Manual</string>
    </property>
   </action>
   <action name="actionSemiAuto">
@@ -230,7 +230,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Log</string>
+    <string>Logs</string>
    </property>
   </action>
   <action name="actionAbout">
@@ -269,7 +269,7 @@
   </action>
   <action name="actionSave">
    <property name="text">
-    <string>Save</string>
+    <string>Export Data</string>
    </property>
    <property name="shortcut">
     <string>Shift+S</string>
@@ -325,7 +325,7 @@
   </action>
   <action name="actionGraphing">
    <property name="text">
-    <string>Graphing</string>
+    <string>Analysis</string>
    </property>
   </action>
   <action name="actionAddCar">
@@ -343,9 +343,19 @@
     <string>Leader Board</string>
    </property>
   </action>
-  <action name="actionHelp">
+  <action name="actionUserMan">
    <property name="text">
     <string>User Manual</string>
+   </property>
+  </action>
+  <action name="actionAdminMan">
+   <property name="text">
+    <string>Admin Manual</string>
+   </property>
+  </action>
+  <action name="actionImport_Data">
+   <property name="text">
+    <string>Import Data</string>
    </property>
   </action>
  </widget>

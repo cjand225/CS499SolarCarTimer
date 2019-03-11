@@ -27,8 +27,10 @@ def importCSV(path):
 
 def exportCSV(carStorage, path):
     folderPath = os.path.join(path, datetime.datetime.now().strftime('%Y-%b-%d_%H%M'))
+    # if the timestamped folder doesn't exist, create it now
     if not os.path.exists(folderPath):
         os.makedirs(folderPath)
+    # go through each car and write it out to a csv file named after carNum-TeamName.csv
     for car in carStorage.storageList:
         fileName = str(car.CarNum) + '-' + str(car.TeamName) + '.csv'
         filePath = os.path.join(folderPath, fileName)
