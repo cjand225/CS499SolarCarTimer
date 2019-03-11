@@ -22,7 +22,7 @@ class testCarStorage(unittest.TestCase):
         myStore = CarStorage()
         carListData = generateCarData(self.maxCars)
         carToCreate = [carListData[0][1], carListData[0][2]]
-        myStore.createCar(carToCreate[0], carToCreate[1])
+        myStore.createCar(carToCreate[1], carToCreate[0])
         self.assertIsInstance(myStore.storageList[0], Car)
         self.assertEqual(carToCreate, [myStore.storageList[0].TeamName, myStore.storageList[0].CarNum])
 
@@ -82,7 +82,7 @@ class testCarStorage(unittest.TestCase):
 
     def testAppendLapTime(self):
         myStore = CarStorage()
-        myStore.createCar('University of Kentucky', 45)
+        myStore.createCar(45, 'University of Kentucky')
         myCar = myStore.storageList[0]
         myCar.setSeedValue(time.time())
         lapData = generateLapData(self.maxLaps)
@@ -94,8 +94,8 @@ class testCarStorage(unittest.TestCase):
 
     def testEditLaptime(self):
         myStore = CarStorage()
-        myStore.createCar('University of Kentucky', 45)
-        myStore.createCar('University of Ken', 4)
+        myStore.createCar(45, 'University of Kentucky')
+        myStore.createCar(4, 'University of Ken')
         myCar = myStore.storageList[0]
         myCar.setSeedValue(time.time())
         lapData = generateLapData(self.maxLaps)

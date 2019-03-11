@@ -1,7 +1,6 @@
 import logging, os, datetime
 
-logDir = os.path.abspath(os.path.join(__file__, "./../../Settings/logs"))
-infoLogPath = os.path.abspath(os.path.join(logDir, str(datetime.datetime.now()).strip().replace(':','-') + '.log')).strip()
+from SCTimeUtility.Resources import logDir, logFilePath
 
 '''  
     Function: checkDirs
@@ -55,7 +54,7 @@ def initLog():
 
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(levelname)s] - %(message)s')
-    fh = logging.FileHandler(infoLogPath)
+    fh = logging.FileHandler(logFilePath)
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
     infoLog.addHandler(fh)

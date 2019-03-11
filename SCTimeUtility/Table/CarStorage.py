@@ -88,7 +88,7 @@ class CarStorage(QObject):
 
     """
 
-    def createCar(self, teamName, carNum):
+    def createCar(self, carNum, teamName):
         # check valid carNumber and Valid Car Org
         newCar = Car(self.getLatestCarID(), str(teamName), carNum)
         if self.SeedValue is not None:
@@ -114,7 +114,7 @@ class CarStorage(QObject):
         for item in list:
             # print(len(list))
             if len(item) == 2:
-                self.createCar(item[0], item[1])
+                self.createCar(item[1], item[0])
             else:
                 continue
             index += 1
@@ -208,7 +208,7 @@ class CarStorage(QObject):
     """
 
     def appendLapTime(self, carID, time):
-        self.storageList[carID].addLapTime(LapTime(time))
+        self.storageList[carID].addLapTime(time)
         # self.dataChanged.emit(carId,len
 
     """
@@ -308,3 +308,15 @@ class CarStorage(QObject):
             if newList[x].getLapCount() > highest:
                 highest = newList[x].getLapCount()
         return highest
+
+    def startCar(self, index):
+        pass
+
+    def stopCar(self, index):
+        pass
+
+    def startAllCars(self):
+        pass
+
+    def stopAllCars(self):
+        pass

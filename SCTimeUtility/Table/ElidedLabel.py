@@ -4,7 +4,8 @@ Purpose:
 
 Depends On:
 '''
-from PyQt5.QtCore import Qt, pyqtProperty, pyqtSignal
+from PyQt5.Qt import pyqtProperty
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtBoundSignal
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFontMetrics, QPainter, QTextLayout
 from SCTimeUtility.Log.Log import getLog

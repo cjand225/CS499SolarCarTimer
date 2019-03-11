@@ -43,7 +43,7 @@ class LapTime():
     '''
 
     def __str__(self):
-        return str(round(datetime.timedelta(seconds=self.elapsedTime).seconds))
+        return str(datetime.timedelta(seconds=self.elapsedTime).total_seconds())
 
     '''  
         Function: __float__

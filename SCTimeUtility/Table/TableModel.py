@@ -16,7 +16,6 @@ class TableModel(QAbstractTableModel):
 
         self.assignStorage(cs)
         self.connectActions()
-        # self.test()
 
     '''
         Function: connectActions
@@ -104,25 +103,17 @@ class TableModel(QAbstractTableModel):
 
     def setData(self, i, value, role):
         try:
-            value_split = value.split(".")
-            value_time = strptimeMultiple(value_split[0], ["%H:%M:%S", "%M:%S", "%S"])
-            seconds = datetime.timedelta(hours=value_time.hour, minutes=value_time.minute,
-                                         seconds=value_time.second).total_seconds()
-            if len(value_split) == 2:
-                milliseconds = int(value_split[1])
-                seconds = seconds + (milliseconds / pow(10, len(value_split[1])))
-            elif len(value_split) > 2:
-                return False
+            value_time = strptimeMultiple(value, ["%H:%M:%S", "%M:%S", "%S"])
+            delta = datetime.timedelta(hours=value_time.hour, minutes=value_time.minute, seconds=value_time.second)
         except ValueError:
             return False
         if role == Qt.EditRole:
             if i.column() < len(self.carStore.storageList):
-
                 if i.row() < len(self.carStore.storageList[i.column()].LapList):
-                    self.carStore.storageList[i.column()].editLapTime(i.row(), seconds)
+                    self.carStore.storageList[i.column()].editLapTime(i.row(), delta.total_seconds())
                     return True
                 elif i.row() == len(self.carStore.storageList[i.column()].LapList):
-                    self.carStore.appendLapTime(i.column(), seconds)
+                    self.carStore.appendLapTime(i.column(), delta.total_seconds())
                     return True
             else:
                 return False
@@ -163,81 +154,6 @@ class TableModel(QAbstractTableModel):
             flags |= Qt.ItemIsEditable
         return flags
 
-    '''
-        Function: formatValue
-        Parameters: self, value
-        Return Value: Boolean Condition
-        Purpose: function used to parse and convert time data from user, done via pytimeparse module import
-
-    '''
-
-    # takes a time string and converts to workable format
-    def formatValue(self, value):
-        if (value.isdigit()):
-            formString = self.valueToTimeString(value)
-            return pytimeparse.parse(formString)
-        else:
-            print("Was not digit.")
-
-    '''
-        Function: valueToTimeString
-        Parameters: self, val
-        Return Value: String
-        Purpose: Parser written to convert a value to a string in a time format.
-
-    '''
-
-    def valueToTimeString(self, val):
-        timeList = [val[i:i + 2] for i in range(0, len(val), 2)]
-        formString = ''
-
-        for x in range(0, len(timeList)):
-            if len(timeList[x]) < 2:
-                newString = timeList[x] + '0'
-                newString = self.reversed_string(newString)
-                timeList[x] = newString
-
-        timeList.reverse()
-
-        for x in range(0, len(timeList)):
-            if x != 0:
-                formString = formString + ':' + timeList[x]
-            else:
-                formString = formString + timeList[x]
-
-        if len(formString) <= 2:
-            formString = formString + "s"
-
-        return formString
-
-    '''
-        Function: intergerToTimeString
-        Parameters: self, int
-        Return Value: string
-        Purpose: Converts an Integer to Time-formatted string
-
-    '''
-
-    def intergerToTimeString(self, int):
-        Hours = divmod(int, 3600)
-        Minutes = divmod(int, 60)
-        Seconds = divmod(int, 60)
-
-        Hours = str(Hours[0])
-        Minutes = str(Minutes[0])
-        Seconds = str(Seconds[1])
-
-        if len(Hours) == 1:
-            Hours = '0' + Hours
-
-        if len(Minutes) == 1:
-            Minutes = '0' + Minutes
-
-        if len(Seconds) == 1:
-            Seconds = '0' + Seconds
-
-        return Hours + ':' + Minutes + ":" + Seconds
-
     '''  
         Function: assignStorage
         Parameters: self, storage
@@ -265,13 +181,3 @@ class TableModel(QAbstractTableModel):
             self.carStore.storageList[i].initialTime = time.time()
             for j in range(5):
                 self.carStore.appendLapTime(i, j)
-
-    '''  
-        Function: reversed_string
-        Parameters: self, string
-        Return Value: string reversed
-        Purpose: reverse a string given by a parameter
-    '''
-
-    def reversed_string(self, string):
-        return string[::-1]

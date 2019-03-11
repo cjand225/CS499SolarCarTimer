@@ -11,6 +11,8 @@ Depends On:
             Files: Table.py, SemiAutoWidget.py, VideoWidget.py, LogWidget.py, Graph.py
                    GraphWidget.py,
 '''
+import os
+from pathlib import Path
 from PyQt5.QtCore import QFile, QTextStream, Qt
 from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog, QStyle
@@ -115,10 +117,6 @@ class AppWindow(QMainWindow):
         if self.leaderBoardWidget is not None:
             self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
             self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
-
-        # help
-        self.actionAbout.triggered.connect(self.handleAboutDialog)
-        self.actionHelp.triggered.connect(self.handleHelpDialog)
 
     ''' 
     
@@ -225,28 +223,18 @@ class AppWindow(QMainWindow):
     '''
 
     def openFileDialog(self):
-        filename = self.fileDialog.getOpenFileName(self, 'Open File')
-        if filename:
-            return filename[0]
-        else:
-            return None
+        return self.fileDialog.getOpenFileName(self, 'Open File')
 
-    ''' 
-        Function: saveAsFileDialog(self)
+    '''
+        Function: openDirDialog
         Parameters: self
-        Return Value: FileName(String) or None
-        Purpose: Opens a fileDialog to get input from the user on where they would like to save
-                 their current session to. If Nothing is pressed on return, it'll return None,
-                 otherwise it'll return the name and place of where they would like to save their
-                 file.
+        Return Value:
+        Purpose: Returns a string value of the directory chosen, used for saving or opening a directory with multiple 
+                 files located within.
     '''
 
-    def saveAsFileDialog(self):
-        filename = self.fileDialog.getSaveFileName(self, 'Save File')
-        if filename != '':
-            return filename[0]
-        else:
-            return None
+    def openDirDialog(self):
+        return self.fileDialog.getExistingDirectory(self, "Select Directory", str(Path.home()))
 
     ''' 
     
@@ -260,13 +248,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    # TODO: set parameters for width/heigh/file formats
     def newFileDialog(self):
-        filename = self.fileDialog.getSaveFileName(self, 'New File')
-        if filename != '':
-            return filename[0]
-        else:
-            return None
+        return self.fileDialog.getSaveFileName(self, 'New File')
 
     ''' 
     
@@ -341,71 +324,42 @@ class AppWindow(QMainWindow):
 
     '''
 
-        Function: initHelpDialog
-        Parameters: uiPath, filePath
-        Return Value: N/A
-        Purpose: Instances a QDialog given a filepath in UIpath parameter and a file containing data to display
-                 given by filePath, loads file into a text stream that then is set as html for the textbrowser
-                 built into the Dialog's ui file. If no file path is given, it'll just return none
-
-
+        Function: createBrowserDialog
+        Parameters: self, uiPath, filePath
+        Return Value: return value of execution
+        Purpose: Creates a general purpose brower dialog used to load any document from a file, mostly used for easy
+                 streaming of manuals and other documention to the program itself.
     '''
 
-    def initHelpDialog(self, uiPath, filePath=None):
-        self.helpDialog = QDialog()
-        self.helpDialog.ui = loadUi(uiPath, self.helpDialog)
-        if filePath is not None:
+    def createBrowserDialog(self, uiPath, filePath):
+        # create and loadui for QDialog instance
+        browserDialog = QDialog()
+        browserDialog.ui = loadUi(uiPath, browserDialog)
+        # if filePath is specified, create it, otherwise, return Rejected Enum
+        if os.path.isfile(filePath):
+            # open as a file stream
             file = QFile(filePath)
             file.open(QFile.ReadOnly | QFile.Text)
             stream = QTextStream(file)
-            self.helpDialog.ui.textBrowser.setHtml(stream.readAll())
+            # direct stream as HTML, connect close button, execute and return value after close.
+            browserDialog.ui.textBrowser.setHtml(stream.readAll())
+            browserDialog.ui.buttonBox.clicked.connect(browserDialog.close)
+            browserDialog.exec()
+            # clean up after execution
+            browserDialog.ui.buttonBox.clicked.disconnect()
+            browserDialog.close()
+            browserDialog.deleteLater()
+            return QDialog.Accepted
+        else:
+            return QDialog.Rejected
 
     '''
-
-        Function: initAboutDialog
-        Parameters: uiPath, filePath
-        Return Value: N/A
-        Purpose: Instances a QDialog given a filepath in UIpath parameter and a file containing data to display
-                 given by filePath, loads file into a text stream that then is set as html for the textbrowser
-                 built into the Dialog's ui file. If no file path is given, it'll just return none 
-
+        Function: createDecisionDialog
+        Parameters: self, uiPath, filePath
+        Return Value: QDialog.Accepted | QDialog.Rejected
+        Purpose: Given paramaters, creates a decision based dialog i.e. yes or no, ok/cancel, to determine how to handle
+                 next user interaction.
     '''
 
-    def initAboutDialog(self, uiPath, filePath=None):
-        self.aboutDialog = QDialog()
-        self.aboutDialog.ui = loadUi(uiPath, self.aboutDialog)
-        if filePath is not None:
-            file = QFile(filePath)
-            file.open(QFile.ReadOnly | QFile.Text)
-            stream = QTextStream(file)
-            self.aboutDialog.ui.textBrowser.setHtml(stream.readAll())
-
-    '''
-
-        Function: handleAboutDialog
-        Parameters: self
-        Return Value: N/A
-        Purpose: Binds the buttonbox to the close event allowing the ok/close buttons to close the dialog
-                 and then executes the dialog to display out to the user.
-
-
-    '''
-
-    def handleAboutDialog(self):
-        self.aboutDialog.ui.buttonBox.clicked.connect(self.aboutDialog.close)
-        self.aboutDialog.exec()
-
-    '''
-        
-        Function: handleHelpDialog
-        Parameters: self
-        Return Value: N/A
-        Purpose: Binds the buttonbox to the close event allowing the ok/close buttons to close the dialog
-                 and then executes the dialog to display out to the user.
-    
-    
-    '''
-
-    def handleHelpDialog(self):
-        self.helpDialog.ui.buttonBox.clicked.connect(self.helpDialog.close)
-        self.helpDialog.exec()
+    def createDecisionDialog(self, uiPath, textField):
+        pass

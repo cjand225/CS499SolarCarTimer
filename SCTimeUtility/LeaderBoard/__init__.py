@@ -1,5 +1,3 @@
-import os
+from SCTimeUtility.Resources.UI import leaderPath
 
-from SCTimeUtility.App import uiDir
-
-LeaderBoardUIPath = os.path.join(uiDir, 'LeaderBoard.ui')
+LeaderBoardUIPath = leaderPath

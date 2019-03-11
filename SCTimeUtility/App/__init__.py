@@ -1,18 +1,18 @@
-import os
+from SCTimeUtility.Resources import resourceDir
+from SCTimeUtility.Resources.UI import appWinPath, quitDialogPath, helpDialogPath, aboutDialogPath
+from SCTimeUtility.Resources.Docs import userPath, adminPath, aboutPath
 
-resourcesDir = os.path.abspath(os.path.join(__file__, "./../../Resources"))
-manualDir = os.path.abspath(os.path.join(__file__, "./../../../Docs"))
-settingsDir = os.path.abspath(os.path.join(__file__, "./../../bin/Settings"))
-uiDir = os.path.join(resourcesDir, './UI')
+resourcesDir = resourceDir
 
 # ui file paths
-mainUIPath = os.path.join(uiDir, 'AppWindow.ui')
+mainUIPath = appWinPath
 
 # ui Dialog paths
-quitDialogUIPath = os.path.join(uiDir, 'QuitDialog.ui')
-helpDialogUIPath = os.path.join(uiDir, 'HelpDialog.ui')
-aboutDialogUIPath = os.path.join(uiDir, 'AboutDialog.ui')
+quitDialogUIPath = quitDialogPath
+helpDialogUIPath = helpDialogPath
+aboutDialogUIPath = aboutDialogPath
 
 # resource manual paths
-userManPath = os.path.join(manualDir, 'UserManual.html')
-aboutPath = os.path.join(manualDir, 'About.html')
+userManPath = userPath
+adminManPath = adminPath
+aboutManPath = aboutPath

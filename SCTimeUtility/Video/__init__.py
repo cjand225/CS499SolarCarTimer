@@ -1,5 +1,3 @@
-import os
+from SCTimeUtility.Resources.UI import videoPath
 
-from SCTimeUtility.App import uiDir
-
-videoUIPath = os.path.join(uiDir, 'Video.ui')
+videoUIPath = videoPath

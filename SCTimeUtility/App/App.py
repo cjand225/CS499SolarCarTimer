@@ -4,13 +4,15 @@ Purpose: Controller for entire application, used to periodically update project 
          model.
 
 '''
-
+# standard lib imports
 import sys, os
+
+# dependency imports
 from PyQt5.QtWidgets import QApplication
 
-from SCTimeUtility.System.FileSystem import importCSV, exportCSV
-from SCTimeUtility.System.IO import saveCSV
-from SCTimeUtility.App import mainUIPath, quitDialogUIPath, helpDialogUIPath, aboutDialogUIPath, userManPath, aboutPath
+# package imports
+from SCTimeUtility.App import mainUIPath, quitDialogUIPath, helpDialogUIPath, aboutDialogUIPath, userManPath, \
+    aboutManPath, adminManPath
 from SCTimeUtility.App.AppWindow import AppWindow
 from SCTimeUtility.Table.Table import Table
 from SCTimeUtility.Video.Video import Video
@@ -18,6 +20,7 @@ from SCTimeUtility.Graph.Graph import Graph
 from SCTimeUtility.LeaderBoard.LeaderBoard import LeaderBoard
 from SCTimeUtility.Log.Log import getLog
 from SCTimeUtility.Log.LogWidget import LogWidget
+from SCTimeUtility.System.FileSystem import exportCSV, importCSV
 
 
 class App(QApplication):
@@ -26,9 +29,6 @@ class App(QApplication):
         super(App, self).__init__(sys.argv)
         self.mainWindow = None
         self.running = False
-
-        # read/write paths
-        self.defaultSavePath = ''
 
         # Forward Module Declaration
         self.logger = getLog()
@@ -41,10 +41,6 @@ class App(QApplication):
         self.graph = None
         self.logWidget = None
         self.leaderBoard = None
-
-        # read/write files
-        self.writeFile = None
-        self.readFile = None
 
         # Initializing everything
         self.initApplication()
@@ -83,8 +79,13 @@ class App(QApplication):
     def initMainWindow(self):
         self.mainWindow = AppWindow(mainUIPath)
         self.mainWindow.initCloseDialog(quitDialogUIPath)
-        self.mainWindow.initHelpDialog(helpDialogUIPath, userManPath)
-        self.mainWindow.initAboutDialog(aboutDialogUIPath, aboutPath)
+
+        self.mainWindow.actionAdminMan.triggered.connect(
+            lambda l: self.mainWindow.createBrowserDialog(helpDialogUIPath, adminManPath))
+        self.mainWindow.actionAbout.triggered.connect(
+            lambda l: self.mainWindow.createBrowserDialog(aboutDialogUIPath, aboutManPath))
+        self.mainWindow.actionUserMan.triggered.connect(
+            lambda l: self.mainWindow.createBrowserDialog(helpDialogUIPath, userManPath))
 
     ''' 
 
@@ -212,11 +213,10 @@ class App(QApplication):
 
     def connectActionsMainWindow(self):
         getLog().debug('[' + __name__ + '] ' + 'Binding listeners to Main Window')
-        self.mainWindow.actionNew.triggered.connect(self.newFile)
-        self.mainWindow.actionOpen.triggered.connect(self.openFile)
-        self.mainWindow.actionSave.triggered.connect(self.saveFile)
-        self.mainWindow.actionSaveAs.triggered.connect(self.saveAsFile)
-        self.table.Widget.saveShortcut.activated.connect(self.saveFile)
+        self.mainWindow.actionNew.triggered.connect(self.newSession)
+        self.mainWindow.actionOpen.triggered.connect(self.importDataFromFile)
+        self.mainWindow.actionSaveAs.triggered.connect(self.exportDataToFile)
+        self.table.Widget.saveShortcut.activated.connect(self.exportDataToFile)
         self.table.CarStoreList.dataModified.connect(self.graphUpdate)
 
     ''' 
@@ -235,26 +235,6 @@ class App(QApplication):
 
     ''' 
 
-        Function: saveFile(self)
-        Parameters: self
-        Return Value: N/A
-        Purpose: Saves the current session of data from Table Model to the currently chosen writeFile,
-                 if the file happens to not exist, the writeFile file will then ask the user to name such
-                 a file to be created.
-
-    '''
-
-    def saveFile(self):
-        if self.writeFile is not None and self.writeFile != '':
-            saveCSV(self.table.CarStoreList, self.writeFile)
-            exportCSV(self.table.getCarStorage(), self.writeFile)
-            self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
-        else:
-            self.logger.debug('[' + __name__ + '] ' + 'No Write file currently found, requesting new one.')
-            self.saveAsFile()
-
-    ''' 
-
         Function: SaveAsFile(self)
         Parameters: self
         Return Value: N/A
@@ -264,48 +244,46 @@ class App(QApplication):
 
     '''
 
-    def saveAsFile(self):
-        newFile = os.path.join(self.mainWindow.saveAsFileDialog())
-        if newFile is not None and newFile != '':
-            # write file to location
-            self.writeFile = newFile
-            self.saveFile()
-            self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + self.writeFile)
+    def exportDataToFile(self):
+        writePath = os.path.join(self.mainWindow.openDirDialog())
+        if os.path.exists(writePath):
+            exportCSV(self.table.CarStoreList, writePath)
+            self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + writePath)
         else:
-            self.logger.debug('[' + __name__ + '] ' + 'Could not save data to: ' + str(newFile))
+            self.logger.debug('[' + __name__ + '] ' + 'Could not save data to: ' + str(writePath))
 
     ''' 
 
-        Function: openFile(self)
+        Function: importDataFromFile(self)
         Parameters: self
         Return Value: N/A
-        Purpose: opens a file chosen by the user via FileDialog that is then opened and read/parsed
-                 into the Table Model
+        Purpose: opens a directory chosen by user, then proceeds to read and parse CSVs that have relevant tokens
+                 and data. 
 
     '''
 
     # TODO: Rework so that addcar passes in Table module data
-    def openFile(self):
-        readFile = os.path.join(self.mainWindow.openFileDialog())
-        if readFile is str and not readFile:
-            self.writeFile = readFile
+    def importDataFromFile(self):
+        readDir = os.path.join(self.mainWindow.openDirDialog())
+        if os.path.exists(readDir):
+            importCSV(readDir)
+        else:
+            pass
 
     ''' 
 
-        Function: newFile(self)
+        Function: newSession(self)
         Parameters: self
         Return Value: N/A
-        Purpose: Clears any currently existing tableModel, prompts user to set a filename via FileDialog,
-                 then saves that as the current writeFile to be used for anything further.
+        Purpose: Clears any currently existing Table module, allowing for application to essentially restart.
 
     '''
 
-    def newFile(self):
-        self.writeFile = self.mainWindow.saveAsFileDialog()
-        if self.writeFile is str and not self.writeFile:
-            self.logger.debug('[' + __name__ + '] ' + 'Data saved to new file: ' + self.writeFile)
+    def newSession(self):
+        if not self.table.CarStoreList:
+            self.logger.debug('[' + __name__ + '] ' + 'Started new session requested by user: ')
         else:
-            self.logger.debug('[' + __name__ + '] ' + 'Failed to create new file (bad path given)')
+            self.logger.debug('[' + __name__ + '] ' + 'Failed to create new session.')
 
     '''
         Function: graphUpdate
