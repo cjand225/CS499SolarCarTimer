@@ -1,4 +1,12 @@
-import random, string, pytimeparse, datetime, time
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
+import random, string, datetime, time
 
 from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
 

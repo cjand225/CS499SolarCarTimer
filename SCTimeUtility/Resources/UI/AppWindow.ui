@@ -124,14 +124,10 @@
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNew"/>
-    <addaction name="actionOpen"/>
+    <addaction name="actionNewSess"/>
+    <addaction name="actionOpenDir"/>
     <addaction name="separator"/>
-    <addaction name="actionImport_Data"/>
-    <addaction name="actionSave"/>
-    <addaction name="separator"/>
-    <addaction name="separator"/>
-    <addaction name="actionClose"/>
+    <addaction name="actionExportData"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -174,7 +170,7 @@
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
-  <action name="actionNew">
+  <action name="actionNewSess">
    <property name="text">
     <string>New Session</string>
    </property>
@@ -182,7 +178,7 @@
     <string>Shift+N</string>
    </property>
   </action>
-  <action name="actionOpen">
+  <action name="actionOpenDir">
    <property name="text">
     <string>Open Directory</string>
    </property>
@@ -267,7 +263,7 @@
     <string>Recent</string>
    </property>
   </action>
-  <action name="actionSave">
+  <action name="actionExportData">
    <property name="text">
     <string>Export Data</string>
    </property>
@@ -353,7 +349,7 @@
     <string>Admin Manual</string>
    </property>
   </action>
-  <action name="actionImport_Data">
+  <action name="actionImportData">
    <property name="text">
     <string>Import Data</string>
    </property>

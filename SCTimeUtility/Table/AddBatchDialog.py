@@ -1,7 +1,16 @@
+"""
+
+    Module: AddBatchDialog
+    Purpose: QDialog class used to import batches of cars into the main application.
+    Depends On: QDialog, PyQt, logging,
+
+"""
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.uic import loadUi
+
 from SCTimeUtility.Log.Log import getLog
 
 

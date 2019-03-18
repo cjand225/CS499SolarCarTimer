@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 from PyQt5.QtWidgets import QWidget, QApplication, QStyle, QPushButton, QCheckBox
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi

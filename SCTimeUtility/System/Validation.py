@@ -1,10 +1,13 @@
-'''
-Module: Validation.py
-Purpose: assortment of functions used to validate data before it is used for certain objects.
+"""
 
-'''
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 
 import re
+
 from SCTimeUtility.Log.Log import getLog
 
 RegExpID = "^([0-9][0-9]{0,2}|1000)$"

@@ -7,8 +7,10 @@
     Depends On: Car
 
 """
-from PyQt5.QtCore import QObject, pyqtSignal
+
 import copy
+
+from PyQt5.QtCore import QObject, pyqtSignal
 
 from SCTimeUtility.Table.Car import Car
 from SCTimeUtility.Table.LapTime import LapTime

@@ -1,3 +1,11 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
 import logging
 
 from SCTimeUtility.Resources.UI import logWidPath

@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 import logging, os, datetime
 
 from SCTimeUtility.Resources import logDir, logFilePath

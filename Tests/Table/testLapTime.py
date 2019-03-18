@@ -27,7 +27,7 @@ class testLapTime(unittest.TestCase):
     def testStr(self):
         myLap = LapTime(3.1459)
         stringVal = str(myLap)
-        self.assertEqual("3", stringVal)
+        self.assertEqual("3.1459", stringVal)
 
     def testGetElapsed(self):
         myLap = LapTime(3.1459)

@@ -1,9 +1,19 @@
-import datetime, math
+"""
+
+    Module: Laptime
+    Purpose:
+    Depends On:
+
+"""
+
+import datetime, math, time
 
 
 class LapTime():
     def __init__(self, timeData):
         self.elapsedTime = timeData
+        self.firstEdit = datetime.datetime.now()
+        self.latestEdit = datetime.datetime.now()
 
     '''  
         Function: setElapsed
@@ -14,6 +24,7 @@ class LapTime():
 
     def setElapsed(self, timeData):
         self.elapsedTime = timeData
+        self.latestEdit = datetime.datetime.now()
 
     '''  
         Function: getElapsed

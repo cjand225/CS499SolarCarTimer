@@ -1,3 +1,12 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
+# Standard lib imports
 import os, csv, datetime
 
 '''  

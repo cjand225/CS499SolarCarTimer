@@ -1,7 +1,10 @@
 """
 
-    Currently entire graphing class
-    TODO: Rework to Graph Module Controller
+    Module:
+    Purpose:
+    Depends On:
+
+    #TODO: Needs Reworking
 
 """
 

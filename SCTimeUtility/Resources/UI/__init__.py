@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 import os, sys
 from SCTimeUtility.Resources import resourceDir
 

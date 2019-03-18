@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 import datetime
 from SCTimeUtility.Log.Log import getLog
 
@@ -17,4 +24,3 @@ def strptimeMultiple(text, formats):
         except ValueError:
             pass
     raise ValueError()
-

@@ -1,3 +1,11 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
 from SCTimeUtility.Resources import resourceDir
 from SCTimeUtility.Resources.UI import appWinPath, quitDialogPath, helpDialogPath, aboutDialogPath
 from SCTimeUtility.Resources.Docs import userPath, adminPath, aboutPath

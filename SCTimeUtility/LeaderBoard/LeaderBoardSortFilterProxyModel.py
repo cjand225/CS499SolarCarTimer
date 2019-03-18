@@ -1,3 +1,11 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
 from PyQt5.QtCore import Qt, QSortFilterProxyModel
 
 

@@ -1,14 +1,17 @@
-'''
-Module: Video.py
-Purpose:
+"""
 
-Depends On:
-'''
+    Module:
+    Purpose:
+    Depends On:
 
+"""
+
+# Standard Lib Imports
 import queue
 
+# Package Imports
 from SCTimeUtility.Video import videoUIPath
-from SCTimeUtility.Video.VideoWidget import VisionWidget
+from SCTimeUtility.Video.VideoWidget import VideoWidget
 from SCTimeUtility.Video.CaptureThread import CaptureThread
 from SCTimeUtility.Video.ImageProcessThread import ImageProcessThread
 from SCTimeUtility.Video.DetectionThread import DetectThread
@@ -40,7 +43,7 @@ class Video():
         self.initBinds()
 
     def initUI(self):
-        self.VisWidget = VisionWidget(videoUIPath)
+        self.VisWidget = VideoWidget(videoUIPath)
         self.ImgCanvasWidth = self.VisWidget.getWidth()
         self.ImgCanvasHeight = self.VisWidget.getHeight()
 

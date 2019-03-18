@@ -1,3 +1,12 @@
+"""
+
+    Module:
+
+    Purpose:
+    Depends On:
+
+"""
+
 from SCTimeUtility.App.App import App
 
 if __name__ == '__main__':

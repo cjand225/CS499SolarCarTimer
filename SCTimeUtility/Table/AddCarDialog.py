@@ -1,3 +1,11 @@
+"""
+
+    Module: AddCarDialog
+    Purpose:
+    Depends On:
+
+"""
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator

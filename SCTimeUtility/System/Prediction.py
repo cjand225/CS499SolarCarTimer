@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 import math, numpy as np, scipy.stats
 
 from SCTimeUtility.Table.LapTime import LapTime

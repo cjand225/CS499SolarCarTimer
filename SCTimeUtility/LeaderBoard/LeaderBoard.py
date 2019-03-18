@@ -1,6 +1,18 @@
-from PyQt5.QtCore import Qt, QSize
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
+# Standard Lib imports
 from operator import itemgetter
 
+# Dependency Imports
+from PyQt5.QtCore import Qt, QSize
+
+# Package Imports
 from SCTimeUtility.LeaderBoard import LeaderBoardUIPath
 from SCTimeUtility.LeaderBoard.LeaderBoardWidget import LeaderBoardWidget
 from SCTimeUtility.LeaderBoard.LeaderBoardModel import LeaderBoardModel

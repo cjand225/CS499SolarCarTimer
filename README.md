@@ -21,7 +21,6 @@ As well as the following packages w/ their version numbers.
         -numpy >= 1.15.4
         -matplotlib >= 2.2.3
         -PyQt5 >= 5.6.0
-        -pytimeparse >= 1.1.8
         -opencv-contrib-python >= 3.4.3
         -pywin32 >= 1.0; platform_system == "Windows"
         -tesseract >= 0.1.3
@@ -123,7 +122,7 @@ After the package has been built, just run:
 
 If wheel (or wanting to run from `terminal or cmd`)
 
-    python -m SCTimeUtility.__main__
+    python -m SCTimeUtility
     
 Otherwise, Just use click the shortcut in either the start menu or desktop.
 

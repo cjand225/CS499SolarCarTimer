@@ -1,6 +1,14 @@
-from PyQt5.QtWidgets import QDialog
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 
 import time, os
+
+from PyQt5.QtWidgets import QDialog
 
 from SCTimeUtility.Table import tableUIPath, semiAutoUIPath, addCarDialogUIPath, addBatchCarDialogUIPath
 from SCTimeUtility.Table.CarStorage import CarStorage

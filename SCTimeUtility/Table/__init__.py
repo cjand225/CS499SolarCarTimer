@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 from SCTimeUtility.Resources.UI import tableViewPath, semiAutoPath, addCarPath, addBatchPath
 
 tableUIPath = tableViewPath
