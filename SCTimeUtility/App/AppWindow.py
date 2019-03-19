@@ -1,15 +1,15 @@
 '''
-Module: AppWindow.py
-Purpose: A QMainWindow Object used and manipulated by the App class to control child widgets added
-         from other modules as well as handle many of the signals created from gui elements.
+    Module: AppWindow.py
+    Purpose: A QMainWindow Object used and manipulated by the App class to control child widgets added
+             from other modules as well as handle many of the signals created from gui elements.
 
-Depends On:
-            Libs: PyQt5
-            Classes: QWidget, QMainWindow, TableWidget, SemiAutoWidget, VisionWidget, GraphWidget,
-                     LogWidget, GraphOptionsWidget
+    Depends On:
+                Libs: PyQt5
+                Classes: QWidget, QMainWindow, TableWidget, SemiAutoWidget, VisionWidget, GraphWidget,
+                         LogWidget, GraphOptionsWidget
 
-            Files: Table.py, SemiAutoWidget.py, VideoWidget.py, LogWidget.py, Graph.py
-                   GraphWidget.py,
+                Files: Table.py, SemiAutoWidget.py, VideoWidget.py, LogWidget.py, Graph.py
+                       GraphWidget.py,
 '''
 import os
 from pathlib import Path

@@ -10,7 +10,6 @@ conda activate <env-name>
 
 #Must Install before using Application via Pip:
 pip install opencv-contrib-python
-pip install pytimeparse
 
 
 #Package Dependencies:
@@ -20,10 +19,6 @@ Opencv-contrib-python
 numpy
 matplotlib
 scipy
-
-#for Vision Module (For un-implemented Detection)
-tesseract
-imutils
 
 Windows specfic:
 pyWin32

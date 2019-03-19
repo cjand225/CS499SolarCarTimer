@@ -1,3 +1,11 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
 import time
 
 from PyQt5.QtCore import pyqtSignal, QObject

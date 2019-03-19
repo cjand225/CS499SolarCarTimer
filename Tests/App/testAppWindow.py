@@ -1,12 +1,12 @@
 import unittest
 import sys
 from SCTimeUtility.App.App import App
-from SCTimeUtility.App.AppWindow import AppWindow
 from SCTimeUtility.Table.SemiAuto import SemiAuto
 from SCTimeUtility.Table.Table import Table
-from SCTimeUtility.Video.VideoWidget import VisionWidget
+from SCTimeUtility.Video.VideoWidget import VideoWidget
 from SCTimeUtility.Log.LogWidget import LogWidget
 from SCTimeUtility.Graph.Graph import Graph
+from SCTimeUtility.Resources.UI import semiAutoPath, graphWidPath, tableViewPath, videoPath, logWidPath
 
 
 class TestAppWindowMethods(unittest.TestCase):
@@ -16,7 +16,7 @@ class TestAppWindowMethods(unittest.TestCase):
         self.MyAppWindow = self.MyApp.mainWindow
 
     def testAddVision(self):
-        vis = VisionWidget(App.visionUIPath)
+        vis = VideoWidget(videoPath)
         self.MyAppWindow.addVision(vis)
         self.assertTrue(self.MyAppWindow.visionWidget, vis)
 
@@ -26,16 +26,16 @@ class TestAppWindowMethods(unittest.TestCase):
         self.assertTrue(self.MyAppWindow.tableWidget, mytable)
 
     def testAddLog(self):
-        myLog = LogWidget(App.logUIPath)
+        myLog = LogWidget()
         self.MyAppWindow.addLog(myLog)
         self.assertTrue(self.MyAppWindow.logWidget, myLog)
 
     def testaddSemiAuto(self):
-        mySemi = SemiAuto(Table.semiAutoUIPath)
+        mySemi = SemiAuto(semiAutoPath)
         self.MyAppWindow.addSemiAuto(mySemi)
         self.assertTrue(self.MyAppWindow.semiAutoWidget, mySemi)
 
     def testAddGraphWidget(self):
-        myGraph = Graph(App.graphUIPath)
+        myGraph = Graph()
         self.MyAppWindow.addGraph(myGraph)
         self.assertTrue(self.MyAppWindow.graphWidget, myGraph)

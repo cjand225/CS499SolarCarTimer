@@ -1,13 +1,21 @@
-'''
-Module: ImageProcessThread.py
-Purpose: Processes framedata passed from CaptureThread for further processing before being
-         sent to the OCR for image recognition
-Depends: Queue, Threading, cv2
-'''
+"""
 
-import threading, cv2, time, numpy as np
+    Module: ImageProcessThread.py
+    Purpose: Processes framedata passed from CaptureThread for further processing before being
+             sent to the OCR for image recognition
+    Depends: Queue, Threading, cv2
 
+"""
+
+# Standard Lib Imports
+import threading, time
+
+# Dependency Imports
+import numpy as np, cv2
+
+# Package Imports
 from SCTimeUtility.System.Graphics import ApplyFilter, filterType
+
 
 class ImageProcessThread(threading.Thread):
 
@@ -41,7 +49,7 @@ class ImageProcessThread(threading.Thread):
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (3, 3))
         fgbg = cv2.createBackgroundSubtractorMOG2()
 
-        #frames needed to calculate if a frame should be added to next queue
+        # frames needed to calculate if a frame should be added to next queue
         prevFrame = None
         difference = None
 

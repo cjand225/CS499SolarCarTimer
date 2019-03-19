@@ -1,3 +1,12 @@
+"""
+
+    Module:
+
+    Purpose:
+    Depends On:
+
+"""
+
 import logging
 
 from PyQt5.QtWidgets import QWidget, QStyle, QApplication, QPlainTextEdit, QTabWidget, QGridLayout

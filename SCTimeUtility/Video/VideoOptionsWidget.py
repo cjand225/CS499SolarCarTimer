@@ -1,9 +1,11 @@
-'''
-Module: VideoOptionsWidget.py
-Purpose:
+"""
 
-Depends On:
-'''
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
 
 from PyQt5.QtWidgets import QWidget, QStyle, QApplication
 from PyQt5.QtCore import Qt

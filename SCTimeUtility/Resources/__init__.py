@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 import os, datetime
 
 resourceDir = os.path.abspath(os.path.join(__file__, "."))

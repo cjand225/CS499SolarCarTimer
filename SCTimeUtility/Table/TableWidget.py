@@ -1,3 +1,11 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
 from PyQt5.QtWidgets import QWidget, QApplication, QHeaderView, QShortcut, QStyle
 from PyQt5.QtGui import QKeySequence
 from PyQt5.QtCore import Qt

@@ -1,6 +1,8 @@
 """
+
     Module: Graphics.py
     Purpose: Related graphics functions kept here for use in various parts of Video module
+    Depends On:
 
 """
 import cv2, numpy as np

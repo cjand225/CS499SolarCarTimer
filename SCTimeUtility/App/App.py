@@ -1,7 +1,8 @@
 '''
-Module: App.py
-Purpose: Controller for entire application, used to periodically update project with data to and from the
-         model.
+    Module: App.py
+    Purpose: Controller for entire application, used to periodically update project with data to and from the
+             model.
+    Depends On:
 
 '''
 # standard lib imports
@@ -213,9 +214,9 @@ class App(QApplication):
 
     def connectActionsMainWindow(self):
         getLog().debug('[' + __name__ + '] ' + 'Binding listeners to Main Window')
-        self.mainWindow.actionNew.triggered.connect(self.newSession)
-        self.mainWindow.actionOpen.triggered.connect(self.importDataFromFile)
-        self.mainWindow.actionSaveAs.triggered.connect(self.exportDataToFile)
+        self.mainWindow.actionNewSess.triggered.connect(self.newSession)
+        self.mainWindow.actionOpenDir.triggered.connect(self.importDataFromFile)
+        self.mainWindow.actionExportData.triggered.connect(self.exportDataToFile)
         self.table.Widget.saveShortcut.activated.connect(self.exportDataToFile)
         self.table.CarStoreList.dataModified.connect(self.graphUpdate)
 

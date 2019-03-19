@@ -1,11 +1,19 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
+
+import matplotlib.pyplot as plt, numpy as np
+
 '''
     Function: lapVsTimeGraph
     Parameters: self
     Return Value: N/A
     Purpose: Creates a Graph based on Lap Vs. Time based on certain intervals of laps and amounts of time.
 '''
-
-import matplotlib.pyplot as plt, numpy as np
 
 
 def lapVsTimeGraph(self):

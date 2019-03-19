@@ -5,15 +5,21 @@
 block_cipher = None
 
 import os
-resource_path = os.path.abspath("./../SCTimeUtility/resources/*.ui")
-script_path = os.path.abspath("./../SCTimeUtility/__main__.py")
-project_path = os.path.abspath(".")
-dist_path = os.path.join("./../SCTimeUtility/resources/")
+resource_path = os.path.abspath(os.path.join(".", "SCTimeUtility", "Resources"))
+ui_path = os.path.abspath(os.path.join(resource_path, "UI", "*.*"))
+docs_path = os.path.abspath(os.path.join(resource_path, "Docs", "*.*"))
+icons_path = os.path.abspath(os.path.join(resource_path, "Icons", "*.*"))
+script_path = os.path.abspath(os.path.join(".", "SCTimeUtility", "__main__.py"))
+project_path = os.path.abspath(os.path.join("."))
+dist_path = os.path.join(".",  "SCTimeUtility", "Resources")
+ui_dist_path = os.path.join(dist_path, "UI")
+docs_dist_path = os.path.join(dist_path, "Docs")
+icons_dist_path = os.path.join(dist_path, "Icons")
 
 a = Analysis([script_path],
              pathex=[project_path],
              binaries=[],
-             datas=[( resource_path , dist_path)],
+             datas=[( ui_path , ui_dist_path), (docs_path, docs_dist_path), (icons_path, icons_dist_path)],
              hiddenimports=[],
              hookspath=[],
              runtime_hooks=[],

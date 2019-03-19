@@ -1,4 +1,4 @@
-import unittest, sys, math
+import unittest, sys, math, datetime
 from PyQt5.QtTest import QSignalSpy
 
 from SCTimeUtility.Table.LapTime import LapTime
@@ -12,32 +12,34 @@ class testCar(unittest.TestCase):
         self.RegExpID = "^([0-9][0-9]{0,2}|1000)$"
         self.RegExpTeamName = "^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"
         self.RegExpCarNum = "^(?:500|[1-9]?[0-9])$"
+        self.validTestString = "University of Kentucky"
+        self.validCarNumber = 23
         self.numOfLaps = 300
         self.editNum = 100
 
     def testCreateNormal(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         self.assertRegex(str(myCar.ID), self.RegExpID)
         self.assertRegex(str(myCar.CarNum), self.RegExpCarNum)
         self.assertRegex(str(myCar.TeamName), self.RegExpTeamName)
         self.assertEqual(myCar.ID, 1)
-        self.assertEqual(myCar.TeamName, "University of Kentucky")
-        self.assertEqual(myCar.CarNum, 23)
+        self.assertEqual(myCar.TeamName, self.validTestString)
+        self.assertEqual(myCar.CarNum, self.validCarNumber)
 
     def testCreateMalformed(self):
-        self.assertRaises(Exception, Car, "A", "hi", 23)
+        self.assertRaises(Exception, Car, "A", "hi", self.validCarNumber)
         self.assertRaises(Exception, Car, "hi", "A", "as")
         self.assertRaises(Exception, Car, 1, 12, "23")
         self.assertRaises(Exception, Car, None, None, None)
         self.assertRaises(Exception, Car)
 
     def testSetCarID(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setID(2)
         self.assertEqual(myCar.ID, 2)
 
     def testSeedValue(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         seedVal = time.time()
         myCar.setSeedValue(seedVal)
         self.assertIsNotNone(myCar.getSeedValue())
@@ -47,7 +49,7 @@ class testCar(unittest.TestCase):
         self.assertEqual(myCar.SeedValue, seedVal)
 
     def testaddTime(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         seedTime = time.time()
         testTime = time.time()
         myCar.setSeedValue(seedTime)
@@ -56,7 +58,7 @@ class testCar(unittest.TestCase):
         self.assertEqual(firstLap, myCar.getLap(1).getElapsed())
 
     def testAddMultipleLaps(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         lapList = []
         for x in range(0, self.numOfLaps):
@@ -70,7 +72,7 @@ class testCar(unittest.TestCase):
             self.assertEqual(lapList[x].getElapsed(), myCar.getLap(x + 1).getElapsed())
 
     def testGetLap(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         lapList = []
         for x in range(0, self.numOfLaps):
@@ -81,7 +83,7 @@ class testCar(unittest.TestCase):
         self.assertEqual(myCar.getLap(randomLap), myCar.LapList[randomLap])
 
     def testRemoveLap(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         QtSpyBot = QSignalSpy(myCar.lapChanged)
         myCar.setSeedValue(time.time())
         lapList = generateLapData(self.numOfLaps)
@@ -94,7 +96,7 @@ class testCar(unittest.TestCase):
         self.assertNotEqual(lapList[lapRemoved], myCar.LapList[lapRemoved].elapsedTime)
 
     def testRemoveMultipleLaps(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         lapList = generateLapData(self.numOfLaps)
         for x in range(0, self.numOfLaps):
@@ -108,22 +110,22 @@ class testCar(unittest.TestCase):
             self.assertEqual(0, myCar.getLap(randLap).elapsedTime)
 
     def testGetCarID(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myID = myCar.getID()
         self.assertEqual(myID, 1)
 
     def testGetCarTeamName(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myOrg = myCar.getTeam()
-        self.assertEqual(myOrg, "University of Kentucky")
+        self.assertEqual(myOrg, self.validTestString)
 
     def testGetCarNum(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCarNum = myCar.getCarNum()
-        self.assertEqual(myCarNum, 23)
+        self.assertEqual(myCarNum, self.validCarNumber)
 
     def testLapCount(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         for x in range(0, self.numOfLaps):
             myCar.addLapTime(time.time())
@@ -131,20 +133,20 @@ class testCar(unittest.TestCase):
         self.assertEqual(myCar.getLapCount(), self.numOfLaps + 1)
 
     def testGetTotalElapsedTime(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         randIndex = random.randint(0, self.numOfLaps - 1)
         lapData = generateLapData(self.numOfLaps)
         for lap in lapData:
-            myCar.addLapTime(LapTime(lap))
+            myCar.addLapTime(LapTime(datetime.timedelta(seconds=lap)))
 
         allLaps = myCar.LapList[1:randIndex]
-        totalElapsed = sum([lap.elapsedTime for lap in allLaps])
+        totalElapsed = sum([lap for lap in allLaps])
         totalFromCar = myCar.getTotalElapsedTime(randIndex)
         self.assertEqual(totalElapsed, totalFromCar)
 
     def testGetFastestLap(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         lapData = generateLapData(self.numOfLaps)
         for lap in lapData:
@@ -153,7 +155,7 @@ class testCar(unittest.TestCase):
         self.assertEqual(fastest, myCar.getFastestLap())
 
     def testEditLap(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         lapData = generateLapData(self.numOfLaps)
         # let 5 seconds pass to generate new times
@@ -187,7 +189,7 @@ class testCar(unittest.TestCase):
                 self.assertEqual(myCar.LapList[editIndices[x]].elapsedTime, edit)
 
     def testIndexExists(self):
-        myCar = Car(1, "University of Kentucky", 23)
+        myCar = Car(1, self.validTestString, self.validCarNumber)
         myCar.setSeedValue(time.time())
         lapData = generateLapData(self.numOfLaps)
         # let 5 seconds pass to generate new times

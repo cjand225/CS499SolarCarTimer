@@ -1,5 +1,8 @@
 """
-    used as a widget that holds all the Graphs created
+
+    Module:
+    Purpose:
+    Depends On:
 
 """
 

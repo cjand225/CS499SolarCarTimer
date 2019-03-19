@@ -1,11 +1,11 @@
-'''
-Module: CaptureThread.py
-Purpose: a thread class intended for retrieving frame data constantly from a Video device(webcam),
-         and adding that frame data to a queue that is then passed to ImageProcessThread.
-Depends On: threading, cv2(OpenCV)
+"""
 
+    Module: CaptureThread.py
+    Purpose: a thread class intended for retrieving frame data constantly from a Video device(webcam),
+             and adding that frame data to a queue that is then passed to ImageProcessThread.
+    Depends On: threading, cv2(OpenCV), PyQt, SCT Graphics Module
 
-'''
+"""
 
 import threading, cv2, time
 
@@ -23,7 +23,7 @@ class CaptureThread(threading.Thread):
 
     '''
 
-    def __init__(self, queueOne, imageCam, width, height, fps, canvas=None, ):
+    def __init__(self, queueOne, imageCam, width, height, fps, canvas=None):
         threading.Thread.__init__(self)
 
         self.canvas = canvas
@@ -61,6 +61,8 @@ class CaptureThread(threading.Thread):
 
     '''
         Function: grab()
+        Parameters: self
+        Return Value: N/A
         Purpose: sets a capture device, Frames per second, Height and Width of image,
                  then continously runs by grabbing that specified frame data from the
                  capture device(webcam) and then pushes that onto a queue(stack).
@@ -104,6 +106,15 @@ class CaptureThread(threading.Thread):
                 time.sleep(sleepAmount)
 
         capture.release()
+
+    '''
+    
+        Function: showFPS
+        Parameters: self, timeDiff
+        Return Value: N/A
+        Purpose: Shows the current fps of the cam printed out to console.
+        
+    '''
 
     def showFPS(self, timeDiff):
         print('FPS: %d' % (1 / timeDiff))

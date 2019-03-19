@@ -1,3 +1,11 @@
+"""
+
+    Module: AddCarDialog
+    Purpose:
+    Depends On:
+
+"""
+
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator
@@ -31,6 +39,8 @@ class AddCarDialog(QDialog):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        self.move(self.x(), self.y())
+
 
     '''  
         Function: initValidation

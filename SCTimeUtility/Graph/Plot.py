@@ -1,6 +1,8 @@
 """
 
-    used as the canvas to plot each individual graphs
+    Module:
+    Purpose:
+    Depends On:
 
 """
 

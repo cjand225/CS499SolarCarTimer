@@ -1,3 +1,10 @@
+"""
+
+    Module:
+    Purpose:
+    Depends On:
+
+"""
 from PyQt5.QtWidgets import QWidget, QApplication, QStyle, QPushButton, QCheckBox
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
@@ -41,6 +48,7 @@ class SemiAuto(QWidget):
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
         self.buttons = self.buttonsLayout
+        self.move(self.x(), self.y())
 
     '''  
         Function: initButtonLayout
