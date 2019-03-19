@@ -2,26 +2,67 @@
 
 ## Requirements
 
-Running this program requires Anaconda/Miniconda in order to install the virtual environment. The program was testing with **Miniconda 4.5.11**, but it may also work with older versions of the software.
+It is recommended that a virtual environment be used for creating the dev environment and an IDE be used for project management.
 
-## Installing the environment
+You may use ones like Anaconda Package Manager, Pipenv, venv, etc.
 
-The steps for installing the environment differ depending on the operating system.
+Anaconda was originally used to create and manage the environment for this project, as well as Pycharm for an IDE.
 
-### On Windows
+### Packages:
+        -numpy >= 1.15.4
+        -matplotlib >= 2.2.3
+        -PyQt5 >= 5.6.0
+        -opencv-contrib-python >= 3.4.3
+        -pywin32 >= 1.0; platform_system == "Windows"
 
-If you are using Command Prompt (`cmd`), ensure that `conda`1 can be found in the `%PATH%`. If `conda` is in `%PATH`, or if you are using `conda`'s included "Anaconda Prompt," run the followwing in the root directory of the repository
+# Creating Environment
 
-	conda create -n "timer-utility" --file Install\envBuild_Windows.txt
-	
-This should craete a `conda` environment named `timer-utility`. The environment can then be activated by using `activate "timer-utility"`. See the **User manual** for more instructions on the running the program.
+#### Creating a Clean Environment
 
-### On macOS and Linux
+First, create the environment using:
 
-From a terminal, run the following in the root directory of the repository
+    conda create -n <name>
+    
+Activate it using:
 
-	conda env create -f environment.yml
-	
-This should craete a `conda` environment named `timer-utility`. The environment can then be activated by using `source activate "timer-utility"`. See the **User manual** for more instructions on running the program.
+    conda activate <name>
+    
+Then install the packages (from the package list) using either `pip` or `conda`:
 
-	
+    conda install <package-name>
+    pip install <package-name>
+    
+    
+After installing all the required packages, run (in the project folder):
+
+    python -m SCTimeUtility
+    
+_Note: If using conda to install packages, you may want to use [conda-forge](https://conda-forge.org) as the package provider._
+
+
+#### Creating from pre-existing environement list
+
+      conda create -n <name> --file <envFileName>
+
+# Building Package
+
+### Building from Source
+
+To build the program package (depending on what platform you want):
+
+Python Wheel (Cross-Platform):
+    
+    python setup.py -bdist_wheel
+
+EXE (Windows):
+
+    python setup.py -bdist_wininst
+
+MSI (Windows):
+
+    python setup.py -bdist_msi
+
+RPM (Linux):
+
+    python setup.py -bdist_rpm
+    
