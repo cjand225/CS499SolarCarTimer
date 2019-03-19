@@ -27,7 +27,7 @@ def importCSV(path):
 '''
     Function: exportCSV
     Parameters: path, carStorage
-    Return Value: Boolean Condition
+    Return Value: N/A
     Purpose: Exports every car in CarStorage instance to timestamped directory with each csv file being comprised
              of the car name, a dash, teamName, and the csv file extension inside the directory.
 
@@ -45,5 +45,8 @@ def exportCSV(carStorage, path):
         filePath = os.path.join(folderPath, fileName)
         with open(filePath, 'w', newline='') as f:
             writer = csv.writer(f)
+            writer.writerow(['Lap', 'Elapsed Time', 'First Edit', 'Last Edit'])
+            lapCount = 0
             for lap in car.LapList:
-                writer.writerow([lap])
+                writer.writerow([lapCount, lap, lap.firstEdit, lap.latestEdit])
+                lapCount += 1
