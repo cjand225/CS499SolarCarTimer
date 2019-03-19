@@ -39,6 +39,8 @@ class AddCarDialog(QDialog):
         self.ui = loadUi(self.UIPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        self.move(self.x(), self.y())
+
 
     '''  
         Function: initValidation
