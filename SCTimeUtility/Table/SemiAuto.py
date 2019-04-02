@@ -25,6 +25,7 @@ class SemiAuto(QWidget):
         self.startStopButtonColumn = 3
         self.predictColumn = 4
 
+        self.carStore = None
         self.carStoreRef = []
         self.indexList, self.labelList, self.buttonList = [], [], []
         self.startStopList, self.checkBoxList, self.predictList = [], [], []
@@ -194,9 +195,11 @@ class SemiAuto(QWidget):
             for button in self.buttonList:
                 self.bindButtonRecord(index - 1, button)
                 index += 1
+
             index = 0
             for button in self.startStopList:
-                button.clicked.connect(lambda b: self.clickStartStop(index))
+                self.bindRunning(index)
+                self.bindStartStop(index - 1, button)
                 index += 1
 
     '''  
@@ -231,7 +234,14 @@ class SemiAuto(QWidget):
     '''
 
     def bindCheckBox(self, index, checkBox):
-        checkBox.toggled.connect(lambda b: self.handleCheck(index))
+        checkBox.toggled.connect(lambda b: self.handleCheck(self.carStoreRef[index].ID))
+
+    def bindStartStop(self, index, button):
+        button.clicked.connect(lambda b: self.toggleCar(self.carStoreRef[index].ID))
+
+    def bindRunning(self, index):
+        car = self.carStoreRef[index]
+        car.runningSignal.connect(lambda b: self.clickStartStop(self.carStoreRef[index].ID))
 
     '''  
         Function: handleCheck
@@ -258,7 +268,7 @@ class SemiAuto(QWidget):
         if index - 1 < 0:
             self.carStoreRef[index].addLapTime()
         else:
-            self.carStoreRef[index - 1].addLapTime()
+            self.carStoreRef[index].addLapTime()
 
     '''  
         Function: clickStartStop 
@@ -267,6 +277,28 @@ class SemiAuto(QWidget):
         Purpose: used for starting and stopping individual cars.
     '''
 
-    def clickStartStop(self, index):
-        self.startStopList[(index - 1)].setText("Stop")
-        # toggle start/stop of car here
+    def clickStartStop(self, ID):
+        if self.carStoreRef[ID].isRunning():
+            self.startStopList[ID].setText("Start")
+        else:
+            self.startStopList[ID].setText("Stop")
+
+
+    '''  
+        Function: toggleCar
+        Parameters: self, index
+        Return Value: N/A
+        Purpose: used for starting and stopping individual cars.
+    '''
+
+    def toggleCar(self, ID):
+        if self.carStoreRef[ID].isRunning():
+            self.carStoreRef[ID].stop()
+            # Disabled Buttons for specific car
+            self.buttonList[ID].setDisabled(True)
+            self.checkBoxList[ID].setDisabled(True)
+        elif not self.carStoreRef[ID].isRunning():
+            self.carStoreRef[ID].start()
+            # Re-enable buttons for specific car
+            self.buttonList[ID].setDisabled(False)
+            self.checkBoxList[ID].setDisabled(False)

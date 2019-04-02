@@ -27,7 +27,7 @@ def saveCSV(cs, filePath):
             storageWriter = csv.writer(storageFile)
             # storageWriter.writeHeaders(['Car ID', 'Team Name', 'Car Num', 'Lap Times'])
             storageWriter.writerows(
-                [[c.ID, c.TeamName, c.CarNum, c.initialTime] + [t.elapsedTime for t in c.LapList] for c in
+                [[c.ID, c.TeamName, c.CarNum, c.initialTime] + [t.elapsedTime for t in c.lapList] for c in
                  cs.storageList])
 
 

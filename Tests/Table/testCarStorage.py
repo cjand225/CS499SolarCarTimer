@@ -90,7 +90,7 @@ class testCarStorage(unittest.TestCase):
         for lapIndex in range(0, len(lapData)):
             myCar.addLapTime(lapData[lapIndex])
             fakeLap = LapTime(lapData[lapIndex])
-            self.assertEqual(fakeLap.getElapsed(), myCar.LapList[lapIndex + 1].getElapsed())
+            self.assertEqual(fakeLap.getElapsed(), myCar.lapList[lapIndex + 1].getElapsed())
 
     def testEditLaptime(self):
         myStore = CarStorage()
@@ -137,10 +137,10 @@ class testCarStorage(unittest.TestCase):
         # pick a random lap each time, confirm its zero'd out
         for x in range(0, self.maxCars - 1):
             currCar = myStore.storageList[x]
-            randLapIndex = random.randrange(1, len(currCar.LapList) - 1)
+            randLapIndex = random.randrange(1, len(currCar.lapList) - 1)
             myStore.storageList[x].removeLapTime(randLapIndex)
             self.assertEqual(myStore.storageList[x].getLapCount() - 1, self.maxLaps)
-            self.assertEqual(myStore.storageList[x].LapList[randLapIndex].elapsedTime, 0)
+            self.assertEqual(myStore.storageList[x].lapList[randLapIndex].elapsedTime, 0)
 
     def testGetTeamNames(self):
         myStore = CarStorage()

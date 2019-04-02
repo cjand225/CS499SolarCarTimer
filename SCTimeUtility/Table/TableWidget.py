@@ -74,20 +74,3 @@ class TableWidget(QWidget):
             # As a side effect, it also forces the header to resize to fit its container.
             self.tableView.verticalHeader().sectionSize(headerIndex)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
-
-    '''
-        Function: test
-        Parameters: self
-        Return Value: N/A
-        Purpose: Populates TableView with some dummy data to test if its properly displaying content.
-
-    '''
-
-    def test(self):
-        for i in range(8, 20):
-            self.tableView.model().cs.addCar(i, "foo{0}".format(i), 20)
-            self.tableView.model().cs.appendLapTime(i, 91, 0, 0, 0)
-            print(self.tableView.model().columnCount(None))
-            self.tableView.repaint()
-        for i in range(1, 20):
-            self.tableView.model().cs.appendLapTime(5, i, 0, 0, 0)

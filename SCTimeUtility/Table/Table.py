@@ -6,7 +6,7 @@
 
 """
 
-import time, os
+import datetime
 
 from PyQt5.QtWidgets import QDialog
 
@@ -70,6 +70,12 @@ class Table():
         self.Widget.startRace.clicked.connect(self.handleStart)
         self.CarStoreList.dataModified.connect(self.updateSemiAuto)
         self.CarStoreList.dataModified.connect(self.fixHeaders)
+        self.semiAuto.globalStart.clicked.connect(self.CarStoreList.startCars)
+        self.semiAuto.globalStop.clicked.connect(self.CarStoreList.stopCars)
+        self.semiAuto.addCar.clicked.connect(self.handleAddDialog)
+        # self.semiAuto.editCar.clicked.connect()
+        self.semiAuto.addMultiple.clicked.connect(self.handleAddBatchDialog)
+        # self.semiAuto.removeCar.clicked.connect()
 
     '''
 
@@ -212,7 +218,7 @@ class Table():
     '''
 
     def handleStart(self):
-        self.CarStoreList.setSeedValue(time.time())
+        self.CarStoreList.setSeedValue(datetime.datetime.now())
 
     '''
 
@@ -258,7 +264,7 @@ class Table():
             self.addBatchDialog.clear()
 
     '''
-
+    
         Function: handleStart
         Parameters: self
         Return Value: N/A
@@ -281,3 +287,9 @@ class Table():
     def fixHeaders(self):
         self.Widget.initHeaderHorizontal()
         self.Widget.initHeaderVertical()
+
+    def removeCar(self):
+        pass
+
+    def editCar(self):
+        pass

@@ -6,9 +6,9 @@
 
 """
 
-import random, string, datetime, time
+import datetime
 
-from PyQt5.QtCore import Qt, QAbstractTableModel, QModelIndex, QVariant
+from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant
 
 from SCTimeUtility.Table.CarStorage import CarStorage
 from SCTimeUtility.System.TimeReferences import strptimeMultiple
@@ -62,7 +62,7 @@ class TableModel(QAbstractTableModel):
     '''
 
     def rowCount(self, p):
-        lapListLengths = [len(i.LapList) for i in self.carStore.storageList]
+        lapListLengths = [len(i.lapList) for i in self.carStore.storageList]
         if lapListLengths:
             return max(max(lapListLengths) + 1, self.defaultRows)
         else:
@@ -93,8 +93,8 @@ class TableModel(QAbstractTableModel):
     def data(self, item, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
             if item.column() < len(self.carStore.storageList) and \
-                    item.row() < len(self.carStore.storageList[item.column()].LapList):
-                timeData = self.carStore.storageList[item.column()].LapList[item.row()].getElapsed()
+                    item.row() < len(self.carStore.storageList[item.column()].lapList):
+                timeData = self.carStore.storageList[item.column()].lapList[item.row()].getElapsed()
                 newString = str(datetime.timedelta(seconds=timeData))
                 return str(newString)
             else:
@@ -117,11 +117,11 @@ class TableModel(QAbstractTableModel):
             return False
         if role == Qt.EditRole:
             if i.column() < len(self.carStore.storageList):
-                if i.row() < len(self.carStore.storageList[i.column()].LapList):
-                    self.carStore.storageList[i.column()].editLapTime(i.row(), delta.total_seconds())
+                if i.row() < len(self.carStore.storageList[i.column()].lapList):
+                    self.carStore.storageList[i.column()].editLapTime(i.row(), delta)
                     return True
-                elif i.row() == len(self.carStore.storageList[i.column()].LapList):
-                    self.carStore.appendLapTime(i.column(), delta.total_seconds())
+                elif i.row() == len(self.carStore.storageList[i.column()].lapList):
+                    self.carStore.appendLapTime(i.column(), delta)
                     return True
             else:
                 return False
@@ -143,7 +143,7 @@ class TableModel(QAbstractTableModel):
                 else:
                     return None
             elif orientation == Qt.Vertical:
-                lengthList = [len(i.LapList) for i in self.carStore.storageList]
+                lengthList = [len(i.lapList) for i in self.carStore.storageList]
                 if lengthList and section < max(lengthList):
                     return section
 
@@ -157,9 +157,12 @@ class TableModel(QAbstractTableModel):
 
     def flags(self, i):
         flags = super().flags(i)
-        if i.column() < len(self.carStore.storageList) and i.row() <= len(
-                self.carStore.storageList[i.column()].LapList) and i.row() > 0:
-            flags |= Qt.ItemIsEditable
+        if i.column() < len(self.carStore.storageList) and i.row() <= len(self.carStore.storageList[i.column()].lapList) and i.row() > 0:
+            if self.carStore.storageList[i.column()].isRunning():
+                flags |= Qt.ItemIsEditable
+            else:
+                pass
+
         return flags
 
     '''  
@@ -169,23 +172,6 @@ class TableModel(QAbstractTableModel):
         Purpose: gives a reference of the CarStorage Class instance
     '''
 
-    # TODO: convert to boolean returns
     def assignStorage(self, storage):
-        if not storage:
-            self.carStore = CarStorage()
-        else:
+        if isinstance(storage, CarStorage):
             self.carStore = storage
-
-    '''  
-        Function: test
-        Parameters: self
-        Return Value: N/A
-        Purpose: test function that populates carStorage with dummy data to test how model behaves.
-    '''
-
-    def test(self):
-        for i, s in enumerate(string.ascii_lowercase[:8]):
-            self.carStore.addCar(s, random.randint(0, 100))
-            self.carStore.storageList[i].initialTime = time.time()
-            for j in range(5):
-                self.carStore.appendLapTime(i, j)

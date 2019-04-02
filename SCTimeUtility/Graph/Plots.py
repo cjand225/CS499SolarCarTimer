@@ -30,9 +30,9 @@ def lapVsTimeGraph(self):
     index = 0
     for team in self.graphedTeamList:
         durationList = []
-        graphRange = np.arange(0, len(self.graphedTeamList[index].LapList), 1.0)
-        plt.xticks(np.arange(1.0, len(self.graphedTeamList[index].LapList) + 1, 1.0))
-        for lap in team.LapList:
+        graphRange = np.arange(0, len(self.graphedTeamList[index].lapList), 1.0)
+        plt.xticks(np.arange(1.0, len(self.graphedTeamList[index].lapList) + 1, 1.0))
+        for lap in team.lapList:
             durationList.append(lap.getElapsed())
         durationList = self.getElapsed(durationList)
         # plot curent Team
@@ -72,12 +72,12 @@ def avgLapVsTimeGraph(self):
     index = 0
     for team in self.graphedTeamList:
         lapAverages = []
-        graphRange = np.arange(0, len(team.LapList), 1.0)
-        plt.xticks(np.arange(1.0, len(team.LapList) + 1, 1.0))
+        graphRange = np.arange(0, len(team.lapList), 1.0)
+        plt.xticks(np.arange(1.0, len(team.lapList) + 1, 1.0))
 
         # for every lap for current team calculate the average time
         currLap = 0
-        for lap in team.LapList:
+        for lap in team.lapList:
             if self.inMinutes:
                 lapAverages.append((lap.getElapsed() / ((currLap + 1) * 60)))
             else:
@@ -111,7 +111,7 @@ def minTimeGraph(self):
     # calculate minimum times for teams
     for team in self.graphedTeamList:
         lapList = []
-        for lap in team.LapList:
+        for lap in team.lapList:
             if lap.getElapsed() != 0:
                 lapList.append(lap.getElapsed())
 
@@ -140,7 +140,7 @@ def maxTimeGraph(self):
     # calculate minimum times for teams
     for team in self.graphedTeamList:
         lapList = []
-        for lap in team.LapList:
+        for lap in team.lapList:
             if lap.getElapsed() != 0:
                 lapList.append(lap.getElapsed())
 

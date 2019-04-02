@@ -45,8 +45,8 @@ def exportCSV(carStorage, path):
         filePath = os.path.join(folderPath, fileName)
         with open(filePath, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['Lap', 'Elapsed Time', 'First Edit', 'Last Edit'])
+            writer.writerow(['Lap', 'Elapsed Time', 'First Edit', 'Last Edit', 'Time of Day'])
             lapCount = 0
-            for lap in car.LapList:
-                writer.writerow([lapCount, lap, lap.firstEdit, lap.latestEdit])
+            for lap in car.lapList:
+                writer.writerow([lapCount, lap, lap.initialWrite, lap.lastWrite, lap.initialWrite.strftime("%I:%M")])
                 lapCount += 1

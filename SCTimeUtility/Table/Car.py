@@ -6,7 +6,7 @@
 
 """
 
-import time
+import datetime
 
 from PyQt5.QtCore import pyqtSignal, QObject
 
@@ -16,6 +16,7 @@ from SCTimeUtility.Log.Log import getLog
 
 class Car(QObject):
     lapChanged = pyqtSignal(int)
+    runningSignal = pyqtSignal(int, bool)
 
     def __init__(self, ID, Team, CarNum):
         super().__init__()
@@ -24,49 +25,46 @@ class Car(QObject):
         try:
             self.ID = int(ID)
             self.CarNum = int(CarNum)
-        except ValueError:
-            raise ValueError
-
-        if type(Team) is not str:
-            raise ValueError
-        else:
             self.TeamName = str(Team)
+        except ValueError as err:
+            self.logger.error(err)
 
-        if not self.ID:
-            self.ID = -1
-        if not self.CarNum:
-            self.CarNum = -1
-
-        self.SeedValue = None
+        self.seedValue = None
         self.initialTime = None
+        self.running = False
 
-        self.LapCount = 0
-        self.LapList = []
+        self.lapCount = 0
+        self.lapList = []
 
     """
           Function: setSeedValue
           Parameters: self, value
           Return Value: N/A
-          Purpose: sets the member variable "self.SeedValue" to the value parameter passed, and then
+          Purpose: sets the member variable "self.seedValue" to the value parameter passed, and then
                    calls createFirstLap before returning. Used for initializing lap times for each car.
 
     """
 
     def setSeedValue(self, value):
-        self.SeedValue = value
-        self.createFirstLap()
+        if isinstance(value, datetime.datetime):
+            self.seedValue = value
+            self.createFirstLap()
+            self.running = True
+            self.runningSignal.emit(self.ID, self.running)
+        else:
+            raise TypeError("Seed Value is incorrect type" + str(type(value)))
 
     """
           Function: getSeedValue
           Parameters: self
-          Return Value: self.SeedValue
+          Return Value: self.seedValue
           Purpose: returns the seed value at which all lap times are based upon, otherwise known as 
                    starting time.
 
     """
 
     def getSeedValue(self):
-        return self.SeedValue
+        return self.seedValue
 
     """
           Function: createFirstLap
@@ -78,10 +76,10 @@ class Car(QObject):
     """
 
     def createFirstLap(self):
-        self.LapList.clear()
-        self.LapList.append(LapTime(self.SeedValue - self.SeedValue))
-        self.LapCount = len(self.LapList)
-        self.lapChanged.emit(len(self.LapList))
+        self.lapList.clear()
+        self.lapList.append(LapTime(datetime.timedelta(0)))
+        self.lapCount = len(self.lapList)
+        self.lapChanged.emit(len(self.lapList))
 
     """
           Function: getID
@@ -132,13 +130,13 @@ class Car(QObject):
   
         Function: getLapCount
         Parameters: self
-        Return Value: self.LapCount
+        Return Value: self.lapCount
         Purpose: Returns the total laps that have been added to the car class.
   
     """
 
     def getLapCount(self):
-        return len(self.LapList)
+        return len(self.lapList)
 
     """
         Function: addLapTime
@@ -153,41 +151,57 @@ class Car(QObject):
     """
 
     def addLapTime(self, timeData=None):
-        if self.SeedValue is not None:
+        if self.seedValue is not None:
             if timeData is None:
                 self.addLapSemiAuto()
             else:
                 self.addLapManually(timeData)
-            self.LapCount = len(self.LapList)
-            self.lapChanged.emit(len(self.LapList))
+            self.lapCount = len(self.lapList)
+            self.lapChanged.emit(len(self.lapList))
 
     """
         Function: addLapSemiAuto
         Parameters: self
         Return Value: N/A
-        Purpose: appends a laptime to the current LapList of the Car based on the amount of time
+        Purpose: appends a LapTime to the current lapList of the Car based on the amount of time
                  that has passed and all previous laptimes, invoke via user interface by user within
                  the Semi-Auto widget.
 
     """
 
     def addLapSemiAuto(self):
-        timeBeforeIndex = self.getTotalElapsedTime(self.getLapCount())
-        timeSinceStart = time.time() - self.SeedValue
-        recordedTime = 0
+        currentTime = datetime.datetime.now()
+        beginTime = self.seedValue
+        previousTime = self.lapList[self.lapCount - 1].initialWrite
+        recordTime = datetime.timedelta(hours=currentTime.hour,
+                                        minutes=currentTime.minute,
+                                        seconds=currentTime.second,
+                                        microseconds=currentTime.microsecond) \
+                     - \
+                     datetime.timedelta(hours=previousTime.hour,
+                                        minutes=previousTime.minute,
+                                        seconds=previousTime.second,
+                                        microseconds=previousTime.microsecond)
 
-        if timeBeforeIndex == -1:
-            recordedTime = timeSinceStart
+        totalTime = datetime.timedelta(hours=currentTime.hour,
+                                       minutes=currentTime.minute,
+                                       seconds=currentTime.second,
+                                       microseconds=currentTime.microsecond) \
+                    - \
+                    datetime.timedelta(hours=beginTime.hour,
+                                       minutes=beginTime.minute,
+                                       seconds=beginTime.second,
+                                       microseconds=beginTime.microsecond)
+
+        if not recordTime > totalTime:
+            self.lapList.append(LapTime(recordTime))
+            self.logger.info('Lap Time {} added Car: {} , {} via SemiAuto.'.format(recordTime,
+                                                                                   self.TeamName,
+                                                                                   self.CarNum))
         else:
-            recordedTime = timeSinceStart - timeBeforeIndex
-
-        # time couldn't have possibly occured as race hasn't lastest long enough
-        if recordedTime < 0:
-            recordedTime = 0
-
-        self.LapList.append(LapTime(recordedTime))
-        self.logger.info(
-            'Lap Time {} added Car: {} , {} via SemiAuto.'.format(recordedTime, self.TeamName, self.CarNum))
+            self.logger.info('Unable to add Lap Time {} for Car: {} , {} via SemiAuto.'.format(recordTime,
+                                                                                               self.TeamName,
+                                                                                               self.CarNum))
 
     """
         Function: addLapManually
@@ -199,27 +213,30 @@ class Car(QObject):
     """
 
     def addLapManually(self, timeData):
-        self.LapList.append(LapTime(timeData))
+        self.lapList.append(LapTime(timeData))
         self.logger.info(
-            'Lap Time {} added Car: {} , {} via Manual.'.format(timeData, self.TeamName, self.CarNum))
+            'Lap Time {} added Car: {} , {} via Manual.'.format(timeData,
+                                                                self.TeamName,
+                                                                self.CarNum))
 
-        """
-             Function: editLapTime
-             Parameters: self, index, timeData
-             Return Value: N/A
-             Purpose: Edits current given index in lapList, if lap below given index exists, the lap below is
-                      offset by the difference between the lap below's value and the newly given value from
-                      timeData.
+    """
+        Function: editLapTime
+        Parameters: self, index, timeData
+        Return Value: N/A
+        Purpose: Edits current given index in lapList, if lap below given index exists, the lap below is
+                 offset by the difference between the lap below's value and the newly given value from
+                 timeData.
       
-         """
+    """
 
     def editLapTime(self, index, timeData):
         editCondition = False
         edit = timeData
         # both cell above and cell below exists
-        if self.indexExists(index) and self.indexExists(index + 1) and timeData is not None and timeData >= 0:
+        if self.indexExists(index) and self.indexExists(
+                index + 1) and timeData is not None and timeData.total_seconds() >= 0:
 
-            totalTime = self.LapList[index].elapsedTime + self.LapList[index + 1].elapsedTime
+            totalTime = self.lapList[index].elapsedTime + self.lapList[index + 1].elapsedTime
             editBelow = totalTime - edit
 
             # edit both cells with new edit
@@ -229,7 +246,8 @@ class Car(QObject):
             else:
                 self.logger.info('Failed to Edit Lap {} for Car: {} '.format(index, self.ID))
         # if the index given is the last index in the list
-        elif self.indexExists(index) and not self.indexExists(index + 1) and timeData is not None and timeData >= 0:
+        elif self.indexExists(index) and not self.indexExists(
+                index + 1) and timeData is not None and timeData.total_seconds() >= 0:
             # only current index cell exists
             if self.editCell(index, edit):
                 editCondition = True
@@ -238,9 +256,9 @@ class Car(QObject):
                 self.logger.info('Failed to Edit Lap {} for Car: {} '.format(index, self.ID))
         else:
             self.logger.info(
-                "Failed to Edit Lap {} for Car: {} : Index isn't within range of LapList".format(index, self.ID))
+                "Failed to Edit Lap {} for Car: {} : Index isn't within range of lapList".format(index, self.ID))
 
-        self.lapChanged.emit(len(self.LapList))
+        self.lapChanged.emit(len(self.lapList))
         return editCondition
 
     """
@@ -253,7 +271,7 @@ class Car(QObject):
 
     def editCell(self, index, timeData):
         if self.indexExists(index):
-            self.LapList[index].elapsedTime = timeData
+            self.lapList[index].setElapsed(timeData)
             return True
         else:
             return False
@@ -262,12 +280,12 @@ class Car(QObject):
          Function: indexExists
          Parameters: self, index
          Return Value: Boolean Condition
-         Purpose: Returns a Boolean Condition to indicate whether an index is within range of the LapList
+         Purpose: Returns a Boolean Condition to indicate whether an index is within range of the lapList
 
      """
 
     def indexExists(self, index):
-        return index in range(0, len(self.LapList))
+        return index in range(0, len(self.lapList))
 
     """
          Function: getLap
@@ -278,10 +296,10 @@ class Car(QObject):
      """
 
     def getLap(self, lapID):
-        if lapID in range(0, len(self.LapList)):
-            return self.LapList[lapID]
+        if lapID in range(0, len(self.lapList)):
+            return self.lapList[lapID]
         else:
-            return LapTime(-1)
+            raise IndexError("LapID: " + str(lapID) + " out of range.")
 
     """
          Function: getLastLapIndex
@@ -292,7 +310,7 @@ class Car(QObject):
      """
 
     def getLastLapIndex(self):
-        return len(self.LapList) - 2
+        return len(self.lapList) - 2
 
     """
          Function: removeLapTime
@@ -305,8 +323,8 @@ class Car(QObject):
      """
 
     def removeLapTime(self, lapID):
-        if lapID in range(1, len(self.LapList) - 1):
-            self.LapList[lapID].clear()
+        if lapID in range(1, len(self.lapList) - 1):
+            self.lapList[lapID].clear()
             self.logger.info('Lap {} removed for Car: {} , {}!'.format(lapID, self.TeamName, self.CarNum))
             return True
         else:
@@ -323,7 +341,7 @@ class Car(QObject):
      """
 
     def getLatestLapID(self):
-        return len(self.LapList) - 1
+        return len(self.lapList) - 1
 
     """
          Function: getTotalElaspedTime
@@ -334,8 +352,8 @@ class Car(QObject):
      """
 
     def getTotalElapsedTime(self, index):
-        if not index in range(0, len(self.LapList) - 1):
-            allLaps = self.LapList[1:index]
+        if not index in range(0, len(self.lapList) - 1):
+            allLaps = self.lapList[1:index]
             return sum([lap.getElapsed() for lap in allLaps])
         else:
             return -1
@@ -352,23 +370,39 @@ class Car(QObject):
      """
 
     def getFastestLap(self):
-        allLaps = self.LapList[1:]
+        allLaps = self.lapList[1:]
         if allLaps:
             return min([lap.getElapsed() for lap in allLaps])
         else:
             return None
 
     def hasSeed(self):
-        pass
+        if isinstance(self.seedValue, datetime.datetime):
+            return True
+        else:
+            return False
 
     def editTeamName(self, newName):
-        pass
+        if isinstance(newName, str):
+            self.TeamName = newName
 
     def editCarNumber(self, newNumber):
-        pass
+        if isinstance(newNumber, int):
+            self.CarNum = newNumber
 
-    def pauseRecording(self):
-        pass
+    def stop(self):
+        if self.running:
+            self.running = False
+            self.runningSignal.emit(self.ID, self.running)
 
-    def resumeRecording(self):
-        pass
+    def start(self):
+        if not self.running and not self.seedValue:
+            self.running = True
+            self.setSeedValue(datetime.datetime.now())
+            self.runningSignal.emit(self.ID, self.running)
+        elif not self.running and isinstance(self.seedValue, datetime.datetime):
+            self.running = True
+            self.runningSignal.emit(self.ID, self.running)
+
+    def isRunning(self):
+        return self.running
