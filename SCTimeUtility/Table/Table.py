@@ -65,11 +65,17 @@ class Table():
 
     def connectActions(self):
         self.tableView.doubleClicked.connect(self.handleTableDoubleClick)
-        self.Widget.addCar.clicked.connect(self.handleAddDialog)
-        self.Widget.addBatch.clicked.connect(self.handleAddBatchDialog)
-        self.Widget.startRace.clicked.connect(self.handleStart)
+
+        self.Widget.bAddCar.clicked.connect(self.handleAddDialog)
+        self.Widget.bAddMultiple.clicked.connect(self.handleAddBatchDialog)
+        # self.Widget.bEditCar.clicked.connect(self.editCar)
+        # self.Widget.bRemoveCar.clicked.connect(self.removeCar)
+        # self.Widget.bStartCar.clicked.connect()
+        # self.Widget.bStopCar.clicked.connect()
+
         self.CarStoreList.dataModified.connect(self.updateSemiAuto)
         self.CarStoreList.dataModified.connect(self.fixHeaders)
+
         self.semiAuto.globalStart.clicked.connect(self.CarStoreList.startCars)
         self.semiAuto.globalStop.clicked.connect(self.CarStoreList.stopCars)
         self.semiAuto.addCar.clicked.connect(self.handleAddDialog)

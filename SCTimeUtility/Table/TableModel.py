@@ -9,6 +9,7 @@
 import datetime
 
 from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant
+from PyQt5.QtGui import QColor
 
 from SCTimeUtility.Table.CarStorage import CarStorage
 from SCTimeUtility.System.TimeReferences import strptimeMultiple
@@ -96,9 +97,18 @@ class TableModel(QAbstractTableModel):
                     item.row() < len(self.carStore.storageList[item.column()].lapList):
                 timeData = self.carStore.storageList[item.column()].lapList[item.row()].getElapsed()
                 newString = str(datetime.timedelta(seconds=timeData))
-                return str(newString)
+                return QVariant(str(newString))
             else:
-                return QVariant()
+                return QVariant('')
+        if role == Qt.BackgroundRole:
+            if item.column() > len(self.carStore.storageList):
+                return QColor(Qt.darkGray)
+            elif len(self.carStore.storageList) > item.column() and not self.carStore.storageList[item.column()].isRunning():
+                return QColor(Qt.lightGray)
+            elif not len(self.carStore.storageList) > item.column():
+                return QColor(Qt.darkGray)
+            else:
+                return QColor(Qt.white)
 
     '''
         Function: setData
@@ -157,7 +167,8 @@ class TableModel(QAbstractTableModel):
 
     def flags(self, i):
         flags = super().flags(i)
-        if i.column() < len(self.carStore.storageList) and i.row() <= len(self.carStore.storageList[i.column()].lapList) and i.row() > 0:
+        if i.column() < len(self.carStore.storageList) and i.row() <= len(
+                self.carStore.storageList[i.column()].lapList) and i.row() > 0:
             if self.carStore.storageList[i.column()].isRunning():
                 flags |= Qt.ItemIsEditable
             else:

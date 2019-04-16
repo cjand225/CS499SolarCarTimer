@@ -278,7 +278,7 @@ class SemiAuto(QWidget):
     '''
 
     def clickStartStop(self, ID):
-        if self.carStoreRef[ID].isRunning():
+        if not self.carStoreRef[ID].isRunning():
             self.startStopList[ID].setText("Start")
         else:
             self.startStopList[ID].setText("Stop")
