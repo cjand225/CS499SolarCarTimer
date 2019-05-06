@@ -21,21 +21,17 @@ class SemiAuto(QWidget):
         super().__init__()
         self.UIPath = uiPath
 
-        self.labelColumn = 0
-        self.buttonColumn = 1
-        self.checkBoxColumn = 2
-        self.startStopButtonColumn = 3
-        self.predictColumn = 4
-
         self.carStore = None
         self.carStoreRef = []
 
+        # column postions of buttons in dict and on widget
         self.carLabel = 0
         self.RecordButton = 1
         self.PredictLabel = 2
         self.CheckBox = 3
         self.StartButton = 4
 
+        # holds dicts related to each car
         self.buttonDict = OrderedDict()
 
         # layout of semiAuto
@@ -68,12 +64,12 @@ class SemiAuto(QWidget):
 
     def initButtonLayout(self):
         self.buttons.setAlignment(Qt.AlignTop)
-        self.buttons.setColumnMinimumWidth(self.labelColumn, 100)
-        self.buttons.setColumnMinimumWidth(self.checkBoxColumn, 100)
+        self.buttons.setColumnMinimumWidth(self.carLabel, 100)
+        self.buttons.setColumnMinimumWidth(self.PredictLabel, 100)
         self.buttons.setHorizontalSpacing(15)
-        self.buttons.setColumnStretch(self.labelColumn, 1)
-        self.buttons.setColumnStretch(self.buttonColumn, 1)
-        self.buttons.setColumnStretch(self.checkBoxColumn, 0)
+        self.buttons.setColumnStretch(self.carLabel, 1)
+        self.buttons.setColumnStretch(self.RecordButton, 1)
+        self.buttons.setColumnStretch(self.PredictLabel, 0)
 
     '''  
         Function: updateList
@@ -186,12 +182,11 @@ class SemiAuto(QWidget):
 
     def addButtons(self):
         for buttonList in self.buttonDict:
-            self.buttons.addWidget(self.buttonDict[buttonList][self.carLabel], buttonList, self.labelColumn)
-            self.buttons.addWidget(self.buttonDict[buttonList][self.RecordButton], buttonList, self.buttonColumn)
-            self.buttons.addWidget(self.buttonDict[buttonList][self.StartButton], buttonList,
-                                   self.startStopButtonColumn)
-            self.buttons.addWidget(self.buttonDict[buttonList][self.PredictLabel], buttonList, self.checkBoxColumn)
-            self.buttons.addWidget(self.buttonDict[buttonList][self.CheckBox], buttonList, self.predictColumn)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.carLabel], buttonList, self.carLabel)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.RecordButton], buttonList, self.RecordButton)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.StartButton], buttonList, self.StartButton)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.PredictLabel], buttonList, self.PredictLabel)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.CheckBox], buttonList, self.CheckBox)
 
     '''  
         Function: bindButtons
