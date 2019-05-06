@@ -1,14 +1,16 @@
 """
 
-    Module:
-    Purpose:
-    Depends On:
+    Module: TableWidget.py
+    Purpose: View (front-end) for the table module. Displays spreadsheet like table and controls for
+             manipulating car data.
+    Depends On: Pyqt, time (python standard lib), SCTimeUtility packages (Log)
 
 """
+import time
 
-from PyQt5.QtWidgets import QWidget, QApplication, QHeaderView, QShortcut, QStyle
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QApplication, QHeaderView, QShortcut, QStyle, QTimeEdit
+from PyQt5.QtGui import QKeySequence, QResizeEvent, QPaintEvent, QColor
+from PyQt5.QtCore import Qt, QTime
 from PyQt5.uic import loadUi
 
 from SCTimeUtility.Log.Log import getLog
@@ -37,6 +39,8 @@ class TableWidget(QWidget):
         self.ui = loadUi(self.uiPath, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        self.lcdTime.setSegmentStyle(2)
+        self.timeEdit.setTime(QTime().currentTime())
         self.show()
 
     '''
@@ -73,21 +77,13 @@ class TableWidget(QWidget):
             # sectionSize computes the height of the row header.
             # As a side effect, it also forces the header to resize to fit its container.
             self.tableView.verticalHeader().sectionSize(headerIndex)
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    '''
-        Function: test
-        Parameters: self
-        Return Value: N/A
-        Purpose: Populates TableView with some dummy data to test if its properly displaying content.
+    def paintEvent(self, a0: QPaintEvent) -> None:
+        self.lcdTime.display(time.strftime("%I" + ":" + "%M"))
+        super().paintEvent(a0)
 
-    '''
-
-    def test(self):
-        for i in range(8, 20):
-            self.tableView.model().cs.addCar(i, "foo{0}".format(i), 20)
-            self.tableView.model().cs.appendLapTime(i, 91, 0, 0, 0)
-            print(self.tableView.model().columnCount(None))
-            self.tableView.repaint()
-        for i in range(1, 20):
-            self.tableView.model().cs.appendLapTime(5, i, 0, 0, 0)
+    def resizeEvent(self, a0: QResizeEvent) -> None:
+        self.initHeaderVertical()
+        self.initHeaderHorizontal()
+        super().resizeEvent(a0)

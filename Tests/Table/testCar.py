@@ -43,10 +43,10 @@ class testCar(unittest.TestCase):
         seedVal = time.time()
         myCar.setSeedValue(seedVal)
         self.assertIsNotNone(myCar.getSeedValue())
-        self.assertIsNotNone(myCar.SeedValue)
-        self.assertEqual(myCar.SeedValue, myCar.getSeedValue())
+        self.assertIsNotNone(myCar.seedValue)
+        self.assertEqual(myCar.seedValue, myCar.getSeedValue())
         self.assertEqual(myCar.getSeedValue(), seedVal)
-        self.assertEqual(myCar.SeedValue, seedVal)
+        self.assertEqual(myCar.seedValue, seedVal)
 
     def testaddTime(self):
         myCar = Car(1, self.validTestString, self.validCarNumber)
@@ -80,7 +80,7 @@ class testCar(unittest.TestCase):
             lapList.append(LapTime(timeAdd))
             myCar.addLapTime(timeAdd)
         randomLap = random.randint(0, self.numOfLaps - 1)
-        self.assertEqual(myCar.getLap(randomLap), myCar.LapList[randomLap])
+        self.assertEqual(myCar.getLap(randomLap), myCar.lapList[randomLap])
 
     def testRemoveLap(self):
         myCar = Car(1, self.validTestString, self.validCarNumber)
@@ -93,7 +93,7 @@ class testCar(unittest.TestCase):
         lapRemoved = random.randint(0, 5)
         # 501 signals emitted because seedvalue call emits signal as well
         self.assertEqual(len(lapList) + 1, len(QtSpyBot))
-        self.assertNotEqual(lapList[lapRemoved], myCar.LapList[lapRemoved].elapsedTime)
+        self.assertNotEqual(lapList[lapRemoved], myCar.lapList[lapRemoved].elapsedTime)
 
     def testRemoveMultipleLaps(self):
         myCar = Car(1, self.validTestString, self.validCarNumber)
@@ -140,7 +140,7 @@ class testCar(unittest.TestCase):
         for lap in lapData:
             myCar.addLapTime(LapTime(datetime.timedelta(seconds=lap)))
 
-        allLaps = myCar.LapList[1:randIndex]
+        allLaps = myCar.lapList[1:randIndex]
         totalElapsed = sum([lap for lap in allLaps])
         totalFromCar = myCar.getTotalElapsedTime(randIndex)
         self.assertEqual(totalElapsed, totalFromCar)
@@ -171,22 +171,22 @@ class testCar(unittest.TestCase):
 
         for x in range(1, len(editIndices) - 1):
             orgLapBelow = editIndices[x] + 1
-            orgData = myCar.LapList[editIndices[x]].elapsedTime
+            orgData = myCar.lapList[editIndices[x]].elapsedTime
             edit = editLapData[x]
 
-            if orgLapBelow in range(0, len(myCar.LapList) - 1):
-                orgDataBelow = myCar.LapList[orgLapBelow].elapsedTime
+            if orgLapBelow in range(0, len(myCar.lapList) - 1):
+                orgDataBelow = myCar.lapList[orgLapBelow].elapsedTime
                 totalTime = orgData + orgDataBelow
                 myCar.editLapTime(editIndices[x], edit)
                 editBelow = totalTime - edit
 
-                self.assertEqual(myCar.LapList[editIndices[x]].elapsedTime, edit)
-                self.assertEqual(myCar.LapList[editIndices[x] + 1].elapsedTime, LapTime(editBelow).elapsedTime)
-                self.assertNotEqual(myCar.LapList[editIndices[x]].elapsedTime, orgData)
+                self.assertEqual(myCar.lapList[editIndices[x]].elapsedTime, edit)
+                self.assertEqual(myCar.lapList[editIndices[x] + 1].elapsedTime, LapTime(editBelow).elapsedTime)
+                self.assertNotEqual(myCar.lapList[editIndices[x]].elapsedTime, orgData)
 
             else:
                 myCar.editLapTime(editIndices[x], edit)
-                self.assertEqual(myCar.LapList[editIndices[x]].elapsedTime, edit)
+                self.assertEqual(myCar.lapList[editIndices[x]].elapsedTime, edit)
 
     def testIndexExists(self):
         myCar = Car(1, self.validTestString, self.validCarNumber)

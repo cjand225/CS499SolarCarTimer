@@ -6,7 +6,7 @@
 
 """
 
-import time, os
+import datetime
 
 from PyQt5.QtWidgets import QDialog
 
@@ -65,11 +65,23 @@ class Table():
 
     def connectActions(self):
         self.tableView.doubleClicked.connect(self.handleTableDoubleClick)
-        self.Widget.addCar.clicked.connect(self.handleAddDialog)
-        self.Widget.addBatch.clicked.connect(self.handleAddBatchDialog)
-        self.Widget.startRace.clicked.connect(self.handleStart)
+
+        self.Widget.bAddCar.clicked.connect(self.handleAddDialog)
+        self.Widget.bAddMultiple.clicked.connect(self.handleAddBatchDialog)
+        # self.Widget.bEditCar.clicked.connect(self.editCar)
+        # self.Widget.bRemoveCar.clicked.connect(self.removeCar)
+        # self.Widget.bStartCar.clicked.connect()
+        # self.Widget.bStopCar.clicked.connect()
+
         self.CarStoreList.dataModified.connect(self.updateSemiAuto)
         self.CarStoreList.dataModified.connect(self.fixHeaders)
+
+        self.semiAuto.globalStart.clicked.connect(self.CarStoreList.startCars)
+        self.semiAuto.globalStop.clicked.connect(self.CarStoreList.stopCars)
+        self.semiAuto.addCar.clicked.connect(self.handleAddDialog)
+        # self.semiAuto.editCar.clicked.connect()
+        self.semiAuto.addMultiple.clicked.connect(self.handleAddBatchDialog)
+        # self.semiAuto.removeCar.clicked.connect()
 
     '''
 
@@ -212,7 +224,7 @@ class Table():
     '''
 
     def handleStart(self):
-        self.CarStoreList.setSeedValue(time.time())
+        self.CarStoreList.setSeedValue(datetime.datetime.now())
 
     '''
 
@@ -258,7 +270,7 @@ class Table():
             self.addBatchDialog.clear()
 
     '''
-
+    
         Function: handleStart
         Parameters: self
         Return Value: N/A
@@ -281,3 +293,9 @@ class Table():
     def fixHeaders(self):
         self.Widget.initHeaderHorizontal()
         self.Widget.initHeaderVertical()
+
+    def removeCar(self):
+        pass
+
+    def editCar(self):
+        pass

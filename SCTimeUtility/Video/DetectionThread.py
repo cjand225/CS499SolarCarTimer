@@ -65,7 +65,7 @@ class DetectThread(threading.Thread):
 
     '''
 
-        Function: resume
+        Function: start
         Parameters: self
         Return Value: N/A
         Purpose: Toggles boolean self.running to true to run thread

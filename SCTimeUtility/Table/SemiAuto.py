@@ -9,6 +9,8 @@ from PyQt5.QtWidgets import QWidget, QApplication, QStyle, QPushButton, QCheckBo
 from PyQt5.QtCore import Qt
 from PyQt5.uic import loadUi
 
+from collections import OrderedDict
+
 from SCTimeUtility.Table.ElidedLabel import ElidedLabel
 from SCTimeUtility.Log.Log import getLog
 
@@ -19,15 +21,18 @@ class SemiAuto(QWidget):
         super().__init__()
         self.UIPath = uiPath
 
-        self.labelColumn = 0
-        self.buttonColumn = 1
-        self.checkBoxColumn = 2
-        self.startStopButtonColumn = 3
-        self.predictColumn = 4
-
+        self.carStore = None
         self.carStoreRef = []
-        self.indexList, self.labelList, self.buttonList = [], [], []
-        self.startStopList, self.checkBoxList, self.predictList = [], [], []
+
+        # column postions of buttons in dict and on widget
+        self.carLabel = 0
+        self.RecordButton = 1
+        self.PredictLabel = 2
+        self.CheckBox = 3
+        self.StartButton = 4
+
+        # holds dicts related to each car
+        self.buttonDict = OrderedDict()
 
         # layout of semiAuto
         self.buttons = None
@@ -59,12 +64,12 @@ class SemiAuto(QWidget):
 
     def initButtonLayout(self):
         self.buttons.setAlignment(Qt.AlignTop)
-        self.buttons.setColumnMinimumWidth(self.labelColumn, 100)
-        self.buttons.setColumnMinimumWidth(self.checkBoxColumn, 100)
+        self.buttons.setColumnMinimumWidth(self.carLabel, 100)
+        self.buttons.setColumnMinimumWidth(self.PredictLabel, 100)
         self.buttons.setHorizontalSpacing(15)
-        self.buttons.setColumnStretch(self.labelColumn, 1)
-        self.buttons.setColumnStretch(self.buttonColumn, 1)
-        self.buttons.setColumnStretch(self.checkBoxColumn, 0)
+        self.buttons.setColumnStretch(self.carLabel, 1)
+        self.buttons.setColumnStretch(self.RecordButton, 1)
+        self.buttons.setColumnStretch(self.PredictLabel, 0)
 
     '''  
         Function: updateList
@@ -79,7 +84,7 @@ class SemiAuto(QWidget):
         self.createButtons()
         # self.createPredictionLabels()
         self.bindButtons()
-        self.bindCheckBoxes()
+        self.addButtons()
 
     '''  
         Function: createButtons
@@ -113,18 +118,8 @@ class SemiAuto(QWidget):
             # predictLabel.setStyleSheet("QLabel { color: blue; } ")
             predictLabel.setHidden(True)
 
-            self.indexList.append(labelIndex)
-            self.labelList.append(label)
-            self.buttonList.append(button)
-            self.startStopList.append(startStopButton)
-            self.checkBoxList.append(checkBox)
-            self.predictList.append(predictLabel)
+            self.buttonDict.update({labelIndex: [label, button, predictLabel, checkBox, startStopButton]})
 
-            self.buttons.addWidget(label, labelIndex, self.labelColumn)
-            self.buttons.addWidget(button, labelIndex, self.buttonColumn)
-            self.buttons.addWidget(startStopButton, labelIndex, self.startStopButtonColumn)
-            self.buttons.addWidget(checkBox, labelIndex, self.checkBoxColumn)
-            self.buttons.addWidget(predictLabel, labelIndex, self.predictColumn)
             labelIndex += 1
 
     '''  
@@ -137,13 +132,8 @@ class SemiAuto(QWidget):
 
     def clearLists(self):
         self.unBindButtons()
+        self.buttonDict.clear()
         self.clearLayout(self.buttons)
-
-        self.labelList.clear()
-        self.checkBoxList.clear()
-        self.buttonList.clear()
-        self.startStopList.clear()
-        self.predictList.clear()
 
     '''  
         Function: unBindButtons
@@ -153,14 +143,10 @@ class SemiAuto(QWidget):
     '''
 
     def unBindButtons(self):
-        for button in self.buttonList:
-            button.clicked.disconnect()
-
-        for checkBox in self.checkBoxList:
-            checkBox.toggled.disconnect()
-
-        for button in self.startStopList:
-            button.clicked.disconnect()
+        for buttonList in self.buttonDict:
+            self.buttonDict[buttonList][self.RecordButton].clicked.disconnect()
+            self.buttonDict[buttonList][self.StartButton].clicked.disconnect()
+            self.buttonDict[buttonList][self.CheckBox].toggled.disconnect()
 
     '''  
         Function: clearLayout
@@ -189,15 +175,18 @@ class SemiAuto(QWidget):
     '''
 
     def bindButtons(self):
-        if len(self.buttonList) == len(self.carStoreRef):
-            index = 0
-            for button in self.buttonList:
-                self.bindButtonRecord(index - 1, button)
-                index += 1
-            index = 0
-            for button in self.startStopList:
-                button.clicked.connect(lambda b: self.clickStartStop(index))
-                index += 1
+        for buttonList in self.buttonDict:
+            self.bindButtonRecord(buttonList, self.buttonDict[buttonList][self.RecordButton])
+            self.bindStartStop(buttonList, self.buttonDict[buttonList][self.StartButton])
+            self.bindCheckBox(buttonList, self.buttonDict[buttonList][self.CheckBox])
+
+    def addButtons(self):
+        for buttonList in self.buttonDict:
+            self.buttons.addWidget(self.buttonDict[buttonList][self.carLabel], buttonList, self.carLabel)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.RecordButton], buttonList, self.RecordButton)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.StartButton], buttonList, self.StartButton)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.PredictLabel], buttonList, self.PredictLabel)
+            self.buttons.addWidget(self.buttonDict[buttonList][self.CheckBox], buttonList, self.CheckBox)
 
     '''  
         Function: bindButtons
@@ -210,20 +199,6 @@ class SemiAuto(QWidget):
         button.clicked.connect(lambda b: self.clickRecord(index))
 
     '''  
-        Function: bindCheckBoxes
-        Parameters: self
-        Return Value: N/A
-        Purpose: Wrappter to Bind checkboxes to the corresponding index within the checkbox list.
-    '''
-
-    def bindCheckBoxes(self):
-        if len(self.checkBoxList) == len(self.carStoreRef):
-            index = 0
-            for checkBox in self.checkBoxList:
-                self.bindCheckBox(index, checkBox)
-                index += 1
-
-    '''  
         Function: bindCheckBox
         Parameters: self, index, checkBox
         Return Value: N/A
@@ -231,7 +206,14 @@ class SemiAuto(QWidget):
     '''
 
     def bindCheckBox(self, index, checkBox):
-        checkBox.toggled.connect(lambda b: self.handleCheck(index))
+        checkBox.toggled.connect(lambda b: self.handleCheck(self.carStoreRef[index].ID))
+
+    def bindStartStop(self, index, button):
+        button.clicked.connect(lambda b: self.toggleCar(self.carStoreRef[index].ID))
+
+    def bindRunning(self, index):
+        car = self.carStoreRef[index]
+        car.runningSignal.connect(lambda b: self.clickStartStop(self.carStoreRef[index].ID))
 
     '''  
         Function: handleCheck
@@ -240,12 +222,12 @@ class SemiAuto(QWidget):
         Purpose: function used to calculate prediction times if a given checkbox is clicked for a particular car.
     '''
 
-    def handleCheck(self, index):
-        if self.checkBoxList[index].isChecked():
-            self.predictList[index].setVisible(True)
+    def handleCheck(self, ID):
+        if self.buttonDict[ID][self.CheckBox].isChecked():
+            self.buttonDict[ID][self.PredictLabel].setVisiible(True)
             # put handle calculation function here
         else:
-            self.predictList[index].setHidden(True)
+            self.buttonDict[ID][self.PredictLabel].setHidden(True)
 
     '''  
         Function: clickRecord
@@ -254,11 +236,8 @@ class SemiAuto(QWidget):
         Purpose: Given the particular index, tells the CarStorage to add a laptime to that particular car index.
     '''
 
-    def clickRecord(self, index):
-        if index - 1 < 0:
-            self.carStoreRef[index].addLapTime()
-        else:
-            self.carStoreRef[index - 1].addLapTime()
+    def clickRecord(self, ID):
+        self.carStoreRef[ID].addLapTime()
 
     '''  
         Function: clickStartStop 
@@ -267,6 +246,27 @@ class SemiAuto(QWidget):
         Purpose: used for starting and stopping individual cars.
     '''
 
-    def clickStartStop(self, index):
-        self.startStopList[(index - 1)].setText("Stop")
-        # toggle start/stop of car here
+    def clickStartStop(self, ID):
+        if not self.carStoreRef[ID].isRunning():
+            self.buttonDict[ID][self.StartButton].setText("Start")
+        else:
+            self.buttonDict[ID][self.StartButton].setText("Stop")
+
+    '''  
+        Function: toggleCar
+        Parameters: self, index
+        Return Value: N/A
+        Purpose: used for starting and stopping individual cars.
+    '''
+
+    def toggleCar(self, ID):
+        if self.carStoreRef[ID].isRunning():
+            self.carStoreRef[ID].stop()
+            # Disabled Buttons for specific car
+            self.buttonDict[ID][self.RecordButton].setDisabled(True)
+            self.buttonDict[ID][self.CheckBox].setDisabled(True)
+        elif not self.carStoreRef[ID].isRunning():
+            self.carStoreRef[ID].start()
+            # Re-enable buttons for specific car
+            self.buttonDict[ID][self.RecordButton].setDisabled(False)
+            self.buttonDict[ID][self.CheckBox].setDisabled(False)

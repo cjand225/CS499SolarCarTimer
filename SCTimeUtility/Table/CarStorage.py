@@ -8,7 +8,7 @@
 
 """
 
-import copy
+import copy, datetime
 
 from PyQt5.QtCore import QObject, pyqtSignal
 
@@ -24,7 +24,7 @@ class CarStorage(QObject):
         super().__init__()
         self.logger = getLog()
         self.storageList = []
-        self.SeedValue = None
+        self.seedValue = None
         self.timeOffset = None
         self.enableOffset = False
 
@@ -38,23 +38,23 @@ class CarStorage(QObject):
     """
 
     def setSeedValue(self, seedTime):
-        if self.SeedValue is None and len(self.storageList) > 0:
-            self.SeedValue = seedTime
-            self.logger.info('[' + __name__ + ']' + 'Setting Seed Value for All Cars')
+        if not self.seedValue and len(self.storageList) > 0:
+            self.seedValue = seedTime
             self.setSeeds()
+            self.logger.info('[' + __name__ + ']' + 'Setting Seed Value for All Cars')
 
     """
           Function: setSeeds
           Parameters: self
           Return Value: N/A
-          Purpose: Function that sets the Seed Value of each car with the value of the "Global" SeedValue
+          Purpose: Function that sets the Seed Value of each car with the value of the "Global" seedValue
                    that is stored within Car Storage.
 
     """
 
     def setSeeds(self):
         for car in self.storageList:
-            car.setSeedValue(self.SeedValue)
+            car.setSeedValue(self.seedValue)
 
     """
           Function: setOffsetTime
@@ -93,8 +93,8 @@ class CarStorage(QObject):
     def createCar(self, carNum, teamName):
         # check valid carNumber and Valid Car Org
         newCar = Car(self.getLatestCarID(), str(teamName), carNum)
-        if self.SeedValue is not None:
-            newCar.setSeedValue(self.SeedValue)
+        if self.seedValue is not None:
+            newCar.setSeedValue(self.seedValue)
         self.storageList.append(newCar)
         self.dataModified.emit(newCar.ID, 0)
         newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
@@ -311,14 +311,61 @@ class CarStorage(QObject):
                 highest = newList[x].getLapCount()
         return highest
 
+    '''
+        Function: startCar
+        Parameters: self, index
+        Return Value: N/A
+        Purpose: Starts car given at index parameter, allowing for recording of time values.
+    
+    '''
+
     def startCar(self, index):
-        pass
+        if index in len(self.storageList):
+            # start
+            if self.storageList[index].hasSeed() and self.storageList[index].isRunning():
+                self.storageList[index].start()
+            # start
+            elif not self.storageList[index].hasSeed():
+                self.storageList[index].setSeedValue()
+
+    '''
+        Function: startCar
+        Parameters: self, index
+        Return Value: N/A
+        Purpose: Starts car given at index parameter, allowing for recording of time values.
+
+    '''
 
     def stopCar(self, index):
-        pass
+        if index in len(self.storageList):
+            if self.storageList[index].hasSeed() and self.storageList[index].isRunning():
+                self.storageList[index].stop()
 
-    def startAllCars(self):
-        pass
+    '''
+        Function: startCar
+        Parameters: self, index
+        Return Value: N/A
+        Purpose: Starts car given at index parameter, allowing for recording of time values.
 
-    def stopAllCars(self):
-        pass
+    '''
+
+    def startCars(self):
+        if isinstance(self.seedValue, datetime.datetime):
+            for car in self.storageList:
+                car.setSeedValue(self.seedValue)
+        elif not self.seedValue:
+            self.seedValue = datetime.datetime.now()
+            for car in self.storageList:
+                car.setSeedValue(self.seedValue)
+
+    '''
+        Function: stopCars
+        Parameters: self, index
+        Return Value: N/A
+        Purpose: Starts car given at index parameter, allowing for recording of time values.
+
+    '''
+
+    def stopCars(self):
+        for car in self.storageList:
+            car.stop()

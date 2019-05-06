@@ -5,11 +5,11 @@
 block_cipher = None
 
 import os
-resource_path = os.path.abspath(os.path.join(".", "SCTimeUtility", "Resources"))
+resource_path = os.path.abspath(os.path.join(".","..", "..", "SCTimeUtility", "Resources"))
 ui_path = os.path.abspath(os.path.join(resource_path, "UI", "*.*"))
 docs_path = os.path.abspath(os.path.join(resource_path, "Docs", "*.*"))
 icons_path = os.path.abspath(os.path.join(resource_path, "Icons", "*.*"))
-script_path = os.path.abspath(os.path.join(".", "SCTimeUtility", "__main__.py"))
+script_path = os.path.abspath(os.path.join(".","..", "..", "SCTimeUtility", "__main__.py"))
 project_path = os.path.abspath(os.path.join("."))
 dist_path = os.path.join(".",  "SCTimeUtility", "Resources")
 ui_dist_path = os.path.join(dist_path, "UI")
