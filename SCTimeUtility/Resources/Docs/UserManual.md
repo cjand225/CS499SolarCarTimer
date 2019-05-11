@@ -34,6 +34,10 @@ From this screen, existing data may be loaded from the **File** menu.
 
 Currently, the **Open**, **Save**, and **Save as** actions work correctly and can be used to save or load lap data files in a CSV format.
 
+
+
+
+
 ### Adding cars to the table
 
 Upon opening the application, it may become apparent that no cells in the Lap Table can be editted immediately. This is intentional; before any lap data can be entered, the cars to be tracked must first be added to the table.
@@ -48,7 +52,7 @@ Cars may also be added without the menu. Double clicking any cell in the leftmos
 
 ### Adding and editing lap data
 
-Two working methods are currently available for inputting lap data. Both methods should be usable simultaneously; the application is not limited to using one method at a time.
+Data can be input via two modes, Semi-Auto Widget or Manual Table Entry.
 
 #### Manual lap entry
 
