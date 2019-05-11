@@ -79,10 +79,12 @@ class TableWidget(QWidget):
             self.tableView.verticalHeader().sectionSize(headerIndex)
         self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+    #TODO
     def paintEvent(self, a0: QPaintEvent) -> None:
         self.lcdTime.display(time.strftime("%I" + ":" + "%M"))
         super().paintEvent(a0)
 
+    #TODO
     def resizeEvent(self, a0: QResizeEvent) -> None:
         self.initHeaderVertical()
         self.initHeaderHorizontal()

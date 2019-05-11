@@ -205,12 +205,15 @@ class SemiAuto(QWidget):
         Purpose: Binds a given checkbox to their corresponding index within checkbox list.
     '''
 
+    # TODO:
     def bindCheckBox(self, index, checkBox):
         checkBox.toggled.connect(lambda b: self.handleCheck(self.carStoreRef[index].ID))
 
+    # TODO:
     def bindStartStop(self, index, button):
         button.clicked.connect(lambda b: self.toggleCar(self.carStoreRef[index].ID))
 
+    # TODO
     def bindRunning(self, index):
         car = self.carStoreRef[index]
         car.runningSignal.connect(lambda b: self.clickStartStop(self.carStoreRef[index].ID))
