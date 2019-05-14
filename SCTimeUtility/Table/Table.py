@@ -294,8 +294,10 @@ class Table():
         self.Widget.initHeaderHorizontal()
         self.Widget.initHeaderVertical()
 
+    #TODO
     def removeCar(self):
         pass
 
+    #TODO
     def editCar(self):
         pass

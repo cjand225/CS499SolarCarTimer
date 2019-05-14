@@ -30,7 +30,6 @@ class Car(QObject):
             self.logger.error(err)
 
         self.seedValue = None
-        self.initialTime = None
         self.running = False
 
         self.lapCount = 0
@@ -376,33 +375,36 @@ class Car(QObject):
         else:
             return None
 
+    #TODO
     def hasSeed(self):
         if isinstance(self.seedValue, datetime.datetime):
             return True
         else:
             return False
-
+    #TODO
     def editTeamName(self, newName):
         if isinstance(newName, str):
             self.TeamName = newName
-
+    #TODO
     def editCarNumber(self, newNumber):
         if isinstance(newNumber, int):
             self.CarNum = newNumber
-
+    #TODO
     def stop(self):
         if self.running:
             self.running = False
             self.runningSignal.emit(self.ID, self.running)
-
+    #TODO
     def start(self):
+        # Initial State of Car before starting first time
         if not self.running and not self.seedValue:
             self.running = True
             self.setSeedValue(datetime.datetime.now())
             self.runningSignal.emit(self.ID, self.running)
+        # Pause State from Car, Resume, added a new seedValue
         elif not self.running and isinstance(self.seedValue, datetime.datetime):
             self.running = True
             self.runningSignal.emit(self.ID, self.running)
-
+    #TODO
     def isRunning(self):
         return self.running
