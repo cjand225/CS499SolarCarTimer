@@ -11,59 +11,20 @@ Each Mode is Performed by:
 
 Also comes with Graphing and LeaderBoard Modules used to track and analyze car data.
 
-## Requirements
-
-A virtual environment.
-
-As well as the following packages w/ their version numbers.
-
-    Packages:
-        -numpy >= 1.15.4
-        -matplotlib >= 2.2.3
-        -PyQt5 >= 5.6.0
-        -opencv-contrib-python >= 3.4.3
-        -pywin32 >= 1.0; platform_system == "Windows"
-
-## Development
-
-Refer to Admin Manual under Resources/Docs in package.
-
-## Installation
-
-### Pre-built Packages
+## Lastest Release
 
 Check here for pre-build releases:
 
 [Latest Release](https://github.com/cjand225/SCTimingUtility/releases/latest)
 
-### Building from Source
+## Resources
 
-To build the program package (depending on what platform you want):
+For more technical explanations and general resources, please refer to the following manuals:
 
-Python Wheel (Universal):
-    
-    python setup.py -bdist_wheel
-
-EXE (Windows):
-
-    python setup.py -bdist_wininst
-
-MSI (Windows):
-
-    python setup.py -bdist_msi
-
-RPM (Linux):
-
-    python setup.py -bdist_rpm
-    
-
-### Running Application
-After the package has been built and installed via pip, just run:
-
-    python -m SCTimeUtility
-    
+* [User Manual](SCTimeUtility/Resources/Docs/UserManual.md)
+* [Admin Manual](SCTimeUtility/Resources/Docs/AdminManual.md)
 	
-# Authors and license
+## Authors and license
 
 Licensed under GNU General Public License v3.0
 

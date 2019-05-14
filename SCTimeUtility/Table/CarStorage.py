@@ -80,7 +80,7 @@ class CarStorage(QObject):
         self.enableOffset = cond
 
     """
-          Function: createCars
+          Function: createCar
           Parameters: self, list
           Return Value: N/A
           Purpose: Goes through list parameter, checks if the first item is a digit. If so, it assumes

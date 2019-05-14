@@ -24,6 +24,17 @@ The program itself is build mostly from PyQt, Matplotlib, numpy, and Pandas.
 
 ### Package
 
+To run the Wheel package: 
+
+    Python -m SCTimeUtility
+    
+### Building
+
+    Python setup.py <TypeOfPackage>
+    
+* -sdist for source distribution
+* -bdist_wheel for wheel pip package
+
 ## Car Dynamics
 
 ### Add
@@ -31,7 +42,6 @@ The program itself is build mostly from PyQt, Matplotlib, numpy, and Pandas.
 Adding a car can be done by either double clicking the left most column on the table, or by using the add car button.
 
 Both will be displayed in the images below.
-
 
 
 ### Remove
