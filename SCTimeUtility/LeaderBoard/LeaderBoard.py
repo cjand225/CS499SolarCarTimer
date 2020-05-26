@@ -19,26 +19,26 @@ from SCTimeUtility.LeaderBoard.LeaderBoardModel import LeaderBoardModel
 from SCTimeUtility.LeaderBoard.LeaderBoardSortFilterProxyModel import LeaderBoardSortFilterProxyModel
 
 
-class LeaderBoard():
+class LeaderBoard:
 
     def __init__(self, cs=None):
         self.widget = None
-        self.dataStorage = None
-        self.horzHeader = ['Car Number', 'Team Name', 'Laps Completed', 'Fastest Lap']
-        self.sortableColumns = [2, 3]
-        self.newCarList = [[]]
+        self.data_storage = None
+        self.horizontal_header = ['Car Number', 'Team Name', 'Laps Completed', 'Fastest Lap']
+        self.sortable_columns = [2, 3]
+        self.car_list_copy = [[]]
 
-        self.initWidget()
+        self.init_widget()
         self.carStore = cs
-        self.boardModel = LeaderBoardSortFilterProxyModel(self.widget.tableView, self.sortableColumns)
-        self.boardModel.setSourceModel(LeaderBoardModel(self.widget.tableView, self.horzHeader, self.carStore))
+        self.boardModel = LeaderBoardSortFilterProxyModel(self.widget.table_view, self.sortable_columns)
+        self.boardModel.setSourceModel(LeaderBoardModel(self.widget.table_view, self.horizontal_header, self.carStore))
         self.boardModel.setSortRole(Qt.UserRole)
-        self.widget.tableView.setSortingEnabled(True)
+        self.widget.table_view.setSortingEnabled(True)
         self.boardModel.sourceModel().dataChanged.connect(self.sort)
-        self.widget.tableView.horizontalHeader().sortIndicatorChanged.connect(self.sortIndicatorChangedEvent)
-        self.widget.tableView.setModel(self.boardModel)
-        self.widget.adjustHeaders(True)
-        self.widget.tableView.sortByColumn(3, Qt.AscendingOrder)
+        self.widget.table_view.horizontalHeader().sortIndicatorChanged.connect(self.sort_indicator_changed_event)
+        self.widget.table_view.setModel(self.boardModel)
+        self.widget.resize_headers(True)
+        self.widget.table_view.sortByColumn(3, Qt.AscendingOrder)
 
     '''  
         Function: sort
@@ -48,9 +48,9 @@ class LeaderBoard():
     '''
 
     def sort(self):
-        oldSort = self.boardModel.sortColumn()
+        old_sort = self.boardModel.sortColumn()
         self.boardModel.invalidate()
-        self.widget.tableView.sortByColumn(oldSort, Qt.AscendingOrder)
+        self.widget.table_view.sortByColumn(old_sort, Qt.AscendingOrder)
 
     '''  
         Function: sortIndicatorChangedEvent
@@ -59,9 +59,9 @@ class LeaderBoard():
         Purpose: checks if index is within the alotted columns and then indicates that a sort event has happened.
     '''
 
-    def sortIndicatorChangedEvent(self, index, order):
-        if not index in self.sortableColumns:
-            self.widget.tableView.horizontalHeader().setSortIndicator(index, self.boardModel.sortOrder())
+    def sort_indicator_changed_event(self, index, order):
+        if not index in self.sortable_columns:
+            self.widget.table_view.horizontalHeader().setSortIndicator(index, self.boardModel.sortOrder())
 
     '''  
         Function: initWidget
@@ -70,17 +70,17 @@ class LeaderBoard():
         Purpose: Initializes the widget for the leader board module.
     '''
 
-    def initWidget(self):
+    def init_widget(self):
         self.widget = LeaderBoardWidget(LeaderBoardUIPath)
 
     '''  
-        Function: getWidget
+        Function: get_widget
         Parameters: self
         Return Value: self.widget
         Purpose: Returns a reference to the widget stored within the LeaderBoard Module.
     '''
 
-    def getWidget(self):
+    def get_widget(self):
         return self.widget
 
     '''  
@@ -90,10 +90,10 @@ class LeaderBoard():
         Purpose: Periodically called function used to update the data contained within leader board module.
     '''
 
-    def updateData(self, data):
-        self.dataStorage = data
-        self.updateBoard(data)
-        self.sortCarByFastestLap()
+    def update_data(self, data):
+        self.data_storage = data
+        self.update_board(data)
+        self.sort_by_fastest()
 
     '''  
         Function: testLap
@@ -102,8 +102,8 @@ class LeaderBoard():
         Purpose: test function used to check the sorting by fastest lap function.
     '''
 
-    def testLap(self):
-        self.sortCarByFastestLap()
+    def test_lap(self):
+        self.sort_by_fastest()
 
     '''  
         Function: sortCar
@@ -113,22 +113,22 @@ class LeaderBoard():
                  and updating the board based on that.
     '''
 
-    def sortCarByFastestLap(self):
-        self.newCarList = [[]]
-        self.carList = []
-        self.carList.clear()
-        self.newCarList.clear()
+    def sort_by_fastest(self):
+        self.car_list_copy = [[]]
+        self.car_list = []
+        self.car_list.clear()
+        self.car_list_copy.clear()
 
-        for car in self.dataStorage:
+        for car in self.data_storage:
             listCar = [car.getID(), car.getFastestLap()]
-            self.newCarList.append(listCar)
+            self.car_list_copy.append(listCar)
             if itemgetter(1) is not None:
-                self.newCarList = sorted(self.newCarList, key=itemgetter(1))
+                self.car_list_copy = sorted(self.car_list_copy, key=itemgetter(1))
 
-        for x in range(0, len(self.newCarList)):
-            self.carList.append(self.dataStorage[self.newCarList[x][0]])
+        for x in range(0, len(self.car_list_copy)):
+            self.car_list.append(self.data_storage[self.car_list_copy[x][0]])
 
-        self.updateBoard(self.carList)
+        self.update_board(self.car_list)
 
     '''  
         Function: updateBoard
@@ -137,9 +137,9 @@ class LeaderBoard():
         Purpose: Updates the view of the leader board module with the data supplied from the parameter.
     '''
 
-    def updateBoard(self, data):
+    def update_board(self, data):
         self.widget.resize(QSize(self.widget.width() + 1, self.widget.height()))
         self.boardModel.setModelData(data)
-        self.widget.initHeaderHorizontal()
-        self.widget.initHeaderVertical()
+        self.widget.init_horizontal_header()
+        self.widget.init_vertical_header()
         self.widget.resize(QSize(self.widget.width() - 1, self.widget.height()))

@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
      <item row="0" column="0">
-      <widget class="QTableView" name="tableView"/>
+      <widget class="QTableView" name="table_view"/>
      </item>
     </layout>
    </item>

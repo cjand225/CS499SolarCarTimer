@@ -17,7 +17,7 @@ from SCTimeUtility.Resources import logDir, logFilePath
 '''
 
 
-def checkDirs():
+def check_directory():
     if not os.path.exists(logDir):
         os.makedirs(logDir)
 
@@ -30,7 +30,7 @@ def checkDirs():
 '''
 
 
-def getLog():
+def get_log():
     return logging.getLogger("SCT")
 
 
@@ -42,9 +42,9 @@ def getLog():
 '''
 
 
-def initLogs():
-    checkDirs()
-    initLog()
+def init_logs():
+    check_directory()
+    init_log()
 
 
 '''  
@@ -55,13 +55,13 @@ def initLogs():
 '''
 
 
-def initLog():
-    infoLog = logging.getLogger("SCT")
-    infoLog.setLevel(logging.DEBUG)
+def init_log():
+    info_log = logging.getLogger("SCT")
+    info_log.setLevel(logging.DEBUG)
 
     # create formatter and add it to the handlers
     formatter = logging.Formatter('[%(asctime)s] - [%(levelname)s] - %(message)s')
     fh = logging.FileHandler(logFilePath)
     fh.setLevel(logging.DEBUG)
     fh.setFormatter(formatter)
-    infoLog.addHandler(fh)
+    info_log.addHandler(fh)

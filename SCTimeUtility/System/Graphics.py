@@ -20,7 +20,7 @@ from PyQt5.QtGui import QImage
 """
 
 
-class filterType(Enum):
+class FilterType(Enum):
     NORMAL = 0
     BLUR = 1
     EDGE = 2
@@ -37,15 +37,15 @@ class filterType(Enum):
 """
 
 
-def applyEdgeFilter(imgData):
-    v = np.median(imgData)
+def apply_edge_filtering(frame_data):
+    v = np.median(frame_data)
     sigma = 0.33
     lower = int(max(0, (1.0 - sigma) * v))
     upper = int(min(255, (1.0 + sigma) * v))
-    kernalSize = 1
+    kernal_size = 1
 
-    bilateralImage = cv2.bilateralFilter(imgData, kernalSize, 225, 225)
-    hsv = cv2.cvtColor(bilateralImage, cv2.COLOR_BGR2GRAY)
+    bilateral_image = cv2.bilateralFilter(frame_data, kernal_size, 225, 225)
+    hsv = cv2.cvtColor(bilateral_image, cv2.COLOR_BGR2GRAY)
     edges = cv2.Canny(hsv, lower, upper)
 
     return edges
@@ -61,9 +61,9 @@ def applyEdgeFilter(imgData):
 """
 
 
-def applyBlurFilter(imgData):
-    blurImg = cv2.bilateralFilter(imgData, 3, 225, 225)
-    blur = cv2.cvtColor(blurImg, cv2.COLOR_BGR2RGB)
+def apply_blur_filtering(imgData):
+    blur_img = cv2.bilateralFilter(imgData, 3, 225, 225)
+    blur = cv2.cvtColor(blur_img, cv2.COLOR_BGR2RGB)
     return blur
 
 
@@ -77,13 +77,13 @@ def applyBlurFilter(imgData):
 """
 
 
-def ApplyFilter(imgData, filter):
-    if filter == filterType.EDGE:
-        edges = applyEdgeFilter(imgData)
+def apply_filtering(frame_data, filter_choice):
+    if filter_choice == filter_choice.EDGE:
+        edges = apply_edge_filtering(frame_data)
         return edges, QImage(edges, edges.shape[1], edges.shape[0], edges.strides[0], QImage.Format_Grayscale8)
-    elif filter == filterType.BLUR:
-        blur = applyBlurFilter(imgData)
+    elif filter_choice == filter_choice.BLUR:
+        blur = apply_blur_filtering(frame_data)
         return blur, QImage(blur, blur.shape[1], blur.shape[0], blur.strides[0], QImage.Format_RGB888)
-    elif filter == filterType.NORMAL:
-        Norm = cv2.cvtColor(imgData, cv2.COLOR_BGR2RGB)
+    elif filter_choice == filter_choice.NORMAL:
+        Norm = cv2.cvtColor(frame_data, cv2.COLOR_BGR2RGB)
         return Norm, QImage(Norm, Norm.shape[1], Norm.shape[0], Norm.strides[0], QImage.Format_RGB888)

@@ -11,7 +11,7 @@ from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator
 from PyQt5.uic import loadUi
 
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class AddCarDialog(QDialog):

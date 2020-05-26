@@ -14,7 +14,7 @@ from PyQt5.QtCore import QObject, pyqtSignal
 
 from SCTimeUtility.Table.Car import Car
 from SCTimeUtility.Table.LapTime import LapTime
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class CarStorage(QObject):
@@ -22,11 +22,11 @@ class CarStorage(QObject):
 
     def __init__(self):
         super().__init__()
-        self.logger = getLog()
-        self.storageList = []
-        self.seedValue = None
-        self.timeOffset = None
-        self.enableOffset = False
+        self.logger = get_log()
+        self.storage_list = []
+        self.seed_value = None
+        self.offset_time = None
+        self.enable_offset = False
 
     """
           Function: setSeedValue
@@ -37,10 +37,10 @@ class CarStorage(QObject):
 
     """
 
-    def setSeedValue(self, seedTime):
-        if not self.seedValue and len(self.storageList) > 0:
-            self.seedValue = seedTime
-            self.setSeeds()
+    def set_seed_value(self, seed_time):
+        if not self.seed_value and len(self.storage_list) > 0:
+            self.seed_value = seed_time
+            self.set_individual_seeds()
             self.logger.info('[' + __name__ + ']' + 'Setting Seed Value for All Cars')
 
     """
@@ -52,9 +52,9 @@ class CarStorage(QObject):
 
     """
 
-    def setSeeds(self):
-        for car in self.storageList:
-            car.setSeedValue(self.seedValue)
+    def set_individual_seeds(self):
+        for car in self.storage_list:
+            car.set_seed_value(self.seed_value)
 
     """
           Function: setOffsetTime
@@ -64,8 +64,8 @@ class CarStorage(QObject):
 
     """
 
-    def setTimeOffset(self, offset):
-        self.timeOffset = offset
+    def set_offset_time(self, offset):
+        self.offset_time = offset
 
     """
           Function: enableOffsetTime
@@ -76,8 +76,8 @@ class CarStorage(QObject):
 
     """
 
-    def enableOffsetTime(self, cond):
-        self.enableOffset = cond
+    def enable_offset_time(self, enabled):
+        self.enable_offset = enabled
 
     """
           Function: createCar
@@ -90,15 +90,14 @@ class CarStorage(QObject):
 
     """
 
-    def createCar(self, carNum, teamName):
-        # check valid carNumber and Valid Car Org
-        newCar = Car(self.getLatestCarID(), str(teamName), carNum)
-        if self.seedValue is not None:
-            newCar.setSeedValue(self.seedValue)
-        self.storageList.append(newCar)
-        self.dataModified.emit(newCar.ID, 0)
-        newCar.lapChanged.connect(lambda l: self.dataModified.emit(newCar.ID, l))
-        self.logger.info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(teamName, carNum))
+    def create_car(self, car_number, team_name):
+        new_car = Car(self.get_latest_car_id(), str(team_name), car_number)
+        if self.seed_value is not None:
+            new_car.setSeedValue(self.seed_value)
+        self.storage_list.append(new_car)
+        self.dataModified.emit(new_car.ID, 0)
+        new_car.lapChanged.connect(lambda l: self.dataModified.emit(new_car.ID, l))
+        self.logger.info('[' + __name__ + ']' + 'Adding Car: {} , {}'.format(team_name, car_number))
 
     """
           Function: createCars
@@ -111,14 +110,11 @@ class CarStorage(QObject):
 
     """
 
-    def createCars(self, list):
+    def create_cars(self, car_list):
         index = 0
-        for item in list:
-            # print(len(list))
+        for item in car_list:
             if len(item) == 2:
-                self.createCar(item[1], item[0])
-            else:
-                continue
+                self.create_car(item[1], item[0])
             index += 1
 
     """
@@ -132,9 +128,9 @@ class CarStorage(QObject):
 
     """
 
-    def removeCar(self, ID):
-        self.storageList.remove(self.getCarByID(ID))
-        self.reindexStorage(ID)
+    def remove_car(self, ID):
+        self.storage_list.remove(self.get_car_by_id(ID))
+        self.sort_storage(ID)
 
     """
          Function: reindexStorage
@@ -146,9 +142,9 @@ class CarStorage(QObject):
 
     """
 
-    def reindexStorage(self, ID):
-        for x in range(ID, len(self.storageList) - 1):
-            self.storageList[x].setID(x - 1)
+    def sort_storage(self, ID):
+        for x in range(ID, len(self.storage_list) - 1):
+            self.storage_list[x].setID(x - 1)
 
     """
          Function: getCarByID
@@ -161,9 +157,9 @@ class CarStorage(QObject):
 
     """
 
-    def getCarByID(self, ID):
-        if ID in range(0, len(self.storageList) - 1):
-            return self.storageList[ID]
+    def get_car_by_id(self, ID):
+        if ID in range(0, len(self.storage_list) - 1):
+            return self.storage_list[ID]
         else:
             return False
 
@@ -178,9 +174,9 @@ class CarStorage(QObject):
 
     """
 
-    def getCarByNum(self, carNum):
-        for item in self.storageList:
-            if item.getCarNum() == carNum:
+    def get_car_by_car_number(self, car_number):
+        for item in self.storage_list:
+            if item.getCarNum() == car_number:
                 return item
 
     """
@@ -194,9 +190,9 @@ class CarStorage(QObject):
 
     """
 
-    def getCarByTeamName(self, teamName):
-        itemList = [item for item in self.storageList if item.getTeam() == teamName]
-        item = itemList[0]
+    def get_car_by_team_name(self, team_name):
+        item_list = [item for item in self.storage_list if item.getTeam() == team_name]
+        item = item_list[0]
         return item
 
     """
@@ -209,9 +205,8 @@ class CarStorage(QObject):
 
     """
 
-    def appendLapTime(self, carID, time):
-        self.storageList[carID].addLapTime(time)
-        # self.dataChanged.emit(carId,len
+    def append_lap_time(self, car_index, time):
+        self.storage_list[car_index].addLapTime(time)
 
     """
          Function: editLapTime
@@ -223,8 +218,8 @@ class CarStorage(QObject):
 
     """
 
-    def editLapTime(self, carID, LapID, hours, minutes, seconds, milliseconds):
-        self.storageList[carID].editLapTime(LapID, hours, minutes, seconds, milliseconds)
+    def edit_lap_time(self, car_index, lap_index, hours, minutes, seconds, milliseconds):
+        self.storage_list[car_index].edit_lap_time(lap_index, hours, minutes, seconds, milliseconds)
 
     """
          Function: removeLapTime
@@ -236,8 +231,8 @@ class CarStorage(QObject):
 
     """
 
-    def removeLapTime(self, carID, LapID):
-        self.getCarByID(carID).removeLapTime(LapID)
+    def remove_lap_time(self, car_index, lap_index):
+        self.get_car_by_id(car_index).removeLapTime(lap_index)
 
     """
          Function: getCarListCopy
@@ -248,12 +243,12 @@ class CarStorage(QObject):
 
     """
 
-    def getCarListCopy(self):
-        storageCopy = []
-        storageCopy.clear()
-        for car in range(0, len(storageCopy) - 1):
-            storageCopy.append(copy.deepcopy(self.storageList[car]))
-        return storageCopy  # .copy()
+    def car_list_copy(self):
+        storage_copy = []
+        storage_copy.clear()
+        for car in range(0, len(storage_copy) - 1):
+            storage_copy.append(copy.deepcopy(self.storage_list[car]))
+        return storage_copy
 
     """
          Function: getCarNames
@@ -263,11 +258,11 @@ class CarStorage(QObject):
 
     """
 
-    def getCarNames(self):
-        newList = self.storageList.copy()
+    def car_names_copy(self):
+        new_list = self.storage_list.copy()
         names = []
-        for x in range(0, len(newList)):
-            names.append(newList[x].getTeam())
+        for x in range(0, len(new_list)):
+            names.append(new_list[x].getTeam())
         return names
 
     """
@@ -278,8 +273,8 @@ class CarStorage(QObject):
 
     """
 
-    def getLatestCarID(self):
-        return len(self.storageList)
+    def get_latest_car_id(self):
+        return len(self.storage_list)
 
     """
         
@@ -290,8 +285,8 @@ class CarStorage(QObject):
     
     """
 
-    def getCarCount(self):
-        return len(self.storageList)
+    def get_car_count(self):
+        return len(self.storage_list)
 
     """
 
@@ -302,13 +297,12 @@ class CarStorage(QObject):
 
     """
 
-    def getHighestLapCount(self):
-        newList = self.storageList.copy()
+    def get_highest_lap_count(self):
+        new_list = self.storage_list.copy()
         highest = 0
-        names = []
-        for x in range(0, len(newList)):
-            if newList[x].getLapCount() > highest:
-                highest = newList[x].getLapCount()
+        for x in range(0, len(new_list)):
+            if new_list[x].getLapCount() > highest:
+                highest = new_list[x].getLapCount()
         return highest
 
     '''
@@ -319,14 +313,14 @@ class CarStorage(QObject):
     
     '''
 
-    def startCar(self, index):
-        if index in len(self.storageList):
+    def start_car_by_index(self, index):
+        if index in len(self.storage_list):
             # start
-            if self.storageList[index].hasSeed() and self.storageList[index].isRunning():
-                self.storageList[index].start()
+            if self.storage_list[index].hasSeed() and self.storage_list[index].is_running():
+                self.storage_list[index].start()
             # start
-            elif not self.storageList[index].hasSeed():
-                self.storageList[index].setSeedValue()
+            elif not self.storage_list[index].hasSeed():
+                self.storage_list[index].set_seed_value()
 
     '''
         Function: startCar
@@ -336,10 +330,10 @@ class CarStorage(QObject):
 
     '''
 
-    def stopCar(self, index):
-        if index in len(self.storageList):
-            if self.storageList[index].hasSeed() and self.storageList[index].isRunning():
-                self.storageList[index].stop()
+    def stop_car_by_index(self, index):
+        if index in len(self.storage_list):
+            if self.storage_list[index].hasSeed() and self.storage_list[index].is_running():
+                self.storage_list[index].stop()
 
     '''
         Function: startCar
@@ -349,14 +343,14 @@ class CarStorage(QObject):
 
     '''
 
-    def startCars(self):
-        if isinstance(self.seedValue, datetime.datetime):
-            for car in self.storageList:
-                car.setSeedValue(self.seedValue)
-        elif not self.seedValue:
-            self.seedValue = datetime.datetime.now()
-            for car in self.storageList:
-                car.setSeedValue(self.seedValue)
+    def start_all_cars(self):
+        if isinstance(self.seed_value, datetime.datetime):
+            for car in self.storage_list:
+                car.set_seed_value(self.seed_value)
+        elif not self.seed_value:
+            self.seed_value = datetime.datetime.now()
+            for car in self.storage_list:
+                car.set_seed_value(self.seed_value)
 
     '''
         Function: stopCars
@@ -366,6 +360,6 @@ class CarStorage(QObject):
 
     '''
 
-    def stopCars(self):
-        for car in self.storageList:
+    def stop_all_cars(self):
+        for car in self.storage_list:
             car.stop()

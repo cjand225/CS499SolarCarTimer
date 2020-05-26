@@ -54,8 +54,8 @@ class testCar(unittest.TestCase):
         testTime = time.time()
         myCar.setSeedValue(seedTime)
         myCar.addLapTime(testTime)
-        firstLap = LapTime(testTime).getElapsed()
-        self.assertEqual(firstLap, myCar.getLap(1).getElapsed())
+        firstLap = LapTime(testTime).get_elapsed()
+        self.assertEqual(firstLap, myCar.getLap(1).get_elapsed_time())
 
     def testAddMultipleLaps(self):
         myCar = Car(1, self.validTestString, self.validCarNumber)
@@ -69,7 +69,7 @@ class testCar(unittest.TestCase):
         self.assertEqual(self.numOfLaps, myCar.getLapCount() - 1)
         # check for accuracy of each lap - account for seed value
         for x in range(0, self.numOfLaps - 1):
-            self.assertEqual(lapList[x].getElapsed(), myCar.getLap(x + 1).getElapsed())
+            self.assertEqual(lapList[x].get_elapsed(), myCar.getLap(x + 1).get_elapsed_time())
 
     def testGetLap(self):
         myCar = Car(1, self.validTestString, self.validCarNumber)
@@ -151,7 +151,7 @@ class testCar(unittest.TestCase):
         lapData = generateLapData(self.numOfLaps)
         for lap in lapData:
             myCar.addLapTime(lap)
-        fastest = min([LapTime(lap).getElapsed() for lap in lapData])
+        fastest = min([LapTime(lap).get_elapsed() for lap in lapData])
         self.assertEqual(fastest, myCar.getFastestLap())
 
     def testEditLap(self):

@@ -19,32 +19,32 @@ from SCTimeUtility.Table.Table import Table
 from SCTimeUtility.Video.Video import Video
 from SCTimeUtility.Graph.Graph import Graph
 from SCTimeUtility.LeaderBoard.LeaderBoard import LeaderBoard
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 from SCTimeUtility.Log.LogWidget import LogWidget
-from SCTimeUtility.System.FileSystem import exportCSV, importCSV
+from SCTimeUtility.System.FileSystem import export_csv, import_csv
 
 
 class App(QApplication):
 
     def __init__(self):
         super(App, self).__init__(sys.argv)
-        self.mainWindow = None
+        self.application_window = None
         self.running = False
 
         # Forward Module Declaration
-        self.logger = getLog()
+        self.logger = get_log()
 
-        self.ModuleList = []
+        self.module_list = []
 
-        self.table = None
-        self.semiAuto = None
-        self.vision = None
-        self.graph = None
-        self.logWidget = None
-        self.leaderBoard = None
+        self.table_module = None
+        self.semi_auto_module = None
+        self.vision_module = None
+        self.graph_module = None
+        self.log_module = None
+        self.leaderboard_module = None
 
         # Initializing everything
-        self.initApplication()
+        self.init_application()
 
     ''' 
 
@@ -55,17 +55,17 @@ class App(QApplication):
 
     '''
 
-    def initApplication(self):
-        self.initMainWindow()
-        self.initLog()
-        self.initTable()
-        self.initVision()
-        self.initGraph()
-        self.initLeaderBoard()
+    def init_application(self):
+        self.init_application_window()
+        self.init_log_module()
+        self.init_table_module()
+        self.init_vision_module()
+        self.init_graph_module()
+        self.init_leaderboard_module()
 
         # adding and connecting essential components to user interface
-        self.addComponents()
-        self.connectActionsMainWindow()
+        self.bind_components()
+        self.bind_actions_application_window()
 
     ''' 
 
@@ -77,16 +77,16 @@ class App(QApplication):
 
     '''
 
-    def initMainWindow(self):
-        self.mainWindow = AppWindow(mainUIPath)
-        self.mainWindow.initCloseDialog(quitDialogUIPath)
+    def init_application_window(self):
+        self.application_window = AppWindow(mainUIPath)
+        self.application_window.init_close_dialog(quitDialogUIPath)
 
-        self.mainWindow.actionAdminMan.triggered.connect(
-            lambda l: self.mainWindow.createBrowserDialog(helpDialogUIPath, adminManPath))
-        self.mainWindow.actionAbout.triggered.connect(
-            lambda l: self.mainWindow.createBrowserDialog(aboutDialogUIPath, aboutManPath))
-        self.mainWindow.actionUserMan.triggered.connect(
-            lambda l: self.mainWindow.createBrowserDialog(helpDialogUIPath, userManPath))
+        self.application_window.action_admin_manual.triggered.connect(
+            lambda l: self.application_window.create_browser_dialog(helpDialogUIPath, adminManPath))
+        self.application_window.action_about.triggered.connect(
+            lambda l: self.application_window.create_browser_dialog(aboutDialogUIPath, aboutManPath))
+        self.application_window.action_user_manual.triggered.connect(
+            lambda l: self.application_window.create_browser_dialog(helpDialogUIPath, userManPath))
 
     ''' 
 
@@ -98,9 +98,9 @@ class App(QApplication):
 
     '''
 
-    def initTable(self):
-        self.table = Table()
-        if self.table is not None:
+    def init_table_module(self):
+        self.table_module = Table()
+        if self.table_module is not None:
             self.logger.debug('[' + __name__ + ']' + ' Table Initialized')
         else:
             self.logger.debug('[' + __name__ + ']' + ' Table failed to initialize')
@@ -116,12 +116,12 @@ class App(QApplication):
 
     '''
 
-    def initVision(self):
-        self.vision = Video()
-        if self.vision is not None:
-            getLog().debug('[' + __name__ + '] ' + 'Video module Initialized')
+    def init_vision_module(self):
+        self.vision_module = Video()
+        if self.vision_module is not None:
+            get_log().debug('[' + __name__ + '] ' + 'Video module Initialized')
         else:
-            getLog().debug('[' + __name__ + '] ' + 'Video module failed to initialize')
+            get_log().debug('[' + __name__ + '] ' + 'Video module failed to initialize')
 
     ''' 
 
@@ -133,12 +133,12 @@ class App(QApplication):
 
     '''
 
-    def initLog(self):
-        self.logWidget = LogWidget()
-        if self.logWidget is not None:
-            getLog().debug('[' + __name__ + '] ' + 'Log module initialized')
+    def init_log_module(self):
+        self.log_module = LogWidget()
+        if self.log_module is not None:
+            get_log().debug('[' + __name__ + '] ' + 'Log module initialized')
         else:
-            getLog().debug('[' + __name__ + '] ' + 'Log module failed to initialize')
+            get_log().debug('[' + __name__ + '] ' + 'Log module failed to initialize')
 
     ''' 
 
@@ -150,12 +150,12 @@ class App(QApplication):
 
     '''
 
-    def initGraph(self):
-        self.graph = Graph()
-        if self.graph is not None:
-            getLog().debug('[' + __name__ + '] ' + 'Graph module initialized')
+    def init_graph_module(self):
+        self.graph_module = Graph()
+        if self.graph_module is not None:
+            get_log().debug('[' + __name__ + '] ' + 'Graph module initialized')
         else:
-            getLog().debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
+            get_log().debug('[' + __name__ + '] ' + 'Graph module failed to initialize')
 
     ''' 
 
@@ -167,12 +167,12 @@ class App(QApplication):
 
     '''
 
-    def initLeaderBoard(self):
-        self.leaderBoard = LeaderBoard(self.table.CarStoreList)
-        if self.leaderBoard is not None:
-            getLog().debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
+    def init_leaderboard_module(self):
+        self.leaderboard_module = LeaderBoard(self.table_module.car_storage_list)
+        if self.leaderboard_module is not None:
+            get_log().debug('[' + __name__ + '] ' + 'LeaderBoard module initialized')
         else:
-            getLog().debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
+            get_log().debug('[' + __name__ + '] ' + 'LeaderBoard module failed to initialize')
 
     ''' 
 
@@ -184,23 +184,23 @@ class App(QApplication):
 
     '''
 
-    def addComponents(self):
-        getLog().debug('[' + __name__ + '] ' + 'Adding components to Main Window')
+    def bind_components(self):
+        get_log().debug('[' + __name__ + '] ' + 'Adding components to Main Window')
 
-        if self.logWidget is not None:
-            self.mainWindow.addLog(self.logWidget)
-        if self.table is not None:
-            self.mainWindow.addTable(self.table.getTableWidget())
-        if self.table.getSemiAuto() is not None:
-            self.mainWindow.addSemiAuto(self.table.getSemiAuto())
-        if self.vision is not None:
-            self.mainWindow.addVision(self.vision.getWidget())
-        if self.graph is not None:
-            self.mainWindow.addGraph(self.graph)
-        if self.leaderBoard is not None:
-            self.mainWindow.addLeaderBoard(self.leaderBoard.getWidget())
+        if self.log_module is not None:
+            self.application_window.add_log(self.log_module)
+        if self.table_module is not None:
+            self.application_window.add_table(self.table_module.get_table_widget())
+        if self.table_module.get_semi_auto_module() is not None:
+            self.application_window.add_semi_auto(self.table_module.get_semi_auto_module())
+        if self.vision_module is not None:
+            self.application_window.add_vision(self.vision_module.get_widget())
+        if self.graph_module is not None:
+            self.application_window.add_graph(self.graph_module)
+        if self.leaderboard_module is not None:
+            self.application_window.add_leaderboard(self.leaderboard_module.get_widget())
 
-        self.mainWindow.connectComponents()
+        self.application_window.bind_components()
 
     ''' 
 
@@ -212,13 +212,13 @@ class App(QApplication):
 
     '''
 
-    def connectActionsMainWindow(self):
-        getLog().debug('[' + __name__ + '] ' + 'Binding listeners to Main Window')
-        self.mainWindow.actionNewSess.triggered.connect(self.newSession)
-        self.mainWindow.actionOpenDir.triggered.connect(self.importDataFromFile)
-        self.mainWindow.actionExportData.triggered.connect(self.exportDataToFile)
-        self.table.Widget.saveShortcut.activated.connect(self.exportDataToFile)
-        self.table.CarStoreList.dataModified.connect(self.graphUpdate)
+    def bind_actions_application_window(self):
+        get_log().debug('[' + __name__ + '] ' + 'Binding listeners to Main Window')
+        self.application_window.action_new.triggered.connect(self.new_session)
+        self.application_window.action_open.triggered.connect(self.import_data)
+        self.application_window.action_export.triggered.connect(self.export_data)
+        #self.table.widget.save_shortcut_binding.activated.connect(self.exportDataToFile)
+        self.table_module.car_storage_list.dataModified.connect(self.update_graph)
 
     ''' 
     
@@ -245,13 +245,13 @@ class App(QApplication):
 
     '''
 
-    def exportDataToFile(self):
-        writePath = os.path.join(self.mainWindow.openDirDialog())
-        if os.path.exists(writePath):
-            exportCSV(self.table.CarStoreList, writePath)
-            self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + writePath)
+    def export_data(self):
+        write_path = os.path.join(self.application_window.open_directory_dialog())
+        if os.path.exists(write_path):
+            export_csv(self.table_module.car_storage_list, write_path)
+            self.logger.debug('[' + __name__ + '] ' + 'Data saved to: ' + write_path)
         else:
-            self.logger.debug('[' + __name__ + '] ' + 'Could not save data to: ' + str(writePath))
+            self.logger.debug('[' + __name__ + '] ' + 'Could not save data to: ' + str(write_path))
 
     ''' 
 
@@ -263,11 +263,11 @@ class App(QApplication):
 
     '''
 
-    # TODO: Rework so that addcar passes in Table module data
-    def importDataFromFile(self):
-        readDir = os.path.join(self.mainWindow.openDirDialog())
-        if os.path.exists(readDir):
-            importCSV(readDir)
+    # TODO: Rework so that add_car passes in Table module data
+    def import_data(self):
+        read_directory = os.path.join(self.application_window.open_directory_dialog())
+        if os.path.exists(read_directory):
+            import_csv(read_directory)
         else:
             pass
 
@@ -280,8 +280,8 @@ class App(QApplication):
 
     '''
 
-    def newSession(self):
-        if not self.table.CarStoreList:
+    def new_session(self):
+        if not self.table_module.car_storage_list:
             self.logger.debug('[' + __name__ + '] ' + 'Started new session requested by user: ')
         else:
             self.logger.debug('[' + __name__ + '] ' + 'Failed to create new session.')
@@ -295,8 +295,8 @@ class App(QApplication):
     
     '''
 
-    def graphUpdate(self):
-        self.graph.handleUpdate(self.table.getCarStorage())
+    def update_graph(self):
+        self.graph_module.handle_update(self.table_module.get_car_storage())
 
     '''
         Function: graphUpdate
@@ -307,5 +307,5 @@ class App(QApplication):
 
     '''
 
-    def leaderBoardUpdate(self):
-        self.leaderBoard.updateData(self.table.getCarStorage())
+    def update_leaderboard(self):
+        self.leaderboard_module.update_data(self.table_module.get_car_storage())

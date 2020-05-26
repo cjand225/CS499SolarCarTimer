@@ -22,14 +22,14 @@ class VideoWidget(QWidget):
 
     '''
 
-    def __init__(self, uipath):
+    def __init__(self, resource_path):
         super().__init__()
-        self.UIPath = uipath
-        self.imgCanvas = None
-        self.ImgCanvasWidth = None
-        self.ImgCanvasHeight = None
+        self.resource_path = resource_path
+        self.img_canvas = None
+        self.canvas_width = None
+        self.canvas_height = None
 
-        self.initUI()
+        self.init_widget()
 
     '''
 
@@ -40,12 +40,12 @@ class VideoWidget(QWidget):
 
     '''
 
-    def initUI(self):
-        self.ui = loadUi(self.UIPath, self)
+    def init_widget(self):
+        self.widget = loadUi(self.resource_path, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignVCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        self.ImgCanvasWidth = self.imgCanvas.frameSize().width()
-        self.ImgCanvasHeight = self.imgCanvas.frameSize().height()
+        self.canvas_width = self.img_canvas.frameSize().width()
+        self.canvas_height = self.img_canvas.frameSize().height()
 
     '''
 
@@ -56,8 +56,8 @@ class VideoWidget(QWidget):
 
     '''
 
-    def getHeight(self):
-        return self.ImgCanvasHeight
+    def get_height(self):
+        return self.canvas_height
 
     '''
 
@@ -68,8 +68,8 @@ class VideoWidget(QWidget):
 
     '''
 
-    def getWidth(self):
-        return self.ImgCanvasWidth
+    def get_width(self):
+        return self.canvas_width
 
     '''
 
@@ -80,8 +80,8 @@ class VideoWidget(QWidget):
 
     '''
 
-    def getCanvas(self):
-        return self.imgCanvas
+    def get_canvas(self):
+        return self.img_canvas
 
     '''
 
@@ -92,7 +92,7 @@ class VideoWidget(QWidget):
 
     '''
 
-    def getStartButton(self):
+    def get_start_button(self):
         return self.startButton
 
     '''
@@ -104,7 +104,7 @@ class VideoWidget(QWidget):
 
     '''
 
-    def getStopButton(self):
+    def get_stop_button(self):
         return self.stopButton
 
     '''
@@ -116,5 +116,5 @@ class VideoWidget(QWidget):
 
     '''
 
-    def clearCanvas(self):
-        self.imgCanvas.clear()
+    def clear_canvas(self):
+        self.img_canvas.clear()

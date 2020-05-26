@@ -10,7 +10,7 @@ from SCTimeUtility.System.FileSystem import *
 storage = CarStorage()
 populateStorage(200, storage)
 
-for car in storage.storageList:
+for car in storage.storage_list:
     list = generateLapData(200)
     for lap in list:
         car.addLapTime(lap)

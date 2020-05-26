@@ -17,14 +17,14 @@ class GraphWidget(QWidget):
         super(GraphWidget, self).__init__()
         self.GraphTabs = QTabWidget()
 
-    def initUI(self):
+    def init_widget(self):
         pass
 
-    def addPlot(self, plot):
+    def add_plot(self, index):
         pass
 
-    def removePlot(self, plotIndex):
+    def remove_plot(self, index):
         pass
 
-    def editPlot(self, plotIndex):
+    def edit_plot(self, index):
         pass

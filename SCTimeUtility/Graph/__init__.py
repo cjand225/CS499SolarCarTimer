@@ -8,4 +8,4 @@
 
 from SCTimeUtility.Resources.UI import graphWidPath
 
-graphUIPath = graphWidPath
+graph_resource_path = graphWidPath

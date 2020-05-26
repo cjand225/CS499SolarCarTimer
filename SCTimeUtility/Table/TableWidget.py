@@ -13,18 +13,17 @@ from PyQt5.QtGui import QKeySequence, QResizeEvent, QPaintEvent, QColor
 from PyQt5.QtCore import Qt, QTime
 from PyQt5.uic import loadUi
 
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class TableWidget(QWidget):
 
-    def __init__(self, uipath):
+    def __init__(self, resource_path):
         super().__init__()
-        self.uiPath = uipath
-        self.tableView = None
-
-        self.initUI()
-        self.saveShortcut = QShortcut(QKeySequence("Ctrl+S"), self)
+        self.resource_path = resource_path
+        self.table_view = None
+        self.init_widget()
+        self.save_shortcut = QShortcut(QKeySequence("Ctrl+S"), self)
 
     '''
         Function: initUI
@@ -35,12 +34,12 @@ class TableWidget(QWidget):
                  
     '''
 
-    def initUI(self):
-        self.ui = loadUi(self.uiPath, self)
+    def init_widget(self):
+        self.widget = loadUi(self.resource_path, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
-        self.lcdTime.setSegmentStyle(2)
-        self.timeEdit.setTime(QTime().currentTime())
+        self.lcd_time.setSegmentStyle(2)
+        self.offset_edit.setTime(QTime().currentTime())
         self.show()
 
     '''
@@ -52,14 +51,11 @@ class TableWidget(QWidget):
 
     '''
 
-    def initHeaderHorizontal(self):
-        # Resizes the horizontal header so that the Table fits initially without scrollbars.
-        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        for headerIndex in range(len(self.tableView.horizontalHeader())):
-            # sectionSize computes the width of the column header.
-            # As a side effect, it also forces the header to resize to f it its container.
-            self.tableView.horizontalHeader().sectionSize(headerIndex)
-        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+    def init_horizontal_header(self):
+        self.table_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        for headerIndex in range(len(self.table_view.horizontalHeader())):
+            self.table_view.horizontalHeader().sectionSize(headerIndex)
+        self.table_view.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
 
     '''
         Function: iniHeaderVertical
@@ -70,22 +66,19 @@ class TableWidget(QWidget):
 
     '''
 
-    def initHeaderVertical(self):
-        # Resizes the vertical header so that the Table fits initially without scrollbars.
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        for headerIndex in range(len(self.tableView.verticalHeader())):
-            # sectionSize computes the height of the row header.
-            # As a side effect, it also forces the header to resize to fit its container.
-            self.tableView.verticalHeader().sectionSize(headerIndex)
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+    def init_vertical_header(self):
+        self.table_view.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        for headerIndex in range(len(self.table_view.verticalHeader())):
+            self.table_view.verticalHeader().sectionSize(headerIndex)
+        self.table_view.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
-    #TODO
+    # TODO
     def paintEvent(self, a0: QPaintEvent) -> None:
-        self.lcdTime.display(time.strftime("%I" + ":" + "%M"))
+        self.lcd_time.display(time.strftime("%I" + ":" + "%M"))
         super().paintEvent(a0)
 
-    #TODO
+    # TODO
     def resizeEvent(self, a0: QResizeEvent) -> None:
-        self.initHeaderVertical()
-        self.initHeaderHorizontal()
+        self.init_vertical_header()
+        self.init_horizontal_header()
         super().resizeEvent(a0)

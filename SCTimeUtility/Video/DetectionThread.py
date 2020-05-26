@@ -22,9 +22,9 @@ class DetectThread(threading.Thread):
 
     '''
 
-    def __init__(self, detectQ):
+    def __init__(self, detection_resource_queue):
         threading.Thread.__init__(self)
-        self.DetectQueue = detectQ
+        self.detection_queue = detection_resource_queue
         self.running = False
 
     '''
@@ -37,7 +37,7 @@ class DetectThread(threading.Thread):
     '''
 
     def run(self):
-        self.detectFrame()
+        self.detection_frame()
 
     '''
 
@@ -48,7 +48,7 @@ class DetectThread(threading.Thread):
 
     '''
 
-    def isRunning(self):
+    def is_running(self):
         return self.running
 
     '''
@@ -84,7 +84,7 @@ class DetectThread(threading.Thread):
 
     '''
 
-    def detectFrame(self):
+    def detection_frame(self):
         self.running = False
 
         # create the kernel and background subtraction
@@ -94,5 +94,5 @@ class DetectThread(threading.Thread):
         while self.running:
 
             # make sure thread runs 3 frames behind image process thread
-            if self.DetectQueue.qsize() > 3:
-                next = self.DetectQueue.get()
+            if self.detection_queue.qsize() > 3:
+                next = self.detection_queue.get()

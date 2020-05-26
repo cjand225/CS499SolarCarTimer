@@ -11,23 +11,23 @@ from PyQt5.QtWidgets import QApplication, QDialog, QErrorMessage, QStyle
 from PyQt5.QtGui import QIntValidator, QRegExpValidator
 from PyQt5.uic import loadUi
 
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class AddBatchDialog(QDialog):
 
-    def __init__(self, uipath):
+    def __init__(self, resource_path):
         super().__init__()
-        self.UIPath = uipath
+        self.resource_path = resource_path
 
         self.data = None
-        self.ui = None
-        self.regValid = None
-        self.validationError = None
-        self.carList = []
+        self.widget = None
+        self.regular_expression_validator = None
+        self.validation_error = None
+        self.car_list = []
 
-        self.initUI()
-        self.initValidation()
+        self.init_widget()
+        self.init_validation()
 
     """
           Function: initUI
@@ -37,8 +37,8 @@ class AddBatchDialog(QDialog):
 
     """
 
-    def initUI(self):
-        self.ui = loadUi(self.UIPath, self)
+    def init_widget(self):
+        self.widget = loadUi(self.resource_path, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
@@ -51,11 +51,11 @@ class AddBatchDialog(QDialog):
 
     """
 
-    def initValidation(self):
+    def init_validation(self):
         self.setModal(True)
-        self.regValid = QRegExpValidator(self)
+        self.regular_expression_validator = QRegExpValidator(self)
         #        self.batchEdit.setValidator(self.regValid)
-        self.validationError = QErrorMessage(self)
+        self.validation_error = QErrorMessage(self)
 
     """
           Function: createList
@@ -68,19 +68,19 @@ class AddBatchDialog(QDialog):
 
     """
 
-    def createList(self):
-        bcList = []
+    def create_list(self):
+        car_batch_list = []
         self.data = self.batchEdit.toPlainText()
         for line in self.data.split('\n'):
-            bcList.append(line)
+            car_batch_list.append(line)
 
         # use 2d dict to split tokens by ',', if no tokens found or too many, line is skipped
-        for item in bcList:
+        for item in car_batch_list:
             if item.count(',') == 1:
                 newItemOne, newItemTwo = item.split(',')
                 tempList = [newItemOne, newItemTwo]
                 if tempList[0] != '' and tempList[1] != '':
-                    self.carList.append(tempList)
+                    self.car_list.append(tempList)
 
     """
           Function: getList
@@ -90,8 +90,8 @@ class AddBatchDialog(QDialog):
 
     """
 
-    def getList(self):
-        return self.carList
+    def get_list(self):
+        return self.car_list
 
     """
           Function: clear
@@ -101,9 +101,9 @@ class AddBatchDialog(QDialog):
 
     """
 
-    def clear(self):
+    def clear_batch(self):
         self.batchEdit.clear()
-        self.carList = []
+        self.car_list = []
 
     """
           Function: done
@@ -118,7 +118,7 @@ class AddBatchDialog(QDialog):
         if r == QDialog.Accepted:
             if self.batchEdit.toPlainText():
                 super().done(r)
-                self.createList()
+                self.create_list()
             else:
                 super().done(r)
         else:

@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt, numpy as np
 '''
 
 
-def lapVsTimeGraph(self):
+def lap_over_time_graph(self):
     plt.figure(self.currGraphNum)
     # set labels
     plt.title('Lap vs Time')
@@ -28,18 +28,18 @@ def lapVsTimeGraph(self):
 
     # plot data
     index = 0
-    for team in self.graphedTeamList:
+    for team in self.graphed_team_list:
         durationList = []
-        graphRange = np.arange(0, len(self.graphedTeamList[index].lapList), 1.0)
-        plt.xticks(np.arange(1.0, len(self.graphedTeamList[index].lapList) + 1, 1.0))
+        graphRange = np.arange(0, len(self.graphed_team_list[index].lapList), 1.0)
+        plt.xticks(np.arange(1.0, len(self.graphed_team_list[index].lapList) + 1, 1.0))
         for lap in team.lapList:
-            durationList.append(lap.getElapsed())
-        durationList = self.getElapsed(durationList)
+            durationList.append(lap.get_elapsed_time())
+        durationList = self.get_elapsed_time(durationList)
         # plot curent Team
         plt.plot(graphRange, durationList, label=team.getTeam())
         index += 1
 
-    if len(self.graphedTeamList) > 0:
+    if len(self.graphed_team_list) > 0:
         plt.legend()
     plt.tight_layout()
     plt.grid(True)
@@ -57,7 +57,7 @@ def lapVsTimeGraph(self):
 '''
 
 
-def avgLapVsTimeGraph(self):
+def average_lap_over_time_graph(self):
     plt.figure(self.currGraphNum)
 
     # set labels
@@ -70,7 +70,7 @@ def avgLapVsTimeGraph(self):
 
     # plot team lap averages
     index = 0
-    for team in self.graphedTeamList:
+    for team in self.graphed_team_list:
         lapAverages = []
         graphRange = np.arange(0, len(team.lapList), 1.0)
         plt.xticks(np.arange(1.0, len(team.lapList) + 1, 1.0))
@@ -79,13 +79,13 @@ def avgLapVsTimeGraph(self):
         currLap = 0
         for lap in team.lapList:
             if self.inMinutes:
-                lapAverages.append((lap.getElapsed() / ((currLap + 1) * 60)))
+                lapAverages.append((lap.get_elapsed_time() / ((currLap + 1) * 60)))
             else:
-                lapAverages.append(lap.getElapsed() / (currLap + 1))
+                lapAverages.append(lap.get_elapsed_time() / (currLap + 1))
             currLap += 1
 
         plt.plot(graphRange, lapAverages, label=team.getTeam())
-    if len(self.graphedTeamList) > 0:
+    if len(self.graphed_team_list) > 0:
         plt.legend()
 
     plt.tight_layout()
@@ -104,25 +104,25 @@ def avgLapVsTimeGraph(self):
 '''
 
 
-def minTimeGraph(self):
+def lowest_time_graph(self):
     labels = []
     data = []
 
     # calculate minimum times for teams
-    for team in self.graphedTeamList:
+    for team in self.graphed_team_list:
         lapList = []
         for lap in team.lapList:
-            if lap.getElapsed() != 0:
-                lapList.append(lap.getElapsed())
+            if lap.get_elapsed_time() != 0:
+                lapList.append(lap.get_elapsed_time())
 
         data.append(min(lapList))
         labels.append(team.getTeam())
 
     # send data to bar Graph
     if self.inMinutes:
-        self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Time (minutes)')
+        self.bar_graph(data, labels, 'Minimum Times', 'Teams', 'Time (minutes)')
     else:
-        self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Time (seconds)')
+        self.bar_graph(data, labels, 'Minimum Times', 'Teams', 'Time (seconds)')
 
 
 '''  
@@ -133,25 +133,25 @@ def minTimeGraph(self):
 '''
 
 
-def maxTimeGraph(self):
+def highest_time_graph(self):
     labels = []
     data = []
 
     # calculate minimum times for teams
-    for team in self.graphedTeamList:
+    for team in self.graphed_team_list:
         lapList = []
         for lap in team.lapList:
-            if lap.getElapsed() != 0:
-                lapList.append(lap.getElapsed())
+            if lap.get_elapsed_time() != 0:
+                lapList.append(lap.get_elapsed_time())
 
         data.append(max(lapList))
         labels.append(team.getTeam())
 
     # send data to bar Graph
     if self.inMinutes:
-        self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Time (minutes)')
+        self.bar_graph(data, labels, 'Maximum Times', 'Teams', 'Time (minutes)')
     else:
-        self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Time (seconds)')
+        self.bar_graph(data, labels, 'Maximum Times', 'Teams', 'Time (seconds)')
 
 
 '''  
@@ -162,7 +162,7 @@ def maxTimeGraph(self):
 '''
 
 
-def barGraph(self, data, labels, title, x_axis, y_axis):
+def bar_graph(self, data, labels, title, x_axis, y_axis):
     # increments the figure number to guarantee new window
     plt.figure(self.currGraphNum)
     self.currGraphNum += 1

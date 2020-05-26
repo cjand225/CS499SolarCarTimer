@@ -18,30 +18,30 @@ from PyQt5.QtGui import QCloseEvent
 from PyQt5.QtWidgets import QMainWindow, QApplication, QFileDialog, QDialog, QStyle
 from PyQt5.uic import loadUi
 
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class AppWindow(QMainWindow):
 
-    def __init__(self, uipath):
+    def __init__(self, resource_path):
         super(AppWindow, self).__init__()
         # initialize Window
-        self.uiPath = uipath
+        self.resource_path = resource_path
+        self.logger = get_log()
 
         # Widgets controlled by top view AppWindow
-        self.visionWidget = None
-        self.tableWidget = None
-        self.semiAutoWidget = None
-        self.graphWidget = None
-        self.logWidget = None
-        self.leaderBoardWidget = None
-        self.logger = getLog()
-        self.aboutDialog = None
-        self.helpDialog = None
+        self.vision_widget = None
+        self.table_widget = None
+        self.semi_auto_widget = None
+        self.graph_widget = None
+        self.log_widget = None
+        self.leaderboard_widget = None
+        self.about_dialog = None
+        self.help_dialog = None
 
-        # declare initializers here
-        self.initMainWindow()
-        self.initFileDialog()
+        # declare initializations here
+        self.init_widget()
+        self.init_file_dialog()
 
     ''' 
 
@@ -53,8 +53,8 @@ class AppWindow(QMainWindow):
 
     '''
 
-    def initMainWindow(self):
-        self.mainWindowUI = loadUi(self.uiPath, self)
+    def init_widget(self):
+        self.widget = loadUi(self.resource_path, self)
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignHCenter,
                                             self.size(), QApplication.desktop().availableGeometry()))
@@ -73,7 +73,7 @@ class AppWindow(QMainWindow):
     '''
 
     @staticmethod
-    def toggleWidget(widget, e):
+    def toggle_widget(widget, e):
         if widget.isVisible():
             widget.hide()
         else:
@@ -89,34 +89,34 @@ class AppWindow(QMainWindow):
 
     '''
 
-    def connectComponents(self):
+    def bind_components(self):
         # File
-        self.actionQuit.triggered.connect(self.handleWidgetClosing)
+        self.action_quit.triggered.connect(self.widget_close_event)
 
         # view
-        if self.tableWidget is not None:
-            self.actionTable.triggered.connect(lambda e: type(self).toggleWidget(self.tableWidget, e))
-            self.pushTable.clicked.connect(lambda e: type(self).toggleWidget(self.tableWidget, e))
+        if self.table_widget is not None:
+            self.action_table.triggered.connect(lambda e: type(self).toggle_widget(self.table_widget, e))
+            self.table_pb.clicked.connect(lambda e: type(self).toggle_widget(self.table_widget, e))
 
-        if self.semiAutoWidget is not None:
-            self.actionSemiAuto.triggered.connect(lambda e: type(self).toggleWidget(self.semiAutoWidget, e))
-            self.pushSemiAuto.clicked.connect(lambda e: type(self).toggleWidget(self.semiAutoWidget, e))
+        if self.semi_auto_widget is not None:
+            self.action_semi_auto.triggered.connect(lambda e: type(self).toggle_widget(self.semi_auto_widget, e))
+            self.semi_auto_pb.clicked.connect(lambda e: type(self).toggle_widget(self.semi_auto_widget, e))
 
-        if self.visionWidget is not None:
-            self.actionAuto.triggered.connect(lambda e: type(self).toggleWidget(self.visionWidget, e))
-            self.pushVideo.clicked.connect(lambda e: type(self).toggleWidget(self.visionWidget, e))
+        if self.vision_widget is not None:
+            self.action_auto.triggered.connect(lambda e: type(self).toggle_widget(self.vision_widget, e))
+            self.vision_pb.clicked.connect(lambda e: type(self).toggle_widget(self.vision_widget, e))
 
-        if self.logWidget is not None:
-            self.actionLog.triggered.connect(lambda e: type(self).toggleWidget(self.logWidget, e))
-            self.pushLogs.clicked.connect(lambda e: type(self).toggleWidget(self.logWidget, e))
+        if self.log_widget is not None:
+            self.action_log.triggered.connect(lambda e: type(self).toggle_widget(self.log_widget, e))
+            self.log_pb.clicked.connect(lambda e: type(self).toggle_widget(self.log_widget, e))
 
-        if self.graphWidget is not None:
-            self.actionGraphing.triggered.connect(lambda e: type(self).toggleWidget(self.graphWidget, e))
-            self.pushGraph.clicked.connect(lambda e: type(self).toggleWidget(self.graphWidget, e))
+        if self.graph_widget is not None:
+            self.action_graph.triggered.connect(lambda e: type(self).toggle_widget(self.graph_widget, e))
+            self.graph_pb.clicked.connect(lambda e: type(self).toggle_widget(self.graph_widget, e))
 
-        if self.leaderBoardWidget is not None:
-            self.actionLeaderBoard.triggered.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
-            self.pushLeaderBoard.clicked.connect(lambda e: type(self).toggleWidget(self.leaderBoardWidget, e))
+        if self.leaderboard_widget is not None:
+            self.action_leaderboard.triggered.connect(lambda e: type(self).toggle_widget(self.leaderboard_widget, e))
+            self.leaderboard_pb.clicked.connect(lambda e: type(self).toggle_widget(self.leaderboard_widget, e))
 
     ''' 
     
@@ -128,8 +128,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def addVision(self, vision):
-        self.visionWidget = vision
+    def add_vision(self, vision):
+        self.vision_widget = vision
 
     ''' 
     
@@ -141,8 +141,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def addTable(self, table):
-        self.tableWidget = table
+    def add_table(self, table):
+        self.table_widget = table
 
     ''' 
     
@@ -155,8 +155,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def addSemiAuto(self, semiAuto):
-        self.semiAutoWidget = semiAuto
+    def add_semi_auto(self, semiAuto):
+        self.semi_auto_widget = semiAuto
 
     ''' 
     
@@ -168,8 +168,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def addGraph(self, graph):
-        self.graphWidget = graph
+    def add_graph(self, graph):
+        self.graph_widget = graph
 
     ''' 
 
@@ -181,8 +181,8 @@ class AppWindow(QMainWindow):
 
     '''
 
-    def addLeaderBoard(self, leaderboard):
-        self.leaderBoardWidget = leaderboard
+    def add_leaderboard(self, leaderboard):
+        self.leaderboard_widget = leaderboard
 
     ''' 
     
@@ -194,8 +194,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def addLog(self, pLogWidget):
-        self.logWidget = pLogWidget
+    def add_log(self, pLogWidget):
+        self.log_widget = pLogWidget
 
     ''' 
     
@@ -208,8 +208,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def initFileDialog(self):
-        self.fileDialog = QFileDialog(self)
+    def init_file_dialog(self):
+        self.file_dialog = QFileDialog(self)
 
     ''' 
     
@@ -222,8 +222,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def openFileDialog(self):
-        return self.fileDialog.getOpenFileName(self, 'Open File')
+    def open_file_dialog(self):
+        return self.file_dialog.getOpenFileName(self, 'Open File')
 
     '''
         Function: openDirDialog
@@ -233,8 +233,8 @@ class AppWindow(QMainWindow):
                  files located within.
     '''
 
-    def openDirDialog(self):
-        return self.fileDialog.getExistingDirectory(self, "Select Directory", str(Path.home()))
+    def open_directory_dialog(self):
+        return self.file_dialog.getExistingDirectory(self, "Select Directory", str(Path.home()))
 
     ''' 
     
@@ -248,8 +248,8 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def newFileDialog(self):
-        return self.fileDialog.getSaveFileName(self, 'New File')
+    def new_file_dialog(self):
+        return self.file_dialog.getSaveFileName(self, 'New File')
 
     ''' 
     
@@ -261,9 +261,9 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def initCloseDialog(self, uipath):
-        self.QuitMsg = QDialog()
-        self.QuitMsg.ui = loadUi(uipath, self.QuitMsg)
+    def init_close_dialog(self, resource_path):
+        self.quit_message_dialog = QDialog()
+        self.quit_message_dialog.ui = loadUi(resource_path, self.quit_message_dialog)
 
     ''' 
     
@@ -278,8 +278,8 @@ class AppWindow(QMainWindow):
     '''
 
     def closeEvent(self, a0: QCloseEvent):
-        retVal = self.QuitMsg.exec()  # grabs event code from Message box execution
-        self.handleClose(retVal, a0)
+        ret_val = self.quit_message_dialog.exec()  # grabs event code from Message box execution
+        self.handleClose(ret_val, a0)
 
     ''' 
     
@@ -291,19 +291,19 @@ class AppWindow(QMainWindow):
     
     '''
 
-    def handleWidgetClosing(self):
-        if self.tableWidget is not None:
-            self.tableWidget.close()
-        if self.visionWidget is not None:
-            self.visionWidget.close()
-        if self.logWidget is not None:
-            self.logWidget.close()
-        if self.graphWidget is not None:
-            self.graphWidget.close()
-        if self.leaderBoardWidget is not None:
-            self.leaderBoardWidget.close()
-        if self.semiAutoWidget is not None:
-            self.semiAutoWidget.close()
+    def widget_close_event(self):
+        if self.table_widget is not None:
+            self.table_widget.close()
+        if self.vision_widget is not None:
+            self.vision_widget.close()
+        if self.log_widget is not None:
+            self.log_widget.close()
+        if self.graph_widget is not None:
+            self.graph_widget.close()
+        if self.leaderboard_widget is not None:
+            self.leaderboard_widget.close()
+        if self.semi_auto_widget is not None:
+            self.semi_auto_widget.close()
         self.close()
 
     '''
@@ -317,7 +317,7 @@ class AppWindow(QMainWindow):
     def handleClose(self, retVal, a0: QCloseEvent):
         if retVal == 1:  # if OK clicked - Close
             a0.accept()
-            self.handleWidgetClosing()
+            self.widget_close_event()
         # if Cancel or MessageBox is closed - Ignore the signal
         if retVal == 0:
             a0.ignore()
@@ -331,24 +331,19 @@ class AppWindow(QMainWindow):
                  streaming of manuals and other documention to the program itself.
     '''
 
-    def createBrowserDialog(self, uiPath, filePath):
-        # create and loadui for QDialog instance
-        browserDialog = QDialog()
-        browserDialog.ui = loadUi(uiPath, browserDialog)
-        # if filePath is specified, create it, otherwise, return Rejected Enum
-        if os.path.isfile(filePath):
-            # open as a file stream
-            file = QFile(filePath)
+    def create_browser_dialog(self, resource_path, file_path):
+        browser_dialog = QDialog()
+        browser_dialog.ui = loadUi(resource_path, browser_dialog)
+        if os.path.isfile(file_path):
+            file = QFile(file_path)
             file.open(QFile.ReadOnly | QFile.Text)
             stream = QTextStream(file)
-            # direct stream as HTML, connect close button, execute and return value after close.
-            browserDialog.ui.textBrowser.setHtml(stream.readAll())
-            browserDialog.ui.buttonBox.clicked.connect(browserDialog.close)
-            browserDialog.exec()
-            # clean up after execution
-            browserDialog.ui.buttonBox.clicked.disconnect()
-            browserDialog.close()
-            browserDialog.deleteLater()
+            browser_dialog.ui.textBrowser.setHtml(stream.readAll())
+            browser_dialog.ui.buttonBox.clicked.connect(browser_dialog.close)
+            browser_dialog.exec()
+            browser_dialog.ui.buttonBox.clicked.disconnect()
+            browser_dialog.close()
+            browser_dialog.deleteLater()
             return QDialog.Accepted
         else:
             return QDialog.Rejected
@@ -361,5 +356,5 @@ class AppWindow(QMainWindow):
                  next user interaction.
     '''
 
-    def createDecisionDialog(self, uiPath, textField):
+    def create_decision_dialog(self, uiPath, textField):
         pass

@@ -11,7 +11,7 @@ import datetime
 from PyQt5.QtCore import pyqtSignal, QObject
 
 from SCTimeUtility.Table.LapTime import LapTime
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class Car(QObject):
@@ -20,7 +20,7 @@ class Car(QObject):
 
     def __init__(self, ID, Team, CarNum):
         super().__init__()
-        self.logger = getLog()
+        self.logger = get_log()
 
         try:
             self.ID = int(ID)
@@ -171,7 +171,7 @@ class Car(QObject):
     def addLapSemiAuto(self):
         currentTime = datetime.datetime.now()
         beginTime = self.seedValue
-        previousTime = self.lapList[self.lapCount - 1].initialWrite
+        previousTime = self.lapList[self.lapCount - 1].initial_write
         recordTime = datetime.timedelta(hours=currentTime.hour,
                                         minutes=currentTime.minute,
                                         seconds=currentTime.second,
@@ -270,7 +270,7 @@ class Car(QObject):
 
     def editCell(self, index, timeData):
         if self.indexExists(index):
-            self.lapList[index].setElapsed(timeData)
+            self.lapList[index].set_elapsed(timeData)
             return True
         else:
             return False
@@ -353,7 +353,7 @@ class Car(QObject):
     def getTotalElapsedTime(self, index):
         if not index in range(0, len(self.lapList) - 1):
             allLaps = self.lapList[1:index]
-            return sum([lap.getElapsed() for lap in allLaps])
+            return sum([lap.get_elapsed_time() for lap in allLaps])
         else:
             return -1
 
@@ -371,7 +371,7 @@ class Car(QObject):
     def getFastestLap(self):
         allLaps = self.lapList[1:]
         if allLaps:
-            return min([lap.getElapsed() for lap in allLaps])
+            return min([lap.get_elapsed_time() for lap in allLaps])
         else:
             return None
 

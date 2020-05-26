@@ -9,7 +9,7 @@ import csv, os, pandas
 
 from SCTimeUtility.Table.Car import Car
 from SCTimeUtility.Table.CarStorage import CarStorage
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 '''  
     Function: saveCSV
@@ -20,15 +20,15 @@ from SCTimeUtility.Log.Log import getLog
 '''
 
 
-def saveCSV(cs, filePath):
+def save_csv(car_storage_object, file_path):
     # Save a CarStorage object to a CSV file.
-    if filePath != '':
-        with open(filePath, "w") as storageFile:
-            storageWriter = csv.writer(storageFile)
+    if file_path != '':
+        with open(file_path, "w") as storageFile:
+            storage_writer = csv.writer(storageFile)
             # storageWriter.writeHeaders(['Car ID', 'Team Name', 'Car Num', 'Lap Times'])
-            storageWriter.writerows(
-                [[c.ID, c.TeamName, c.CarNum, c.initialTime] + [t.elapsedTime for t in c.lapList] for c in
-                 cs.storageList])
+            storage_writer.writerows([[c.ID, c.TeamName, c.CarNum, c.initialTime] +
+                                      [t.elapsedTime for t in c.lapList]
+                                      for c in car_storage_object.storage_list])
 
 
 '''  
@@ -39,37 +39,33 @@ def saveCSV(cs, filePath):
 '''
 
 
-def loadCSV(filePath):
-    if filePath != '':
-        carList = []
-        with open(filePath, "r") as storageFile:
-            storageReader = csv.reader(storageFile)
-            for row in storageReader:
-                carId = int(row[0])
-                carOrg = row[1]
-                carNum = int(row[2])
-                initialTime = float(row[3])
-                elapsedTimes = [float(i) for i in row[4:]]
-                newCar = Car(carId, carOrg, carNum)
-                newCar.initialTime = initialTime
-                for time in elapsedTimes:
-                    newCar.addLapTime(time)
-                carList.append(newCar)
-        return carList
+def load_csv(file_path):
+    if file_path != '':
+        car_list = []
+        with open(file_path, "r") as storageFile:
+            storage_reader = csv.reader(storageFile)
+            for row in storage_reader:
+                car_index = int(row[0])
+                team_name = row[1]
+                car_number = int(row[2])
+                initial_time = float(row[3])
+                elapsed_times = [float(i) for i in row[4:]]
+                new_car = Car(car_index, team_name, car_number)
+                new_car.initialTime = initial_time
+                for time in elapsed_times:
+                    new_car.addLapTime(time)
+                car_list.append(new_car)
+        return car_list
 
 
-def loadTable():
+def load_table():
     print("PH")
 
 
-def saveTable():
+def save_table():
     print("PH")
 
 
-def createDir(dir):
-    if not os.path.exists(dir):
-        os.mkdir(dir)
-
-
-def reverseString(self, string):
-    return string[::-1]
+def create_directory(directory_path):
+    if not os.path.exists(directory_path):
+        os.mkdir(directory_path)

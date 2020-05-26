@@ -1,75 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>Video</class>
-    <widget class="QWidget" name="Video">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>629</width>
-                <height>559</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>458</width>
-                <height>390</height>
-            </size>
-        </property>
-        <property name="windowTitle">
-            <string>Auto</string>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_2">
-            <item row="0" column="0">
-                <layout class="QGridLayout" name="videoWidgetLayout">
-                    <item row="0" column="0">
-                        <widget class="QGroupBox" name="videoBox">
-                            <property name="title">
-                                <string>Video Frame</string>
-                            </property>
-                            <layout class="QGridLayout" name="gridLayout_4">
-                                <item row="0" column="0">
-                                    <layout class="QGridLayout" name="videoLayout">
-                                        <item row="0" column="0">
-                                            <widget class="QWidget" name="imageFrame" native="true">
-                                                <layout class="QGridLayout" name="gridLayout_3">
-                                                    <item row="0" column="0">
-                                                        <layout class="QGridLayout" name="imageLayout">
-                                                            <item row="0" column="0">
-                                                                <widget class="QLabel" name="imgCanvas">
-                                                                    <property name="text">
-                                                                        <string/>
-                                                                    </property>
-                                                                </widget>
-                                                            </item>
-                                                        </layout>
-                                                    </item>
-                                                </layout>
-                                            </widget>
-                                        </item>
-                                    </layout>
-                                </item>
-                            </layout>
-                        </widget>
-                    </item>
-                </layout>
-            </item>
-            <item row="2" column="0">
-                <widget class="QPushButton" name="stopButton">
-                    <property name="text">
-                        <string>Stop Feed</string>
-                    </property>
+ <class>Video</class>
+ <widget class="QWidget" name="Video">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>629</width>
+    <height>559</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>458</width>
+    <height>390</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>Auto</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_2">
+   <item row="0" column="0">
+    <layout class="QGridLayout" name="videoWidgetLayout">
+     <item row="0" column="0">
+      <widget class="QGroupBox" name="videoBox">
+       <property name="title">
+        <string>Video Frame</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="videoLayout">
+          <item row="0" column="0">
+           <widget class="QWidget" name="imageFrame" native="true">
+            <layout class="QGridLayout" name="gridLayout_3">
+             <item row="0" column="0">
+              <layout class="QGridLayout" name="imageLayout">
+               <item row="0" column="0">
+                <widget class="QLabel" name="img_canvas">
+                 <property name="text">
+                  <string/>
+                 </property>
                 </widget>
-            </item>
-            <item row="1" column="0">
-                <widget class="QPushButton" name="startButton">
-                    <property name="text">
-                        <string>Start Feed</string>
-                    </property>
-                </widget>
-            </item>
-        </layout>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="2" column="0">
+    <widget class="QPushButton" name="stopButton">
+     <property name="text">
+      <string>Stop Feed</string>
+     </property>
     </widget>
-    <resources/>
-    <connections/>
+   </item>
+   <item row="1" column="0">
+    <widget class="QPushButton" name="startButton">
+     <property name="text">
+      <string>Start Feed</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

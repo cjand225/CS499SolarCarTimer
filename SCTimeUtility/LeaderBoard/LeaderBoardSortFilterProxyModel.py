@@ -11,9 +11,9 @@ from PyQt5.QtCore import Qt, QSortFilterProxyModel
 
 class LeaderBoardSortFilterProxyModel(QSortFilterProxyModel):
 
-    def __init__(self, parent, sortableColumns):
+    def __init__(self, parent, sortable_columns):
         super().__init__(parent)
-        self.sortableColumns = sortableColumns
+        self.sortable_columns = sortable_columns
 
     '''  
         Function: lessThan
@@ -23,13 +23,13 @@ class LeaderBoardSortFilterProxyModel(QSortFilterProxyModel):
                  function inherited from QSortFilterProxyModel.
     '''
 
-    def lessThan(self, sourceLeft, sourceRight):
-        if sourceLeft.data(Qt.UserRole) is None:
+    def lessThan(self, source_left, source_right):
+        if source_left.data(Qt.UserRole) is None:
             return False
-        elif sourceRight.data(Qt.UserRole) is None:
+        elif source_right.data(Qt.UserRole) is None:
             return False
         else:
-            return super().lessThan(sourceLeft, sourceRight)
+            return super().lessThan(source_left, source_right)
 
     '''  
         Function: sort
@@ -40,7 +40,7 @@ class LeaderBoardSortFilterProxyModel(QSortFilterProxyModel):
     '''
 
     def sort(self, column, order=Qt.AscendingOrder):
-        if column in self.sortableColumns:
+        if column in self.sortable_columns:
             super().sort(column, order)
 
     '''  

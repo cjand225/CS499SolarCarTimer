@@ -10,7 +10,7 @@ from PyQt5.Qt import pyqtProperty
 from PyQt5.QtCore import Qt, pyqtSignal, pyqtBoundSignal
 from PyQt5.QtWidgets import QLabel
 from PyQt5.QtGui import QFontMetrics, QPainter, QTextLayout
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class ElidedLabel(QLabel):

@@ -13,18 +13,18 @@ from datetime import datetime, timedelta
 from PyQt5.QtCore import QAbstractTableModel, QVariant, Qt
 
 # Package Imports
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class LeaderBoardModel(QAbstractTableModel):
-    def __init__(self, parent, headerData, storage=None):
+    def __init__(self, parent, header_data, storage=None):
         super().__init__(parent)
 
-        self.defaultColumns = len(headerData)
-        self.defaultRows = 10
-        self.header = headerData
-        self.carStore = storage
-        self.connectActions()
+        self.default_columns = len(header_data)
+        self.default_rows = 10
+        self.header = header_data
+        self.car_storage = storage
+        self.connect_actions()
 
     '''  
         Function: lapsCompletedKey
@@ -34,7 +34,7 @@ class LeaderBoardModel(QAbstractTableModel):
     '''
 
     @staticmethod
-    def lapsCompletedKey(c):
+    def laps_completed_key(c):
         return c.getLapCount()
 
     '''  
@@ -45,7 +45,7 @@ class LeaderBoardModel(QAbstractTableModel):
     '''
 
     @staticmethod
-    def fastestLapKey(c):
+    def fastest_lap_key(c):
         return c.getFastestLap()
 
     '''  
@@ -56,10 +56,10 @@ class LeaderBoardModel(QAbstractTableModel):
                  actually changed.
     '''
 
-    def storageModifiedEvent(self, col, row):
-        leftChangeIndex = self.index(col, 0)
-        rightChangeIndex = self.index(col, self.columnCount())
-        self.dataChanged.emit(leftChangeIndex, leftChangeIndex)
+    def storage_modified_event(self, col, row):
+        left_change_index = self.index(col, 0)
+        right_change_index = self.index(col, self.columnCount())
+        self.dataChanged.emit(left_change_index, left_change_index)
         self.headerDataChanged.emit(Qt.Vertical, row, row)
 
     '''  
@@ -69,8 +69,8 @@ class LeaderBoardModel(QAbstractTableModel):
         Purpose: connects the necessary signals for getting updates of data.
     '''
 
-    def connectActions(self):
-        self.carStore.dataModified.connect(self.storageModifiedEvent)
+    def connect_actions(self):
+        self.car_storage.dataModified.connect(self.storage_modified_event)
 
     '''  
         Function: rowCount
@@ -80,7 +80,7 @@ class LeaderBoardModel(QAbstractTableModel):
     '''
 
     def rowCount(self, p):
-        return max(len(self.carStore.storageList), self.defaultRows)
+        return max(len(self.car_storage.storage_list), self.default_rows)
 
     '''  
         Function: columnCount
@@ -90,7 +90,7 @@ class LeaderBoardModel(QAbstractTableModel):
     '''
 
     def columnCount(self, p=None):
-        return self.defaultColumns
+        return self.default_columns
 
     '''  
         Function: data
@@ -102,13 +102,13 @@ class LeaderBoardModel(QAbstractTableModel):
 
     def data(self, item, role):
         if role == Qt.DisplayRole:
-            if (item.column() < self.defaultColumns) and item.row() < len(self.carStore.storageList):
+            if (item.column() < self.default_columns) and item.row() < len(self.car_storage.storage_list):
                 return str(self.getDisplayItemAt(item.row(), item.column()))
             else:
                 return QVariant()
         elif role == Qt.UserRole:
-            if (item.column() < self.defaultColumns) and item.row() < len(self.carStore.storageList):
-                return self.getSortItemAt(item.row(), item.column())
+            if (item.column() < self.default_columns) and item.row() < len(self.car_storage.storage_list):
+                return self.get_sorted_item_at(item.row(), item.column())
             else:
                 return QVariant()
         else:
@@ -125,20 +125,20 @@ class LeaderBoardModel(QAbstractTableModel):
     def headerData(self, section, orientation, role):
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
-                if section < self.defaultColumns:
+                if section < self.default_columns:
                     return self.header[section]
                 else:
                     return None
         elif role == Qt.UserRole:
             if orientation == Qt.Vertical:
-                if section < len(self.carStore.storageList):
+                if section < len(self.car_storage.storage_list):
                     return section + 1
                 else:
                     return None
         elif role == Qt.UserRole + 1:
             if orientation == Qt.Vertical:
-                if section < len(self.carStore.storageList):
-                    return len(self.carStore.storageList) - section
+                if section < len(self.car_storage.storage_list):
+                    return len(self.car_storage.storage_list) - section
                 else:
                     return None
 
@@ -151,15 +151,15 @@ class LeaderBoardModel(QAbstractTableModel):
 
     def getDisplayItemAt(self, index, subIndex):
         if subIndex == 0:
-            return self.carStore.storageList[index].getCarNum()
+            return self.car_storage.storage_list[index].getCarNum()
         elif subIndex == 1:
-            return self.carStore.storageList[index].getTeam()
+            return self.car_storage.storage_list[index].getTeam()
         elif subIndex == 2:
-            return max(self.carStore.storageList[index].getLapCount() - 1, 0)
+            return max(self.car_storage.storage_list[index].getLapCount() - 1, 0)
         elif subIndex == 3:
-            fastLap = self.carStore.storageList[index].getFastestLap()
-            if fastLap is not None:
-                return str(timedelta(seconds=fastLap))
+            fast_lap = self.car_storage.storage_list[index].getFastestLap()
+            if fast_lap is not None:
+                return str(timedelta(seconds=fast_lap))
             else:
                 return ""
         else:
@@ -172,17 +172,17 @@ class LeaderBoardModel(QAbstractTableModel):
         Purpose: Returns the sorted item under the subindex at the specified index within Car Storage.
     '''
 
-    def getSortItemAt(self, index, subIndex):
+    def get_sorted_item_at(self, index, subIndex):
         if subIndex == 0:
-            return self.carStore.storageList[index].getCarNum()
+            return self.car_storage.storage_list[index].getCarNum()
         elif subIndex == 1:
-            return self.carStore.storageList[index].getTeam()
+            return self.car_storage.storage_list[index].getTeam()
         elif subIndex == 2:
             # This is kind of a hack, but it's the easiest way to
             # ensure that getFastestLAp and getLapCount have
             # compatible orders.
-            return -max(self.carStore.storageList[index].getLapCount() - 1, 0)
+            return -max(self.car_storage.storage_list[index].getLapCount() - 1, 0)
         elif subIndex == 3:
-            return self.carStore.storageList[index].getFastestLap()
+            return self.car_storage.storage_list[index].getFastestLap()
         else:
             return None

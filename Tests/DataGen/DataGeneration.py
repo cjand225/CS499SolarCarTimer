@@ -45,6 +45,6 @@ def generateRandomWord(length):
 def populateStorage(numOfCars, storage):
     carInfo = generateCarInfo(numOfCars)
     for car in carInfo:
-        storage.createCar(car[0], car[1])
+        storage.create_car(car[0], car[1])
     return storage
 

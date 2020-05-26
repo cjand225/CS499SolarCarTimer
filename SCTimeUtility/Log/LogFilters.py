@@ -16,7 +16,7 @@ import logging
 '''
 
 
-class debugFilter(logging.Filter):
+class DebugFilter(logging.Filter):
     def filter(self, record):
         if record.levelno == logging.DEBUG:
             return record
@@ -30,7 +30,7 @@ class debugFilter(logging.Filter):
 '''
 
 
-class infoFilter(logging.Filter):
+class InfoFilter(logging.Filter):
     def filter(self, record):
         if record.levelno == logging.INFO:
             return record
@@ -44,7 +44,7 @@ class infoFilter(logging.Filter):
 '''
 
 
-class warningFilter(logging.Filter):
+class WarningFilter(logging.Filter):
     def filter(self, record):
         if record.levelno == logging.WARNING:
             return record
@@ -58,7 +58,7 @@ class warningFilter(logging.Filter):
 '''
 
 
-class errorFilter(logging.Filter):
+class ErrorFilter(logging.Filter):
     def filter(self, record):
         if record.levelno == logging.ERROR:
             return record
@@ -72,7 +72,7 @@ class errorFilter(logging.Filter):
 '''
 
 
-class criticalFilter(logging.Filter):
+class CriticalFilter(logging.Filter):
     def filter(self, record):
         if record.levelno == logging.CRITICAL:
             return record

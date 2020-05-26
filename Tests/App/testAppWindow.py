@@ -13,29 +13,29 @@ class TestAppWindowMethods(unittest.TestCase):
 
     def setUp(self):
         self.MyApp = App()
-        self.MyAppWindow = self.MyApp.mainWindow
+        self.MyAppWindow = self.MyApp.application_window
 
     def testAddVision(self):
         vis = VideoWidget(videoPath)
-        self.MyAppWindow.addVision(vis)
-        self.assertTrue(self.MyAppWindow.visionWidget, vis)
+        self.MyAppWindow.add_vision(vis)
+        self.assertTrue(self.MyAppWindow.vision_widget, vis)
 
     def testAddTable(self):
         mytable = Table()
-        self.MyAppWindow.addTable(mytable)
-        self.assertTrue(self.MyAppWindow.tableWidget, mytable)
+        self.MyAppWindow.add_table(mytable)
+        self.assertTrue(self.MyAppWindow.table_widget, mytable)
 
     def testAddLog(self):
         myLog = LogWidget()
-        self.MyAppWindow.addLog(myLog)
-        self.assertTrue(self.MyAppWindow.logWidget, myLog)
+        self.MyAppWindow.add_log(myLog)
+        self.assertTrue(self.MyAppWindow.log_widget, myLog)
 
     def testaddSemiAuto(self):
         mySemi = SemiAuto(semiAutoPath)
-        self.MyAppWindow.addSemiAuto(mySemi)
-        self.assertTrue(self.MyAppWindow.semiAutoWidget, mySemi)
+        self.MyAppWindow.add_semi_auto(mySemi)
+        self.assertTrue(self.MyAppWindow.semi_auto_widget, mySemi)
 
     def testAddGraphWidget(self):
         myGraph = Graph()
-        self.MyAppWindow.addGraph(myGraph)
-        self.assertTrue(self.MyAppWindow.graphWidget, myGraph)
+        self.MyAppWindow.add_graph(myGraph)
+        self.assertTrue(self.MyAppWindow.graph_widget, myGraph)

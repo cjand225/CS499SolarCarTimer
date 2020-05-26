@@ -17,7 +17,7 @@ from SCTimeUtility.Table.TableWidget import TableWidget
 from SCTimeUtility.Table.AddCarDialog import AddCarDialog
 from SCTimeUtility.Table.AddBatchDialog import AddBatchDialog
 from SCTimeUtility.Table.SemiAuto import SemiAuto
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class Table():
@@ -25,19 +25,19 @@ class Table():
     def __init__(self):
         super().__init__()
 
-        self.logger = getLog()
+        self.logger = get_log()
         # things to be initialized later
         self.TableMod = None
-        self.Widget = None
-        self.CarStoreList = None
-        self.saveShortcut = None
-        self.tableView = None
-        self.semiAuto = None
-        self.semiWidget = None
-        self.addDialog = None
-        self.addBatchDialog = None
+        self.widget = None
+        self.car_storage_list = None
+        self.save_shortcut_binding = None
+        self.table_view = None
+        self.semi_auto_module = None
+        self.semi_auto_widget = None
+        self.add_car_dialog = None
+        self.add_multi_car_dialog = None
 
-        self.initTable()
+        self.init_table_module()
 
     '''
 
@@ -48,11 +48,11 @@ class Table():
 
     '''
 
-    def initUI(self):
-        self.Widget = TableWidget(tableUIPath)
-        self.Widget.initHeaderVertical()
-        self.Widget.show()
-        self.tableView = self.Widget.tableView
+    def init_widget(self):
+        self.widget = TableWidget(tableUIPath)
+        self.widget.init_vertical_header()
+        self.widget.show()
+        self.table_view = self.widget.table_view
 
     '''
 
@@ -63,24 +63,24 @@ class Table():
 
     '''
 
-    def connectActions(self):
-        self.tableView.doubleClicked.connect(self.handleTableDoubleClick)
+    def bind_actions(self):
+        self.table_view.doubleClicked.connect(self.double_click_event)
 
-        self.Widget.bAddCar.clicked.connect(self.handleAddDialog)
-        self.Widget.bAddMultiple.clicked.connect(self.handleAddBatchDialog)
-        # self.Widget.bEditCar.clicked.connect(self.editCar)
-        # self.Widget.bRemoveCar.clicked.connect(self.removeCar)
-        # self.Widget.bStartCar.clicked.connect()
-        # self.Widget.bStopCar.clicked.connect()
+        self.widget.add_car_pb.clicked.connect(self.add_car_event)
+        self.widget.add_multi_pb.clicked.connect(self.add_multi_car_event)
+        # self.Widget.edit_car_pb.clicked.connect(self.editCar)
+        # self.Widget.remove_car_pb.clicked.connect(self.removeCar)
+        # self.Widget.start_car_pb.clicked.connect()
+        # self.Widget.stop_car_pb.clicked.connect()
 
-        self.CarStoreList.dataModified.connect(self.updateSemiAuto)
-        self.CarStoreList.dataModified.connect(self.fixHeaders)
+        self.car_storage_list.dataModified.connect(self.update_semi_auto_module)
+        self.car_storage_list.dataModified.connect(self.resize_headers)
 
-        self.semiAuto.globalStart.clicked.connect(self.CarStoreList.startCars)
-        self.semiAuto.globalStop.clicked.connect(self.CarStoreList.stopCars)
-        self.semiAuto.addCar.clicked.connect(self.handleAddDialog)
+        self.semi_auto_module.globalStart.clicked.connect(self.car_storage_list.start_all_cars)
+        self.semi_auto_module.globalStop.clicked.connect(self.car_storage_list.stop_all_cars)
+        self.semi_auto_module.addCar.clicked.connect(self.add_car_event)
         # self.semiAuto.editCar.clicked.connect()
-        self.semiAuto.addMultiple.clicked.connect(self.handleAddBatchDialog)
+        self.semi_auto_module.addMultiple.clicked.connect(self.add_multi_car_event)
         # self.semiAuto.removeCar.clicked.connect()
 
     '''
@@ -92,8 +92,8 @@ class Table():
 
     '''
 
-    def getTableWidget(self):
-        return self.Widget
+    def get_table_widget(self):
+        return self.widget
 
     '''
 
@@ -104,9 +104,9 @@ class Table():
 
     '''
 
-    def initTableModel(self):
-        self.TableMod = TableModel(self.Widget, self.CarStoreList)
-        self.tableView.setModel(self.TableMod)
+    def get_table_model(self):
+        self.TableMod = TableModel(self.widget, self.car_storage_list)
+        self.table_view.setModel(self.TableMod)
 
     '''
 
@@ -117,15 +117,15 @@ class Table():
 
     '''
 
-    def initTable(self):
+    def init_table_module(self):
         # Model > UI > UIModel
-        self.initCarStorage()
-        self.initUI()
-        self.initTableModel()
-        self.fixHeaders()
-        self.initDialogs()
-        self.initSemiAuto()
-        self.connectActions()
+        self.init_car_storage()
+        self.init_widget()
+        self.get_table_model()
+        self.resize_headers()
+        self.init_dialogs()
+        self.init_semi_auto_module()
+        self.bind_actions()
 
     '''
 
@@ -136,8 +136,8 @@ class Table():
 
     '''
 
-    def initCarStorage(self):
-        self.CarStoreList = CarStorage()
+    def init_car_storage(self):
+        self.car_storage_list = CarStorage()
 
     '''
 
@@ -148,8 +148,8 @@ class Table():
 
     '''
 
-    def getCarStorage(self):
-        return self.CarStoreList.getCarListCopy()
+    def get_car_storage(self):
+        return self.car_storage_list.car_list_copy()
 
     '''
 
@@ -161,8 +161,8 @@ class Table():
 
     '''
 
-    def initSemiAuto(self):
-        self.semiAuto = SemiAuto(semiAutoUIPath)
+    def init_semi_auto_module(self):
+        self.semi_auto_module = SemiAuto(semiAutoUIPath)
         self.logger.debug('[' + __name__ + '] ' + 'Semi-Auto Initialized')
 
     '''
@@ -174,8 +174,8 @@ class Table():
 
     '''
 
-    def getSemiAuto(self):
-        return self.semiAuto
+    def get_semi_auto_module(self):
+        return self.semi_auto_module
 
     '''
 
@@ -186,9 +186,9 @@ class Table():
 
     '''
 
-    def initDialogs(self):
-        self.addDialog = AddCarDialog(addCarDialogUIPath)
-        self.addBatchDialog = AddBatchDialog(addBatchCarDialogUIPath)
+    def init_dialogs(self):
+        self.add_car_dialog = AddCarDialog(addCarDialogUIPath)
+        self.add_multi_car_dialog = AddBatchDialog(addBatchCarDialogUIPath)
 
     '''
 
@@ -199,8 +199,8 @@ class Table():
         
     '''
 
-    def createCar(self, carNum, teamName):
-        self.CarStoreList.createCar(carNum, teamName)
+    def create_car(self, carNum, teamName):
+        self.car_storage_list.create_car(carNum, teamName)
 
     '''
 
@@ -211,8 +211,8 @@ class Table():
 
     '''
 
-    def createCars(self, list):
-        self.CarStoreList.createCars(list)
+    def create_multiple_cars(self, list):
+        self.car_storage_list.create_multiple_cars(list)
 
     '''
 
@@ -223,8 +223,8 @@ class Table():
 
     '''
 
-    def handleStart(self):
-        self.CarStoreList.setSeedValue(datetime.datetime.now())
+    def enable_car_start(self):
+        self.car_storage_list.set_seed_value(datetime.datetime.now())
 
     '''
 
@@ -235,9 +235,9 @@ class Table():
 
     '''
 
-    def handleTableDoubleClick(self, i):
-        if i.column() == len(self.CarStoreList.storageList):
-            self.handleAddDialog()
+    def double_click_event(self, i):
+        if i.column() == len(self.car_storage_list.storage_list):
+            self.add_car_event()
 
     '''
 
@@ -248,11 +248,11 @@ class Table():
 
     '''
 
-    def handleAddDialog(self):
-        retval = self.addDialog.exec()
-        if retval == QDialog.Accepted:
-            self.createCar(self.addDialog.carNumber, self.addDialog.teamName)
-            self.addDialog.clearText()
+    def add_car_event(self):
+        ret_val = self.add_car_dialog.exec()
+        if ret_val == QDialog.Accepted:
+            self.create_car(self.add_car_dialog.carNumber, self.add_car_dialog.teamName)
+            self.add_car_dialog.clearText()
 
     '''
 
@@ -263,11 +263,11 @@ class Table():
 
     '''
 
-    def handleAddBatchDialog(self):
-        retval = self.addBatchDialog.exec()
-        if retval == QDialog.Accepted:
-            self.createCars(self.addBatchDialog.getList())
-            self.addBatchDialog.clear()
+    def add_multi_car_event(self):
+        ret_val = self.add_multi_car_dialog.exec()
+        if ret_val == QDialog.Accepted:
+            self.create_multiple_cars(self.add_multi_car_dialog.get_list())
+            self.add_multi_car_dialog.clear_batch()
 
     '''
     
@@ -278,8 +278,8 @@ class Table():
 
     '''
 
-    def updateSemiAuto(self):
-        self.semiAuto.updateList(self.CarStoreList.storageList)
+    def update_semi_auto_module(self):
+        self.semi_auto_module.update_list(self.car_storage_list.storage_list)
 
     '''
 
@@ -290,14 +290,14 @@ class Table():
 
     '''
 
-    def fixHeaders(self):
-        self.Widget.initHeaderHorizontal()
-        self.Widget.initHeaderVertical()
+    def resize_headers(self):
+        self.widget.init_horizontal_header()
+        self.widget.init_vertical_header()
 
-    #TODO
-    def removeCar(self):
+    # TODO
+    def remove_car(self):
         pass
 
-    #TODO
-    def editCar(self):
+    # TODO
+    def edit_car_details(self):
         pass

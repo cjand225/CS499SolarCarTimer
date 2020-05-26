@@ -10,5 +10,5 @@ import logging
 
 from SCTimeUtility.Resources.UI import logWidPath
 
-logUIPath = logWidPath
+resource_path = logWidPath
 defaultLogFormat = logging.Formatter('[%(asctime)s] - [%(levelname)s] - %(message)s')

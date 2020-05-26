@@ -15,8 +15,8 @@ from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtWidgets import QApplication, QWidget, QStyle
 from PyQt5.uic import loadUi
 
-from SCTimeUtility.Graph import graphUIPath
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Graph import graph_resource_path
+from SCTimeUtility.Log.Log import get_log
 
 
 class GraphType(IntEnum):
@@ -31,18 +31,18 @@ class Graph(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.GraphDict = ["Lap vs Time", "Average Lap vs Time", "Minimum Time", "Maximum Time"]
-        self.currentGraphType = self.GraphDict[GraphType.LAP_TIME]
-        self.graphedTeamList = []
+        self.graph_dictionary = ["Lap vs Time", "Average Lap vs Time", "Minimum Time", "Maximum Time"]
+        self.default_graph_type = self.graph_dictionary[GraphType.LAP_TIME]
+        self.graphed_team_list = []
         self.currGraphNum = 1
         self.inMinutes = False
 
         self.teamList = []
 
-        self.initUI()
-        self.addGraphs()
-        self.handleUpdate(self.teamList)
-        self.bindListeners()
+        self.init_widget()
+        self.add_graphs()
+        self.handle_update(self.teamList)
+        self.bind_actions()
 
     '''  
         Function: initUI
@@ -51,21 +51,21 @@ class Graph(QWidget):
         Purpose: Initializes and loads resource file for the Graph Widget.
     '''
 
-    def initUI(self):
-        self.ui = loadUi(graphUIPath, self)
+    def init_widget(self):
+        self.widget = loadUi(graph_resource_path, self)
         self.setGeometry(QStyle.alignedRect(Qt.RightToLeft, Qt.AlignBottom,
                                             self.size(), QApplication.desktop().availableGeometry()))
 
     '''  
-        Function: addGraphcs
+        Function: addGraphics
         Parameters: self
         Return Value: N/A
         Purpose: Adds Graph types to the list of available graphs
     '''
 
     # add Graph types
-    def addGraphs(self):
-        for graph in self.GraphDict:
+    def add_graphs(self):
+        for graph in self.graph_dictionary:
             self.GraphTypes.addItem(graph)
 
     '''  
@@ -75,12 +75,12 @@ class Graph(QWidget):
         Purpose: Binds all the different functions to corresponding buttons on GUI.
     '''
 
-    def bindListeners(self):
-        self.ApplyGraphBtn.clicked.connect(self.drawGraph)
-        self.GraphTypes.activated[str].connect(self.typeChosen)
-        self.ChosenTeamList.itemDoubleClicked.connect(self.chosenTeamClick)
-        self.MinuteButton.toggled.connect(self.timeToggle)
-        self.TeamChoiceBox.activated.connect(self.teamChosen)
+    def bind_actions(self):
+        self.ApplyGraphBtn.clicked.connect(self.create_graph)
+        self.GraphTypes.activated[str].connect(self.graph_type_chosen)
+        self.ChosenTeamList.itemDoubleClicked.connect(self.chosen_team_click_event)
+        self.MinuteButton.toggled.connect(self.time_display_toggle)
+        self.TeamChoiceBox.activated.connect(self.team_selected)
 
     '''  
         Function: updateTeamList
@@ -89,8 +89,8 @@ class Graph(QWidget):
         Purpose: Called periodically on update of model to update the team listing availability for graphing
     '''
 
-    def updateTeamList(self, newTeamList):
-        self.teamList = newTeamList
+    def update_team_lists(self, team_list):
+        self.teamList = team_list
 
     '''  
         Function: populateTeamChoiceBox
@@ -99,8 +99,8 @@ class Graph(QWidget):
         Purpose: Populates the choice of teams into gui related teamChoiceBox.
     '''
 
-    def populateTeamChoiceBox(self):
-        self.graphedTeamList = []
+    def populate_team_choices(self):
+        self.graphed_team_list = []
         self.TeamChoiceBox.clear()
         for x in range(0, len(self.teamList)):
             self.TeamChoiceBox.addItem(str(self.teamList[x].getTeam()), x)
@@ -112,7 +112,7 @@ class Graph(QWidget):
         Purpose: Toggles how time is displayed, whether in seconds or minutes.
     '''
 
-    def timeToggle(self):
+    def time_display_toggle(self):
         self.inMinutes = self.MinuteButton.isChecked()
 
     '''  
@@ -122,9 +122,9 @@ class Graph(QWidget):
         Purpose: called periodically to update team listings.
     '''
 
-    def handleUpdate(self, newTeamList):
-        self.updateTeamList(newTeamList)
-        self.populateTeamChoiceBox()
+    def handle_update(self, team_list):
+        self.update_team_lists(team_list)
+        self.populate_team_choices()
 
     '''  
         Function: drawGraph
@@ -133,15 +133,15 @@ class Graph(QWidget):
         Purpose: 
     '''
 
-    def drawGraph(self):
-        if self.currentGraphType == self.GraphDict[GraphType.LAP_TIME]:
-            self.lapVsTimeGraph()
-        elif self.currentGraphType == self.GraphDict[GraphType.AVG_TIME]:
-            self.avgLapVsTimeGraph()
-        elif self.currentGraphType == self.GraphDict[GraphType.MIN_TIME]:
-            self.minTimeGraph()
-        elif self.currentGraphType == self.GraphDict[GraphType.MAX_TIME]:
-            self.maxTimeGraph()
+    def create_graph(self):
+        if self.default_graph_type == self.graph_dictionary[GraphType.LAP_TIME]:
+            self.lap_over_time_graph()
+        elif self.default_graph_type == self.graph_dictionary[GraphType.AVG_TIME]:
+            self.average_lap_over_time_graph()
+        elif self.default_graph_type == self.graph_dictionary[GraphType.MIN_TIME]:
+            self.lowest_time_graph()
+        elif self.default_graph_type == self.graph_dictionary[GraphType.MAX_TIME]:
+            self.highest_time_graph()
 
     '''  
         Function: teamChosen
@@ -150,8 +150,8 @@ class Graph(QWidget):
         Purpose: Adds current index to the list of chosen teams to Graph.
     '''
 
-    def teamChosen(self, index):
-        self.addTeamToGraphList(self.TeamChoiceBox.currentIndex())
+    def team_selected(self):
+        self.add_team_to_graphing_list(self.TeamChoiceBox.currentIndex())
 
     '''  
         Function: addTeamToGraphList
@@ -161,15 +161,15 @@ class Graph(QWidget):
                  range of the list indices.
     '''
 
-    def addTeamToGraphList(self, index):
+    def add_team_to_graphing_list(self, index):
         # check for space in list
-        if len(self.graphedTeamList) >= self.maxGraphNumber:
+        if len(self.graphed_team_list) >= self.maxGraphNumber:
             return False
 
         # if not in list add it
-        if not (self.teamList[index] in self.graphedTeamList):
+        if not (self.teamList[index] in self.graphed_team_list):
             self.ChosenTeamList.addItem(self.teamList[index].getTeam())
-            self.graphedTeamList.append(self.teamList[index])
+            self.graphed_team_list.append(self.teamList[index])
             return True
         return False
 
@@ -180,12 +180,12 @@ class Graph(QWidget):
         Purpose: Returns a boolean value based on if a team was removed from the current graphing list.
     '''
 
-    def removeTeamFromGraphList(self, teamName):
+    def remove_team_from_graph_list(self, teamName):
         # search Graph list and remove found element
-        for i in range(0, len(self.graphedTeamList) - 1):
-            team = self.graphedTeamList[i]
+        for i in range(0, len(self.graphed_team_list) - 1):
+            team = self.graphed_team_list[i]
             if team.getTeam() == teamName:
-                self.graphedTeamList.pop(i)
+                self.graphed_team_list.pop(i)
                 return True
         return False
 
@@ -196,10 +196,10 @@ class Graph(QWidget):
         Purpose: handles the click events associated with added and removing teams.
     '''
 
-    def chosenTeamClick(self):
+    def chosen_team_click_event(self):
         # if the team is double clicked then remove it
         teamName = self.ChosenTeamList.currentItem().text()
-        self.removeTeamFromGraphList(teamName)
+        self.remove_team_from_graph_list(teamName)
         # remove the team from the list
         self.ChosenTeamList.takeItem(self.ChosenTeamList.currentRow())
 
@@ -210,10 +210,10 @@ class Graph(QWidget):
         Purpose: sets the current graphing type to the one selected in the list
     '''
 
-    def typeChosen(self, text):
+    def graph_type_chosen(self, text):
         # checks that type is valid (in types list)
-        if text in self.GraphDict:
-            self.currentGraphType = text
+        if text in self.graph_dictionary:
+            self.default_graph_type = text
 
     '''  
         Function: getElapsed
@@ -222,13 +222,13 @@ class Graph(QWidget):
         Purpose: Appends a new list of laptimes for plotting Graph, based on either minutes or seconds.
     '''
 
-    def getElapsed(self, lapList):
+    def get_elapsed_time(self, lap_list):
         elapsed = []
         if self.inMinutes:
-            for lap in lapList:
+            for lap in lap_list:
                 elapsed.append(lap / 60)
         else:
-            for lap in lapList:
+            for lap in lap_list:
                 elapsed.append(lap)
         return elapsed
 
@@ -239,8 +239,7 @@ class Graph(QWidget):
         Purpose: Creates a Graph based on Lap Vs. Time based on certain intervals of laps and amounts of time.
     '''
 
-    def lapVsTimeGraph(self):
-
+    def lap_over_time_graph(self):
         plt.figure(self.currGraphNum)
         # set labels
         plt.title('Lap vs Time')
@@ -252,18 +251,18 @@ class Graph(QWidget):
 
         # plot data
         index = 0
-        for team in self.graphedTeamList:
-            durationList = []
-            graphRange = np.arange(0, len(self.graphedTeamList[index].lapList), 1.0)
-            plt.xticks(np.arange(1.0, len(self.graphedTeamList[index].lapList) + 1, 1.0))
+        for team in self.graphed_team_list:
+            duration_list = []
+            graph_range = np.arange(0, len(self.graphed_team_list[index].lapList), 1.0)
+            plt.xticks(np.arange(1.0, len(self.graphed_team_list[index].lapList) + 1, 1.0))
             for lap in team.lapList:
-                durationList.append(lap.getElapsed())
-            durationList = self.getElapsed(durationList)
-            # plot curent Team
-            plt.plot(graphRange, durationList, label=team.getTeam())
+                duration_list.append(lap.get_elapsed_time())
+            duration_list = self.get_elapsed_time(duration_list)
+            # plot current Team
+            plt.plot(graph_range, duration_list, label=team.getTeam())
             index += 1
 
-        if len(self.graphedTeamList) > 0:
+        if len(self.graphed_team_list) > 0:
             plt.legend()
         plt.tight_layout()
         plt.grid(True)
@@ -279,7 +278,7 @@ class Graph(QWidget):
         Purpose: creates a Graph based on Average Lap Vs. Time of all participating cars selected.
     '''
 
-    def avgLapVsTimeGraph(self):
+    def average_lap_over_time_graph(self):
 
         plt.figure(self.currGraphNum)
 
@@ -293,7 +292,7 @@ class Graph(QWidget):
 
         # plot team lap averages
         index = 0
-        for team in self.graphedTeamList:
+        for team in self.graphed_team_list:
             lapAverages = []
             graphRange = np.arange(0, len(team.lapList), 1.0)
             plt.xticks(np.arange(1.0, len(team.lapList) + 1, 1.0))
@@ -302,13 +301,13 @@ class Graph(QWidget):
             currLap = 0
             for lap in team.lapList:
                 if self.inMinutes:
-                    lapAverages.append((lap.getElapsed() / ((currLap + 1) * 60)))
+                    lapAverages.append((lap.get_elapsed_time() / ((currLap + 1) * 60)))
                 else:
-                    lapAverages.append(lap.getElapsed() / (currLap + 1))
+                    lapAverages.append(lap.get_elapsed_time() / (currLap + 1))
                 currLap += 1
 
             plt.plot(graphRange, lapAverages, label=team.getTeam())
-        if len(self.graphedTeamList) > 0:
+        if len(self.graphed_team_list) > 0:
             plt.legend()
 
         plt.tight_layout()
@@ -322,55 +321,55 @@ class Graph(QWidget):
         Function: minTimeGraph
         Parameters: self
         Return Value: N/A
-        Purpose: Creates a Graph based on the minimum Time of each Car at certain intervals.
+        Purpose: Creates a Graph based on the lowest Time of each Car at certain intervals.
     '''
 
-    def minTimeGraph(self):
+    def lowest_time_graph(self):
         labels = []
         data = []
 
         # calculate minimum times for teams
-        for team in self.graphedTeamList:
+        for team in self.graphed_team_list:
             lapList = []
             for lap in team.lapList:
-                if lap.getElapsed() != 0:
-                    lapList.append(lap.getElapsed())
+                if lap.get_elapsed_time() != 0:
+                    lapList.append(lap.get_elapsed_time())
 
             data.append(min(lapList))
             labels.append(team.getTeam())
 
         # send data to bar Graph
         if self.inMinutes:
-            self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Time (minutes)')
+            self.bar_graph(data, labels, 'Minimum Times', 'Teams', 'Time (minutes)')
         else:
-            self.barGraph(data, labels, 'Minimum Times', 'Teams', 'Time (seconds)')
+            self.bar_graph(data, labels, 'Minimum Times', 'Teams', 'Time (seconds)')
 
     '''  
         Function: maxTimeGraph
         Parameters: self
         Return Value: N/A
-        Purpose: Creates a Graph based on the minimum Time of each Car at certain intervals.
+        Purpose: Creates a Graph based on the highest Time of each Car at certain intervals.
     '''
 
-    def maxTimeGraph(self):
+    def highest_time_graph(self):
         labels = []
         data = []
 
         # calculate minimum times for teams
-        for team in self.graphedTeamList:
+        for team in self.graphed_team_list:
             lapList = []
             for lap in team.lapList:
-                if lap.getElapsed() != 0:
-                    lapList.append(lap.getElapsed())
+                if lap.get_elapsed_time() != 0:
+                    lapList.append(lap.get_elapsed_time())
 
             data.append(max(lapList))
             labels.append(team.getTeam())
 
         # send data to bar Graph
         if self.inMinutes:
-            self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Time (minutes)')
+            self.bar_graph(data, labels, 'Maximum Times', 'Teams', 'Time (minutes)')
         else:
-            self.barGraph(data, labels, 'Maximum Times', 'Teams', 'Time (seconds)')
+            self.bar_graph(data, labels, 'Maximum Times', 'Teams', 'Time (seconds)')
 
     '''  
         Function: barGraph
@@ -379,7 +378,7 @@ class Graph(QWidget):
         Purpose: Creates a bar Graph based on laps or Lap Times of each car.
     '''
 
-    def barGraph(self, data, labels, title, x_axis, y_axis):
+    def bar_graph(self, data, labels, title, x_axis, y_axis):
         # increments the figure number to guarantee new window
         plt.figure(self.currGraphNum)
         self.currGraphNum += 1

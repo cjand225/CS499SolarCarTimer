@@ -11,19 +11,19 @@ from PyQt5.QtGui import QResizeEvent
 from PyQt5.QtWidgets import QWidget, QApplication, QStyle, QHeaderView
 from PyQt5.uic import loadUi
 
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 
 class LeaderBoardWidget(QWidget):
 
-    def __init__(self, uiPath):
+    def __init__(self, resource_path):
         super().__init__()
-        self.initialWidth = None
-        self.ui = None
-        self.uiPath = uiPath
-        self.initUI()
-        self.tableView.horizontalHeader().sectionResized.connect(self.columnResized)
-        self.columnSizes = []
+        self.default_widget_width = None
+        self.widget = None
+        self.resource_path = resource_path
+        self.init_widget()
+
+        self.column_sizes = []
 
     '''  
         Function: show
@@ -34,11 +34,11 @@ class LeaderBoardWidget(QWidget):
 
     def show(self):
         super().show()
-        if not self.initialWidth:
-            self.initialWidth = self.width()
-        self.tableView.horizontalHeader().blockSignals(True)
-        self.adjustHeaders()
-        self.tableView.horizontalHeader().blockSignals(False)
+        if not self.default_widget_width:
+            self.default_widget_width = self.width()
+        self.table_view.horizontalHeader().blockSignals(True)
+        self.resize_headers()
+        self.table_view.horizontalHeader().blockSignals(False)
 
     '''  
         Function: columnResized
@@ -48,18 +48,18 @@ class LeaderBoardWidget(QWidget):
     '''
 
     def columnResized(self, i, oldSize, newSize):
-        self.tableView.horizontalHeader().blockSignals(True)
-        actual_length = self.tableView.horizontalHeader().width()
-        total_length = self.tableView.horizontalHeader().length()
+        self.table_view.horizontalHeader().blockSignals(True)
+        actual_length = self.table_view.horizontalHeader().width()
+        total_length = self.table_view.horizontalHeader().length()
         if total_length != actual_length:
-            if i < len(self.tableView.horizontalHeader()) - 1:
-                next_size = self.tableView.horizontalHeader().sectionSize(i + 1)
-                self.tableView.horizontalHeader().resizeSection(i + 1, next_size - (newSize - oldSize))
+            if i < len(self.table_view.horizontalHeader()) - 1:
+                next_size = self.table_view.horizontalHeader().sectionSize(i + 1)
+                self.table_view.horizontalHeader().resizeSection(i + 1, next_size - (newSize - oldSize))
             else:
-                self.tableView.horizontalHeader().resizeSection(i, oldSize)
+                self.table_view.horizontalHeader().resizeSection(i, oldSize)
         else:
-            self.tableView.horizontalHeader().resizeSection(i, max(0, oldSize - 10))
-        self.tableView.horizontalHeader().blockSignals(False)
+            self.table_view.horizontalHeader().resizeSection(i, max(0, oldSize - 10))
+        self.table_view.horizontalHeader().blockSignals(False)
 
     '''  
         Function: initUI
@@ -68,10 +68,11 @@ class LeaderBoardWidget(QWidget):
         Purpose: Initializes and loads the Resources necessary for the leaderboard widget.
     '''
 
-    def initUI(self):
-        self.ui = loadUi(self.uiPath, self)
+    def init_widget(self):
+        self.widget = loadUi(self.resource_path, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignLeft,
                                             self.size(), QApplication.desktop().availableGeometry()))
+        self.table_view.horizontalHeader().sectionResized.connect(self.columnResized)
 
     '''  
         Function: adjustHeaders
@@ -80,9 +81,9 @@ class LeaderBoardWidget(QWidget):
         Purpose: Updates headers based on sizing issues.
     '''
 
-    def adjustHeaders(self, update=False):
-        self.initHeaderHorizontal(update)
-        self.initHeaderVertical()
+    def resize_headers(self, update=False):
+        self.init_horizontal_header(update)
+        self.init_vertical_header()
 
     '''  
         Function: resizeEvent
@@ -92,10 +93,10 @@ class LeaderBoardWidget(QWidget):
     '''
 
     def resizeEvent(self, a0: QResizeEvent):
-        if (not self.initialWidth) or (a0.size().width() > self.initialWidth):
-            self.tableView.horizontalHeader().blockSignals(True)
-            self.adjustHeaders()
-            self.tableView.horizontalHeader().blockSignals(False)
+        if (not self.default_widget_width) or (a0.size().width() > self.default_widget_width):
+            self.table_view.horizontalHeader().blockSignals(True)
+            self.resize_headers()
+            self.table_view.horizontalHeader().blockSignals(False)
 
     '''  
         Function: initHeaderHorizontal
@@ -104,22 +105,22 @@ class LeaderBoardWidget(QWidget):
         Purpose: Initializes the Settings and data needed for the headers.
     '''
 
-    def initHeaderHorizontal(self, update=False):
+    def init_horizontal_header(self, update=False):
         # Resizes the horizontal header so that the Table fits initially without scrollbars.
         if update:
-            self.tableView.horizontalHeader().blockSignals(True)
-            self.columnSizes = []
-        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        for headerIndex in range(len(self.tableView.horizontalHeader())):
+            self.table_view.horizontalHeader().blockSignals(True)
+            self.column_sizes = []
+        self.table_view.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        for headerIndex in range(len(self.table_view.horizontalHeader())):
             # sectionSize computes the width of the column header.
             # As a side effect, it also forces the header to resize to f it its container.
-            columnSize = self.tableView.horizontalHeader().sectionSize(headerIndex)
+            columnSize = self.table_view.horizontalHeader().sectionSize(headerIndex)
             if update:
-                self.columnSizes.append(columnSize)
-        self.tableView.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
-        self.tableView.horizontalHeader().setStretchLastSection(True)
+                self.column_sizes.append(columnSize)
+        self.table_view.horizontalHeader().setSectionResizeMode(QHeaderView.Interactive)
+        self.table_view.horizontalHeader().setStretchLastSection(True)
         if update:
-            self.tableView.horizontalHeader().blockSignals(False)
+            self.table_view.horizontalHeader().blockSignals(False)
 
     '''  
         Function: initHeaderVertical
@@ -128,11 +129,11 @@ class LeaderBoardWidget(QWidget):
         Purpose: Initializes the Settings and data needed for the headers.
     '''
 
-    def initHeaderVertical(self):
+    def init_vertical_header(self):
         # Resizes the vertical header so that the Table fits initially without scrollbars.
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        for headerIndex in range(len(self.tableView.verticalHeader())):
+        self.table_view.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        for headerIndex in range(len(self.table_view.verticalHeader())):
             # sectionSize computes the height of the row header.
             # As a side effect, it also forces the header to resize to fit its container.
-            self.tableView.verticalHeader().sectionSize(headerIndex)
-        self.tableView.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)
+            self.table_view.verticalHeader().sectionSize(headerIndex)
+        self.table_view.verticalHeader().setSectionResizeMode(QHeaderView.Interactive)

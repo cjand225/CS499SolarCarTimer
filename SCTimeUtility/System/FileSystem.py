@@ -16,8 +16,9 @@ import os, csv, datetime
     Purpose: parses and imports data from a directory containing CSVs.
 '''
 
-#TODO
-def importCSV(path):
+
+# TODO
+def import_csv(path):
     if os.path.exists(path):
         pass
     else:
@@ -34,19 +35,17 @@ def importCSV(path):
 '''
 
 
-def exportCSV(carStorage, path):
-    folderPath = os.path.join(path, datetime.datetime.now().strftime('%Y-%b-%d_%H%M'))
-    # if the timestamped folder doesn't exist, create it now
-    if not os.path.exists(folderPath):
-        os.makedirs(folderPath)
-    # go through each car and write it out to a csv file named after carNum-TeamName.csv
-    for car in carStorage.storageList:
-        fileName = str(car.CarNum) + '-' + str(car.TeamName) + '.csv'
-        filePath = os.path.join(folderPath, fileName)
-        with open(filePath, 'w', newline='') as f:
+def export_csv(car_storage, path):
+    folder_path = os.path.join(path, datetime.datetime.now().strftime('%Y-%b-%d_%H%M'))
+    if not os.path.exists(folder_path):
+        os.makedirs(folder_path)
+    for car in car_storage.storage_list:
+        file_name = str(car.CarNum) + '-' + str(car.TeamName) + '.csv'
+        file_path = os.path.join(folder_path, file_name)
+        with open(file_path, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['Lap', 'Elapsed Time', 'First Edit', 'Last Edit', 'Time of Day'])
-            lapCount = 0
+            lap_count = 0
             for lap in car.lapList:
-                writer.writerow([lapCount, lap, lap.initialWrite, lap.lastWrite, lap.initialWrite.strftime("%I:%M")])
-                lapCount += 1
+                writer.writerow([lap_count, lap, lap.initial_write, lap.last_write, lap.initial_write.strftime("%I:%M")])
+                lap_count += 1

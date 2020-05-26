@@ -8,7 +8,7 @@
 
 import re
 
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 RegExpID = "^([0-9][0-9]{0,2}|1000)$"
 RegExpTeamName = "^[a-zA-Z]+(?:[\s-][a-zA-Z]+)*$"
@@ -25,8 +25,8 @@ RegExpFileName = "^[a-zA-Z0-9](?[a-zA-Z0-9 ._-]*[a-zA-Z0-9])?\.[a-zA-Z0-9_-]+$"
 """
 
 
-def isValidFilename(regExpFileName, filename):
-    return re.findall(regExpFileName, filename)
+def is_valid_filename(reg_exp, filename):
+    return re.findall(reg_exp, filename)
 
 
 """
@@ -40,8 +40,8 @@ def isValidFilename(regExpFileName, filename):
 """
 
 
-def isValidElaspedTime(inputTime, totalCurrentTime):
-    return inputTime >= totalCurrentTime
+def is_valid_elapsed_time(input_time, total_time):
+    return input_time >= total_time
 
 
 """
@@ -54,12 +54,8 @@ def isValidElaspedTime(inputTime, totalCurrentTime):
 """
 
 
-def isValidTeamName(regExpTeamName, teamName):
-    check = False
-    if type(teamName) is str:
-        if re.findall(regExpTeamName, teamName):
-            check = True
-    return check
+def is_valid_team_name(reg_exp, team_name):
+    return re.findall(reg_exp, team_name)
 
 
 """
@@ -90,12 +86,11 @@ def isValidInteger(carNum, ExpCarNum):
 """
 
 
-def existsCarNumber(num, storageList):
-    check = False
+def car_number_exists(num, storageList):
     for item in storageList:
         if item.getCarNum() == num:
-            check = True
-    return check
+            return True
+    return False
 
 
 """
@@ -107,12 +102,11 @@ def existsCarNumber(num, storageList):
 """
 
 
-def existsTeamName(teamName, storageList):
-    check = False
+def team_name_exists(teamName, storageList):
     for item in storageList:
         if item.getTeam() == teamName:
-            check = True
-    return check
+            return True
+    return False
 
 
 """
@@ -125,8 +119,8 @@ def existsTeamName(teamName, storageList):
 """
 
 
-def existsCar(storageList, num, org):
-    return existsCarNumber(num, storageList) or existsTeamName(org, storageList)
+def car_exists(storage_list, car_number, team_name):
+    return car_number_exists(car_number, storage_list) or team_name_exists(team_name, storage_list)
 
 
 """
@@ -138,5 +132,5 @@ def existsCar(storageList, num, org):
 """
 
 
-def isValidCar(num, teamName):
-    return isValidInteger(num, RegExpCarNum) and isValidTeamName(teamName, RegExpTeamName)
+def is_valid_car(num, teamName):
+    return isValidInteger(num, RegExpCarNum) and is_valid_team_name(teamName, RegExpTeamName)

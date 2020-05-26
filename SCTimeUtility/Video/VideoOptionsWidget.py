@@ -14,19 +14,19 @@ from PyQt5.uic import loadUi
 
 class VideoOptionsWidget(QWidget):
 
-    def __init__(self, uipath):
+    def __init__(self, resource_path):
         super().__init__()
-        self.uiPath = uipath
+        self.resource_path = resource_path
 
-        self.camDevice = None
-        self.deviceList = []
+        self.device_num = None
+        self.device_list = []
         self.resolution = [None, None]
-        self.framesPerSecond = None
+        self.fps = None
 
-        self.initUI()
+        self.init_widget()
 
-    def initUI(self):
-        self.ui = loadUi(self.UIPath, self)
+    def init_widget(self):
+        self.widget = loadUi(self.resource_path, self)
         self.setGeometry(QStyle.alignedRect(Qt.LeftToRight, Qt.AlignRight,
                                             self.size(), QApplication.desktop().availableGeometry()))
 

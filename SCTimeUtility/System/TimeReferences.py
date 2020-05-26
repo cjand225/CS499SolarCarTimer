@@ -6,7 +6,7 @@
 
 """
 import datetime
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 '''  
     Function: strpTimeMultiple
@@ -17,7 +17,7 @@ from SCTimeUtility.Log.Log import getLog
 '''
 
 
-def strptimeMultiple(text, formats):
+def strptime_multiple(text, formats):
     for f in formats:
         try:
             return datetime.datetime.strptime(text, f)

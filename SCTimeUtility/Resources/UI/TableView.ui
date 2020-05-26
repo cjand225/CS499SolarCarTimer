@@ -23,7 +23,7 @@
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout" stretch="0">
      <item>
-      <widget class="QTableView" name="tableView"/>
+      <widget class="QTableView" name="table_view"/>
      </item>
     </layout>
    </item>
@@ -44,10 +44,10 @@
            <item row="0" column="0">
             <layout class="QGridLayout" name="gridLayout_2">
              <item row="1" column="1">
-              <widget class="QTimeEdit" name="timeEdit"/>
+              <widget class="QTimeEdit" name="offset_edit"/>
              </item>
              <item row="0" column="1">
-              <widget class="QLCDNumber" name="lcdTime">
+              <widget class="QLCDNumber" name="lcd_time">
                <property name="minimumSize">
                 <size>
                  <width>10</width>
@@ -57,14 +57,14 @@
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QLabel" name="CurrTime">
+              <widget class="QLabel" name="offset_time">
                <property name="text">
                 <string>Time Offset:</string>
                </property>
               </widget>
              </item>
              <item row="0" column="0">
-              <widget class="QLabel" name="OffsetTime">
+              <widget class="QLabel" name="current_time">
                <property name="text">
                 <string>Current Time:</string>
                </property>
@@ -84,42 +84,42 @@
            <item row="0" column="0">
             <layout class="QFormLayout" name="formLayout">
              <item row="0" column="0">
-              <widget class="QPushButton" name="bAddCar">
+              <widget class="QPushButton" name="add_car_pb">
                <property name="text">
                 <string>Add Car</string>
                </property>
               </widget>
              </item>
              <item row="0" column="1">
-              <widget class="QPushButton" name="bAddMultiple">
+              <widget class="QPushButton" name="add_multi_pb">
                <property name="text">
                 <string>Add Multiple</string>
                </property>
               </widget>
              </item>
              <item row="1" column="0">
-              <widget class="QPushButton" name="bEditCar">
+              <widget class="QPushButton" name="edit_car_pb">
                <property name="text">
                 <string>Edit Car</string>
                </property>
               </widget>
              </item>
              <item row="1" column="1">
-              <widget class="QPushButton" name="bStopCar">
+              <widget class="QPushButton" name="stop_car_pb">
                <property name="text">
                 <string>Stop Car</string>
                </property>
               </widget>
              </item>
              <item row="2" column="0">
-              <widget class="QPushButton" name="bRemoveCar">
+              <widget class="QPushButton" name="remove_car_pb">
                <property name="text">
                 <string>Remove Car</string>
                </property>
               </widget>
              </item>
              <item row="2" column="1">
-              <widget class="QPushButton" name="bStartCar">
+              <widget class="QPushButton" name="start_car_pb">
                <property name="text">
                 <string>Start Car</string>
                </property>

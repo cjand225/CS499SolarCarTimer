@@ -68,7 +68,7 @@ class TestSemiAutoWidget(unittest.TestCase):
         semiAutoWidget = type(self).createWidget()
         testCar = type(self).addCar(semiAutoWidget)
         spy = QSignalSpy(semiAutoWidget.carRecord)
-        semiAutoWidget.clickRecord(0)
+        semiAutoWidget.record_click_event(0)
         self.assertTrue(spy.wait(250))
         self.assertEqual(len(spy), 1)
         firstClick = spy[0]

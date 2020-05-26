@@ -9,12 +9,12 @@
 import datetime, math
 
 
-class LapTime():
-    def __init__(self, timeData):
-        if isinstance(timeData, datetime.timedelta):
-            self.elapsedTime = timeData
-            self.initialWrite = datetime.datetime.now()
-            self.lastWrite = self.initialWrite
+class LapTime:
+    def __init__(self, time_data):
+        if isinstance(time_data, datetime.timedelta):
+            self.elapsedTime = time_data
+            self.initial_write = datetime.datetime.now()
+            self.last_write = self.initial_write
         else:
             raise TypeError("Not a valid instance of datetime.")
 
@@ -25,9 +25,9 @@ class LapTime():
         Purpose: Allows setting of time data for LapTime when invoked, same as constructing an instance.
     '''
 
-    def setElapsed(self, timeData):
-        self.elapsedTime = timeData
-        self.lastWrite = datetime.datetime.now()
+    def set_elapsed(self, time_data):
+        self.elapsedTime = time_data
+        self.last_write = datetime.datetime.now()
 
     '''  
         Function: getElapsed
@@ -36,7 +36,7 @@ class LapTime():
         Purpose: returns the integer value of the current elapsed time in milliseconds
     '''
 
-    def getElapsed(self):
+    def get_elapsed_time(self):
         return int(self.elapsedTime.total_seconds())
 
     '''  

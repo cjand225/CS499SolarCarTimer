@@ -2,7 +2,7 @@ import os, sys, unittest
 
 sys.path.insert(0, os.path.abspath("SCTimeUtility"))
 from time import time
-from SCTimeUtility.System.Prediction import predictNextLapTime, LapPredictionError
+from SCTimeUtility.System.Prediction import predict_next_lap_occurance, LapPredictionError
 from SCTimeUtility.Table.LapTime import LapTime
 from Tests.System.GenerateLapTimes import generateLapTimes
 
@@ -16,16 +16,16 @@ class TestPrediction(unittest.TestCase):
         n = 20
         seed = 0
         lapTimes = generateLapTimes(elapsedMean, elapsedStd, n, seed=seed, currentTime=0)
-        self.assertTrue((abs(expectedPrediction - predictNextLapTime(lapTimes).elapsedTime) < epsilon))
+        self.assertTrue((abs(expectedPrediction - predict_next_lap_occurance(lapTimes).elapsedTime) < epsilon))
 
     def testSingleLapPrediction(self):
         elapsedTime = 100
         recordedTime = time()
         lapTimes = [LapTime(recordedTime, elapsedTime)]
-        predictedTime = predictNextLapTime(lapTimes)
+        predictedTime = predict_next_lap_occurance(lapTimes)
         self.assertEqual(predictedTime.elapsedTime, elapsedTime)
         self.assertEqual(abs(predictedTime.recordedTime - recordedTime) - elapsedTime, 0)
 
     def testNoDataLapPrediction(self):
         lapTimes = []
-        self.assertRaises(LapPredictionError, predictNextLapTime, lapTimes)
+        self.assertRaises(LapPredictionError, predict_next_lap_occurance, lapTimes)

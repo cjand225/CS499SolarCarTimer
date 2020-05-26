@@ -11,7 +11,7 @@ import threading, cv2, time
 
 from PyQt5.QtGui import QPixmap
 
-from SCTimeUtility.System.Graphics import ApplyFilter, filterType
+from SCTimeUtility.System.Graphics import apply_filtering, FilterType
 
 
 class CaptureThread(threading.Thread):
@@ -23,7 +23,7 @@ class CaptureThread(threading.Thread):
 
     '''
 
-    def __init__(self, queueOne, imageCam, width, height, fps, canvas=None):
+    def __init__(self, capture_resource_queue, image_device_num, capture_width, capture_height, fps, canvas=None):
         threading.Thread.__init__(self)
 
         self.canvas = canvas
@@ -31,23 +31,23 @@ class CaptureThread(threading.Thread):
         self.enableFPS = False
 
         # variables needed for capturing frame data
-        self.captureCam = imageCam  # Specific I/O Device
-        self.imageWidth = width  # Resolution Width
-        self.imageHeight = height  # Resolution Height
-        self.frames = fps  # Frames per Second
-        self.CapQ = queueOne  # queue for adding multiple frame
-        self.loopDeltaTime = 1 / self.frames
+        self.capture_cam = image_device_num  # Specific I/O Device
+        self.frame_width = capture_width  # Resolution Width
+        self.frame_height = capture_height  # Resolution Height
+        self.frame_amount = fps  # Frames per Second
+        self.capture_queue = capture_resource_queue  # queue for adding multiple frame
+        self.delta_time_loop = 1 / self.frame_amount
 
     # executes what the thread is meant for
     def run(self):
-        self.grab()
+        self.capture_frames()
 
     '''
         Function: isRunning()
         Purpose:  returns a boolean value that indicates if the thread is still running.
     '''
 
-    def isRunning(self):
+    def is_running(self):
         return self.running
 
     '''
@@ -69,41 +69,41 @@ class CaptureThread(threading.Thread):
     '''
 
     # gets frame data continuously until thread stops
-    def grab(self):
+    def capture_frames(self):
         self.running = True
 
-        capture = cv2.VideoCapture(self.captureCam)
-        capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.imageWidth)
-        capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.imageHeight)
-        capture.set(cv2.CAP_PROP_FPS, self.frames)
-        capture.open(self.captureCam)
+        capture = cv2.VideoCapture(self.capture_cam)
+        capture.set(cv2.CAP_PROP_FRAME_WIDTH, self.frame_width)
+        capture.set(cv2.CAP_PROP_FRAME_HEIGHT, self.frame_height)
+        capture.set(cv2.CAP_PROP_FPS, self.frame_amount)
+        capture.open(self.capture_cam)
 
         # set initial target/current times
-        guiImage = None
-        currentTime = targetTime = time.time()
+        canvas_image = None
+        current_time = target_time = time.time()
         while (self.running):
             # calculate difference in time and get the current time
-            previousTime = currentTime
-            currentTime = time.time()
-            deltaTime = currentTime - previousTime
+            previous_time = current_time
+            current_time = time.time()
+            delta_time = current_time - previous_time
 
             capture.grab()
-            retval, img = capture.retrieve(0)
-            # self.showFPS(deltaTime)
+            ret_val, frame_data = capture.retrieve(0)
+            # self.display_fps(delta_time)
 
-            if img is not None:
-                retImg, guiImage = ApplyFilter(img, filterType.EDGE)
+            if frame_data is not None:
+                ret_img, canvas_image = apply_filtering(frame_data, FilterType.EDGE)
 
             if self.canvas:
-                self.canvas.setPixmap(QPixmap.fromImage(guiImage))
-            self.CapQ.put(img)
+                self.canvas.setPixmap(QPixmap.fromImage(canvas_image))
+            self.capture_queue.put(frame_data)
 
             # keep adding the difference in time needed and calculate sleep based on that
-            targetTime = + self.loopDeltaTime
-            sleepAmount = targetTime - time.time()
+            target_time = + self.delta_time_loop
+            sleep_amount = target_time - time.time()
 
-            if sleepAmount > 0:
-                time.sleep(sleepAmount)
+            if sleep_amount > 0:
+                time.sleep(sleep_amount)
 
         capture.release()
 
@@ -116,6 +116,6 @@ class CaptureThread(threading.Thread):
         
     '''
 
-    def showFPS(self, timeDiff):
-        print('FPS: %d' % (1 / timeDiff))
+    def display_fps(self, time_difference):
+        print('FPS: %d' % (1 / time_difference))
         return

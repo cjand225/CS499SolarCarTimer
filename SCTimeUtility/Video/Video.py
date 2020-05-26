@@ -18,93 +18,93 @@ from SCTimeUtility.Video.DetectionThread import DetectThread
 from SCTimeUtility.Video.VideoOptionsWidget import VideoOptionsWidget
 
 
-class Video():
+class Video:
 
     def __init__(self):
-        self.VisWidget = None
+        self.vision_widget = None
 
         # device requirements
-        self.FramesPerSecond = 60
-        self.VidWidth = 1920
-        self.VidHeight = 1080
-        self.DeviceNum = 0
+        self.video_frames_per_second = 60
+        self.video_frame_width = 1920
+        self.video_frame_height = 1080
+        self.device_number = 0
 
-        self.ImgCanvasWidth = None
-        self.ImgCanvasHeight = None
+        self.image_canvas_width = None
+        self.image_canvas_height = None
 
-        self.CapThread = None
-        self.ProcThread = None
-        self.DetectThread = None
+        self.frame_capture_thread = None
+        self.image_process_thread = None
+        self.object_detection_thread = None
 
-        self.CapturedQ = None
-        self.ProcessedQ = None
+        self.frame_capture_queue = None
+        self.processed_frames_queue = None
 
-        self.initUI()
-        self.initBinds()
+        self.init_widgets()
+        self.init_bindings()
 
-    def initUI(self):
-        self.VisWidget = VideoWidget(videoUIPath)
-        self.ImgCanvasWidth = self.VisWidget.getWidth()
-        self.ImgCanvasHeight = self.VisWidget.getHeight()
+    def init_widgets(self):
+        self.vision_widget = VideoWidget(videoUIPath)
+        self.image_canvas_width = self.vision_widget.get_width()
+        self.image_canvas_height = self.vision_widget.get_height()
 
-    def initQueues(self):
-        self.CapturedQ = queue.Queue()
-        self.ProcessedQ = queue.Queue()
+    def init_resource_queues(self):
+        self.frame_capture_queue = queue.Queue()
+        self.processed_frames_queue = queue.Queue()
 
-    def initThreads(self):
-        self.initCapThread()
-        self.initProcThread()
-        self.initDetectThread()
+    def init_thread_setup(self):
+        self.init_capture_thread()
+        self.init_process_thread()
+        self.init_detection_thread()
 
-    def initCapThread(self):
-        self.CapThread = CaptureThread(self.CapturedQ, self.DeviceNum,
-                                       self.VidWidth, self.VidHeight, self.FramesPerSecond, self.VisWidget.imgCanvas)
+    def init_capture_thread(self):
+        self.frame_capture_thread = CaptureThread(self.frame_capture_queue, self.device_number,
+                                                  self.video_frame_width, self.video_frame_height, self.video_frames_per_second, self.vision_widget.img_canvas)
 
-    def initProcThread(self):
-        self.ProcThread = ImageProcessThread(self.CapturedQ, self.ProcessedQ, self.FramesPerSecond,
-                                             self.VisWidget.imgCanvas)
+    def init_process_thread(self):
+        self.image_process_thread = ImageProcessThread(self.frame_capture_queue, self.processed_frames_queue, self.video_frames_per_second,
+                                                       self.vision_widget.img_canvas)
 
-    def initDetectThread(self):
-        self.DetectThread = DetectThread(self.ProcessedQ)
+    def init_detection_thread(self):
+        self.object_detection_thread = DetectThread(self.processed_frames_queue)
 
-    def initVideoOptions(self):
-        # self.vidOptionsWidget = VideoOptionsWidget()
-        print()
+    def init_video_options(self):
+        pass
 
-    def bindStart(self):
-        self.VisWidget.getStartButton().clicked.connect(self.startVideo)
+    def bind_start_action(self):
+        self.vision_widget.get_start_button().clicked.connect(self.start_video)
 
-    def bindStop(self):
-        self.VisWidget.getStopButton().clicked.connect(self.stopVideo)
+    def bind_stop_action(self):
+        self.vision_widget.get_stop_button().clicked.connect(self.stop_video)
 
-    def initBinds(self):
-        self.bindStart()
-        self.bindStop()
+    def init_bindings(self):
+        self.bind_start_action()
+        self.bind_stop_action()
 
-    def getWidget(self):
-        return self.VisWidget
+    def get_widget(self):
+        return self.vision_widget
 
-    def startVideo(self):
-        self.initQueues()
-        self.initThreads()
-        self.startThreads()
+    def start_video(self):
+        self.init_resource_queues()
+        self.init_thread_setup()
+        self.start_threads()
 
-    def stopVideo(self):
-        self.cleanUp()
+    def stop_video(self):
+        self.clean_up()
 
-    def cleanUp(self):
-        if self.CapThread.isRunning():
-            self.CapThread.stop()
-            self.CapThread.join()
-        if self.ProcThread.isRunning():
-            self.ProcThread.stop()
-            self.ProcThread.join()
-        if self.DetectThread.isRunning():
-            self.DetectThread.stop()
-            self.DetectThread.join()
-        self.VisWidget.clearCanvas()
+    def clean_up(self):
+        if self.frame_capture_thread.is_running():
+            self.frame_capture_thread.stop()
+            self.frame_capture_thread.join()
+        if self.image_process_thread.is_running():
+            self.image_process_thread.stop()
+            self.image_process_thread.join()
+        if self.object_detection_thread.is_running():
+            self.object_detection_thread.stop()
+            self.object_detection_thread.join()
+        self.vision_widget.clear_canvas()
 
-    def startThreads(self):
-        self.CapThread.start()
-        self.ProcThread.start()
-        self.DetectThread.start()
+    def start_threads(self):
+        self.frame_capture_thread.start()
+        self.image_process_thread.start()
+        self.object_detection_thread.start()
+

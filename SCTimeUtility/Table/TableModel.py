@@ -12,19 +12,19 @@ from PyQt5.QtCore import Qt, QAbstractTableModel, QVariant
 from PyQt5.QtGui import QColor
 
 from SCTimeUtility.Table.CarStorage import CarStorage
-from SCTimeUtility.System.TimeReferences import strptimeMultiple
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.System.TimeReferences import strptime_multiple
+from SCTimeUtility.Log.Log import get_log
 
 
 class TableModel(QAbstractTableModel):
     def __init__(self, parent, cs=None):
         super().__init__(parent)
 
-        self.defaultColumns = 10
-        self.defaultRows = 20
+        self.default_columns = 10
+        self.default_rows = 20
 
-        self.assignStorage(cs)
-        self.connectActions()
+        self.store_storage_reference(cs)
+        self.bind_actions()
 
     '''
         Function: connectActions
@@ -35,8 +35,8 @@ class TableModel(QAbstractTableModel):
 
     '''
 
-    def connectActions(self):
-        self.carStore.dataModified.connect(self.storageModifiedEvent)
+    def bind_actions(self):
+        self.car_storage.dataModified.connect(self.storageModifiedEvent)
 
     '''
         Function: connectActions
@@ -48,8 +48,8 @@ class TableModel(QAbstractTableModel):
     '''
 
     def storageModifiedEvent(self, col, row):
-        changeIndex = self.index(row, col)
-        self.dataChanged.emit(changeIndex, changeIndex)
+        change_index = self.index(row, col)
+        self.dataChanged.emit(change_index, change_index)
         self.headerDataChanged.emit(Qt.Horizontal, col, col)
         self.headerDataChanged.emit(Qt.Vertical, row, row)
 
@@ -63,11 +63,11 @@ class TableModel(QAbstractTableModel):
     '''
 
     def rowCount(self, p):
-        lapListLengths = [len(i.lapList) for i in self.carStore.storageList]
-        if lapListLengths:
-            return max(max(lapListLengths) + 1, self.defaultRows)
+        lap_list_lengths = [len(i.lapList) for i in self.car_storage.storage_list]
+        if lap_list_lengths:
+            return max(max(lap_list_lengths) + 1, self.default_rows)
         else:
-            return self.defaultRows
+            return self.default_rows
 
     '''
         Function: columnCount
@@ -79,7 +79,7 @@ class TableModel(QAbstractTableModel):
     '''
 
     def columnCount(self, p):
-        return max(len(self.carStore.storageList) + 1, self.defaultColumns)
+        return max(len(self.car_storage.storage_list) + 1, self.default_columns)
 
     '''
         Function: data
@@ -93,19 +93,19 @@ class TableModel(QAbstractTableModel):
 
     def data(self, item, role=Qt.DisplayRole):
         if role == Qt.DisplayRole:
-            if item.column() < len(self.carStore.storageList) and \
-                    item.row() < len(self.carStore.storageList[item.column()].lapList):
-                timeData = self.carStore.storageList[item.column()].lapList[item.row()].getElapsed()
-                newString = str(datetime.timedelta(seconds=timeData))
-                return QVariant(str(newString))
+            if item.column() < len(self.car_storage.storage_list) and \
+                    item.row() < len(self.car_storage.storage_list[item.column()].lapList):
+                time_data = self.car_storage.storage_list[item.column()].lapList[item.row()].get_elapsed_time()
+                formatted_string = str(datetime.timedelta(seconds=time_data))
+                return QVariant(str(formatted_string))
             else:
                 return QVariant('')
         if role == Qt.BackgroundRole:
-            if item.column() > len(self.carStore.storageList):
+            if item.column() > len(self.car_storage.storage_list):
                 return QColor(Qt.darkGray)
-            elif len(self.carStore.storageList) > item.column() and not self.carStore.storageList[item.column()].isRunning():
+            elif len(self.car_storage.storage_list) > item.column() and not self.car_storage.storage_list[item.column()].is_running():
                 return QColor(Qt.lightGray)
-            elif not len(self.carStore.storageList) > item.column():
+            elif not len(self.car_storage.storage_list) > item.column():
                 return QColor(Qt.darkGray)
             else:
                 return QColor(Qt.white)
@@ -121,17 +121,17 @@ class TableModel(QAbstractTableModel):
 
     def setData(self, i, value, role):
         try:
-            value_time = strptimeMultiple(value, ["%H:%M:%S", "%M:%S", "%S"])
+            value_time = strptime_multiple(value, ["%H:%M:%S", "%M:%S", "%S"])
             delta = datetime.timedelta(hours=value_time.hour, minutes=value_time.minute, seconds=value_time.second)
         except ValueError:
             return False
         if role == Qt.EditRole:
-            if i.column() < len(self.carStore.storageList):
-                if i.row() < len(self.carStore.storageList[i.column()].lapList):
-                    self.carStore.storageList[i.column()].editLapTime(i.row(), delta)
+            if i.column() < len(self.car_storage.storage_list):
+                if i.row() < len(self.car_storage.storage_list[i.column()].lapList):
+                    self.car_storage.storage_list[i.column()].edit_lap_time(i.row(), delta)
                     return True
-                elif i.row() == len(self.carStore.storageList[i.column()].lapList):
-                    self.carStore.appendLapTime(i.column(), delta)
+                elif i.row() == len(self.car_storage.storage_list[i.column()].lapList):
+                    self.car_storage.append_lap_time(i.column(), delta)
                     return True
             else:
                 return False
@@ -148,12 +148,12 @@ class TableModel(QAbstractTableModel):
     def headerData(self, section, orientation, role):
         if role == Qt.DisplayRole:
             if orientation == Qt.Horizontal:
-                if section < len(self.carStore.storageList):
-                    return self.carStore.storageList[section].TeamName
+                if section < len(self.car_storage.storage_list):
+                    return self.car_storage.storage_list[section].TeamName
                 else:
                     return None
             elif orientation == Qt.Vertical:
-                lengthList = [len(i.lapList) for i in self.carStore.storageList]
+                lengthList = [len(i.lapList) for i in self.car_storage.storage_list]
                 if lengthList and section < max(lengthList):
                     return section
 
@@ -167,9 +167,9 @@ class TableModel(QAbstractTableModel):
 
     def flags(self, i):
         flags = super().flags(i)
-        if i.column() < len(self.carStore.storageList) and i.row() <= len(
-                self.carStore.storageList[i.column()].lapList) and i.row() > 0:
-            if self.carStore.storageList[i.column()].isRunning():
+        if i.column() < len(self.car_storage.storage_list) and \
+                len(self.car_storage.storage_list[i.column()].lapList) >= i.row() > 0:
+            if self.car_storage.storage_list[i.column()].is_running():
                 flags |= Qt.ItemIsEditable
             else:
                 pass
@@ -183,6 +183,6 @@ class TableModel(QAbstractTableModel):
         Purpose: gives a reference of the CarStorage Class instance
     '''
 
-    def assignStorage(self, storage):
+    def store_storage_reference(self, storage):
         if isinstance(storage, CarStorage):
-            self.carStore = storage
+            self.car_storage = storage

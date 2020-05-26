@@ -31,14 +31,14 @@ class testLapTime(unittest.TestCase):
 
     def testGetElapsed(self):
         myLap = LapTime(3.1459)
-        elap = myLap.getElapsed()
+        elap = myLap.get_elapsed()
         self.assertEqual(3, elap)
 
     def testSetElasped(self):
         myLap = LapTime(3.1459)
         nVal = 3204
-        myLap.setElapsed(nVal)
-        self.assertEqual(nVal, myLap.getElapsed())
+        myLap.set_elapsed(nVal)
+        self.assertEqual(nVal, myLap.get_elapsed())
         nVal = 32.04
-        myLap.setElapsed(nVal)
-        self.assertEqual(int(nVal), myLap.getElapsed())
+        myLap.set_elapsed(nVal)
+        self.assertEqual(int(nVal), myLap.get_elapsed())

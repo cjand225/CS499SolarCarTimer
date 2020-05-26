@@ -7,6 +7,6 @@
 
 """
 
-from SCTimeUtility.Log.Log import initLogs
+from SCTimeUtility.Log.Log import init_logs
 
-initLogs()
+init_logs()

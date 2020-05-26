@@ -16,12 +16,12 @@ class TestAppMethods(unittest.TestCase):
 
     def testMainWindowCreation(self):
         self.App = App()
-        self.assertNotEqual(self.App.mainWindow, None)
+        self.assertNotEqual(self.App.application_window, None)
 
     def testVideoModule(self):
         self.App = App()
-        self.assertNotEqual(self.App.vision, None)
+        self.assertNotEqual(self.App.vision_module, None)
 
     def testTableModule(self):
         self.App = App()
-        self.assertNotEqual(self.App.table, None)
+        self.assertNotEqual(self.App.table_module, None)

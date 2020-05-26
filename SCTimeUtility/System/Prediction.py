@@ -8,7 +8,7 @@
 import math, numpy as np, scipy.stats
 
 from SCTimeUtility.Table.LapTime import LapTime
-from SCTimeUtility.Log.Log import getLog
+from SCTimeUtility.Log.Log import get_log
 
 '''  
     Function: predictNextLapTime
@@ -18,22 +18,23 @@ from SCTimeUtility.Log.Log import getLog
              provided by the lapTimes parameter.
 '''
 
-#TODO
-def predictNextLapTime(lapTimes):
+
+# TODO
+def predict_next_lap_occurrence(lap_list):
     # Returns the predicted time for the next lap.
-    if len(lapTimes) > 1:
+    if len(lap_list) > 1:
         percentile = 0.05
-        elapsedArr = np.array([t.elapsedTime for t in lapTimes])
-        sampleMean = np.mean(elapsedArr)
-        sampleStd = np.std(elapsedArr, ddof=1)
-        t = scipy.stats.t.ppf(percentile, len(lapTimes) - 1)
-        lower = sampleMean + (t * sampleStd * math.sqrt(1 + (1 / float(len(lapTimes)))))
-    elif len(lapTimes) == 1:
-        lower = lapTimes[0].elapsedTime
+        elapsed_array = np.array([t.elapsedTime for t in lap_list])
+        sample_mean = np.mean(elapsed_array)
+        sample_std = np.std(elapsed_array, ddof=1)
+        t = scipy.stats.t.ppf(percentile, len(lap_list) - 1)
+        lower = sample_mean + (t * sample_std * math.sqrt(1 + (1 / float(len(lap_list)))))
+    elif len(lap_list) == 1:
+        lower = lap_list[0].elapsedTime
     else:
         raise LapPredictionError("Need at least one lap time to predict.")
-    newestTime = max(lapTimes, key=lambda t: t.recordedTime)
-    return LapTime(newestTime.recordedTime + lower, lower)
+    newest_time = max(lap_list, key=lambda t: t.recordedTime)
+    return LapTime(newest_time.recordedTime + lower, lower)
 
 
 class LapPredictionError(Exception):

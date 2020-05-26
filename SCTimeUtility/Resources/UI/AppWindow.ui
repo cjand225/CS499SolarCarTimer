@@ -66,42 +66,42 @@
     <item row="0" column="1">
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="1">
-       <widget class="QPushButton" name="pushSemiAuto">
+       <widget class="QPushButton" name="semi_auto_pb">
         <property name="text">
          <string>Semi-Auto</string>
         </property>
        </widget>
       </item>
       <item row="0" column="5">
-       <widget class="QPushButton" name="pushLogs">
+       <widget class="QPushButton" name="log_pb">
         <property name="text">
          <string>Logs</string>
         </property>
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QPushButton" name="pushVideo">
+       <widget class="QPushButton" name="vision_pb">
         <property name="text">
          <string>Auto</string>
         </property>
        </widget>
       </item>
       <item row="0" column="4">
-       <widget class="QPushButton" name="pushLeaderBoard">
+       <widget class="QPushButton" name="leaderboard_pb">
         <property name="text">
          <string>Leader Board</string>
         </property>
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QPushButton" name="pushGraph">
+       <widget class="QPushButton" name="graph_pb">
         <property name="text">
          <string>Analysis</string>
         </property>
        </widget>
       </item>
       <item row="0" column="0">
-       <widget class="QPushButton" name="pushTable">
+       <widget class="QPushButton" name="table_pb">
         <property name="text">
          <string>Manual</string>
         </property>
@@ -117,60 +117,60 @@
      <x>0</x>
      <y>0</y>
      <width>847</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
      <string>File</string>
     </property>
-    <addaction name="actionNewSess"/>
-    <addaction name="actionOpenDir"/>
+    <addaction name="action_new"/>
+    <addaction name="action_open"/>
     <addaction name="separator"/>
-    <addaction name="actionExportData"/>
+    <addaction name="action_export"/>
     <addaction name="separator"/>
-    <addaction name="actionQuit"/>
+    <addaction name="action_quit"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
      <string>Edit</string>
     </property>
-    <addaction name="actionUndo"/>
-    <addaction name="actionRedo"/>
+    <addaction name="action_undo"/>
+    <addaction name="action_redo"/>
     <addaction name="separator"/>
-    <addaction name="actionCopy"/>
-    <addaction name="actionCut"/>
-    <addaction name="actionPaste"/>
+    <addaction name="action_copy"/>
+    <addaction name="action_cut"/>
+    <addaction name="action_paste"/>
     <addaction name="separator"/>
-    <addaction name="actionSelectRow"/>
-    <addaction name="actionSelectColumn"/>
+    <addaction name="action_select_row"/>
+    <addaction name="action_select_column"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
      <string>View</string>
     </property>
-    <addaction name="actionTable"/>
-    <addaction name="actionSemiAuto"/>
-    <addaction name="actionAuto"/>
-    <addaction name="actionGraphing"/>
-    <addaction name="actionLeaderBoard"/>
-    <addaction name="actionLog"/>
+    <addaction name="action_table"/>
+    <addaction name="action_semi_auto"/>
+    <addaction name="action_auto"/>
+    <addaction name="action_graph"/>
+    <addaction name="action_leaderboard"/>
+    <addaction name="action_log"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
-    <addaction name="actionUserMan"/>
-    <addaction name="actionAdminMan"/>
-    <addaction name="actionAbout"/>
+    <addaction name="action_user_manual"/>
+    <addaction name="action_admin_manual"/>
+    <addaction name="action_about"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuEdit"/>
    <addaction name="menuView"/>
    <addaction name="menuHelp"/>
   </widget>
-  <action name="actionNewSess">
+  <action name="action_new">
    <property name="text">
     <string>New Session</string>
    </property>
@@ -178,7 +178,7 @@
     <string>Shift+N</string>
    </property>
   </action>
-  <action name="actionOpenDir">
+  <action name="action_open">
    <property name="text">
     <string>Open Directory</string>
    </property>
@@ -194,7 +194,7 @@
     <string>Shift+W</string>
    </property>
   </action>
-  <action name="actionTable">
+  <action name="action_table">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -205,7 +205,7 @@
     <string>Manual</string>
    </property>
   </action>
-  <action name="actionSemiAuto">
+  <action name="action_semi_auto">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -213,7 +213,7 @@
     <string>Semi-Auto</string>
    </property>
   </action>
-  <action name="actionAuto">
+  <action name="action_auto">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -221,7 +221,7 @@
     <string>Auto</string>
    </property>
   </action>
-  <action name="actionLog">
+  <action name="action_log">
    <property name="checkable">
     <bool>false</bool>
    </property>
@@ -229,12 +229,12 @@
     <string>Logs</string>
    </property>
   </action>
-  <action name="actionAbout">
+  <action name="action_about">
    <property name="text">
     <string>About</string>
    </property>
   </action>
-  <action name="actionCopy">
+  <action name="action_copy">
    <property name="text">
     <string>Copy</string>
    </property>
@@ -242,7 +242,7 @@
     <string>Ctrl+C</string>
    </property>
   </action>
-  <action name="actionCut">
+  <action name="action_cut">
    <property name="text">
     <string>Cut</string>
    </property>
@@ -250,7 +250,7 @@
     <string>Ctrl+X</string>
    </property>
   </action>
-  <action name="actionPaste">
+  <action name="action_paste">
    <property name="text">
     <string>Paste</string>
    </property>
@@ -263,7 +263,7 @@
     <string>Recent</string>
    </property>
   </action>
-  <action name="actionExportData">
+  <action name="action_export">
    <property name="text">
     <string>Export Data</string>
    </property>
@@ -279,7 +279,7 @@
     <string>Ctrl+Shift+S</string>
    </property>
   </action>
-  <action name="actionQuit">
+  <action name="action_quit">
    <property name="text">
     <string>Quit</string>
    </property>
@@ -287,7 +287,7 @@
     <string>Shift+Q</string>
    </property>
   </action>
-  <action name="actionUndo">
+  <action name="action_undo">
    <property name="text">
     <string>Undo</string>
    </property>
@@ -295,7 +295,7 @@
     <string>Shift+Z</string>
    </property>
   </action>
-  <action name="actionRedo">
+  <action name="action_redo">
    <property name="text">
     <string>Redo</string>
    </property>
@@ -303,7 +303,7 @@
     <string>Ctrl+Shift+Z</string>
    </property>
   </action>
-  <action name="actionSelectRow">
+  <action name="action_select_row">
    <property name="text">
     <string>Select Row</string>
    </property>
@@ -311,7 +311,7 @@
     <string>Ctrl+A</string>
    </property>
   </action>
-  <action name="actionSelectColumn">
+  <action name="action_select_column">
    <property name="text">
     <string>Select Column</string>
    </property>
@@ -319,7 +319,7 @@
     <string>Ctrl+Shift+A</string>
    </property>
   </action>
-  <action name="actionGraphing">
+  <action name="action_graph">
    <property name="text">
     <string>Analysis</string>
    </property>
@@ -334,17 +334,17 @@
     <string>Upload</string>
    </property>
   </action>
-  <action name="actionLeaderBoard">
+  <action name="action_leaderboard">
    <property name="text">
     <string>Leader Board</string>
    </property>
   </action>
-  <action name="actionUserMan">
+  <action name="action_user_manual">
    <property name="text">
     <string>User Manual</string>
    </property>
   </action>
-  <action name="actionAdminMan">
+  <action name="action_admin_manual">
    <property name="text">
     <string>Admin Manual</string>
    </property>
